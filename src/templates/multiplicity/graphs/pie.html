@@ -1,13 +1,8 @@
-{% load static %}
 <div id="pieChart" style="width:100%; height: 600px;"></div>
 
-{% include 'multiplicity/graphs/series.drill.html' %}
-
 	<script>
-    // use drilldown pie chart data but remove keys from data that indicate it's drilldown
-    $(drillSeries[0].data).each(function() {
-      this["drilldown"] = null;
-    });
+    // the non-drilldown pie chart uses the same series as the drilldown pie chart
+    // however, you'll need to remove the "drilldown" key from the data
 
 	  Highcharts.chart('pieChart', {
       chart: {

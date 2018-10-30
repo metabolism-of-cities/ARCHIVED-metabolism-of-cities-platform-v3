@@ -160,10 +160,6 @@ section#tab-charts .charts-icons img {
   height: 24px;
 }
 
-#syncChart .chart {
-  height: 300px;
-}
-
 a.label-default:hover {
   text-decoration: none !important;
 }
