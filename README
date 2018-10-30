@@ -2,3 +2,6 @@ mkdir src/media
 mkdir src/logs
 mkdir src/static
 cp src/ie/settings.sample.py src/ie/settings.py
+
+docker-compose build
+docker-compose up
