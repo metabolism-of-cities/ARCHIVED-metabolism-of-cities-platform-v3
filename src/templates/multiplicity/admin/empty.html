@@ -1,0 +1,46 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}SAMPLETITLE{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Your content here...</h3>
+        <p>Start putting content on grids or panels, you can also use different combinations of grids.
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+  
+  <ol class="breadcrumb">
+    <li><a href="./"><i class="pli-home"></i></a></li>
+    <li><a href="cities">Cities</a></li>
+    <li><a href="cities">{{ info.name }}</a></li>
+    <li><a href="cities">Population</a></li>
+    <li class="active">Density</li>
+  </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

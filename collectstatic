@@ -1,0 +1,1 @@
+sudo docker container exec -i ie_web python manage.py collectstatic --no-input

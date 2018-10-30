@@ -1,0 +1,188 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}
+{{ info.title }}
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+textarea.form-control{height:120px}
+#savingmessage,#chat .bord-btm, #chat p.alert-success, #chat form{display:none}
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        {% if info.taskforce.group == 'project' %}
+          <li><a href="{% url 'team:projects' %}">Projects</a></li>
+        {% endif %}
+        <li><a href="{% url 'team:taskforce' info.taskforce.id %}">{{ info.taskforce.name }}</a></li>
+        <li class="active">{{ info.title }}</li>
+    </ol>
+
+  <h2>
+  <a href="{% url 'team:editticket' info.id %}"><i class="fas fa-pencil-alt"></i></a>
+  {{ info.title }}</h2>
+
+  <div class="row">
+    
+    <div class="col-md-6">
+
+      <dl class="dl dl-horizontal">
+        <dt>Task #</dt>
+        <dd>{{ info.id }}</dd>
+
+        <dt>Task force</dt>
+        <dd><a href="{% url 'team:taskforce' info.taskforce.id %}">{{ info.taskforce.name }}</a></dd>
+        <dt>Status</dt>
+        <dd>{{ info.get_status_display }}</dd>
+
+        {% if info.status is not 'unassigned' and info.assigned_to %}
+          <dt>Assigned to</dt>
+          <dd>{{ info.assigned_to.first_name }}</dd>
+        {% endif %}
+
+      </dl>
+
+    </div>
+
+    <div class="col-md-6">
+      <dl class="dl dl-horizontal">
+        <dt>Importance</dt>
+        <dd>{{ info.get_importance_display }}</dd>
+
+        <dt>Urgency</dt>
+        <dd>{{ info.get_urgency_display }}</dd>
+
+        <dt>Complexity</dt>
+        <dd>{{ info.get_complexity_display }}</dd>
+
+      </dl>
+      </div>
+  </div>
+
+  {% if info.description %}
+      <div class="well">{{ info.description|linebreaksbr }}</div>
+  {% endif %}
+
+  <div class="row">
+    <div class="col-md-6 boxit">
+      <h3>Log</h3>
+      <div class="timeline">
+            
+        {% for details in log %}
+        <div class="timeline-entry">
+            <div class="timeline-stat">
+                <div class="timeline-icon"></div>
+                <div class="timeline-time" title="{{ details.created_at }}">{{ details.created_at|date:"M d, Y" }}</div>
+            </div>
+            <div class="timeline-label">
+              <strong>
+              {{ details.title }}
+              </strong>
+              <span class="badge badge-default pull-right">{{ details.user.first_name }}</span>
+              {% if details.description %}
+              <br>
+              {{ details.description|linebreaksbr }}
+              {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <h4>Report progress</h4>
+
+      <form method="post" class="form form-horizontal" action="{% url 'team:ticketprogress' info.id %}">
+        <div class="form-group">
+          <div class="col-sm-12">
+            <textarea class="form-control" name="progress" required></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset- col-sm-12">
+            <button type="submit" class="btn btn-success">Save</button>
+            {% csrf_token %}
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="col-md-6 boxit" style="border-left:2px solid #fff">
+      <h3>Discussion</h3>
+
+      {% if info.topic %}
+
+        <p>
+          <a href="{% url 'team:topic' info.topic.id %}" class="btn btn-info">
+            <i class="far fa-comments icon-lg icon-fw"></i>
+            View topic
+          </a>
+        </p>
+
+        <div id="chat"></div>
+
+      {% else %}
+
+        <div class="alert alert-warning">
+          No discussion started.
+        </div>
+
+        <p>
+          <a href="{% url 'team:ticketdiscussion' info.id %}" class="btn btn-success">Start discussion</a>
+        </p>
+
+      {% endif %}
+    </div>
+
+  </div>
+
+  <h4>New status</h4>
+
+  <p>
+  {% for key, choice in choices %}
+    {% if key == 'unassigned' or key == 'assigned' %}
+
+    {% else %}
+      <a class="btn btn-info {% if key == info.status %}disabled{% endif %}" href="{% url 'team:ticketstatus' info.id key %}">{{ choice }}</a>
+    {% endif %}
+  {% endfor %}
+  </p>
+
+  <h4>Assign to</h4>
+
+  <p>
+  {% for user in users %}
+      <a class="btn btn-info {% if user == info.assigned_to %}disabled{% endif %}" href="{% url 'team:ticketperson' info.id user.id %}">{{ user.first_name }}</a>
+  {% endfor %}
+  </p>
+
+
+  <p class="jumpdown"><a href="{% url 'team:taskforce' info.taskforce.id %}">Back to task force</a></p>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block footer %}
+
+  {% if info.topic %}
+    <script type="text/javascript">
+    $(function(){
+      $('#chat').load('/intranet/topic/{{ info.topic.id }}');
+    });
+    </script>
+  {% endif %}
+
+{% endblock %}

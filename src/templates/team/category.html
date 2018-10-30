@@ -1,0 +1,52 @@
+{% load static %}
+
+    <p class="pad-all text-main text-sm text-uppercase text-bold">
+         <a class="underline" title="Go to this task force" href="{% url 'team:taskforce' category.id %}">{{ category.name }}</a>
+        <span class="badge btn-info" id="viewallcategories">View all</span>
+    </p>
+    {% if list %}
+    <div class="chat-user-list select-topic">
+        {% for info in list.all %}
+        <a href="#" class="chat-unread{% if topic and topic == info.id %} clicked{% endif %}{% if info.active == False %} hide{% endif %}" data-id="{{ info.id }}" id="topic-{{info.id}}">
+            <div class="media-left">
+              {% if info.last_message.author %}
+                {% with 'moc/team/team.'|add:info.last_message.author.first_name|lower|add:'.jpg' as image_static %}
+                  <img class="img-circle img-xs" src="{% static image_static %}" alt="">
+                {% endwith %}
+              {% endif %}
+                {% if read_message|get_item:info.id and info.last_message_id == read_message|get_item:info.id %}
+                {% else %}
+                    <i class="badge badge-success badge-stat badge-icon pull-left"></i>
+                {% endif %}
+            </div>
+            <div class="media-body">
+                <span class="chat-info">
+                    <span class="hide text-xs">{{ info.last_message.date }}</span>
+                    {% if read_message|get_item:info.id and info.last_message_id == read_message|get_item:info.id %}
+                        <span class="badge badge-default">{{ info.message_set.all|length }}</span>
+                    {% else %}
+                        <span class="badge badge-success">{{ info.message_set.all|length }}</span>
+                    {% endif %}
+                </span>
+                <div class="chat-text">
+                    <p class="chat-username">{{ info.name }}</p>
+                    <p>{{ info.last_message.message|truncatechars:50 }}</p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="chat-user-list">
+        <p class="pad-all  text-sm text-uppercase text-bold alert alert-warning">
+            No topics found.    
+        </p>
+    </div>
+    {% endif %}
+
+    <p class="text-center" style="margin-top:20px">
+    {% if category.google_drive %}
+      <a href="{{ category.google_drive }}" class="btn btn-info"><i class="pli pli-google-drive"></i> Google Drive</a>
+    {% endif %}
+      <a href="{% url 'team:categoryconfig' category.id %}" title="Your taskforce settings"><i class="pli pli-gear"></i></a>
+    </p>

@@ -1,0 +1,8 @@
+Timeframe name , From (date) , To (date) , Material name , Material code , Quantity , Unit , Location ,Comments
+2013,2013-01-01,2013-12-31,Wheat,MF1.1.1,29325,t,Cape Town,"Based on 9794.52 hectares planted at a yield of 2.99 (source for yield: Cereal production provincial level, DAFF)"
+2013,2013-01-01,2013-12-31,Lucerne,MF1.1.4,46234,t,Cape Town,"Based on 7705.62 hectares planted at a yield of 6 (source for yield: Robin Meeske, Elsenburg)"
+2013,2013-01-01,2013-12-31,Wine Grapes,MF1.1.8,48430,t,Cape Town,Based on 5765.51 hectares planted at a yield of 8.4 (source for yield: South African Wine Industry Information & Systems (SAWIS) )
+2013,2013-01-01,2013-12-31,Planted Pastures Perennial,MF1.2.2.1,30860,t,Cape Town,"Based on 5143.27 hectares planted at a yield of 6 (source for yield: Robin Meeske, Elsenburg)"
+2013,2013-01-01,2013-12-31,Canola,MF1.1.6,4739,t,Cape Town,"Based on 3057.59 hectares planted at a yield of 1.55 (source for yield: Cereal production provincial level, DAFF)"
+2013,2013-01-01,2013-12-31,Small Grain Grazing,MF1.1.1,24438,t,Cape Town,"Based on 3054.74 hectares planted at a yield of 8 (source for yield: Robin Meeske, Elsenburg)"
+2013,2013-01-01,2013-12-31,Planted Pastures,MF1.2.2.1,22134,t,Cape Town,"Based on 2213.42 hectares planted at a yield of 10 (source for yield: Robin Meeske, Elsenburg)"

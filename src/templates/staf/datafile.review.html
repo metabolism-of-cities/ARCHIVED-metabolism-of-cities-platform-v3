@@ -1,0 +1,124 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Flows | {{ info.name }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+
+<div class="panel">
+  <div class="panel-heading">
+
+  {% include 'staf/includes/dataset.topnav.html' %}
+
+  </div>
+  <div class="panel-body">
+
+    <h4>Review data</h4>
+    <p>File: <strong>{{ file.original_name }}</strong></p>
+
+    <table class="table table-striped datatable">
+      <thead>
+        <tr>
+          <th>Timeframe</th>
+          <th>Material</th>
+          <th>Quantity</th>
+          {% if show_origin %}
+              <th>Origin</th>
+          {% endif %}
+          {% if show_destination %}
+              <th>Destination</th>
+          {% endif %}
+          {% if show_concentration %}
+              <th>Concentration</th>
+          {% endif %}
+          {% if show_subset %}
+              <th>Subset</th>
+          {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+          {% for details in data %}
+            <tr>
+              <td data-order="{{ details.from }}"><span class="date" title="From {{ details.from }} to {{ details.to }}">{{ details.timeframe }}</span></td>
+              <td>{{ details.material }}</td>
+              <td>{{ details.quantity }} {{ details.unit }}</td>
+              {% if show_origin %}
+                  <td>
+                      {% if details.origin_info %}
+                          <a href="{% url 'multiplicity:place' details.origin_info.city.slug details.origin_info.slug %}" title="Type: {{details.origin_info.type.name }}. City: {{details.origin_info.city.name }}">{{ details.origin }}</a>
+                      {% else %}
+                          <span class="dottedline new">{{ details.origin }}</span>
+                      {% endif %}
+                  </td>
+              {% endif %}
+              {% if show_destination %}
+                  <td>
+                      {% if details.destination_info %}
+                          <a href="">{{ details.destination }}</a>
+                      {% else %}
+                          <span class="dottedline new">{{ details.destination }}</span>
+                      {% endif %}
+                  </td>
+              {% endif %}
+              {% if show_concentration %}
+                  <td>{{ details.concentration }} {{ details.concentrationunit }}</td>
+              {% endif %}
+              {% if show_subset %}
+                  <td>{{ details.subset }}</td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+  </div>
+</div>
+    
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.form-group .col-sm-10 strong{position:relative;top:5px}
+.date, .dottedline{  border-bottom: 1px dashed #999;}
+.new{font-weight:bold;color:#52cb52}
+.new.dottedline{border-color:#52cb52}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'staf:index' %}">Data</a></li>
+        <li><a href="{% url 'staf:datasets' %}">Datasets</a></li>
+        <li><a href="{% url 'staf:dataset' info.id %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'staf:flows' info.id %}">Flows</a></li>
+        {% if flow.id %}
+          <li><a href="{% url 'staf:flow' info.id flow.id %}">{{ flow.name }}</a></li>
+          <li class="active">Manage data</li>
+        {% else %}
+          <li class="active">Add flow</li>
+        {% endif %}
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

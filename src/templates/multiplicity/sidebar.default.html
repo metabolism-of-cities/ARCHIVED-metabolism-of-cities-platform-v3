@@ -1,0 +1,139 @@
+<ul id="mainnav-menu" class="list-group">
+
+  {% if page == 'taskforces' %}
+
+    <li class="list-header">Task Forces</li>
+    {% for details in taskforces %}
+    <li{% if info.id == details.id %} class="active-sub"{% endif %}><a href="{% url 'core:taskforce' details.slug %}">{{ details.name }}</a></li>
+    {% endfor %}
+
+  {% endif %}
+  {% if section == "data" %}
+    <li class="list-header">Data</li>
+    <li{% if menu == "index" %} class="active-sub"{% endif %}><a href="{% url 'staf:index' %}">About</a></li>
+    <li{% if menu == "materials" %} class="active-sub"{% endif %}><a href="{% url 'staf:materials' %}">Material tree</a></li>
+    <li{% if menu == "processes" %} class="active-sub"{% endif %}><a href="{% url 'staf:processes' %}">Process tree</a></li>
+  {% elif section == "literature" %}
+    <li class="list-header">Literature</li>
+    <li{% if page == "publications" %} class="active-sub"{% endif %}><a href="{% url 'core:references' %}">Publications</a></li>
+    <li{% if page == "journals" %} class="active-sub"{% endif %}><a href="{% url 'core:journals' %}">Journals</a></li>
+    <li{% if page == "events" %} class="active-sub"{% endif %}><a href="{% url 'core:events' %}">Events</a></li>
+    <li{% if page == "publishers" %} class="active-sub"{% endif %}><a href="{% url 'core:publishers' %}">Publishers</a></li>
+  {% elif section == "more" %}
+    <li class="list-header">More</li>
+    <li{% if page == "videos" %} class="active-sub"{% endif %}><a href="{% url 'core:videos' %}">Videos</a></li>
+    <li{% if page == "blog" %} class="active-sub"{% endif %}><a href="{% url 'core:blog' %}">Blog</a></li>
+    <li{% if page == "news" %} class="active-sub"{% endif %}><a href="{% url 'core:news' %}">News</a></li>
+  {% elif section == "cities" and info.id %}
+
+  <li class="list-header">Materials</li>
+
+  <li{% if menu == "dashboard" %} class="active-sub"{% endif %}><a href="{% url 'multiplicity:city' info.slug %}">
+  <i class="pli-home"></i>
+      <span class="menu-title">
+          Overview
+      </span>
+  </a>
+  </li>
+
+  {% for details in topics %}
+  <li{% if topic.parent.id == details.id or topic.id == details.id %}{% if menu == "materials" %} class="active-sub"{% endif %}{% endif %}>
+      <a href="{% url 'multiplicity:topic' info.slug details.slug %}">
+        <i class="{{ details.icon }}"></i>
+        <span class="menu-title">{{ details.name }}</span>
+        {% if details.children.count %}
+          <i class="arrow"></i>
+        {% endif %}
+      </a>
+      {% if details.children.count %}
+        <ul class="collapse {% if topic.parent == details and menu == "materials" %}in{% endif %}">
+        {% for sub in details.children.all %}
+            <li{% if sub.slug == topic.slug and menu == "materials" %} class="active"{% endif %}><a href="/cities/{{ info.slug }}/{{ details.slug }}/{{ sub.slug }}">{{ sub.name }}</a></li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+
+  </li>
+  {% endfor %}
+
+  <li class="list-header">More</li>
+
+  <li{% if menu == "infrastructure" %} class="active-sub"{% endif %}>
+      <a href="#">
+          <i class="pli-factory"></i>
+          <span class="menu-title">Infrastructure</span>
+          <i class="arrow"></i>
+      </a>
+
+      <ul class="collapse {% if menu == "infrastructure" %}in{% endif %}">
+        {% for details in topics %}
+          <li{% if menu == "infrastructure" and topic == details %} class="active"{% endif %}><a href="{% url 'multiplicity:infrastructure_list' info.slug details.slug %}">{{ details.name }}</a></li>
+        {% endfor %}
+      </ul>
+  </li>
+
+  <li class="hide">
+      <a href="#">
+          <i class="pli-conference"></i>
+          <span class="menu-title">Population</span>
+          <i class="arrow"></i>
+      </a>
+
+      <ul class="collapse  {% if menu == "population" %}in{% endif %}">
+          <li><a href="/{{ info.link }}/research">Overview</a></li>
+          <li {% if page == "density" %} class="active-link"{% endif %}><a href="/{{ info.link }}/population/density">Density</a></li>
+          <li><a href="/{{ info.link }}/research/reports">MTUs</a></li>
+          <li><a href="/{{ info.link }}/research/articles">Income</a></li>
+      </ul>
+  </li>
+
+  <li>
+      <a href="{% url 'multiplicity:map_home' info.slug %}">
+          <i class="pli-map"></i>
+          <span class="menu-title">Maps</span>
+          <i class="arrow"></i>
+      </a>
+
+      <ul class="collapse  {% if menu == "maps" %}in{% endif %}">
+          <li {% if page == "boundaries" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:map_home' info.slug %}">Boundaries</a></li>
+          <li {% if page == "satellite" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:map' info.slug 'satellite' %}">Satellite</a></li>
+      </ul>
+  </li>
+
+  <li{% if menu == "research" %} class="active-sub"{% endif %} class="hide">
+      <a href="#">
+          <i class="pli-books"></i>
+          <span class="menu-title">Community</span>
+          <i class="arrow"></i>
+      </a>
+
+      <ul class="collapse {% if menu == "research" %}in{% endif %}">
+          <li><a href="/{{ info.link }}/research">Overview</a></li>
+          <li{% if page == "overview" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:research' info.slug %}">Academic Literature</a></li>
+          <li><a href="/{{ info.link }}/research/reports">Reports</a></li>
+          <li><a href="/{{ info.link }}/research/universities">Universities</a></li>
+          <li><a href="/{{ info.link }}/research/projects">Research Projects</a></li>
+      </ul>
+  </li>
+
+  <li{% if menu == "resources" %} class="active-sub"{% endif %}>
+      <a href="#">
+          <i class="pli-paper"></i>
+          <span class="menu-title">Resources</span>
+          <i class="arrow"></i>
+      </a>
+
+      <ul class="collapse {% if menu == "resources" %}in{%endif %}">
+          <li {% if page == "datasets" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Datasets</a></li>
+      </ul>
+  </li>
+  <li{% if menu == "upload" %} class="active-sub"{% endif %}><a href="{% url 'multiplicity:upload' info.slug %}">
+  <i class="pli-upload"></i>
+      <span class="menu-title">
+          Upload data
+      </span>
+  </a>
+  </li>
+  {% endif %}
+
+</ul>

@@ -1,0 +1,69 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Materials catalog{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Material catalog</h3>
+        <p>
+          The principal catalog for reporting material flows is based on the Eurostat
+          <a href="https://ec.europa.eu/eurostat/cache/metadata/en/env_ac_mfa_esms.htm">Material flow accounts (env_ac_mfa)</a>.
+          The <a href="https://circabc.europa.eu/d/d/workspace/SpacesStore/111cdbe6-8407-4bf8-8aff-93cdbd5f5117/MFA_data_structure.xls">data structure</a>
+          used is version 14 March 2018.
+        </p>
+        <table class="table table-striped datatable">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Material</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for details in list %}
+            <tr>
+              <td>{{ details.code }}</td>
+              <td>{{ details.name }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li class="active">Materials</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

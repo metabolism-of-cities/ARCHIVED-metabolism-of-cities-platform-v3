@@ -1,0 +1,66 @@
+{% load static %}
+<div id="streamGraph" style="width:100%; height: 600px;"></div>
+
+{% include 'multiplicity/graphs/options.html' %}
+{% include 'multiplicity/graphs/series.time.html' %}
+
+	<script>
+	  Highcharts.chart('streamGraph', {
+
+      chart: {
+        type: 'streamgraph',
+        marginBottom: 50,
+        marginTop: 50,
+        zoomType: 'x'
+      },
+      title: {
+        text: 'Wastewater effluent'
+      },
+      subtitle: {
+        text: 'Cape Town'
+      },
+      colors: colorScheme,
+      xAxis: {
+        type: 'datetime',
+        title: {
+          text: 'Date',
+          style: {
+            fontWeight: 'bold'
+          },
+        },
+        crosshair: true,
+      },
+      yAxis: {
+        visible: false,
+        startOnTick: false,
+        endOnTick: false,
+      },
+      legend: {
+        enabled: true,
+        verticalAlign: 'top',
+      },
+      plotOptions: {
+        series: {
+          label: {
+            enabled: false,
+          }
+        }
+      },
+
+      tooltip: {
+          shared: true,
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} millions)<br/>',
+          // The date can be shown in multiple ways, see:
+          // https://api.highcharts.com/highcharts/tooltip.dateTimeLabelFormats
+      },
+      series: timeSeries,
+      exporting: {
+          sourceWidth: 800,
+          sourceHeight: 600
+      }
+
+	  });
+
+    // lines for chart burger menu thinner
+    $(".highcharts-button-symbol").attr("stroke-width", 1);
+	</script>

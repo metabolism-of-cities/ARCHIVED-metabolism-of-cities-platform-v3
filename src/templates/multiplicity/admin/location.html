@@ -1,0 +1,69 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Location{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="./"><i class="pli-home"></i></a></li>
+  <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+  <li><a href="{% url 'multiplicity:admin_referencespaces' type.slug %}">{{ type.name }}</a></li>
+  {% if referencespace.name %}
+    <li><a href="{% url 'multiplicity:admin_referencespace' referencespace.type.slug referencespace.id %}">{{ referencespace.name }}</a></li>
+  {% endif %}
+  {% if info.id %}
+    <li><a href="{% url 'multiplicity:admin_referencespace' info.space.type.slug info.space.id %}">{{ info.space.name }}</a></li>
+    <li class="active">{{ info.name }}</li>
+  {% else %}
+    <li class="active">Create location</li>
+  {% endif %}
+</ol>
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-body">
+        <div class="panel-heading">
+          <h3>Reference space location</h3>
+          <p>On this page you can define the location / boundary details for a reference space.</p>
+        </div>
+          <div class="panel-body" style="margin-top:30px">
+            <form method="post" class="form form-horizontal" enctype="multipart/form-data">
+              {% bootstrap_form form layout='horizontal' %}
+              {% buttons %}
+                <div class="col-sm-offset-3 col-sm-9">
+                  <button type="submit" class="btn btn-success">
+                    Save
+                  </button>
+                </div>
+              {% endbuttons %}
+              {% csrf_token %}
+          </form>
+        </div>
+      </div>
+  </div>
+</div>
+
+<p>If you do not have shapefiles, use this:</p>
+<p>
+  Step 1: <a target="_blank" href="https://openstreetmap.org">Open Street Map</a><br>
+  Step 2: 
+  <a href="http://polygons.openstreetmap.fr/index.py" target="_blank">Convert Open Street Map relation to GeoJSON</a>
+</p>
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

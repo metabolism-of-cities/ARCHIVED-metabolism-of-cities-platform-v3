@@ -1,0 +1,83 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+    <style type="text/css">
+    .chat-body{background-color:#d6dbe066}
+    .panel-body{margin-bottom:6px}
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h3>Search</h3>
+
+    {% if saved == 1 %}
+      <div class="alert alert-success">Information was saved</div>
+    {% endif %}
+
+    <p>Enter a keyword to search within the intranet. If you enter multiple keywords, they will be searched for as a single term (i.e. they must appear together).</p>
+
+    <form method="get" class="form form-horizontal" action="{% url 'team:search' %}">
+
+      <p>
+        <input type="text" name="keyword" class="form-control" value="{{ keyword }}" />
+      </p>
+      <p>
+        <button type="submit" class="btn btn-success"><i class="fas fa-search"></i> Search</button>
+      </p>
+      {% csrf_token %} 
+
+    </form>
+
+    {% if keyword != '' %}
+
+      <h3>Results</h3>
+
+      <div class="alert alert-info">
+      {{ list|length }} record(s) found
+      </div>
+
+      {% for info in list %}
+
+            <div class="panel-body chat-body media-block">
+
+              <p>Part of: <strong><a href="{% url 'team:topic' info.topic.id %}">{{ info.topic.name }}</a></strong></p>
+
+                <div class="chat-{% if info.author == user %}me{% else %}user{% endif %}">
+                    <div class="media-left">
+                        {% with 'moc/team/team.'|add:info.author.first_name|lower|add:'.jpg' as image_static %}
+                          <img src="{% static image_static %}" class="img-circle img-sm" alt="">
+                        {% endwith %}
+                    </div>
+                    <div class="media-body">
+
+                        <div>
+                            <p>{{ info.message|linebreaksbr|urlize }}
+                            <small>{{ info.author.first_name }} | {{ info.date|timesince }} ago</small>
+                            </p>
+                        </div>
+
+                    </div>
+
+              </div>
+
+        </div>
+
+      {% endfor %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

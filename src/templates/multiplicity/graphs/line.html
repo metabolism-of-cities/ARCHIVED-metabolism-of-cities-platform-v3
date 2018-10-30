@@ -1,0 +1,68 @@
+{% load static %}
+<div id="lineChart" style="width:100%; height: 600px;"></div>
+
+{% include 'multiplicity/graphs/options.html' %}
+{% include 'multiplicity/graphs/series.time.html' %}
+
+	<script>
+	  Highcharts.chart('lineChart', {
+	      chart: {
+          type: 'spline',
+          animation: false
+	      },
+	      title: {
+          text: 'Wastewater effluent'
+	      },
+	      subtitle: {
+          text: 'Cape Town'
+	      },
+
+        colors: colorScheme,
+
+	      xAxis: {
+          type: 'datetime',
+          title: {
+            text: 'Date',
+            style: {
+              fontWeight: 'bold'
+            },
+          },
+		      crosshair: true,
+          dateTimeLabelFormats: {
+              month: '%B %Y',
+              year: '%B %Y'
+          },
+	      },
+	      yAxis: {
+	          title: {
+	              text: 'ml',
+	              style: {
+	                  fontWeight: 'bold'
+	              },
+	          },
+	          min: 0
+	      },
+	      tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ml<br/>',
+	          // The date can be shown in multiple ways, see:
+	          // https://api.highcharts.com/highcharts/tooltip.dateTimeLabelFormats
+	      },
+
+	      plotOptions: {
+	          spline: {
+	              marker: {
+	                  enabled: false
+	              }
+	          }
+	      },
+
+	      // Define the data points. All series have a dummy year
+	      // of 1970/71 in order to be compared on the same x axis. Note
+	      // that in JavaScript, months start at 0 for January, 1 for February etc.
+	      series: timeSeries,
+	  });
+
+    // lines for chart burger menu thinner
+    $(".highcharts-button-symbol").attr("stroke-width", 1);
+	</script>

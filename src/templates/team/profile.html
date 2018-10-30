@@ -1,0 +1,63 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+    <link href="{% static 'ie/css/switchery.css' %}" rel="stylesheet">
+    <style type="text/css">
+    .taskforce{list-style:none}
+    .taskforce li{margin-bottom:10px}
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
+
+    <h3>Task Forces</h3>
+
+    <table class="table is-striped">
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Notifications</th>
+        <th>Subscribe by default?</th>
+        <th>Options</th>
+      </tr>
+      {% for taskforce in taskforces %}
+      <tr>
+        <td><a href="{% url 'team:taskforce' taskforce.taskforce.id %}">{{ taskforce.taskforce.name }}</a></td>
+        <td>{{ taskforce.role }}</td>
+        <td>{{ taskforce.default_notification }}</td>
+        <td>{{ taskforce.subscribe_by_default }}</td>
+        <td>
+            <a href="{% url 'team:categoryconfig' taskforce.taskforce.id %}">Edit</a> | 
+            <a href="{% url 'team:leavetaskforce' taskforce.id %}">Leave task force</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <p>
+      <a href="/intranet" class="btn btn-info">To message board</a>
+      <a href="/intranet/controlpanel" class="btn btn-info">To back-end portal</a>
+    </p>
+
+    <p><a href="/accounts/logout/" class="btn btn-warning">Log Out</a></p>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+
+{% block footer %}
+{% endblock %}

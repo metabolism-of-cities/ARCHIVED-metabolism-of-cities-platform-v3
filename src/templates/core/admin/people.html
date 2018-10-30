@@ -1,0 +1,44 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}People{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li><a href="{% url 'core:admin_people_list' %}">People</a></li>
+        <li class="active">{{ info.firstname }} {{ info.lastname }}</li>
+    </ol>
+
+  <h2>{{ info|yesno:"Edit details,Add new person" }}</h2>
+  <form method="post" class="form form-horizontal boxit pad-all" enctype="multipart/form-data">
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-success">Save</button>
+      </div>
+    {% endbuttons %}
+    {% csrf_token %}
+  </form>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+  $("#id_member_since").attr("type", "date");
+});
+</script>
+{% endblock %}

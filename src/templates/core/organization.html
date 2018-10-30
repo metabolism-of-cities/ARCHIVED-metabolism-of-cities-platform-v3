@@ -1,0 +1,86 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.get_type_display }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-body">
+      <div class="panel-heading" style="height:auto">
+        <h3>{{ info.name }}</h3>
+        {% if info.location %}
+          <p>
+            <span class="label label-dark">
+              {{ info.location.name }}, {{ info.location.country.name }}
+            </span>
+          </p>
+        {% endif %}
+      </div>
+      <div class="panel-body">
+        {% if info.description %}
+          <p>{{ info.description }}</p>
+        {% endif %}
+        {% if info.url %}
+          <a class="btn btn-pink btn-icon btn-circle" href="{{ info.url }}"><i class="psi-home icon-lg"></i></a> 
+          <a href="{{ info.url }}">Visit website</a>
+        {% endif %}
+
+        {% if divisions %}
+          {% for details in divisions %}
+            <h4>
+            {% if request.user.is_authenticated %}
+              <a href="/admin/core/organization/{{ details.id }}/change/"><i class="psi-pencil"></i></a>
+            {% endif %}
+            {{ details.name }}</h4>
+            <p>{{ details.description|default_if_none:""|linebreaksbr }}</p>
+            {% if details.url %}
+              <a class="btn btn-pink btn-icon btn-circle" href="{{ details.url }}"><i class="psi-home icon-lg"></i></a> 
+              <a href="{{ details.url }}">Visit website</a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        <h4>Relevant publications</h4>
+        {% include 'core/references.list.html' %}
+        <p><a href="{% url 'core:organizations' info.type %}" class="btn btn-info">View all {{ info.get_type_display }}</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+h4{margin-top:20px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.get_type_display }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:community_home' %}">Community</a></li>
+        <li><a href="{% url 'core:organizations' info.type %}">{{ info.get_type_display }}</a></li>
+        <li class="active">{{ info.name }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+    <link href="{% static 'ie/css/switchery.css' %}" rel="stylesheet">
+    <style type="text/css">
+    .taskforce{list-style:none}
+    .taskforce li{margin-bottom:10px}
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
+
+    <p><a href="/accounts/logout/" class="btn btn-warning">Log Out</a></p>
+
+    <h3>Task Forces</h3>
+
+    {% if saved == 1 %}
+      <div class="alert alert-success">Information was saved</div>
+    {% endif %}
+
+    <p>You are part of the following task forces:</p>
+
+    <form method="post" class="form form-horizontal" action="{% url 'team:saveprofile' %}">
+
+      <ul class="list-group taskforce">
+
+          {% for info in categories.all %}
+              <li>
+                    <label>
+                        <input type="checkbox" class="js-switch" value="{{ info.id }}" name="category"
+                       {% if request.user in info.members.all %} 
+                        checked 
+                        {% endif %}>
+                        {{ info.name }}
+                    </label>
+              </li>
+          {% endfor %}
+
+      </ul>
+
+      <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
+      {% csrf_token %} 
+
+    </form>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+
+{% block footer %}
+    <script src="{% static 'ie/js/switchery.min.js' %}"></script>
+  <script type="text/javascript">
+  $(function(){
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+    elems.forEach(function(html) {
+      var switchery = new Switchery(html);
+    });
+  });
+  </script>
+{% endblock %}

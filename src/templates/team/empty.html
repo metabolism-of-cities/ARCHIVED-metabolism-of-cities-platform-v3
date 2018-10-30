@@ -1,0 +1,29 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li class="active">{{ info.name }}</li>
+    </ol>
+
+    <h3>Title</h3>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

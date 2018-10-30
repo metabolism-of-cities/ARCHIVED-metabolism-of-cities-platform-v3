@@ -1,0 +1,65 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li><a href="{% url 'team:projects' %}">Projects</a></li>
+        {% if info.id %}
+          <li><a href="{% url 'team:taskforce' info.taskforce.id %}">{{ info.taskforce.name }}</a></li>
+          <li class="active">Edit project</li>
+        {% else %}
+          <li class="active">Create project</li>
+        {% endif %}
+    </ol>
+
+    {% if info.id %}
+      <h3>{{ info.taskforce.name }}</h3>
+    {% else %}
+      <h3>Create project</h3>
+    {% endif %}
+
+{% if info.id %}
+  <form action="{% url 'team:project' info.id %}" method="post" class="form form-horizontal">
+{% else %}
+  <form action="{% url 'team:createproject' %}" method="post" class="form form-horizontal">
+
+{% endif %}
+    {% bootstrap_form taskforceform layout='horizontal' %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+        <div class="col-sm-offset-3 col-sm-9">
+          <button type="submit" class="btn btn-success">
+            Save
+          </button>
+        </div>
+       </div>
+    {% endbuttons %}
+    {% csrf_token %}
+</form>
+
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+  $("#id_start_date").attr("type", "date");
+  $("#id_end_date").attr("type", "date");
+});
+</script>
+{% endblock %}

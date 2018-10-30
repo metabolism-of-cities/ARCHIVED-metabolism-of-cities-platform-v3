@@ -1,0 +1,155 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Prototype overview{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+        <div class="col-lg-6">
+          <div class="panel widget">
+              <div class="widget-header bg-purple city-header" style="min-height:266px">
+                
+                  {% if SITE_ID == 1 %}
+                  <img class="widget-bg img-responsive" src="/media/referencespace/capetown.jpg" alt="">
+                  {% else %}
+                    <a href="/cities/antigua-barbuda">
+                    <img class="widget-bg img-responsive" src="http://localhost:8000/media/referencespace/Antigua__Barbuda.jpg" alt="">
+                    </a>
+                  {% endif %}
+                
+              </div>
+              <div class="widget-body text-center">
+                
+                {% if SITE_ID == 1 %}
+                  <img alt="" class="widget-img img-circle img-border-light" src="https://static.metabolismofcities.org/multiplicity/img/cities/map-cape-town.jpg">
+                
+                  <h4 class="mar-no text-main">Cape Town</h4>
+                  <p class="text-muted mar-no">South Africa</p>
+                {% else %}
+                  <img alt="" class="widget-img img-circle img-border-light" src="http://localhost:8000/static/multiplicity/img/cities/map-antigua-barbuda.jpg">
+                
+                  <h4 class="mar-no text-main">Antigua &amp; Barbuda</h4>
+                  <p class="text-muted mar-no">Caribbean</p>
+                {% endif %}
+              </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="panel panel-dark panel-colorful">
+                <div class="pad-all text-center">
+                  <a href="/about/team">
+                    <span class="text-3x text-thin">8</span>
+                    <p>Islands</p>
+                  </a>
+                </div>
+              </div>
+            </div>            <div class="col-lg-4">
+              <div class="panel panel-dark panel-colorful">
+                <div class="pad-all text-center">
+                  <a href="/resources/publications">
+                    <span class="text-3x text-thin">477</span>
+                    <p>Resources</p>
+                  </a>
+                </div>
+              </div>
+            </div><div class="col-lg-4">
+              <div class="panel panel-dark panel-colorful">
+                <div class="pad-all text-center">
+                  <a href="/resources/videos">
+                    <span class="text-3x text-thin">23</span>
+                    <p>Research Projects</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+  </div>
+
+
+<div class="row">
+  <div class="col-sm-6 col-lg-4">
+      <div class="panel panel-trans">
+          <div class="panel-heading">
+              <h3 class="panel-title">Latest news</h3>
+          </div>
+          <div class="pad-ver">
+              <ul class="list-group bg-trans list-todo mar-no">
+                {% for details in news %}
+                  <li class="list-group-item">
+                    <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
+                    <span >{{ details.created_at|date:"M d, Y" }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+          </div>
+      </div>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+      <div class="panel panel-trans">
+          <div class="panel-heading">
+              <h3 class="panel-title">Latest resources</h3>
+          </div>
+          <div class="pad-ver">
+              <ul class="list-group bg-trans list-todo mar-no">
+                {% for details in publications %}
+                  <li class="list-group-item">
+                    <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a><br>
+                  </li>
+                {% endfor %}
+              </ul>
+          </div>
+      </div>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+      <div class="panel panel-trans">
+          <div class="panel-heading">
+              <h3 class="panel-title">Latest research</h3>
+          </div>
+          <div class="pad-ver">
+              <ul class="list-group bg-trans list-todo mar-no">
+                {% for details in projects %}
+                  <li class="list-group-item">
+                    <a href="{% url 'core:project' details.id %}">{{ details.name }}</a><br>
+                  </li>
+                {% endfor %}
+              </ul>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Metabolism of Islands</h1>
+        <ol class="breadcrumb">
+            <li><a href="./"><i class="pli-home"></i></a></li>
+            <li class="active">Homepage</li>
+          </ol>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

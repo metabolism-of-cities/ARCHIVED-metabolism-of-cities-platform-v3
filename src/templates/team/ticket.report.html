@@ -1,0 +1,77 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li class="active">Progress report</li>
+    </ol>
+
+    <h3>Progress report</h3>
+
+    <p>
+      Show: 
+      <a class="btn btn-{% if show == 'all' %}info{% else %}default{% endif %}" href="{% url 'team:ticketreport' %}?show=all&amp;tasks={{ filter_task }}&amp;user={{ user }}">All task forces</a>
+      <a class="btn btn-{% if show == 'my_taskforces' %}info{% else %}default{% endif %}" href="{% url 'team:ticketreport' %}?show=my_taskforces&amp;tasks={{ filter_task }}&amp;user={{ user }}">My task forces</a>
+    </p>
+
+    <p>
+      User: 
+      <a class="btn btn-{% if user == 'all' %}info{% else %}default{% endif %}" href="{% url 'team:ticketreport' %}?show={{ show }}&amp;tasks={{ filter_task }}&amp;user=all">All</a>
+      {% for userinfo in users %}
+        <a class="btn btn-{% if userinfo.id == user %}info{% else %}default{% endif %}" href="{% url 'team:ticketreport' %}?show={{ show }}&amp;tasks={{ filter_task }}&amp;user={{ userinfo.id }}">{{ userinfo }}</a>
+      {% endfor %}
+    </p>
+
+    <ul class="nav nav-tabs nav-tabs-inverted">
+      <li class="{% if filter_task == "all" %}active{% else %}regular{% endif %}"><a href="{% url 'team:ticketreport' %}?show={{ show }}&amp;tasks=all&amp;user={{ user }}">All actions</a></li>
+      <li class="{% if filter_task == "new" %}active{% else %}regular{% endif %}"><a href="{% url 'team:ticketreport' %}?show={{ show }}&amp;tasks=new&amp;user={{ user }}">Tasks created</a></li>
+      <li class="{% if filter_task == "updates" %}active{% else %}regular{% endif %}"><a href="{% url 'team:ticketreport' %}?show={{ show }}&amp;tasks=updates&amp;user={{ user }}">Progress update</a></li>
+      <li class="{% if filter_task == "completed" %}active{% else %}regular{% endif %}"><a href="{% url 'team:ticketreport' %}?show={{ show }}&amp;tasks=completed&amp;user={{ user }}">Tasks completed</a></li>
+    </ul>
+    <div class="boxit pad-all">
+    <table class="table table-striped datatable">
+    <thead>
+      <tr>
+        <th width="100">Date</th>
+        <th>Person</th>
+        <th>Task</th>
+        <th>Task force</th>
+        <th width="200">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for info in log %}
+        <tr>
+          <td data-sort="{{ info.created_at|date:"YmdHis" }}">{{ info.created_at|date:"M d, Y" }}</td>
+          <td>{{ info.user }}</td>
+          <td><a href="{% url 'team:ticket' info.ticket.id %}">{{ info.ticket.title }}</a>
+          <td><a href="{% url 'team:taskforce' info.ticket.taskforce.id %}">{{ info.ticket.taskforce.name }}</a></td>
+          <td>{{ info.title }}
+          {% if info.description %}<br>
+          <em>{{ info.description|linebreaksbr }}</em>
+          {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}ac

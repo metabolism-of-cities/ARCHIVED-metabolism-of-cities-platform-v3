@@ -1,0 +1,10 @@
+{{ type }} digest
+
+View: {{ url }}
+
+--------------------------------------------------------
+{% for info in posts %}
+{{ info.message }}
+Posted by: {{ info.author.first_name }} | {{ info.date|timesince }} ago
+--------------------------------------------------------
+{% endfor %}

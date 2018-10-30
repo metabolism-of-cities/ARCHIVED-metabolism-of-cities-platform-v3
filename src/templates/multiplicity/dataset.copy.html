@@ -1,0 +1,470 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ dataset.name }} | Datasets | {{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>{{ dataset.name }}</h3>
+        <p>{{ dataset.notes|linebreaksbr }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Overview</h3>
+
+        <dl class="dl dl-horizontal">
+          <dt>City</dt>
+          <dd>{{ dataset.primary_space.name }}, {{ dataset.primary_space.country.name }}</dd>
+
+          <dt>Source(s)</dt>
+          {% for details in dataset.references.all %}
+            <dd><a href="{% url 'core:reference' details.id %}">{{ details.title }}</a></dd>
+          {% endfor %}
+
+          <dt>Data points</dt>
+          <dd>{{ dataset.data_set.count }} </dd>
+
+        </dl>
+
+        <dl class="dl dl-horizontal">
+        {% for csv in csv_files %}
+
+          <dt>Uploaded by</dt>
+          <dd><a href="{% url 'core:peopledetails' csv.user.people.id %}">{{ csv.user.people.firstname }} {{ csv.user.people.lastname }}</a></dd>
+
+          <dt>CSV file</dt>
+          <dd>{{ csv.original_name }}</dd>
+
+          <dt>Date</dt>
+          <dd>{{ csv.created_at }}</dd>
+
+        {% endfor %}
+
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Data Quality</h3>
+        <dl class="dl dl-horizontal">
+
+          {% if dataset.reliability %}
+            <dt>Reliability</dt>
+            <dd>
+              <div class="btn-group">
+              {% for i in scoring %}
+                  <button class="btn btn-default btn-active-purple {% if dataset.reliability.score == i %}active{%endif %}">{{ i }}</button>
+              {% endfor %}
+              </div>
+              <i title="{{ dataset.reliability.description }}" class="fas fa-info-circle"></i>
+            </dd>
+          {% endif %}
+
+          {% if dataset.completeness %}
+            <dt>Completeness</dt>
+            <dd>
+              <div class="btn-group">
+              {% for i in scoring %}
+                  <button class="btn btn-default btn-active-purple {% if dataset.completeness.score == i %}active{%endif %}">{{ i }}</button>
+              {% endfor %}
+              </div>
+              <i title="{{ dataset.completeness.description }}" class="fas fa-info-circle"></i>
+            </dd>
+          {% endif %}
+
+          {% if dataset.geographical_correlation %}
+            <dt>Geographical correlation</dt>
+            <dd>
+              <div class="btn-group">
+              {% for i in scoring %}
+                  <button class="btn btn-default btn-active-purple {% if dataset.geographical_correlation.score == i %}active{%endif %}">{{ i }}</button>
+              {% endfor %}
+              </div>
+              <i title="{{ dataset.geographical_correlation.description }}" class="fas fa-info-circle"></i>
+            </dd>
+          {% endif %}
+
+          {% if dataset.access %}
+            <dt>Access</dt>
+            <dd>
+              <div class="btn-group">
+              {% for i in scoring %}
+                  <button class="btn btn-default btn-active-purple {% if dataset.access.score == i %}active{%endif %}">{{ i }}</button>
+              {% endfor %}
+              </div>
+              <i title="{{ dataset.access.description }}" class="fas fa-info-circle"></i>
+            </dd>
+          {% endif %}
+
+        </dl>
+
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div id="lineGraph" style="width:100%; height:600px;"></div>
+  </div>
+
+  <div style="height: 500px;"></div>
+
+  <div>
+    <div id="barChart" style="width:100%; height:600px;"></div>
+  </div>
+
+</div>
+
+{% if topic %}
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-colorful panel-purple">
+        <div class="panel-body">
+          <p><strong>Subset: {{ topic.name }}</strong></p>
+          <p>You are viewing a subset of the entire dataset.
+          We are only showing materials that are within the following category:
+          <strong>{{ topic.name }}</strong>.<br><br>
+          <a href="{% url 'multiplicity:dataset' info.slug dataset.id %}" class="btn btn-default">Click here to view the entire dataset</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-colorful panel-success">
+      <div class="panel-body">
+       <table class="table table-fullwidth table-striped datatable">
+        <thead>
+          <tr>
+            <th>Timeframe</th>
+            <th>Material</th>
+            <th>Material classification</th>
+            <th>Quantity</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Comments</th>
+          </tr>
+          </thead>
+          <tbody>
+            {% for details in dataset.data_set.all %}
+
+            {% if not topic or details.material in topic.materials.all or details.material.parent in topic.materials.all %}
+              <tr>
+                <td data-order="{{ details.from }}"><span class="date" title="From {{ details.timeframe.start }} to {{ details.timeframe.end }}">{{ details.timeframe }}</span></td>
+                <td>{{ details.material_name }}</td>
+                <td class="shorten" title="{{ details.material.name }}">{{ details.material.code }}: {{ details.material.name }}</td>
+                <td data-sort="{{ details.quantity }}">{{ details.quantity|intcomma }} {{ details.unit.symbol }}</td>
+                <td>{{ details.origin_space }}</td>
+                <td>{{ details.destination_space }}</td>
+                <td>{{ details.comments }}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="chart" width="100" height="50"></canvas>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Replication instructions</h3>
+        <p>{{ dataset.replication|linebreaksbr }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block head %}
+<style type="text/css">
+.table.dataTable tbody tr{background-color:#93cd51}
+table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width:100%;
+}
+.date, .dottedline{  border-bottom: 1px dashed #999;}
+.new{font-weight:bold;color:#52cb52}
+.new.dottedline{border-color:#52cb52}
+td.shorten {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:datasets' info.slug %}">Datasets</a></li>
+        <li class="active">{{ dataset.name }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/series-label.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script>
+    Highcharts.setOptions({
+        chart: {
+            style: {
+                fontFamily: "'Lato', sans-serif"
+            }
+        }
+    });
+    Highcharts.chart('lineGraph', {
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Wastewater effluent'
+        },
+        subtitle: {
+            text: 'Cape Town'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+              text: 'Date',
+              style: {
+                  fontWeight: 'bold'
+              },
+            }
+        },
+        yAxis: {
+            title: {
+              text: 'ML',
+              style: {
+                  fontWeight: 'bold'
+              },
+            },
+            min: 0
+        },
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+
+        colors: ['#f44336', '#ffb300', '#03a9f4', '#ab47bc', '#26a69a', '#8bc34a'],
+
+        // Define the data points. All series have a dummy year
+        // of 1970/71 in order to be compared on the same x axis. Note
+        // that in JavaScript, months start at 0 for January, 1 for February etc.
+        series: [{
+            name: "Athlone",
+            data: [
+              [Date.UTC(  2015, 4, 1  ),  2912.1  ],
+              [Date.UTC(  2015, 3, 1  ),  3059.7  ],
+              [Date.UTC(  2015, 2, 1  ),  2875  ],
+              [Date.UTC(  2015, 1, 1  ),  3412.4  ],
+              [Date.UTC(  2014, 12, 1 ),  3529.4  ],
+              [Date.UTC(  2014, 11, 1 ),  3487.9  ],
+              [Date.UTC(  2014, 10, 1 ),  2861.8  ],
+              [Date.UTC(  2014, 9, 1  ),  4589  ],
+              [Date.UTC(  2014, 8, 1  ),  5393.8  ],
+              [Date.UTC(  2014, 7, 1  ),  5396.3  ],
+              [Date.UTC(  2014, 6, 1  ),  4651.5  ],
+              [Date.UTC(  2014, 5, 1  ),  3377.1  ],
+              [Date.UTC(  2014, 4, 1  ),  3258.6  ],
+              [Date.UTC(  2014, 3, 1  ),  3391.4  ],
+              [Date.UTC(  2014, 2, 1  ),  2861.8  ],
+              [Date.UTC(  2014, 1, 1  ),  3630.9  ],
+              [Date.UTC(  2013, 12, 1 ),  3817.1  ],
+              [Date.UTC(  2013, 11, 1 ),  4485.4  ],
+              [Date.UTC(  2013, 10, 1 ),  4777.6  ],
+              [Date.UTC(  2013, 9, 1  ),  5718.5  ],
+              [Date.UTC(  2013, 8, 1  ),  5695  ],
+              [Date.UTC(  2013, 7, 1  ),  4967.3  ],
+            ]
+        }, {
+            name: "Bellville",
+            data: [
+              [Date.UTC(  2015, 4, 1  ),  1398.7  ],
+              [Date.UTC(  2015, 3, 1  ),  1538.8  ],
+              [Date.UTC(  2015, 2, 1  ),  1392.5  ],
+              [Date.UTC(  2015, 1, 1  ),  1528.3  ],
+              [Date.UTC(  2014, 12, 1 ),  1179.5  ],
+              [Date.UTC(  2014, 11, 1 ),  1220.6  ],
+              [Date.UTC(  2014, 10, 1 ),  1449.5  ],
+              [Date.UTC(  2014, 9, 1  ),  1766.5  ],
+              [Date.UTC(  2014, 8, 1  ),  2105.3  ],
+              [Date.UTC(  2014, 7, 1  ),  2045.2  ],
+              [Date.UTC(  2014, 6, 1  ),  1928.8  ],
+              [Date.UTC(  2014, 5, 1  ),  1684.1  ],
+              [Date.UTC(  2014, 4, 1  ),  1537.37 ],
+              [Date.UTC(  2014, 3, 1  ),  1608.1  ],
+              [Date.UTC(  2014, 2, 1  ),  1449.5  ],
+              [Date.UTC(  2014, 1, 1  ),  1421.4  ],
+              [Date.UTC(  2013, 12, 1 ),  1587.4  ],
+              [Date.UTC(  2013, 11, 1 ),  1898.7  ],
+              [Date.UTC(  2013, 10, 1 ),  1986.7  ],
+              [Date.UTC(  2013, 9, 1  ),  2287  ],
+              [Date.UTC(  2013, 8, 1  ),  2412  ],
+              [Date.UTC(  2013, 7, 1  ),  1790.6  ],
+            ]
+        }, {
+            name: "Borcherds Quarry ",
+            data: [
+              [Date.UTC(  2015, 4, 1  ),  995.5 ],
+              [Date.UTC(  2015, 3, 1  ),  1033.2  ],
+              [Date.UTC(  2015, 2, 1  ),  921.3 ],
+              [Date.UTC(  2015, 1, 1  ),  1039.1  ],
+              [Date.UTC(  2014, 12, 1 ),  1036.8  ],
+              [Date.UTC(  2014, 11, 1 ),  1068  ],
+              [Date.UTC(  2014, 10, 1 ),  1024  ],
+              [Date.UTC(  2014, 9, 1  ),  1113.9  ],
+              [Date.UTC(  2014, 8, 1  ),  1376.9  ],
+              [Date.UTC(  2014, 7, 1  ),  1333.9  ],
+              [Date.UTC(  2014, 6, 1  ),  1115.7  ],
+              [Date.UTC(  2014, 5, 1  ),  1143.5  ],
+              [Date.UTC(  2014, 4, 1  ),  1104.7  ],
+              [Date.UTC(  2014, 3, 1  ),  1157.7  ],
+              [Date.UTC(  2014, 2, 1  ),  1024  ],
+              [Date.UTC(  2014, 1, 1  ),  1196.5  ],
+              [Date.UTC(  2013, 12, 1 ),  1297.3  ],
+              [Date.UTC(  2013, 11, 1 ),  1306.7  ],
+              [Date.UTC(  2013, 10, 1 ),  1260.5  ],
+              [Date.UTC(  2013, 9, 1  ),  1313.7  ],
+              [Date.UTC(  2013, 8, 1  ),  1412  ],
+              [Date.UTC(  2013, 7, 1  ),  1226.8  ],
+            ]
+        }]
+    });
+  </script>
+  <script>
+    Highcharts.setOptions({
+        chart: {
+            style: {
+                fontFamily: "'Lato', sans-serif"
+            }
+        }
+    });
+
+    Highcharts.chart('barChart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'City-wide water consumption'
+        },
+        subtitle: {
+            text: 'Cape Town'
+        },
+        xAxis: {
+            categories: ['FY 2013/2014', 'FY 2014/2015', 'FY 2015/2016'],
+            title: {
+              style: {
+                  fontWeight: 'bold'
+              },
+              text: 'Year'
+            },
+        },
+        yAxis: {
+            min: 0,
+            title: {
+              style: {
+                  fontWeight: 'bold'
+              },
+              text: 'Total water consumption'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                }
+            }
+        },
+        colors: ['#f44336', '#03a9f4', '#ffb300', '#ab47bc', '#26a69a', '#8bc34a'],
+        series: [{
+            name: 'Unaccounted for',
+            data: [68756744, 76467116, 73031874]
+        },
+        {
+            name: 'Authorized',
+            data: [268467785, 288394954, 278188341]
+        }]
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,11 @@
+<div class="list-group bord-no references">
+  {% for details in list %}
+    <a class="list-group-item" href="{% url 'core:reference' details.id %}">
+      {{ details.title }}
+      <span>
+        <em>{{ details.source }}</em>
+        <strong>{{ details.year }}</strong>
+      </span>
+    </a>
+  {% endfor %}
+</div>

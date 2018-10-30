@@ -1,0 +1,86 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Urban metabolism data{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Processes</h3>
+  </div>
+  <div class="panel-body">
+
+  <div id="tree"></div>
+  <div id="details"></div>
+
+  </div>
+</div>
+    
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/skin-lion/ui.fancytree.min.css" />
+<style type="text/css">
+#tree{overflow:hidden}
+#details{margin-top:20px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Urban metabolism data</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'staf:index' %}">Data</a></li>
+        <li class="active">Processes</li>
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/jquery.fancytree-all-deps.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    // Load tree from Ajax JSON
+    $("#tree").fancytree({
+      source: 
+        [
+          {% for details in processes %}
+            {title: "{{ details.name }}", key: "{{ details.id }}", lazy: true},
+          {% endfor %}
+        ]
+      ,
+			lazyLoad: function(event, data){
+        var node = data.node;
+				data.result = $.ajax({
+					url: "{% url 'staf:processajax' %}",
+					dataType: "json",
+          data: {mode: "children", parent: node.key},
+				});
+			},
+      activate: function(event, data) {
+        var node = data.node;
+        var settext = node.title+'<br> <br><a class="btn btn-warning" href="/data/processes/'+node.key+'/edit"><i class="fa fa-pencil-alt"></i> Edit</a> <a class="btn btn-info" href="/data/processes/'+node.key+'/child"><i class="fa fa-plus"></i> Add child</a>';
+        $("#details").html(settext);
+      },
+		});
+    
+});
+
+</script>
+{% endblock %}

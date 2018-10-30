@@ -1,0 +1,222 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Task force: {{ info.name }}
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.margin-top{margin-top:30px}
+h4 strong.tag:not(.label){opacity:0.5;font-size:70%}
+.morecontent span {
+    display: none;
+}
+.morelink {
+    display: block;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        {% if project.id %}
+          <li><a href="{% url 'team:projects' %}">Projects</a></li>
+        {% endif %}
+        <li class="active">{{ info.name }}</li>
+    </ol>
+
+    {% if project.id %}
+        <a class="btn btn-info pull-right" href="{% url 'team:project' project.id %}"><i class="fas fa-edit icon-lg icon-fw"></i>Edit details</a>
+    {% else %}
+        <a class="btn btn-info pull-right" href="/admin/team/category/{{ info.id }}/change/"><i class="fas fa-edit icon-lg icon-fw"></i>Edit details</a>
+    {% endif %}
+
+    <h3>{{ info.name }}</h3>
+
+    {% if project.id %}
+        <p class="well more">{{ project.description|linebreaksbr }} </p>
+    {% else %}
+        <p class="well">{{ info.category_description|linebreaksbr }} </p>
+    {% endif %}
+
+    {% if project.id %}
+      <div class="row">
+        <div class="col-md-6">
+          <dl class="dl dl-horizontal">
+            {% if project.name %}
+              <dt>Project name</dt>
+              <dd>{{ project.name }}</dd>
+            {% endif %}
+            {% if project.funders %}
+              <dt>Funders</dt>
+              <dd>{{ project.funders }}</dd>
+            {% endif %}
+            {% if project.partners %}
+              <dt>Partners</dt>
+              <dd>{{ project.partners }}</dd>
+            {% endif %}
+            {% if project.type %}
+              <dt>Type</dt>
+              <dd>{{ project.type.title }}</dd>
+            {% endif %}
+          </dl>
+        </div><div class="col-md-6">
+          <dl class="dl dl-horizontal">
+            {% if project.total_budget %}
+              <dt>Total budget</dt>
+              <dd>{{ project.total_budget }}</dd>
+            {% endif %}
+            {% if project.our_budget %}
+              <dt>Our budget</dt>
+              <dd>{{ project.our_budget }}</dd>
+            {% endif %}
+              <dt>Status</dt>
+              <dd>{{ project.get_status_display }}</dd>
+          </dl>
+        </div>
+      </div>
+    {% endif %}
+
+    <h4 class="margin-top">Tasks <strong class="tag pull-right">{{ tickets.count }} tasks found.</strong></h4>
+
+    {% if tickets.count %}
+    {% if units %}
+    <ul class="nav nav-tabs nav-tabs-inverted" id="units">
+      <li class="active"><a href="#" data-id="all">All</a></li>
+      {% for unit in units %}
+        <li><a href="#" data-id="{{ unit.id }}">{{ unit.name }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <table class="table table-striped">
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Assigned to</th>
+        <th>Urgency</th>
+        <th>Importance</th>
+        <th>Complexity</th>
+      </tr>
+      {% for ticket in tickets %}
+      <tr class="unit unit-{{ ticket.unit.id }}">
+        <td>
+        <a href="{% url 'team:editticket' ticket.id %}"><i class="fa fa-pencil-alt"></i></a>
+        <a href="{% url 'team:ticket' ticket.id %}">{{ ticket.title }}</a></td>
+        <td>{{ ticket.get_status_display }}</td>
+        <td>{{ ticket.assigned_to.first_name }} {{ ticket.assigned_to.last_name }}</td>
+        <td>{{ ticket.get_urgency_display }}</td>
+        <td>{{ ticket.get_importance_display }}</td>
+        <td>{{ ticket.get_complexity_display }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    <p><a href="{% url 'team:newticket' info.id %}" class="btn btn-success"><i class="fas fa-plus fa-fw"></i> Create new task</a></p>
+
+
+    <h4 class="margin-top">Members
+        <strong class="tag pull-right">{{ info.members.count }} member(s) found.</strong>
+    </h4>
+
+    <table class="table table-striped">
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Notifications</th>
+      </tr>
+      {% for member in members %}
+      <tr>
+        <td>{{ member.user.first_name }} {{ member.user.last_name }}</td>
+        <td>{{ member.get_role_display }}</td>
+        <td>{{ member.get_default_subscription_display }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h4 class="margin-top">Quick links</h4>
+
+    <p><a class="btn btn-info" href="{% url 'team:categoryconfig' info.id %}"><i class="fas fa-cog icon-lg icon-fw"></i> 
+    {% if project.id %}
+        My role and subscription settings
+    {% else %}
+        Change my task force settings
+    {% endif %}
+    </a></p>
+    <p><a class="btn btn-info" href="{{ info.google_drive }}"><i class="fab fa-google-drive icon-lg icon-fw"></i> Go to Google Drive</a></p>
+    {% if project.id %}
+        <p><a class="btn btn-info" href="{% url 'team:viewcategory' 12 %}"><i class="far fa-comments icon-lg icon-fw"></i> Discussion board: Services</a></p>
+    {% else %}
+        <p><a class="btn btn-info" href="{% url 'team:viewcategory' info.id %}"><i class="far fa-comments icon-lg icon-fw"></i> Discussion board</a></p>
+    {% endif %}
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block footer %}
+
+    <script type="text/javascript">
+    $(function(){
+      $("#units a").click(function(e){
+        e.preventDefault();
+        $("#units li").removeClass('active');
+        $(this).closest("li").addClass('active');
+        $("tr.unit").hide();
+        var id = $(this).data("id");
+        if (id == "all") {
+          $("tr.unit").show();
+        } else {
+          $("tr.unit-"+id).show();
+        }
+      });
+
+
+    var showChar = 1000;  // How many characters are shown by default
+    var ellipsestext = "...";
+    var moretext = "Show more >";
+    var lesstext = "Show less";
+    
+
+    $('.more').each(function() {
+        var content = $(this).html();
+ 
+        if(content.length > showChar) {
+ 
+            var c = content.substr(0, showChar);
+            var h = content.substr(showChar, content.length - showChar);
+ 
+            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+ 
+            $(this).html(html);
+        }
+ 
+    });
+ 
+    $(".morelink").click(function(){
+        if($(this).hasClass("less")) {
+            $(this).removeClass("less");
+            $(this).html(moretext);
+        } else {
+            $(this).addClass("less");
+            $(this).html(lesstext);
+        }
+        $(this).parent().prev().toggle();
+        $(this).prev().toggle();
+        return false;
+    });
+
+    });
+    </script>
+
+{% endblock %}

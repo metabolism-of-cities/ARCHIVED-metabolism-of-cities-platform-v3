@@ -1,0 +1,64 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Task forces{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3>Task forces</h3>
+        </div>
+        <div class="panel-body">
+            <p>
+                This page provides an overview of the different task forces that we have at Metabolism of Cities.
+                <strong>We always look for people to join our task forces!</strong> If you are keen to help us
+                and become part of our group, please have a look at the list below and let us know which one(s) 
+                you would like to join. Our task force lead will then indicate what assignments are available and 
+                how you can assist.
+            </p>
+            {% for info in list %}
+
+              <h4>{{ info.name }}</h4>
+              <p>
+                {{ info.category_description|linebreaksbr }}
+              </p>
+
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Task forces</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:about' %}">About</a></li>
+        <li class="active">Task forces</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Enter meta data</h3>
+  </div>
+  <div class="panel-body">
+
+    <div class="row">
+      <a href="{% url 'multiplicity:upload_flow_file' info.slug dataset.id %}">
+      <div class="col-sm-2">
+        <div class="panel panel-default panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">1</span>
+                <p>Upload data</p>
+                <i class="psi-upload icon-lg"></i>
+            </div>
+        </div>
+      </div>
+      </a>
+      <a href="{% url 'multiplicity:upload_flow_review' info.slug dataset.id file.id %}">
+      <div class="col-sm-2">
+        <div class="panel panel-default panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">2</span>
+                <p>Review data</p>
+                <i class="psi-eye icon-lg"></i>
+            </div>
+        </div>
+      </div>
+      </a>
+        <div class="col-sm-2">
+          <div class="panel panel-success panel-colorful">
+              <div class="pad-all text-center">
+                  <span class="text-3x text-thin">3</span>
+                  <p>Meta data</p>
+                  <i class="psi-lock icon-lg"></i>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <p class="well">File: <strong>{{ file.original_name }}</strong></p>
+
+  </div>
+</div>
+
+<form method="post" class="form form-horizontal" enctype="multipart/form-data">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel">
+        <div class="panel-body">
+
+          {% csrf_token %}
+
+          <fieldset class="dqilist">
+            <legend>Data quality indicators</legend>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="id_name">Dataset name</label>
+              <div class="col-md-9">
+                <input name="name" id="id_name" class="form-control" value="{{ file.dataset.name }}" required type="text">
+              </div>
+            </div>
+
+            {% for details in dqi %}
+              <div class="row">
+                <div class="col-sm-3 pad-left">
+                  {{ details.name }}           
+                  <input type="hidden" id="field-{{ details.id }}" name="quality_{{ details.id }}" value="" />
+                </div>
+                <div class="col-sm-9">
+                  <div class="btn-group dqi">
+                  {% for rating in details.dqirating_set.all %}
+                    <button class="btn btn-default add-tooltip" data-rating="{{ rating.score }}" data-indicator="{{ details.id }}" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ rating.description }}">{{ rating.score }}</button>
+                  {% endfor %}
+                  <a href="#reset" data-indicator="{{ details.id }}" class="reset add-tooltip" data-toggle="tooltip" data-container="body" data-placement="top" title="Reset value"><i class="fa fa-ban"></i></a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+          <div class="form-group mar-top">
+            <label class="col-md-3 control-label" for="id_notes">Notes</label>
+            <div class="col-md-9">
+              <textarea class="form-control" name="notes" id="id_notes" placeholder="Enter any relevant notes that are helpful to better understand the quality of the data."></textarea>
+            </div>
+          </div>
+            
+          </fieldset>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <ul class="nav nav-tabs" id="source-select">
+    <li class="active"><a href="" data-id="new_source">Add new source</a></li>
+    <li><a href="#" data-id="existing_source">Select existing source</a></li>
+  </ul>
+
+  <div class="row source-box">
+    <div class="col-lg-12">
+      <div class="panel">
+        <div class="panel-body">
+
+          <fieldset class="new_source">
+            <legend>Add source document</legend>
+            {% bootstrap_form referenceform layout='horizontal' %}
+          </fieldset>
+
+          <fieldset class="existing_source">
+            <legend>Select existing source</legend>
+
+            <select id="references" name="reference_id" width="100%" class="form-control"></select>
+            
+          </fieldset>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel">
+        <div class="panel-body">
+
+          <fieldset class="new_source">
+            <legend>Replication instructions</legend>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="id_general_notes">Instructions</label>
+              <div class="col-md-9">
+                <textarea class="form-control" name="instructions" id="id_general_notes" placeholder="What steps are required for someone to obtain this same dataset?"></textarea>
+              </div>
+            </div>
+              
+          </fieldset>
+
+          <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+              <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i> Submit</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
+<style type="text/css">
+.existing_source{display:none}
+.exists{opacity:0.5}
+.main-content-block .exists a:not(.btn){color:red;text-decoration:dotted}
+.table td{color:#333}
+textarea[name='authorlist']{height:100px}
+.dqi a{position:relative;top:4px;left:5px}
+.pad-left{padding-left:20px !important}
+.dqilist .control-label {text-align:left;padding-left:20px}
+fieldset{margin-bottom:30px}
+#id_general_notes{height:200px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+  
+  <div id="page-title">
+    <h1 class="page-header text-overflow">Material {{ type }}</h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="./"><i class="pli-home"></i></a></li>
+    <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+    <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+    <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
+    <li><a href="{% url 'multiplicity:upload_flow' info.slug %}">Material {{ type }}</a></li>
+    <li><a href="{% url 'multiplicity:upload_flow_file' info.slug dataset.id %}">{{ dataset.name }}</a></li>
+    <li class="active">Enter meta data</li>
+  </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script type="text/javascript" src="{% static 'ie/js/select2.min.js' %}"></script>
+  <script type="text/javascript">
+  $(function(){
+
+    $("#id_journal").select2();
+
+    $(".dqi button").click(function(e){
+      e.preventDefault();
+      $(this).closest(".dqi").find('button').removeClass("btn-success");
+      $(this).addClass("btn-success");
+      var indicator = $(this).data("indicator");
+      var rating = $(this).data("rating");
+      $("#field-"+indicator).val(rating);
+    });
+
+    $(".dqi a").click(function(e){
+      e.preventDefault();
+      $(this).closest(".dqi").find('button').removeClass("btn-success");
+      var indicator = $(this).data("indicator");
+      $("#field-"+indicator).val('');
+    });
+    
+    $("#source-select a").click(function(e){
+      $("#source-select li").removeClass("active");
+      $(this).closest("li").addClass('active');
+      e.preventDefault();
+      var id = $(this).data("id");
+      $(".source-box fieldset").hide();
+      $(".source-box fieldset."+id).show('fast');
+      if (id == "new_source") {
+        $("#id_title").attr("required", "required");
+        $("#id_authorlist").attr("required", "required");
+        $("#id_year").attr("required", "required");
+      } else {
+        $("#id_title").removeAttr("required");
+        $("#id_authorlist").removeAttr("required");
+        $("#id_year").removeAttr("required");
+      }
+    });
+
+      $('#references').select2({
+        width: '100%',
+        ajax: {
+          url: '{% url 'core:reference_search_ajax' %}',
+          dataType: 'json',
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },
+        }
+      });
+
+
+  });
+  </script>
+{% endblock %}

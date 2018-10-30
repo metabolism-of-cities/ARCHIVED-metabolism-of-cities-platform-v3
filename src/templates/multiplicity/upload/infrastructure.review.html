@@ -1,0 +1,143 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Review your data</h3>
+  </div>
+  <div class="panel-body">
+
+    <div class="row">
+              <a href="{% url 'multiplicity:upload_infrastructure_file' info.slug type.slug %}">
+              <div class="col-sm-2">
+                <div class="panel panel-default panel-colorful">
+                    <div class="pad-all text-center">
+                        <span class="text-3x text-thin">1</span>
+                        <p>Upload data</p>
+                        <i class="psi-upload icon-lg"></i>
+                    </div>
+                </div>
+              </div>
+              </a>
+              <div class="col-sm-2">
+                <div class="panel panel-success panel-colorful">
+                    <div class="pad-all text-center">
+                        <span class="text-3x text-thin">2</span>
+                        <p>Review data</p>
+                        <i class="psi-eye icon-lg"></i>
+                    </div>
+                </div>
+              </div>
+                <a href="{% url 'multiplicity:upload_infrastructure_meta' info.slug type.slug file.id %}">
+                <div class="col-sm-2">
+                  <div class="panel panel-default panel-colorful">
+                      <div class="pad-all text-center">
+                          <span class="text-3x text-thin">3</span>
+                          <p>Meta data</p>
+                          <i class="psi-lock icon-lg"></i>
+                      </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+    <p class="well">File: <strong>{{ file.original_name }}</strong></p>
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% else %}
+    <table class="table table-striped datatable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>GPS</th>
+          <th>Description</th>
+          <th>URL</th>
+          {% if features %}
+            {% for details in features %}
+              <th>{{ details.name }}
+              {% if details.unit %} ({{ details.unit.symbol }}) {% endif %}
+              </th>
+            {% endfor %}
+          {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+          {% for details in data %}
+            <tr class="{% if details.existing %}exists{% endif %}">
+              {% if details.existing %}
+                <td><a title="This record already exists">{{ details.name }}</a></td>
+              {% else %}
+                <td>{{ details.name }}</td>
+              {% endif %}
+              <td>
+              {% if details.lat %}
+              {{ details.lat }}, {{ details.lng }}
+              {% endif %}
+              </td>
+              <td>{{ details.description|truncatechars:30 }}</td>
+              <td>{{ details.url|truncatechars:15 }}</td>
+                {% if features %}
+                  {% for feature in features %}
+                    <td>{{ details.features|get_item:feature.name|truncatechars:20 }}</td>
+                  {% endfor %}
+                {% endif %}
+              </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <hr>
+
+        <p><a href="{% url 'multiplicity:upload_infrastructure_meta' info.slug type.slug file.id %}" class="btn btn-success btn-lg">Next</a></p>
+        {% endif %}
+
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.exists{opacity:0.5}
+.main-content-block .exists a:not(.btn){color:red;text-decoration:dotted}
+.table td{color:#333}
+.table{margin-bottom:20px}
+table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Infrastructure</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
+        <li><a href="{% url 'multiplicity:upload_infrastructure' info.slug %}">Infrastructure data</a></li>
+        <li><a href="{% url 'multiplicity:upload_infrastructure_file' info.slug type.slug %}">{{ type.name }}</a></li>
+        <li class="active">Review data</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

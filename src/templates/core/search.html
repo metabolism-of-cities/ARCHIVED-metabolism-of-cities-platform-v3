@@ -1,0 +1,544 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Search{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-body">
+        <div class="panel-heading">
+<h1>Search our database</h1>
+        </div>
+        <div class="panel-body">
+
+
+
+
+<p>
+  Please enter search terms below to start your search. You will see a list of common terms
+  appear as you start typing. To confirm each search term, please hit ENTER to add it to 
+  the list. The system will only show records that contain <strong>all</strong> of the 
+  search terms that you enter. Remove search terms to increase the number of results.
+  When you see the results, use the filters on the left hand side to refine your results.
+</p>
+
+<div class="resultbox">
+
+  <form method="get" class="form form-horizontal" action="publications/results">
+
+    <h4>
+      <i class="fa fa-filter"></i>
+      Search: 
+    </h4>
+
+    
+    <div class="row">
+      <div class="col">
+        <input type="text" name="search" style="width:100%" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-3">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+      <div class="col-9">
+        <p class="pull-right">
+                      <a href="publications/all">View all publications</a>
+        </p>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+
+<script type="text/javascript" src="js/select2.min.js"></script>
+<script type="text/javascript">
+$(function(){
+  $(".show-all").click(function(e){
+    e.preventDefault();
+    var type = $(this).data("type");
+    $(".hide-"+type).show('fast');
+    $(this).hide();
+  });
+  $("#searchbox").select2({
+    tags: true,
+    tokenSeparators: [',']
+  })
+});
+</script>
+
+</div>
+<div class="bg-blue text-white py-4">
+            <div class="container">
+              <div class="row text-center text-lg-left">
+
+    <h1>Publication Collections</h1>
+    <p>
+      This section provides an overview of the main classifications that have been used to group the different publications together.
+    </p>
+  </div>
+
+</div>
+</div>
+</div>
+<div class="container">
+
+    <h2 id="section2"><a href="publications/collections/2">Metabolism Studies</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>423</strong> publications found.
+    <a href="publications/collections/2" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/87/ecological-footprint-analysis">Ecological Footprint Analysis</a> (16)</li>
+          <li><a href="tags/85/economy-wide-material-flow-analysis-ew-mfa">Economy-Wide Material Flow Analysis (EW MFA)</a> (140)</li>
+          <li><a href="tags/251/emergy-analysis">Emergy analysis</a> (8)</li>
+          <li><a href="tags/299/geographic-information-system-gis">Geographic Information System (GIS)</a> (5)</li>
+          <li><a href="tags/259/industrial-symbiosis">Industrial Symbiosis</a> (0)</li>
+          <li><a href="tags/54/life-cycle-assessment-lca">Life Cycle Assessment (LCA)</a> (21)</li>
+          <li><a href="tags/88/material-intensity-per-unit-service-mips">Material Intensity per Unit Service (MIPS)</a> (1)</li>
+          <li><a href="tags/135/material-stock-analysis">Material Stock Analysis</a> (52)</li>
+          <li><a href="tags/240/multi-region-input-output-analysis">Multi-region Input-Output Analysis</a> (5)</li>
+          <li><a href="tags/65/physical-input-output-tables-piot-input-output-assessment-ioa">Physical input-output tables (PIOT) / Input-Output Assessment (IOA)</a> (38)</li>
+          <li><a href="tags/246/political-ecology">Political ecology</a> (7)</li>
+          <li><a href="tags/289/scenario-analysis">Scenario analysis</a> (1)</li>
+          <li><a href="tags/217/social-metabolism">Social Metabolism</a> (11)</li>
+          <li><a href="tags/86/substance-flow-analysis-sfa">Substance Flow Analysis (SFA)</a> (91)</li>
+          <li><a href="tags/182/urban-ecology">Urban Ecology</a> (11)</li>
+          <li><a href="tags/242/urban-resilience">Urban Resilience</a> (2)</li>
+        </ul>
+
+  
+  <h2 id="section9"><a href="publications/collections/9">Methodologies</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>105</strong> publications found.
+    <a href="publications/collections/9" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/185/circular-economy">Circular Economy</a> (7)</li>
+          <li><a href="tags/294/conservation-of-energy">Conservation of energy</a> (0)</li>
+          <li><a href="tags/293/conservation-of-mass">Conservation of mass</a> (11)</li>
+          <li><a href="tags/53/energy-emergy">Energy/Emergy</a> (18)</li>
+          <li><a href="tags/7/eurostat-methodology">EUROSTAT methodology</a> (48)</li>
+          <li><a href="tags/285/material-flow-analysis">Material Flow Analysis</a> (15)</li>
+          <li><a href="tags/292/n-a">N/A</a> (1)</li>
+          <li><a href="tags/18/urban-metabolism-analyst-model">Urban Metabolism Analyst Model</a> (3)</li>
+        </ul>
+
+  
+  <h2 id="section1"><a href="publications/collections/1">Publication Types</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>474</strong> publications found.
+    <a href="publications/collections/1" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/1/case-study">Case Study</a> (215)</li>
+          <li><a href="tags/4/commentary-editorial">Commentary / Editorial</a> (5)</li>
+          <li><a href="tags/31/comparison">Comparison</a> (20)</li>
+          <li><a href="tags/287/conference-proceedings">Conference proceedings</a> (4)</li>
+          <li><a href="tags/288/database">Database</a> (0)</li>
+          <li><a href="tags/2/methodology">Methodology</a> (96)</li>
+          <li><a href="tags/5/practical-guides-and-handbooks">Practical Guides and Handbooks</a> (10)</li>
+          <li><a href="tags/296/report">Report</a> (3)</li>
+          <li><a href="tags/6/research-and-analysis">Research and Analysis</a> (83)</li>
+          <li><a href="tags/3/review-paper">Review Paper</a> (24)</li>
+        </ul>
+
+  
+  <h2 id="section3"><a href="publications/collections/3">Countries</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>483</strong> publications found.
+    <a href="publications/collections/3" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/291/all-countries">All countries</a> (3)</li>
+          <li><a href="tags/132/antarctica">Antarctica</a> (1)</li>
+          <li><a href="tags/47/argentina">Argentina</a> (14)</li>
+          <li><a href="tags/29/australia">Australia</a> (16)</li>
+          <li><a href="tags/71/austria">Austria</a> (13)</li>
+          <li><a href="tags/162/bangladesh">Bangladesh</a> (3)</li>
+          <li><a href="tags/177/belgium">Belgium</a> (11)</li>
+          <li><a href="tags/213/bhutan">Bhutan</a> (1)</li>
+          <li><a href="tags/119/bolivia">Bolivia</a> (2)</li>
+          <li><a href="tags/75/brazil">Brazil</a> (14)</li>
+          <li><a href="tags/114/canada">Canada</a> (9)</li>
+          <li><a href="tags/56/chile">Chile</a> (5)</li>
+          <li><a href="tags/22/china">China</a> (51)</li>
+          <li><a href="tags/76/colombia">Colombia</a> (6)</li>
+          <li><a href="tags/35/czech-republic">Czech Republic</a> (10)</li>
+          <li><a href="tags/39/denmark">Denmark</a> (2)</li>
+          <li><a href="tags/37/dominica">Dominica</a> (1)</li>
+          <li><a href="tags/57/ecuador">Ecuador</a> (2)</li>
+          <li><a href="tags/89/egypt">Egypt</a> (6)</li>
+          <li><a href="tags/28/europe">Europe</a> (16)</li>
+          <li><a href="tags/68/finland">Finland</a> (5)</li>
+          <li><a href="tags/8/france">France</a> (12)</li>
+          <li><a href="tags/110/germany">Germany</a> (7)</li>
+          <li><a href="tags/255/ghana">Ghana</a> (2)</li>
+          <li><a href="tags/209/greece">Greece</a> (2)</li>
+          <li><a href="tags/97/hong-kong">Hong Kong</a> (3)</li>
+          <li><a href="tags/271/hungary">Hungary</a> (1)</li>
+          <li><a href="tags/50/iceland">Iceland</a> (1)</li>
+          <li><a href="tags/14/india">India</a> (18)</li>
+          <li><a href="tags/247/indonesia">Indonesia</a> (1)</li>
+          <li><a href="tags/160/iran">Iran</a> (2)</li>
+          <li><a href="tags/96/ireland">Ireland</a> (3)</li>
+          <li><a href="tags/43/italy">Italy</a> (10)</li>
+          <li><a href="tags/69/japan">Japan</a> (19)</li>
+          <li><a href="tags/126/jordan">Jordan</a> (2)</li>
+          <li><a href="tags/218/laos">Laos</a> (1)</li>
+          <li><a href="tags/55/latin-america">Latin America</a> (2)</li>
+          <li><a href="tags/58/mexico">Mexico</a> (7)</li>
+          <li><a href="tags/249/morroco">Morroco</a> (1)</li>
+          <li><a href="tags/203/nepal">Nepal</a> (1)</li>
+          <li><a href="tags/159/nigeria">Nigeria</a> (2)</li>
+          <li><a href="tags/48/norway">Norway</a> (8)</li>
+          <li><a href="tags/163/pakistan">Pakistan</a> (3)</li>
+          <li><a href="tags/59/peru">Peru</a> (1)</li>
+          <li><a href="tags/128/philippines">Philippines</a> (8)</li>
+          <li><a href="tags/19/portugal">Portugal</a> (5)</li>
+          <li><a href="tags/158/russia">Russia</a> (2)</li>
+          <li><a href="tags/196/schotland">Schotland</a> (1)</li>
+          <li><a href="tags/231/senegal">Senegal</a> (2)</li>
+          <li><a href="tags/73/singapore">Singapore</a> (5)</li>
+          <li><a href="tags/206/slovenia">Slovenia</a> (1)</li>
+          <li><a href="tags/107/south-africa">South Africa</a> (17)</li>
+          <li><a href="tags/124/south-korea">South Korea</a> (6)</li>
+          <li><a href="tags/90/spain">Spain</a> (7)</li>
+          <li><a href="tags/192/sri-lanka">Sri Lanka</a> (1)</li>
+          <li><a href="tags/44/sweden">Sweden</a> (17)</li>
+          <li><a href="tags/24/switzerland">Switzerland</a> (8)</li>
+          <li><a href="tags/42/taiwan">Taiwan</a> (5)</li>
+          <li><a href="tags/136/thailand">Thailand</a> (6)</li>
+          <li><a href="tags/32/the-netherlands">The Netherlands</a> (10)</li>
+          <li><a href="tags/51/trinidad-and-tobago">Trinidad and Tobago</a> (1)</li>
+          <li><a href="tags/161/turkey">Turkey</a> (3)</li>
+          <li><a href="tags/38/united-kingdom">United Kingdom</a> (21)</li>
+          <li><a href="tags/21/united-states">United States</a> (41)</li>
+          <li><a href="tags/118/venezuela">Venezuela</a> (1)</li>
+          <li><a href="tags/66/vietnam">Vietnam</a> (2)</li>
+        </ul>
+
+  
+  <h2 id="section4"><a href="publications/collections/4">Cities</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>394</strong> publications found.
+    <a href="publications/collections/4" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/256/accra">Accra</a> (2)</li>
+          <li><a href="tags/244/adelaide">Adelaide</a> (3)</li>
+          <li><a href="tags/290/all-cities">All cities</a> (5)</li>
+          <li><a href="tags/125/amman">Amman</a> (2)</li>
+          <li><a href="tags/220/amsterdam">Amsterdam</a> (3)</li>
+          <li><a href="tags/208/athens">Athens</a> (2)</li>
+          <li><a href="tags/198/austin">Austin</a> (1)</li>
+          <li><a href="tags/137/bangalore">Bangalore</a> (1)</li>
+          <li><a href="tags/138/bangkok">Bangkok</a> (5)</li>
+          <li><a href="tags/190/barcelona">Barcelona</a> (4)</li>
+          <li><a href="tags/95/beijing">Beijing</a> (17)</li>
+          <li><a href="tags/265/berlin">Berlin</a> (2)</li>
+          <li><a href="tags/273/birmingham">Birmingham</a> (1)</li>
+          <li><a href="tags/121/bogota">Bogotá</a> (4)</li>
+          <li><a href="tags/245/brisbane">Brisbane</a> (3)</li>
+          <li><a href="tags/263/brittany">Brittany</a> (1)</li>
+          <li><a href="tags/180/brussels">Brussels</a> (8)</li>
+          <li><a href="tags/280/buda">Buda</a> (0)</li>
+          <li><a href="tags/266/budapest">Budapest</a> (2)</li>
+          <li><a href="tags/102/buenos-aires">Buenos Aires</a> (8)</li>
+          <li><a href="tags/154/cairo">Cairo</a> (4)</li>
+          <li><a href="tags/189/calgary">Calgary</a> (1)</li>
+          <li><a href="tags/108/cape-town">Cape Town</a> (15)</li>
+          <li><a href="tags/311/caracas">Caracas</a> (1)</li>
+          <li><a href="tags/171/charleroi">Charleroi</a> (1)</li>
+          <li><a href="tags/283/chicago">Chicago</a> (1)</li>
+          <li><a href="tags/215/chongqing">Chongqing</a> (1)</li>
+          <li><a href="tags/193/colombo">Colombo</a> (1)</li>
+          <li><a href="tags/222/curitiba">Curitiba</a> (1)</li>
+          <li><a href="tags/230/dakar">Dakar</a> (2)</li>
+          <li><a href="tags/62/delhi">Delhi</a> (7)</li>
+          <li><a href="tags/199/denver">Denver</a> (2)</li>
+          <li><a href="tags/152/dhaka">Dhaka</a> (4)</li>
+          <li><a href="tags/225/florence">Florence</a> (0)</li>
+          <li><a href="tags/210/frankfurt">Frankfurt</a> (1)</li>
+          <li><a href="tags/194/geneva">Geneva</a> (4)</li>
+          <li><a href="tags/166/giza">Giza</a> (1)</li>
+          <li><a href="tags/197/glasgow">Glasgow</a> (3)</li>
+          <li><a href="tags/226/gliwice">Gliwice</a> (1)</li>
+          <li><a href="tags/45/gothenburg">Gothenburg</a> (5)</li>
+          <li><a href="tags/143/guangzhou">Guangzhou</a> (3)</li>
+          <li><a href="tags/111/hamburg">Hamburg</a> (2)</li>
+          <li><a href="tags/286/hebei">Hebei</a> (0)</li>
+          <li><a href="tags/224/helsinki">Helsinki</a> (1)</li>
+          <li><a href="tags/170/ho-chi-minh-city">Ho Chi Minh City</a> (1)</li>
+          <li><a href="tags/98/hong-kong-city">Hong Kong: City</a> (3)</li>
+          <li><a href="tags/250/ile-de-france">Ile-de-France</a> (1)</li>
+          <li><a href="tags/260/issaquah">Issaquah</a> (0)</li>
+          <li><a href="tags/149/istanbul">Istanbul</a> (3)</li>
+          <li><a href="tags/148/jakarta">Jakarta</a> (2)</li>
+          <li><a href="tags/153/karachi">Karachi</a> (3)</li>
+          <li><a href="tags/204/kathmandu">Kathmandu</a> (1)</li>
+          <li><a href="tags/258/kawasaki">Kawasaki</a> (0)</li>
+          <li><a href="tags/172/kenitra">Kenitra</a> (1)</li>
+          <li><a href="tags/274/kitakyushu">Kitakyushu</a> (2)</li>
+          <li><a href="tags/300/kitikyushu">Kitikyushu</a> (1)</li>
+          <li><a href="tags/155/kolkata">Kolkata</a> (2)</li>
+          <li><a href="tags/151/lagos">Lagos</a> (2)</li>
+          <li><a href="tags/253/le-mans">Le Mans</a> (1)</li>
+          <li><a href="tags/310/lima">Lima</a> (1)</li>
+          <li><a href="tags/270/limerick">Limerick</a> (1)</li>
+          <li><a href="tags/92/linkoping">Linköping</a> (3)</li>
+          <li><a href="tags/20/lisbon">Lisbon</a> (4)</li>
+          <li><a href="tags/120/liverpool">Liverpool</a> (1)</li>
+          <li><a href="tags/207/ljubljana">Ljubljana</a> (1)</li>
+          <li><a href="tags/146/london">London</a> (11)</li>
+          <li><a href="tags/139/los-angeles">Los Angeles</a> (11)</li>
+          <li><a href="tags/140/macao">Macao</a> (2)</li>
+          <li><a href="tags/191/madrid">Madrid</a> (1)</li>
+          <li><a href="tags/312/malargue">Malargüe</a> (1)</li>
+          <li><a href="tags/238/malmo">Malmö</a> (1)</li>
+          <li><a href="tags/127/manila">Manila</a> (7)</li>
+          <li><a href="tags/254/marne-la-vallee">Marne-la-Vallée</a> (1)</li>
+          <li><a href="tags/184/melbourne">Melbourne</a> (10)</li>
+          <li><a href="tags/99/mexico-city">Mexico City</a> (7)</li>
+          <li><a href="tags/173/miami">Miami</a> (1)</li>
+          <li><a href="tags/261/milan">Milan</a> (3)</li>
+          <li><a href="tags/305/miramar">Miramar</a> (1)</li>
+          <li><a href="tags/308/montevideo">Montevideo</a> (1)</li>
+          <li><a href="tags/142/moscow">Moscow</a> (2)</li>
+          <li><a href="tags/156/mumbai">Mumbai</a> (4)</li>
+          <li><a href="tags/202/naples">Naples</a> (3)</li>
+          <li><a href="tags/297/new-haven">New Haven</a> (2)</li>
+          <li><a href="tags/61/new-jersey">New Jersey</a> (2)</li>
+          <li><a href="tags/134/new-orleans">New Orleans</a> (1)</li>
+          <li><a href="tags/64/new-york">New York</a> (6)</li>
+          <li><a href="tags/179/norrkoping">Norrköping</a> (1)</li>
+          <li><a href="tags/144/osaka">Osaka</a> (2)</li>
+          <li><a href="tags/49/oslo">Oslo</a> (5)</li>
+          <li><a href="tags/9/paris">Paris</a> (9)</li>
+          <li><a href="tags/243/perth">Perth</a> (4)</li>
+          <li><a href="tags/278/phoenix">Phoenix</a> (1)</li>
+          <li><a href="tags/227/poland">Poland</a> (1)</li>
+          <li><a href="tags/200/portland">Portland</a> (2)</li>
+          <li><a href="tags/205/porto">Porto</a> (1)</li>
+          <li><a href="tags/212/prague">Prague</a> (2)</li>
+          <li><a href="tags/257/quebec">Quebec</a> (1)</li>
+          <li><a href="tags/309/quito">Quito</a> (0)</li>
+          <li><a href="tags/252/rennes">Rennes</a> (1)</li>
+          <li><a href="tags/267/reykjavik">Reykjavik</a> (1)</li>
+          <li><a href="tags/101/rio-de-janeiro">Rio de Janeiro</a> (9)</li>
+          <li><a href="tags/195/rotterdam">Rotterdam</a> (3)</li>
+          <li><a href="tags/284/san-francisco">San Francisco</a> (1)</li>
+          <li><a href="tags/279/san-luis-potosi">San Luis Potosí</a> (0)</li>
+          <li><a href="tags/262/santiago-de-chile">Santiago de Chile</a> (2)</li>
+          <li><a href="tags/100/sao-paulo">Sao Paulo</a> (9)</li>
+          <li><a href="tags/201/seattle">Seattle</a> (1)</li>
+          <li><a href="tags/123/seoul">Seoul</a> (6)</li>
+          <li><a href="tags/122/shanghai">Shanghai</a> (11)</li>
+          <li><a href="tags/239/shenyang">Shenyang</a> (1)</li>
+          <li><a href="tags/150/shenzhen">Shenzhen</a> (4)</li>
+          <li><a href="tags/112/singapore-city">Singapore: City</a> (4)</li>
+          <li><a href="tags/268/stellenbosch">Stellenbosch</a> (2)</li>
+          <li><a href="tags/113/stockholm">Stockholm</a> (9)</li>
+          <li><a href="tags/211/stuttgart">Stuttgart</a> (1)</li>
+          <li><a href="tags/23/suzhou">Suzhou</a> (2)</li>
+          <li><a href="tags/187/sydney">Sydney</a> (7)</li>
+          <li><a href="tags/275/syracuse">Syracuse</a> (1)</li>
+          <li><a href="tags/41/taipei">Taipei</a> (5)</li>
+          <li><a href="tags/304/tandil">Tandil</a> (2)</li>
+          <li><a href="tags/145/tehran">Tehran</a> (2)</li>
+          <li><a href="tags/133/tianjin">Tianjin</a> (3)</li>
+          <li><a href="tags/141/tokyo">Tokyo</a> (4)</li>
+          <li><a href="tags/115/toronto">Toronto</a> (7)</li>
+          <li><a href="tags/188/vancouver">Vancouver</a> (1)</li>
+          <li><a href="tags/104/vienna">Vienna</a> (8)</li>
+          <li><a href="tags/103/york">York</a> (1)</li>
+          <li><a href="tags/216/zhangye">Zhangye</a> (1)</li>
+        </ul>
+
+  
+  <h2 id="section5"><a href="publications/collections/5">Scales</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>490</strong> publications found.
+    <a href="publications/collections/5" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/175/city">City</a> (54)</li>
+          <li><a href="tags/316/company">Company</a> (1)</li>
+          <li><a href="tags/30/global">Global</a> (52)</li>
+          <li><a href="tags/147/infra-urban">Infra-urban</a> (5)</li>
+          <li><a href="tags/219/island">Island</a> (6)</li>
+          <li><a href="tags/174/metropolitan">Metropolitan</a> (9)</li>
+          <li><a href="tags/164/multi-scale">Multi-scale</a> (15)</li>
+          <li><a href="tags/10/national">National</a> (91)</li>
+          <li><a href="tags/12/regional">Regional</a> (58)</li>
+          <li><a href="tags/67/rural">Rural</a> (15)</li>
+          <li><a href="tags/11/urban">Urban</a> (168)</li>
+        </ul>
+
+  
+  <h2 id="section7"><a href="publications/collections/7">Time Horizons</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>245</strong> publications found.
+    <a href="publications/collections/7" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/78/contemporary-point-in-time">Contemporary Point in Time</a> (118)</li>
+          <li><a href="tags/186/future-scenario">Future Scenario</a> (24)</li>
+          <li><a href="tags/80/long-range-historical-perspective">Long-Range Historical Perspective</a> (55)</li>
+          <li><a href="tags/79/time-series">Time Series</a> (40)</li>
+        </ul>
+
+  
+  <h2 id="section6"><a href="publications/collections/6">Flows</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>550</strong> publications found.
+    <a href="publications/collections/6" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/306/air">Air</a> (1)</li>
+          <li><a href="tags/301/aluminum">Aluminum</a> (3)</li>
+          <li><a href="tags/17/biomass">Biomass</a> (24)</li>
+          <li><a href="tags/282/carbon">Carbon</a> (4)</li>
+          <li><a href="tags/33/chlorine">Chlorine</a> (5)</li>
+          <li><a href="tags/248/co">CO</a> (5)</li>
+          <li><a href="tags/26/co2">CO2</a> (33)</li>
+          <li><a href="tags/302/concrete">Concrete</a> (2)</li>
+          <li><a href="tags/77/construction-materials">Construction Materials</a> (36)</li>
+          <li><a href="tags/241/copper">Copper</a> (13)</li>
+          <li><a href="tags/117/e-waste">e-Waste</a> (3)</li>
+          <li><a href="tags/16/electricity">Electricity</a> (19)</li>
+          <li><a href="tags/63/emissions">Emissions</a> (24)</li>
+          <li><a href="tags/165/energy">Energy</a> (34)</li>
+          <li><a href="tags/91/fluorine">Fluorine</a> (1)</li>
+          <li><a href="tags/223/food">Food</a> (20)</li>
+          <li><a href="tags/167/fossil-fuel">Fossil Fuel</a> (11)</li>
+          <li><a href="tags/60/glass">Glass</a> (3)</li>
+          <li><a href="tags/315/gravel">Gravel</a> (1)</li>
+          <li><a href="tags/221/greenhouse-gas">Greenhouse Gas</a> (28)</li>
+          <li><a href="tags/276/heat">Heat</a> (1)</li>
+          <li><a href="tags/298/iron">Iron</a> (2)</li>
+          <li><a href="tags/277/lead">Lead</a> (2)</li>
+          <li><a href="tags/313/macadam">Macadam</a> (1)</li>
+          <li><a href="tags/13/metals">Metals</a> (65)</li>
+          <li><a href="tags/168/minerals">Minerals</a> (17)</li>
+          <li><a href="tags/264/natural-gas">Natural Gas</a> (6)</li>
+          <li><a href="tags/93/nitrogen">Nitrogen</a> (5)</li>
+          <li><a href="tags/272/nox">NOx</a> (3)</li>
+          <li><a href="tags/40/paper">Paper</a> (4)</li>
+          <li><a href="tags/46/phosphorus">Phosphorus</a> (7)</li>
+          <li><a href="tags/116/plastic">Plastic</a> (5)</li>
+          <li><a href="tags/70/pvc">PVC</a> (4)</li>
+          <li><a href="tags/314/sand">Sand</a> (1)</li>
+          <li><a href="tags/36/so2">SO2</a> (9)</li>
+          <li><a href="tags/303/steel">Steel</a> (2)</li>
+          <li><a href="tags/27/various-materials">Various Materials</a> (15)</li>
+          <li><a href="tags/25/waste">Waste</a> (40)</li>
+          <li><a href="tags/214/wastewater">Wastewater</a> (15)</li>
+          <li><a href="tags/15/water">Water</a> (37)</li>
+          <li><a href="tags/52/wood">Wood</a> (9)</li>
+          <li><a href="tags/295/zinc">Zinc</a> (6)</li>
+        </ul>
+
+  
+  <h2 id="section10"><a href="publications/collections/10">Other</a></h2>
+
+  <div class="alert alert-secondary">
+    <strong>129</strong> publications found.
+    <a href="publications/collections/10" class="btn btn-default right">View All</a>
+  </div>
+
+  
+    <ul class="multicolumn">
+          <li><a href="tags/235/data-quality">Data Quality</a> (6)</li>
+          <li><a href="tags/130/decoupling">Decoupling</a> (4)</li>
+          <li><a href="tags/74/direct-material-consumption-dmc">Direct Material Consumption (DMC)</a> (10)</li>
+          <li><a href="tags/178/domestic-extraction">Domestic extraction</a> (6)</li>
+          <li><a href="tags/236/dwellings">Dwellings</a> (5)</li>
+          <li><a href="tags/229/human-appropriation-of-net-primary-production-hanpp">Human Appropriation of Net Primary Production (HANPP)</a> (1)</li>
+          <li><a href="tags/129/imports-and-exports">Imports and Exports</a> (12)</li>
+          <li><a href="tags/34/indicators-general">Indicators - general</a> (18)</li>
+          <li><a href="tags/169/informal">Informal</a> (5)</li>
+          <li><a href="tags/228/policy">Policy</a> (19)</li>
+          <li><a href="tags/72/raw-materials-equivalent-rme">Raw Materials Equivalent (RME)</a> (11)</li>
+          <li><a href="tags/281/scaling">Scaling</a> (2)</li>
+          <li><a href="tags/269/slums-and-informal-settlements">Slums and informal settlements</a> (3)</li>
+          <li><a href="tags/307/stan">STAN</a> (1)</li>
+          <li><a href="tags/237/transportation">Transportation</a> (9)</li>
+          <li><a href="tags/109/uncertainty">Uncertainty</a> (14)</li>
+        </ul>
+
+
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.multicolumn {
+-moz-column-count: 3;
+-moz-column-gap: 10px;
+-webkit-column-count: 3;
+-webkit-column-gap: 10px;
+column-count: 3;
+column-gap: 10px;
+}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow"> Search</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:about' %}">Publications</a></li>
+        <li class="active">Search</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

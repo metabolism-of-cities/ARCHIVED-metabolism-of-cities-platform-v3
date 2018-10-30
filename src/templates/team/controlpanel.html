@@ -1,0 +1,285 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Control Panel{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-success">
+            <i class="pli-conference icon-5x"></i>
+
+            <h4 class="text-light">Volunteer Activities</h4>
+            <p class="text-sm">Metabolism of Cities is first and foremost a community of people working voluntarily to advance the field of urban metabolism.</p>
+            <ul class="list-unstyled text-center pad-top mar-no row">
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">12</span>
+                    <p class="text-sm mar-no">Members</p>
+                </li>
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">9</span>
+                    <p class="text-sm mar-no">Task forces</p>
+                </li>
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">89</span>
+                    <p class="text-sm mar-no">Discussion threads</p>
+                </li>
+            </ul>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item show" data-show="communityboard" href="{% url 'team:homepage' %}"><i class="far fa-comments icon-lg icon-fw"></i> <strong>Discussion board</strong></a>
+              <div id="communityboard">
+            {% for info in community %}
+                <a class="list-group-item" href="{% url 'team:viewcategory' info.id %}"><i class="far icon-lg icon-fw"></i> {{ info.name }}</a>
+            {% endfor %}
+              </div>
+              <a class="list-group-item show" data-show="communitydrive" href="#"><i class="fab fa-google-drive icon-lg icon-fw"></i> <strong>Google Drive</strong></a>
+              <div id="communitydrive">
+            {% for info in community %}
+                <a class="list-group-item" href="{{ info.google_drive }}"><i class="far icon-lg icon-fw"></i> {{ info.name }}</a>
+            {% endfor %}
+              </div>
+              <a class="list-group-item show" data-show="taskforces" href="#"><i class="fas fa-users icon-lg icon-fw"></i> <strong>Task forces</strong></a>
+              <div id="taskforces">
+            {% for info in community %}
+                <a class="list-group-item" href="{% url 'team:taskforce' info.id %}"><i class="far icon-lg icon-fw"></i> {{ info.name }}</a>
+            {% endfor %}
+              </div>
+              <a class="list-group-item" href="{% url 'core:admin_member_list' %}"><i class="far icon-lg icon-fw"></i> View member list</a>
+        </div>
+    </div>
+  </div>
+<div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-info">
+            <i class="pli-director icon-5x"></i>
+
+            <h4 class="text-light">Administrative board</h4>
+            <p class="text-sm">The administrative board governs Metabolism of Cities and is in charge of ensuring that we achieve our goals.</p>
+            <ul class="list-unstyled text-center pad-top mar-no row">
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">5</span>
+                    <p class="text-sm mar-no">Board members</p>
+                </li>
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">3</span>
+                    <p class="text-sm mar-no">Unread threads</p>
+                </li>
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">39</span>
+                    <p class="text-sm mar-no">Total threads</p>
+                </li>
+            </ul>
+        </div>
+        <div class="list-group ">
+          {% for boardinfo in board %}
+            <a class="list-group-item" href="{% url 'team:viewcategory' boardinfo.id %}"><i class="far fa-comments icon-lg icon-fw"></i> {{ boardinfo.name }}</a>
+          {% endfor %}
+          {% for boardinfo in board %}
+            <a class="list-group-item" href="{{ boardinfo.google_drive }}"><i class="fab fa-google-drive icon-lg icon-fw"></i> {{ boardinfo.name }}</a>
+          {% endfor %}
+          {% for boardinfo in board %}
+            <a class="list-group-item" href="{% url 'team:taskforce' boardinfo.id %}"><i class="fas fa-users icon-lg icon-fw"></i> {{ boardinfo.name }}</a>
+          {% endfor %}
+        </div>
+    </div>
+  </div
+</div><div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-warning">
+            <i class="pli-coin icon-5x"></i>
+
+            <h4 class="text-light">Services</h4>
+            <p class="text-sm">We engage in paid work to further our goals and also to obtain funds to sponsor our community work.</p>
+            <ul class="list-unstyled text-center pad-top mar-no row">
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">4</span>
+                    <p class="text-sm mar-no">Active projects</p>
+                </li>
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">6</span>
+                    <p class="text-sm mar-no">Pending applications</p>
+                </li>
+                <li class="col-xs-4">
+                    <span class="text-lg text-semibold">11</span>
+                    <p class="text-sm mar-no">Completed projects</p>
+                </li>
+            </ul>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item" href="{% url 'team:viewcategory' services.id %}"><i class="far fa-comments icon-lg icon-fw"></i> Discussion board</a>
+            <a class="list-group-item" href="{{ services.google_drive }}"><i class="fab fa-google-drive icon-lg icon-fw"></i> View Drive</a>
+            <a class="list-group-item" href="{% url 'team:taskforce' services.id %}"><i class="fas fa-users icon-lg icon-fw"></i> Task force</a>
+            <a class="list-group-item" href="/admin/team/service/"><i class="fas fa-edit icon-lg icon-fw"></i> Services</a>
+            <a class="list-group-item show" data-show="projects" href="#"><i class="fas fa-users icon-lg icon-fw"></i> <strong>Project list</strong></a>
+            <div id="projects">
+                <a class="list-group-item" href="{% url 'team:projects' %}"><i class="far icon-lg icon-fw"></i> All projects</a>
+            {% for info in projects %}
+                <a class="list-group-item" href="{% url 'team:taskforce' info.id %}"><i class="far icon-lg icon-fw"></i> {{ info.name }}</a>
+            {% endfor %}
+              <a class="list-group-item " href="{% url 'team:createproject' %}"><i class="fas fa-plus icon-lg icon-fw"></i> <strong>Add project</strong></a>
+            </div>
+        </div>
+    </div>
+  </div
+</div>
+
+</div>
+
+<hr>
+
+<div class="row jumpdown">
+  <div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-purple">
+            <i class="pli-bar-chart icon-5x"></i>
+
+            <h4 class="text-light">Reports</h4>
+            <p class="text-sm">View reports that summarise our activities.</p>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item" href="{% url 'team:ticketreport' %}?show=all&amp;tasks=all"> 
+              <i class="psi-pencil icon-lg icon-fw"></i>
+              Progress report: all task forces
+            </a>
+            <a class="list-group-item" href="{% url 'team:ticketreport' %}?show=my_taskforces&amp;tasks=all"> 
+              <i class="psi-pencil icon-lg icon-fw"></i>
+              Progress report: my task forces
+            </a>
+            <a class="list-group-item" href="{% url 'team:ticketreport' %}?show=all&amp;tasks=all&amp;user={{ request.user.id }}"> 
+              <i class="psi-pencil icon-lg icon-fw"></i>
+              Progress work: my activities
+            </a>
+            <a class="list-group-item" href="{% url 'team:tickets' %}?show=all&status=all&user=all"> 
+              <i class="fas fa-table icon-lg icon-fw"></i>
+              Tasks: all tasks
+            </a>
+            <a class="list-group-item" href="{% url 'team:tickets' %}?show=all&status=all&user={{ request.user.id }}"> 
+              <i class="fas fa-table icon-lg icon-fw"></i>
+              Tasks: my tasks
+            </a>
+            <a class="list-group-item" href="{% url 'team:tickets' %}?show=my_taskforces&status=unassigned&user=all"> 
+              <i class="fas fa-table icon-lg icon-fw"></i>
+              Tasks: unassigned tasks
+            </a>
+        </div>
+    </div>
+  </div><div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-danger">
+            <i class="fa fa-link icon-5x"></i>
+
+            <h4 class="text-light">Useful Links</h4>
+            <p class="text-sm">A number of useful links for our team members.</p>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item" href="/admin"> <i class="fas fa-edit icon-lg icon-fw"></i>Content Management System</a>
+            <a class="list-group-item" href="https://drive.google.com/open?id=1wLlthj85Xu83F332Kg4TK7vkCStlheLjlWFKuAY-7rw"> 
+           <i class="fab fa-google-drive icon-lg icon-fw"></i> Reimbursement form</a>
+           <a class="list-group-item" href="https://pixabay.com/"><i class="fa fa-image icon-fw"></i> Pixabay: open source photo bank</a>
+           <a class="list-group-item" href="https://fontawesome.com/icons?d=gallery&m=free"><i class="fab fa-font-awesome  icon-fw"></i> Font-awesome: icons</a>
+           <a class="list-group-item" href="http://www.themeon.net/nifty/v2.9.1/index.html"><i class="fa fa-crop icon-fw"></i> Nifty Template</a>
+        </div>
+    </div>
+  </div><div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-primary">
+            <i class="fa fa-file-video icon-5x"></i>
+
+            <h4 class="text-light">Instruction videos</h4>
+            <p class="text-sm">Instruction videos to better understand the back-end of Metabolism of Cities</p>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item" href="{% static 'team/videos/introduction-internal-comms.mp4' %}"> Introduction back-end</a>
+            <a class="list-group-item" href="{% static 'team/videos/discussion-board.mp4' %}"> Discussion board</a>
+            <a class="list-group-item" href="{% static 'team/videos/taskforces.mp4' %}"> Task forces</a>
+            <a class="list-group-item" href="{% static 'team/videos/discussion-board-notifications.mp4' %}">  Discussion board notifications</a>
+            <a class="list-group-item" href="{% static 'team/videos/services.mp4' %}"> <span class="badge badge-success pull-right">New</span> Services</a>
+            <a class="list-group-item" href="{% static 'multiplicity/videos/introduction.mp4' %}"> <span class="badge badge-success pull-right">New</span> MultipliCity introduction</a>
+            <a class="list-group-item" href="{% static 'multiplicity/videos/adding-a-city.mp4' %}"> <span class="badge badge-success pull-right">New</span> Adding a city to MultipliCity</a>
+            <a class="list-group-item" href="{% static 'team/videos/taskforces-pages.mp4' %}"> <span class="badge badge-success pull-right">New</span> Task forces public page</a>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<hr>
+<div class="row jumpdown">
+  <div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-warning">
+            <i class="fas fa-building icon-5x"></i>
+
+            <h4 class="text-light">MultipliCity</h4>
+            <p class="text-sm">Manage the content within MultipliCity</p>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item" href="{% url 'multiplicity:admin_referencespaces' 'countries' %}">Countries</a>
+            <a class="list-group-item" href="{% url 'multiplicity:admin_referencespaces' 'cities' %}">Cities</a>
+            <a class="list-group-item" href="{% url 'multiplicity:admin_referencespaces' 'islands' %}">Islands</a>
+        </div>
+    </div>
+  </div><div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-mint">
+            <i class="fas fa-users icon-5x"></i>
+
+            <h4 class="text-light">People</h4>
+            <p class="text-sm">Manage authors, users, etc.</p>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item" href="{% url 'core:admin_people_list' %}">List</a>
+        </div>
+    </div>
+  </div><div class="col-sm-4">
+    <div class="panel">
+        <div class="panel-body text-center bg-pink">
+            <i class="fas fa-camera icon-5x"></i>
+
+            <h4 class="text-light">Multimedia</h4>
+            <p class="text-sm">Manage videos, photos, etc.</p>
+        </div>
+        <div class="list-group ">
+            <a class="list-group-item" href="{% url 'core:admin_video_list' %}">Videos</a>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+#navbar-container,.stretch-bg-head #content-container::before {
+  background-color:#727272;
+}
+#projects,#communitydrive, #communityboard, #taskforces{display:none}
+.jumpdown{padding-top:33px}
+.list-group a.list-group-item{color:#333}
+.col-sm-4 .panel{margin-bottom:0}
+</style>
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script type="text/javascript">
+  $(function(){
+    $(".show").click(function(e){
+      e.preventDefault();
+      var show = $(this).data("show");
+      $("#"+show).toggle('fast');
+    });
+  });
+  </script>
+{% endblock %}

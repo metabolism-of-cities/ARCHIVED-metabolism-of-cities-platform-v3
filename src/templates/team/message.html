@@ -1,0 +1,245 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+aside-left aside-bright aside-in
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+#savingmessage,.subscription{
+    display:none;
+}
+.list-group-item.clicked {
+    font-weight:bold;
+    background:#ECF0F5 !important;
+    color:#000;
+}
+textarea.form-control {
+    height:100px;
+    border:1px solid #ccc;
+}
+#topicbox {
+    display:none;
+}
+#container #aside-container {
+    width:0;
+}
+#viewallcategories,#viewalltaskforces {
+    cursor:pointer;
+}
+.panel .nobottommargin {
+  margin-bottom:0;
+}
+
+@media (max-width: 1024px){
+#container aside {
+    display:none;
+  }
+}
+@media (min-width: 768px) {
+  #chat {
+    padding-left:230px;
+  }
+}
+#container.aside-in #aside {
+  padding-top:0;
+} 
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div id="chat">
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if "saved" in request.GET %}
+                <p class="alert alert-success">
+                <i class="fa fa-check"></i>
+                Information was saved
+                </p>
+            {% endif %}
+            <div class="panel panel-warning panel-colorful media middle pad-all">
+                <div class="media-left">
+                    <div class="pad-hor">
+                        <i class="pli-arrow-left icon-3x"></i>
+                    </div>
+                </div>
+                <div class="media-body">
+                {% if topic.id %}
+                    <p>
+                        <p class="text-2x mar-no text-semibold">
+                        <i class="fas fa-spinner"></i>
+                        Loading message...</p>
+                        <p class="mar-no">Please stay tuned</p>
+                    </p>
+                {% else %}
+                    <p class="text-2x mar-no text-semibold">Select a topic</p>
+                    <p class="mar-no">From one of the task forces</p>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block sidebar %}
+    <ul id="mainnav-menu" class="list-group taskforce">
+
+        <li class="list-header">Task Forces
+            <span class="badge btn-info" id="viewalltaskforces">View all</span>
+        </li>
+
+        {% for info in categories.all %}
+            
+            <li class="{% if request.user not in info.members.all %}hide{% endif %}">
+                <a href="/intranet/category/{{ info.id }}" data-id="{{ info.id }}" id="category-{{ info.id }}">
+                  <i class="pli-receipt-4"></i>
+                  <span class="menu-title">
+                    {{ info.name }}
+                  </span>
+                  <span class="badge badge-{% if unread_category|get_item:info.id %}success{% else %}default{% endif %} pull-right">
+                    {{ info.topic_count }}
+                  </span>
+                </a>
+                <ul class="collapse">
+                  {% for topic in info.topics.all %}
+                      <li><a data-id="{{ topic.id }}" href="{% url 'team:topic' topic.id %}">{{ topic.name }}</a></li>
+                  {% endfor %}
+                </ul>
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}
+
+{% block aside %}
+
+<form action="/intranet/topic/create" method="post" id="topicbox">
+    {% csrf_token %}
+
+    <div id="topiclist">
+    </div>
+
+    <hr>
+
+    <div class="pad-hor">
+        <p><a href="http://"><strong>Add a topic</strong></a></p>
+    </div>
+
+    <div class="pad-all bord-btm">
+        <p>
+            <input name="topic" placeholder="Enter a subject" required class="form-control newtopic" type="text">
+        </p>
+        <p>
+            <button type="submit" class="btn btn-success">Add topic</button>
+            <input type="hidden" name="category" value="" id="category" />
+        </p>
+    </div>
+</form>
+
+{% endblock %}
+
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+    $("ul.taskforce > li > a").click(function(e){
+        e.preventDefault();
+        var id = $(this).data("id");
+        $("ul.taskforce li").removeClass("active-sub");
+        $(this).closest("li").addClass('active-sub');
+        console.log("Opening task force #"+id);
+        $("#category").val(id);
+
+        $( "#topiclist" ).load('/intranet/category/'+id, function( response, status, xhr ) {
+          if ( status == "error" ) {
+            var msg = "Sorry but there was an error: ";
+            console.log( msg + xhr.status + " " + xhr.statusText );
+          } else {
+            window.history.pushState('category'+id, 'Category '+id, '/intranet/category/'+id+'/view');
+            $("#topicbox").show();
+            $("#container #aside-container").css("width", "250px");
+          }
+        });
+
+    });
+    $('#topiclist').on('click', '.select-topic a', function(e) {
+        e.preventDefault();
+        $(this).addClass("clicked");
+        $(this).find('.badge-success').removeClass('badge-success');
+        $(this).find('.badge-stat').hide();
+        var id = $(this).data("id");
+        console.log("Opening topic "+id);
+        $("#topiclist a").removeClass("clicked");
+        $(this).addClass('clicked');
+        $('#chat').load('/intranet/topic/'+id);
+        window.history.pushState('topic'+id, 'Topic '+id, '/intranet/topic/'+id+'/view');
+    });
+    $("ul.taskforce ul a").click(function(e){
+        e.preventDefault();
+        $(this).addClass("clicked");
+        $(this).find('.badge-success').removeClass('badge-success');
+        $(this).find('.badge-stat').hide();
+        var id = $(this).data("id");
+        console.log("Opening topic "+id);
+        $("#topiclist a").removeClass("clicked");
+        $(this).addClass('clicked');
+        $('#chat').load('/intranet/topic/'+id);
+        window.history.pushState('topic'+id, 'Topic '+id, '/intranet/topic/'+id+'/view');
+    });
+    $('#chat').on('keydown', 'textarea', function(e) {
+      if (e.ctrlKey && e.keyCode === 13) {
+        $('#chat form').trigger('submit');
+      }
+    });
+
+    $("#chat").on('submit', 'form', function(){
+        $("#chat form").hide('fast');
+        $("#savingmessage").show();
+    });
+    {% if topic.id %}
+        $("#topicbox").show();
+        $('#topiclist').load('/intranet/category/{{ category.id }}/{{ topic.id }}');
+        $('#chat').load('/intranet/topic/{{ topic.id }}');
+        $("#category-{{ category.id }}").closest("li").addClass("active-sub");
+        $("#category").val({{ category.id }});
+        $("a#topic-{{ topic.id }}").addClass("clicked");
+        $("#container #aside-container").css("width", "250px");
+    {% elif category.id %}
+        $("#category-{{ category.id }}").closest("li").addClass("active-sub");
+        $("#category").val({{ category.id }});
+        $("#container #aside-container").css("width", "250px");
+        $('#topiclist').load('/intranet/category/{{ category.id }}');
+        $("#topicbox").show();
+    {% endif %}
+
+    $("#viewalltaskforces").click(function(){
+      $(".taskforce li").removeClass("hide");
+      $(this).hide();
+    });
+
+    $('body').on('click', '#viewallcategories', function(e) {
+      $(".select-topic a").removeClass("hide");
+      $(this).hide();
+    });
+
+    var width = screen.width;
+    if (width > 1024) {
+      $("ul.taskforce ul.collapse").hide();
+    }
+
+
+});
+</script>
+{% endblock %}

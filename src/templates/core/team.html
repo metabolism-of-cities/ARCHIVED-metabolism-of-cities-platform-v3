@@ -1,0 +1,110 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+  <div class="col-lg-12">
+      <div class="panel">
+        <div class="panel-body">
+        <p>
+        Below in chronological order our team members. Our team is slowly expanding
+        and we welcome new people! There are various ways to join our group, depending
+        on your interests and background. 
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+{% for details in list %}
+
+    <div class="col-lg-4">
+      <div class="panel widget">
+          <div class="widget-header bg-purple">
+              <img class="widget-bg img-responsive" src="{{ details.city.image.url }}" alt="">
+          </div>
+          <div class="widget-body text-center">
+                <a href="{% url 'core:peopledetails' details.id %}">
+                  <img alt="{{ details.firstname }}" class="widget-img img-circle img-border-light" src="{{ details.image.url }}">
+              </a>
+              <h4 class="mar-no text-main">
+                <a href="{% url 'core:peopledetails' details.id %}">
+                {{ details.firstname }} {{ details.lastname }}
+                </a>
+              </h4>
+              <p class="text-muted">{{ details.city.name }}, {{ details.city.country.name }}</p>
+
+              <p>{{ details.profile }}</p>
+
+              <p class="text-muted">Member since {{ details.member_since }}</p>
+
+              <div class="btn-group btn-group-justified pad-top">
+                {% if details.website %}
+                  <a href="{{ details.website }}" class="btn btn-icon bord-no icon-lg add-tooltip fa fa-link" data-original-title="Website" data-container="body"></a>
+                {% endif %}
+                {% if details.twitter %}
+                  <a href="{{ details.twitter }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-twitter" data-original-title="Twitter" data-container="body"></a>
+                {% endif %}
+                {% if details.orcid %}
+                  <a href="https://orcid.org/{{ details.orcid }}" class="btn btn-icon bord-no icon-lg add-tooltip fas fa-id-card-alt" data-original-title="ORCID" data-container="body"></a>
+                {% endif %}
+                {% if details.researchgate %}
+                  <a href="{{ details.researchgate }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-researchgate" data-original-title="Research Gate" data-container="body"></a>
+                {% endif %}
+                {% if details.linkedin %}
+                  <a href="{{ details.linkedin }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-linkedin" data-original-title="LinkedIn" data-container="body"></a>
+                {% endif %}
+              </div>
+          </div>
+      </div>
+
+    </div>
+
+    {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
+
+{% endfor %}
+    
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.widget img.widget-bg {
+  top:-50px;
+}
+.main-content-block .text-center h4 a{color:#333}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">About Us</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="http://">About Us</a></li>
+        <li class="active">Team</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

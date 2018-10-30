@@ -1,0 +1,2 @@
+sudo docker exec -it ie_web python /src/manage.py makemigrations
+sudo docker exec -it ie_web python /src/manage.py migrate

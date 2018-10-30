@@ -1,0 +1,56 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Projects
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li class="active">Projects</li>
+    </ol>
+
+    <h3>Projects</h3>
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Funder</th>
+        <th>Our budget</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for project in projects %}
+        <tr>
+          <td><a href="{% url 'team:taskforce' project.taskforce.id %}">{{ project.taskforce.name }}</a></td>
+          <td>{{ project.funders|default_if_none:"" }}</td>
+          <td>{{ project.our_budget|default_if_none:"" }}</td>
+          <td>{{ project.start_date|default_if_none:"" }}</td>
+          <td>{{ project.end_date|default_if_none:"" }}</td>
+          <td>{{ project.get_status_display }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <p><a href="{% url 'team:createproject' %}" class="btn btn-success"><i class="fas fa-plus fa-fw"></i> Add project</a></p>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

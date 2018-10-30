@@ -1,0 +1,48 @@
+{% load static %}
+<div id="columnChart" style="width:100%; height: 600px;"></div>
+
+{% include 'multiplicity/graphs/options.html' %}
+{% include 'multiplicity/graphs/series.column.html' %}
+
+	<script>
+	  Highcharts.chart('columnChart', {
+	    chart: {
+	      type: 'column'
+	    },
+	    title: {
+	      text: 'City-wide water consumption'
+	    },
+
+	    subtitle: {
+	      text: 'Cape Town'
+	    },
+
+      colors: colorScheme,
+
+	    xAxis: {
+	      categories: ['FY 2013/2014', 'FY 2014/2015', 'FY 2015/2016'],
+	    },
+	    yAxis: {
+	      min: 0,
+	      title: {
+	        text: 'Consumption in liters',
+	        style: {
+	          fontWeight: 'bold'
+	        },
+	      }
+	    },
+	    legend: {
+	      reversed: true,
+        verticalAlign: 'top',
+	    },
+	    plotOptions: {
+	      series: {
+	        stacking: 'normal'
+	      }
+	    },
+	    series: barColumnSeries
+	  });
+
+	  // lines for chart burger menu thinner
+	  $(".highcharts-button-symbol").attr("stroke-width", 1);
+	</script>

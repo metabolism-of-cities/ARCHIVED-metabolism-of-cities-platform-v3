@@ -1,0 +1,201 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.title }} | Publications | {% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2">
+    <h3>{{ info.title }}</h3>
+  </div>
+</div>
+<div class="row reference-metadata">
+  <div class="col-lg-2 text-center">
+    <i class="fas fa-{{ info.type.icon }}"></i>
+  </div>
+  <div class="col-lg-10">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-4">
+            <dl>
+              <dt>Author(s)</dt>
+              {% if authors %}
+              <dd>
+              {% for author in authors %}
+                <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == authors|length %},{% endif %}
+              {% endfor %}
+              </dd>
+            </dl>
+            {% else %}
+            {{ info.authorlist }}
+            {% endif %}
+
+            <dt>Year</dt>
+            <dd>{{ info.year }}</dd>
+          </div>
+          <div class="col-md-4">
+            <dl>
+              {% if info.journal %}
+              <dt>Journal</dt>
+              <dd><a href="{% url 'core:journal' info.journal.id %}">{{ info.journal.name }}</a></dd>
+              {% endif %}
+
+              {% if info.publisher %}
+              <dt>Publisher</dt>
+              <dd><a href="{% url 'core:publisher' info.publisher.id %}">{{ info.publisher.name }}</a></dd>
+              {% endif %}
+
+              {% if info.organizations %}
+              {% for details in info.organizations.all %}
+                <dt>Organization</dt>
+                <dd><a href="{% url 'core:organization' details.type details.id %}">{{ details.name }}</a></dd>
+              {% endfor %}
+              {% endif %}
+
+              <dt>Type</dt>
+              <dd>{{ info.type.name }}</dd>
+
+              {% if info.event %}
+              <dt>{{ info.event.type }}</dt>
+              <dd><a href="{% url 'core:event' info.event.id %}">{{ info.event.name }}</a></dd>
+              {% endif %}
+
+              {% if info.doi %}
+              <dt>DOI</dt>
+              <dd><a href="https://doi.org/{{ info.doi }}">{{ info.doi }}</a></dd>
+              {% endif %}
+
+              {% if info.url %}
+              <dt>More information</dt>
+              <dd><a href="{{ info.url }}">{{ info.url }}</a></dd>
+              {% endif %}
+            </dl>
+          </div>
+          {% if info.tags.all %}
+          <div class="col-md-4">
+            <dt>Tag(s)</dt>
+            <dd>
+            {% for tag in info.tags.all %}
+            <a href="http://" class="label label-default">{{ tag.name }}</a>
+            {% endfor %}
+            </dd>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if info.abstract %}
+<div class="panel panel-dark">
+  <div class="panel-heading">
+    <h2 class="panel-title">Abstract</h2>
+  </div>
+  <div class="panel-body">
+    {{ info.abstract|linebreaksbr }}
+  </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel panel-dark">
+      <div class="panel-heading">
+        <h2 class="panel-title">Related publications</h2>
+      </div>
+      <div class="panel-body">
+        <div class="list-group bord-no references">
+          {% for details in related %}
+            <a class="list-group-item" href="{% url 'core:reference' details.id %}">
+              {{ details.title }}
+              <span>
+                <em>{{ details.source }}</em>
+                <strong>{{ details.year }}</strong>
+              </span>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div><div class="col-lg-4">
+    <div class="panel panel-dark">
+      <div class="panel-heading">
+        <h2 class="panel-title">Download reference</h2>
+      </div>
+      <div class="panel-body">
+        <a class="btn btn-info" href="http://">Bibtex</a>
+        <a class="btn btn-info" href="http://">EndNote</a>
+        <a class="btn btn-info" href="http://">Zotero</a>
+      </div>
+    </div>
+    <div class="panel panel-dark">
+      <div class="panel-heading">
+        <h2 class="panel-title">More options</h2>
+      </div>
+      <div class="panel-body">
+        <div class="pad-btm">
+          <a class="btn btn-success" href="{% url 'core:newreference' %}">Add a publication</a>
+          <a class="btn btn-danger" href="/contact">Report error</a>
+        </div>
+        <div class="pad-btm hide">
+          <a class="btn btn-warning" href="{% url 'core:editreference' info.id %}">Edit publication</a>
+        </div>
+        <div>
+          <a class="btn btn-default" href="http://"><i class="fab fa-facebook"></i></a>
+          <a class="btn btn-default" href="http://"><i class="fab fa-twitter"></i></a>
+          <a class="btn btn-default" href="http://"><i class="fa fa-envelope"></i></a>
+          <a class="btn btn-default" href="http://"><i class="fa fa-print"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if data %}
+
+<div class="panel panel-dark">
+  <div class="panel-heading">
+    <h2 class="panel-title">Data</h2>
+  </div>
+  <div class="panel-body">
+
+    <p>
+      We have {{ data.count }} data points from this publication in our database.
+    </p>
+
+    {% include 'multiplicity/includes/datatable.html' %}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+  <div id="page-title">
+    <h1 class="page-header text-overflow">Publications</h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="./"><i class="pli-home"></i></a></li>
+    <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+    <li><a href="{% url 'core:references' %}">Publications</a></li>
+    <li class="active">Publication #{{ info.id }}</li>
+  </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.title }} | {{ info.type.name }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+{% if not info.active %}
+  <div class="alert alert-warning">This record is not active and not visible to the public</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-sm-3 ">
+    <div class="panel panel-colorful panel-dark">
+      <ul class="list-group">
+          <li class="list-header">Latest {{ info.parent.title }}</li>
+          {% for details in list %}
+          <li class="list-group-item {% if info.id == details.id %} active-sub{% endif %}"><a href="{% url 'core:news' details.id %}">{{ details.title }}</a>
+          <br>
+          {{ details.date|date:"M d, Y" }}
+          </li>
+          {% endfor %}
+          <li class="list-group-item">
+            <a href="{% url 'core:news' %}">View {{ info.parent.title }} archive</a>
+          </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-9">
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel panel-body">
+          <div class="panel-body">
+            <h3>{{ info.title }}</h3>
+            {% if event.start_date %}
+              <p class="date">
+                {{ info.event.start_date|date:"M d, Y" }}
+              </p>
+              {% elif info.date %}
+              <p class="date">{{ info.date|date:"M d, Y" }}</p>
+            {% endif %}
+            {% if info.introduction %}
+              <p><strong>{{ info.introduction|linebreaksbr }}</strong></p>
+            {% endif %}
+
+    {% if info.image or info.introduction %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if info.image %}
+      <p class="text-center"><img src="{{ info.image.url }}" alt="" /></p>
+    {% endif %}
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel panel-body">
+          <div class="panel-body">
+    {% endif %}
+
+            {{ info.content|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.date{opacity:0.7}
+.list-group-item{border-color:rgba(255, 255, 255, 0.2);border-style:dotted}
+.panel > .list-group .list-group-item.active-sub{border-left:8px solid #fe6d33}
+.list-header{font-weight:700}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">
+          {{ info.parent.title }}
+        </h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        {% if SITE_ID == 1 %}
+          <li><a href="{% url 'core:section_home' info.section %}">{{ get_info.section_display }}</a></li>
+        {% endif %}
+        {% if info.parent.title == "Blog" %}
+          <li><a href="{% url 'core:blog' %}">Blog</a></li>
+        {% elif info.parent.title == "News" %}
+          <li><a href="{% url 'core:news' %}">News</a></li>
+        {% elif info.parent.title == "Events" %}
+          <li><a href="{% url 'core:events' %}">Events</a></li>
+        {% endif %}
+        <li class="active">{{ info.title|truncatechars:40 }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

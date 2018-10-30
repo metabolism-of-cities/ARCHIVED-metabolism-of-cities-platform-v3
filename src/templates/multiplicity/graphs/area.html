@@ -1,0 +1,52 @@
+{% load static %}
+<div id="areaChart" style="width:100%; height: 600px;"></div>
+
+{% include 'multiplicity/graphs/options.html' %}
+{% include 'multiplicity/graphs/series.time.html' %}
+
+  <script>
+    Highcharts.chart('areaChart', {
+      chart: {
+          type: 'areaspline'
+      },
+      title: {
+          text: 'Wastewater effluent'
+      },
+      subtitle: {
+          text: 'Cape Town'
+      },
+      xAxis: {
+        type: 'datetime',
+        tickmarkPlacement: 'on',
+        crosshair: true,
+      },
+      legend: {
+        verticalAlign: 'top',
+      },
+      yAxis: {
+        title: {
+          text: 'ml'
+        }
+      },
+      tooltip: {
+          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ml<br/>',
+          shared: true
+      },
+      colors: colorScheme,
+      plotOptions: {
+          areaspline: {
+              stacking: 'normal',
+              lineColor: '#ffffff',
+              lineWidth: 1,
+              marker: {
+                  lineWidth: 1,
+                  lineColor: '#ffffff'
+              }
+          }
+      },
+      series: timeSeries
+    });
+
+    // lines for chart burger menu thinner
+    $(".highcharts-button-symbol").attr("stroke-width", 1);
+  </script>

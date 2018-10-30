@@ -1,0 +1,459 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head floating-style{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6">
+          <div class="panel widget">
+              <div class="widget-header bg-purple city-header">
+                {% if info.image %}
+                  <img class="widget-bg img-responsive" src="{{ info.image.url }}" alt="">
+                {% endif %}
+              </div>
+              <div class="widget-body text-center">
+                {% with "multiplicity/img/cities/map-"|add:info.slug|add:".jpg" as picture %}
+                  <img alt="" class="widget-img img-circle img-border-light" src="{% static picture %}">
+                {% endwith %}
+                  <h4 class="mar-no text-main">{{ info.name }}</h4>
+                  <p class="text-muted mar-no">{{ info.country }}</p>
+              </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+
+          <div class="panel panel-success panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-apple icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'biomass' %}">Biomass</a></p>
+                      <span>4 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Crops, wood, fish, meat...
+              </div>
+          </div>
+          
+          <div class="panel bg-info" style="display:none">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-refinery icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'energy' %}">Fossil fuels</a></p>
+                      <span>2 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Liquid fuels, solid fuels
+              </div>
+          </div>
+          
+          <div class="panel panel-info panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-thunder icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'energy' %}">Energy</a></p>
+                      <span>4 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Fossil fuels, electricity...
+              </div>
+          </div>
+
+        </div>
+        
+        <div class="col-lg-3">
+
+          <div class="panel panel-warning panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-wheelbarrow icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'metals' %}">Metals</a></p>
+                      <span>7 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Iron, copper, nickel, zinc...
+              </div>
+          </div>
+          
+          <div class="panel panel-purple panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-mine icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'minerals' %}">Minerals</a></p>
+                      <span>5 sections</span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Stone, clay, sand, gravel...
+              </div>
+          </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-drop icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Water</a></p>
+                      <span>Drinking water, waste water effluent, water reservoirs, dams...</span>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+  </div>
+
+  <h2>Infrastructure</h2>
+  <div class="alert alert-info">
+    The following infrastructure data was recently added:
+  </div>
+  <div class="row blog">
+    {% for details in types %}
+      {% if details.id in count %}
+        {% if forloop.counter|divisibleby:4 %}</div><div class="row blog">{% endif %}
+        <div class="col-md-4">
+          <div class="panel">
+              <div class="blog-header">
+                <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">
+                  <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
+                </a>
+              </div>
+              <div class="blog-content">
+                  <div class="blog-title media-block">
+                      <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}" class="btn-link">
+                          <h2>{{ details.name }}</h2>
+                      </a>
+                  </div>
+              </div>
+              <div class="blog-footer">
+                  <div class="media-left"><a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">{{ details.total }} records</a> found</div>
+                  <div class="media-body text-right">
+                      <img src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
+                  </div>
+              </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  
+
+   
+   <div class="row" style="display:none">
+   
+    <div class="col-md-12" style="padding-top:20px">
+    
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab"  style="background:#ECF0F5;border:1px solid #ccc;border-bottom:1px solid #ECF0F5" href="#demo-lft-tab-1">Water</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#demo-lft-tab-2">Energy</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#demo-lft-tab-3">Fossil Fuels</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#demo-lft-tab-3">Food</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#demo-lft-tab-3">Construction materials</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#demo-lft-tab-3">Imports &amp; Exports</a>
+            </li>
+        </ul>
+
+        <div id="demo-morris-area-legend-full" class="text-center"></div>
+        <div id="largegraph" class="morris-full-content" style="height: 300px"></div>
+
+    </div>
+   
+   </div>
+
+    <div class="row" style="display:none">
+        <div class="col-md-6" style="margin-top:44px">
+					                <h3 class="text-main text-normal text-2x mar-no">Water Consumption</h3>
+					                <h5 class="text-uppercase text-muted text-normal">Latest figures</h5>
+					                <hr class="new-section-xs">
+					                <div class="row mar-top">
+					                    <div class="col-sm-5">
+					                        <div class="text-lg"><p class="text-5x text-thin text-main mar-no">57 ML</p></div>
+					                        <p class="text-sm">Latest consumption data, per-capita figures for <strong>December 2018</strong></p>
+					                    </div>
+					                    <div class="col-sm-7">
+					                        <div class="list-group bg-trans mar-no">
+					                            <a class="list-group-item" href="#"><i class="pli-information icon-lg icon-fw"></i> View by ward</a>
+					                            <a class="list-group-item" href="#"><i class="pli-mine icon-lg icon-fw"></i> Usage Profile</a>
+					                            <a class="list-group-item" href="#"><span class="label label-info pull-right">New</span><i class="pli-drop icon-lg icon-fw"></i> WWTP Effluent Quality</a>
+					                        </div>
+					                    </div>
+					                </div>
+					                <button class="btn btn-pink mar-ver">View full report</button>
+					                <p class="text-xs">Last update: 11 December 2018. Next update expected: January/February 2019</p>
+					            </div>
+					        <div class="col-md-6" style="margin-top:22px">
+					
+					            <div class="panel">
+					                <div class="panel-heading">
+					                    <h3 class="panel-title">Available water supply</h3>
+					                </div>
+					                <div class="pad-all">
+					                    <div id="demo-morris-line-legend" class="text-center"></div>
+					                    <div id="demo-morris-line" style="height: 268px; position: relative;"><svg height="268" version="1.1" width="784" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative; top: 0.983337px;"><desc>Created with Raphaël 2.1.2</desc><defs></defs><text style="text-anchor: end; font: normal normal normal normal 11px sans-serif;" x="37.5" y="229" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal"><tspan dy="4">0</tspan></text><path style="" fill="none" stroke="#000000" d="M50,229H759" stroke-opacity="0.1" stroke-width="0.5"></path><text style="text-anchor: end; font: normal normal normal normal 11px sans-serif;" x="37.5" y="178" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal"><tspan dy="4">7.5</tspan></text><path style="" fill="none" stroke="#000000" d="M50,178H759" stroke-opacity="0.1" stroke-width="0.5"></path><text style="text-anchor: end; font: normal normal normal normal 11px sans-serif;" x="37.5" y="127" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal"><tspan dy="4">15</tspan></text><path style="" fill="none" stroke="#000000" d="M50,127H759" stroke-opacity="0.1" stroke-width="0.5"></path><text style="text-anchor: end; font: normal normal normal normal 11px sans-serif;" x="37.5" y="76" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal"><tspan dy="4">22.5</tspan></text><path style="" fill="none" stroke="#000000" d="M50,76H759" stroke-opacity="0.1" stroke-width="0.5"></path><text style="text-anchor: end; font: normal normal normal normal 11px sans-serif;" x="37.5" y="25" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal"><tspan dy="4">30</tspan></text><path style="" fill="none" stroke="#000000" d="M50,25H759" stroke-opacity="0.1" stroke-width="0.5"></path><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="759" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2009</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="684.3684210526316" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2007</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="609.7368421052632" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2005</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="535.1052631578948" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2003</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="460.47368421052636" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2001</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="385.8421052631579" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2009</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="311.2105263157895" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2007</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="236.57894736842107" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2005</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="161.94736842105263" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2003</tspan></text><text style="text-anchor: middle; font: normal normal normal normal 11px sans-serif;" x="87.31578947368422" y="241.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#8f9ea6" font-size="11px" font-family="sans-serif" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan dy="4">2001</tspan></text><path style="" fill="none" stroke="#177bbb" d="M50,106.60000000000001C59.328947368421055,96.4,77.98684210526316,58.15000000000001,87.31578947368422,65.80000000000001C96.64473684210527,73.45000000000002,115.30263157894737,157.60000000000002,124.63157894736842,167.8C133.96052631578948,178,152.6184210526316,150.8,161.94736842105263,147.4C171.2763157894737,144,189.93421052631578,149.10000000000002,199.26315789473685,140.60000000000002C208.59210526315792,132.10000000000002,227.25,77.7,236.57894736842107,79.4C245.9078947368421,81.1,264.5657894736842,157.6,273.89473684210526,154.2C283.2236842105263,150.79999999999998,301.88157894736844,53.05000000000001,311.2105263157895,52.20000000000002C320.5394736842105,51.35000000000002,339.19736842105266,141.45000000000002,348.5263157894737,147.4C357.85526315789474,153.35,376.5131578947369,102.35000000000001,385.8421052631579,99.80000000000001C395.17105263157896,97.25000000000001,413.8289473684211,131.25,423.15789473684214,127C432.4868421052632,122.75,451.1447368421053,60.7,460.47368421052636,65.80000000000001C469.8026315789474,70.9,488.4605263157895,157.60000000000002,497.7894736842105,167.8C507.11842105263156,178.00000000000003,525.7763157894738,150.8,535.1052631578948,147.4C544.4342105263158,144,563.0921052631579,149.10000000000002,572.421052631579,140.60000000000002C581.75,132.10000000000002,600.4078947368422,81.10000000000001,609.7368421052632,79.4C619.0657894736843,77.7,637.7236842105264,130.4,647.0526315789474,127C656.3815789473684,123.60000000000001,675.0394736842105,49.65000000000002,684.3684210526316,52.20000000000002C693.6973684210526,54.75000000000002,712.3552631578948,141.45,721.6842105263158,147.4C731.0131578947369,153.35,749.671052631579,111.70000000000002,759,99.80000000000001" stroke-width="2"></path><circle cx="50" cy="106.60000000000001" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="87.31578947368422" cy="65.80000000000001" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="124.63157894736842" cy="167.8" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="161.94736842105263" cy="147.4" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="199.26315789473685" cy="140.60000000000002" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="236.57894736842107" cy="79.4" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="273.89473684210526" cy="154.2" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="311.2105263157895" cy="52.20000000000002" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="348.5263157894737" cy="147.4" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="385.8421052631579" cy="99.80000000000001" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="423.15789473684214" cy="127" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="460.47368421052636" cy="65.80000000000001" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="497.7894736842105" cy="167.8" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="535.1052631578948" cy="147.4" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="572.421052631579" cy="140.60000000000002" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="609.7368421052632" cy="79.4" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="647.0526315789474" cy="127" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="684.3684210526316" cy="52.20000000000002" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="721.6842105263158" cy="147.4" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle><circle cx="759" cy="99.80000000000001" r="4" fill="#177bbb" stroke="#ffffff" style="" stroke-width="1"></circle></svg><div class="morris-hover morris-default-style" style="left: 10px; top: 41px; display: none;"><div class="morris-hover-row-label">2000</div><div class="morris-hover-point" style="color: #177bbb">
+  value:
+  18
+</div></div></div>
+					                </div>
+					            </div>
+					
+					        </div>
+					    </div>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ie/css/morris.min.css' %}" />
+<style type="text/css">
+.city-header { min-height:330px;previous:298px;}
+.morris-legend-items{padding-top:20px}
+#page-content .icon-fw{margin-right:-5px;position:relative;top:10px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+        <h3>{{ info.name }} | <span class="text-thin">{{ info.country.name }}</span></h3>
+        {% if info.slug == "cape-town" %}
+            <p>Population <strong class="text-main">3.8 million (2016)</strong> | Area <strong class="text-main">2,446 km<sup>2</sup></strong> | Income group <strong>low-medium</strong></p>
+        {% elif info.slug == "the-hague" %}
+            <p>Population <strong class="text-main">527,748 (2018)</strong> | Area <strong class="text-main">98.12 km<sup>2</sup></strong> | Density <strong>6,445 people/km<sup>2</sup></strong></p>
+        {% elif info.slug == "montreal" %}
+            <p>Population <strong class="text-main">1.7 million (2016)</strong> | Area <strong class="text-main">431.50 km<sup>2</sup></strong> | Density <strong>3,955 people/km<sup>2</sup></strong></p>
+        {% endif %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static 'ie/js/morris.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ie/js/raphael.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+        var chart = Morris.Area({
+        element: 'largegraph',
+        data: [{
+            period: 'January 16',
+            dl: 77,
+            up: 25
+            }, {
+            period: 'February 16',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 16',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 16',
+            dl: 120,
+            up: 100
+            }, {
+            period: 'May 16',
+            dl: 96,
+            up: 75
+            }, {
+            period: 'June 16',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 16',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 16',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 16',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 16',
+            dl: 201,
+            up: 160
+            }, {
+            period: 'November 16',
+            dl: 180,
+            up: 133
+            }, {
+            period: 'December 16',
+            dl: 133,
+            up: 100
+            }, {
+            period: 'January 17',
+            dl: 101,
+            up: 90
+            }, {
+            period: 'February 17',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 17',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 17',
+            dl: 99,
+            up: 57
+            }, {
+            period: 'May 17',
+            dl: 120,
+            up: 75
+            }, {
+            period: 'June 17',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 17',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 17',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 17',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 17',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'November 17',
+            dl: 110,
+            up: 102
+            }, {
+            period: 'December 17',
+            dl: 65,
+            up: 30
+            }, {
+            period: 'January 18',
+            dl: 120,
+            up: 90
+            }, {
+            period: 'February 18',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 18',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 18',
+            dl: 71,
+            up: 57
+            }, {
+            period: 'May 18',
+            dl: 95,
+            up: 75
+            }, {
+            period: 'June 18',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 18',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 18',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 18',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 18',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'November 18',
+            dl: 90,
+            up: 70
+            }, {
+            period: 'December 18',
+            dl: 65,
+            up: 30
+            }, {
+            period: 'January 19',
+            dl: 77,
+            up: 45
+            }],
+        gridEnabled: true,
+        gridLineColor: 'rgba(0,0,0,.1)',
+        behaveLikeLine: true,
+        smooth: false,
+        axes:true,
+        xkey: 'period',
+        ykeys: ['dl', 'up'],
+        labels: ['Water consumption', 'Waste water'],
+        lineColors: ['#03A9F4', '#9BE0FF'],
+        pointSize: 0,
+        pointStrokeColors : ['#045d97'],
+        lineWidth: 0,
+        resize:true,
+        hideHover: 'auto',
+        fillOpacity: 0.9,
+        parseTime:false
+    });
+
+    chart.options.labels.forEach(function(label, i){
+        var legendItem = $('<div class=\'morris-legend-items\'></div>').text(label);
+        $('<span></span>').css('background-color', chart.options.lineColors[i]).prependTo(legendItem);
+        $('#demo-morris-area-legend-full').append(legendItem)
+    })
+});
+</script>
+{% endblock %}

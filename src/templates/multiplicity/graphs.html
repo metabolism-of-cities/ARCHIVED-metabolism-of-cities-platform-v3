@@ -1,0 +1,799 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Graphs | {{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<h2>{{ dataset.name }}</h2>
+<p>{{ dataset.notes|linebreaksbr }}</p>
+
+<div class="row">
+
+  <div style="margin-bottom:80px">
+    <div id="lineGraph" style="width:100%; height:600px;"></div>
+  </div>
+
+  <div style="margin-bottom:80px">
+    <div id="columnChart" style="width:100%; height:600px;"></div>
+  </div>
+
+  <div style="margin-bottom:80px">
+    <div id="pieChart" style="width:100%; height:600px;"></div>
+  </div>
+
+  <div style="margin-bottom:80px">
+    <div id="streamGraph" style="width:100%; height:600px;"></div>
+  </div>
+
+  <div style="margin-bottom:80px">
+    <div id="barChart" style="width:100%; height: 1200px;"></div>
+  </div>
+
+  <div style="margin-bottom:80px">
+    <div id="drillBarChart" style="width:100%; height: 600px;"></div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li class="active">Graphs</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/series-label.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+  <script src="https://code.highcharts.com/modules/streamgraph.js"></script>
+
+  <script>
+    Highcharts.setOptions({
+        chart: {
+            style: {
+                fontFamily: "'Lato', sans-serif"
+            },
+        },
+        plotOptions: {
+            series: {
+                animation: false
+            },
+            column: {
+                animation: false
+            }
+        }
+    });
+  </script>
+  <script>
+    Highcharts.chart('lineGraph', {
+        chart: {
+            type: 'spline',
+            animation: false
+        },
+        title: {
+            text: 'Wastewater effluent'
+        },
+        subtitle: {
+            text: 'Cape Town'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e. %b',
+                year: '%b'
+            },
+            title: {
+              text: 'Date',
+              style: {
+                  fontWeight: 'bold'
+              },
+            }
+        },
+        yAxis: {
+            title: {
+              text: 'ML',
+              style: {
+                  fontWeight: 'bold'
+              },
+            },
+            min: 0
+        },
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+
+        colors: ['#f44336', '#ffb300', '#03a9f4', '#ab47bc', '#26a69a', '#8bc34a', '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'],
+
+        // Define the data points. All series have a dummy year
+        // of 1970/71 in order to be compared on the same x axis. Note
+        // that in JavaScript, months start at 0 for January, 1 for February etc.
+        series: [{
+            name: "Athlone",
+            data: [
+              [Date.UTC(  2015, 4, 1  ),  2912.1  ],
+              [Date.UTC(  2015, 3, 1  ),  3059.7  ],
+              [Date.UTC(  2015, 2, 1  ),  2875  ],
+              [Date.UTC(  2015, 1, 1  ),  3412.4  ],
+              [Date.UTC(  2014, 12, 1 ),  3529.4  ],
+              [Date.UTC(  2014, 11, 1 ),  3487.9  ],
+              [Date.UTC(  2014, 10, 1 ),  2861.8  ],
+              [Date.UTC(  2014, 9, 1  ),  4589  ],
+              [Date.UTC(  2014, 8, 1  ),  5393.8  ],
+              [Date.UTC(  2014, 7, 1  ),  5396.3  ],
+              [Date.UTC(  2014, 6, 1  ),  4651.5  ],
+              [Date.UTC(  2014, 5, 1  ),  3377.1  ],
+              [Date.UTC(  2014, 4, 1  ),  3258.6  ],
+              [Date.UTC(  2014, 3, 1  ),  3391.4  ],
+              [Date.UTC(  2014, 2, 1  ),  2861.8  ],
+              [Date.UTC(  2014, 1, 1  ),  3630.9  ],
+              [Date.UTC(  2013, 12, 1 ),  3817.1  ],
+              [Date.UTC(  2013, 11, 1 ),  4485.4  ],
+              [Date.UTC(  2013, 10, 1 ),  4777.6  ],
+              [Date.UTC(  2013, 9, 1  ),  5718.5  ],
+              [Date.UTC(  2013, 8, 1  ),  5695  ],
+              [Date.UTC(  2013, 7, 1  ),  4967.3  ],
+            ]
+        }, {
+            name: "Bellville",
+            data: [
+              [Date.UTC(  2015, 4, 1  ),  1398.7  ],
+              [Date.UTC(  2015, 3, 1  ),  1538.8  ],
+              [Date.UTC(  2015, 2, 1  ),  1392.5  ],
+              [Date.UTC(  2015, 1, 1  ),  1528.3  ],
+              [Date.UTC(  2014, 12, 1 ),  1179.5  ],
+              [Date.UTC(  2014, 11, 1 ),  1220.6  ],
+              [Date.UTC(  2014, 10, 1 ),  1449.5  ],
+              [Date.UTC(  2014, 9, 1  ),  1766.5  ],
+              [Date.UTC(  2014, 8, 1  ),  2105.3  ],
+              [Date.UTC(  2014, 7, 1  ),  2045.2  ],
+              [Date.UTC(  2014, 6, 1  ),  1928.8  ],
+              [Date.UTC(  2014, 5, 1  ),  1684.1  ],
+              [Date.UTC(  2014, 4, 1  ),  1537.37 ],
+              [Date.UTC(  2014, 3, 1  ),  1608.1  ],
+              [Date.UTC(  2014, 2, 1  ),  1449.5  ],
+              [Date.UTC(  2014, 1, 1  ),  1421.4  ],
+              [Date.UTC(  2013, 12, 1 ),  1587.4  ],
+              [Date.UTC(  2013, 11, 1 ),  1898.7  ],
+              [Date.UTC(  2013, 10, 1 ),  1986.7  ],
+              [Date.UTC(  2013, 9, 1  ),  2287  ],
+              [Date.UTC(  2013, 8, 1  ),  2412  ],
+              [Date.UTC(  2013, 7, 1  ),  1790.6  ],
+            ]
+        }, {
+            name: "Borcherds Quarry ",
+            data: [
+              [Date.UTC(  2015, 4, 1  ),  995.5 ],
+              [Date.UTC(  2015, 3, 1  ),  1033.2  ],
+              [Date.UTC(  2015, 2, 1  ),  921.3 ],
+              [Date.UTC(  2015, 1, 1  ),  1039.1  ],
+              [Date.UTC(  2014, 12, 1 ),  1036.8  ],
+              [Date.UTC(  2014, 11, 1 ),  1068  ],
+              [Date.UTC(  2014, 10, 1 ),  1024  ],
+              [Date.UTC(  2014, 9, 1  ),  1113.9  ],
+              [Date.UTC(  2014, 8, 1  ),  1376.9  ],
+              [Date.UTC(  2014, 7, 1  ),  1333.9  ],
+              [Date.UTC(  2014, 6, 1  ),  1115.7  ],
+              [Date.UTC(  2014, 5, 1  ),  1143.5  ],
+              [Date.UTC(  2014, 4, 1  ),  1104.7  ],
+              [Date.UTC(  2014, 3, 1  ),  1157.7  ],
+              [Date.UTC(  2014, 2, 1  ),  1024  ],
+              [Date.UTC(  2014, 1, 1  ),  1196.5  ],
+              [Date.UTC(  2013, 12, 1 ),  1297.3  ],
+              [Date.UTC(  2013, 11, 1 ),  1306.7  ],
+              [Date.UTC(  2013, 10, 1 ),  1260.5  ],
+              [Date.UTC(  2013, 9, 1  ),  1313.7  ],
+              [Date.UTC(  2013, 8, 1  ),  1412  ],
+              [Date.UTC(  2013, 7, 1  ),  1226.8  ],
+            ]
+        }]
+    });
+  </script>
+  <script>
+    Highcharts.chart('columnChart', {
+        chart: {
+            type: 'column',
+        },
+        title: {
+            text: 'City-wide water consumption'
+        },
+        subtitle: {
+            text: 'Cape Town'
+        },
+        xAxis: {
+            categories: ['FY 2013/2014', 'FY 2014/2015', 'FY 2015/2016'],
+            title: {
+              style: {
+                  fontWeight: 'bold'
+              },
+              text: 'Year'
+            },
+        },
+        yAxis: {
+            min: 0,
+            title: {
+              style: {
+                  fontWeight: 'bold'
+              },
+              text: 'Total water consumption'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                }
+            }
+        },
+        colors: ['#f44336', '#03a9f4', '#ffb300', '#ab47bc', '#26a69a', '#8bc34a'],
+        series: [{
+            name: 'Unaccounted for',
+            data: [68756744, 76467116, 73031874]
+        },
+        {
+            name: 'Authorized',
+            data: [268467785, 288394954, 278188341]
+        }]
+    });
+  </script>
+  <script>
+    // Create the chart
+    Highcharts.chart('pieChart', {
+        chart: {
+            type: 'pie'
+        },
+
+        title: {
+            text: 'Agricultural production by type'
+        },
+        subtitle: {
+            text: 'Click the slices for more details'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y} t'
+                }
+            }
+        },
+
+        tooltip: {
+          pointFormat: '<b>{point.y} t</b>'
+        },
+
+        colors: ['#f44336', '#ffb300', '#03a9f4', '#ab47bc', '#26a69a', '#8bc34a', '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'],
+
+        "series": [
+            {
+              "name": "Types",
+              "colorByPoint": true,
+              "data": [
+                  {
+                      "name": "Cereals",
+                      "y": 29325 + 24438 + 924 + 194,
+                      "drilldown": "Cereals"
+                  },
+                  {
+                      "name": "Roots, tubers",
+                      "y": 12927 + 4732 + 1358,
+                      "drilldown": "Roots, tubers"
+                  },
+                  {
+                      "name": "Pulses",
+                      "y": 46234 + 243 + 99,
+                      "drilldown": "Pulses"
+                  },
+                  {
+                      "name": "Oil-bearing crops",
+                      "y": 4739 + 2605,
+                      "drilldown": "Oil-bearing crops"
+                  },
+                  {
+                      "name": "Vegetables",
+                      "y": 18167 + 4744 + 10090 + 6743 + 793 + 1476 + 433 + 3685 + 464 + 194 + 137 + 94 + 76 + 2,
+                      "drilldown": "Vegetables"
+                  },
+                  {
+                      "name": "Fruits",
+                      "y": 48430 + 6162 + 5854 + 4086 + 1465 + 989 + 258,
+                      "drilldown": "Fruits"
+                  },
+                  {
+                      "name": "Fodder crops",
+                      "y": 30860 + 22134,
+                      "drilldown": "Fodder crops"
+                  },
+                  {
+                      "name": "Grazed biomass",
+                      "y": 1107,
+                      "drilldown": null,
+                  },
+              ]
+            }
+        ],
+        "drilldown": {
+          "series": [
+            {
+              "name": "Cereals",
+              "id": "Cereals",
+              "data": [
+                ["Wheat", 29325],
+                ["Small Grain Grazing", 24438],
+                ["Barley", 924],
+                ["Oats", 194],
+              ]
+            },
+            {
+              "name": "Roots, tubers",
+              "id": "Roots, tubers",
+              "data": [
+                ["Carrots", 12927],
+                ["Potatoes", 4732],
+                ["Beetroot", 1358],
+              ]
+            },
+            {
+              "name": "Pulses",
+              "id": "Pulses",
+              "data": [
+                ["Lucerne", 46234],
+                ["Lupine", 243],
+                ["Grean beans", 99],
+              ]
+            },
+            {
+              "name": "Oil-bearing crops",
+              "id": "Oil-bearing crops",
+              "data": [
+                ["Canola", 4739],
+                ["Olives", 2605],
+              ]
+            },
+            {
+              "name": "Vegetables",
+              "id": "Vegetables",
+              "data": [
+                ["Cabbage", 18167],
+                ["Lettuce", 4744],
+                ["Cauliflower", 10090],
+                ["Vegetable mixed", 6743],
+                ["Broccoli", 793],
+                ["Onions", 1476],
+                ["Butternut", 433],
+                ["Mushrooms", 3685],
+                ["Celery", 464],
+                ["Gemsquash", 194],
+                ["Pumpkin", 137],
+                ["Tomatoes", 94],
+                ["Peppers", 76],
+                ["Chillies", 2],
+              ]
+            },
+            {
+              "name": "Fruits",
+              "id": "Fruits",
+              "data": [
+                ["Wine Grapes", 48430],
+                ["Pears", 6162],
+                ["Guava", 5854],
+                ["Apples", 4086],
+                ["Plums", 1465],
+                ["Pomegranate", 989],
+                ["Table Grapes", 258],
+              ]
+            },
+            {
+              "name": "Fodder crops",
+              "id": "Fodder crops",
+              "data": [
+                ["Planted Pastures Perennial", 30860],
+                ["Planted Pastures", 22134],
+              ]
+            },
+          ]
+        }
+    });
+  </script>
+  <script>
+    var colors = Highcharts.getOptions().colors;
+    Highcharts.chart('streamGraph', {
+
+        chart: {
+            type: 'streamgraph',
+            marginBottom: 30,
+            zoomType: 'x'
+        },
+
+        colors: ['#f44336', '#ffb300', '#03a9f4', '#ab47bc', '#26a69a', '#8bc34a', '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'],
+
+        title: {
+            floating: true,
+            align: 'left',
+            text: 'Material export'
+        },
+        subtitle: {
+            floating: true,
+            align: 'left',
+            y: 30,
+            text: 'Cape Town'
+        },
+
+        xAxis: {
+            maxPadding: 0,
+            type: 'category',
+            crosshair: true,
+            categories: [
+                '1994',
+                '1995',
+                '1996',
+                '1997',
+                '1998',
+                '1999',
+                '2000',
+                '2001',
+                '2002',
+                '2003',
+                '2004',
+                '2005',
+                '2006',
+                '2007',
+                '2008',
+                '2009',
+                '2010',
+                '2011',
+                '2012',
+                '2013',
+                '2014',
+                '2015',
+                '2016',
+                '2017',
+            ],
+            labels: {
+                align: 'left',
+                reserveSpace: false,
+                rotation: 270
+            },
+            lineWidth: 0,
+            margin: 20,
+            tickWidth: 0
+        },
+
+        yAxis: {
+            visible: false,
+            startOnTick: false,
+            endOnTick: false
+        },
+        legend: {
+            enabled: true,
+            verticalAlign: 'top',
+        },
+        plotOptions: {
+            series: {
+                label: {
+                    minFontSize: 5,
+                    maxFontSize: 15,
+                    style: {
+                        color: 'rgba(255,255,255,0.75)'
+                    }
+                }
+            }
+        },
+
+        series: [
+          {
+            "name": "Metals",
+            "data": [
+              280, 183, 324, 100, 305, 299, 282, 298, 87, 376, 283, 245, 216, 181, 321, 240, 180, 368, 119, 53, 124, 176, 302, 381
+            ]
+          },
+          {
+            "name": "Non-metalic minerals",
+            "data": [
+              297, 218, 232, 327, 217, 331, 116, 357, 96, 282, 321, 368, 394, 395, 300, 125, 260, 68, 211, 334, 112, 187, 234, 264
+            ]
+          },
+          {
+            "name": "Fossil fuels",
+            "data": [
+              253, 185, 225, 277, 107, 278, 72, 307, 82, 199, 250, 353, 330, 221, 359, 141, 120, 128, 292, 369, 156, 297, 188, 99
+            ]
+          },
+          {
+            "name": "Biomass",
+            "data": [
+              250, 369, 323, 347, 123, 68, 105, 74, 261, 323, 117, 50, 311, 338, 292, 150, 321, 288, 179, 175, 122, 387, 246, 299
+            ]
+          },
+        ],
+
+        exporting: {
+            sourceWidth: 800,
+            sourceHeight: 600
+        }
+
+    });
+  </script>
+
+  <script>
+
+    Highcharts.chart('barChart', {
+        chart: {
+            type: 'bar'
+        },
+        colors: ['#ffb300', '#03a9f4', '#ab47bc', '#26a69a', '#8bc34a', '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'],
+        title: {
+            text: 'Cape Town population by suburb'
+        },
+        xAxis: {
+            categories: ["Bo-Kaap (Malay Quarter)", "Devil's Peak Estate", "De Waterkant", "Foreshore", "Gardens", "Higgovale", "Lower Vrede (District Six)", "Oranjezicht", "Salt River", "Schotse Kloof (Malay Quarter)", "Tamboerskloof", "University Estate", "Vredehoek", "Walmer Estate (District Six)", "Woodstock (including Upper Woodstock)", "Zonnebloem (District Six)", "Belhar", "Bellville", "Brackenfell", "Bothasig", "Brooklyn", "Durbanville", "Edgemead", "Elsie's River", "Goodwood", "Kensington", "Kraaifontein", "Kuils River", "Loevenstein", "Maitland", "Milnerton", "Monte Vista", "Panorama", "Parow", "Plattekloof", "Rugby", "Thornton", "Bantry Bay", "Camps Bay", "Clifton", "Fresnaye", "Green Point", "Hout Bay", "Imizamo Yethu", "Llandudno", "Mouille Point", "Sea Point", "Three Anchor Bay", "Bergvliet", "Bishopscourt"],
+            title: {
+                text: null
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Population',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' millions'
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+          data: [13180, 4685, 46508, 21091, 39554, 49254, 2246, 28257, 38086, 30977, 19474, 5950, 27492, 21448, 27303, 18401, 8783, 29962, 9375, 20267, 14581, 35717, 49904, 45558, 3305, 39181, 8069, 45538, 12557, 9753, 37029, 10929, 6110, 4408, 16417, 36546, 31421, 8874, 37523, 3624, 14058, 41888, 35466, 49252, 30239, 17335, 3305, 47460, 46346, 24046
+]
+        }]
+    });
+  </script>
+
+  <script>
+
+    // Create the chart
+    Highcharts.chart('drillBarChart', {
+        chart: {
+            type: 'bar'
+        },
+        colors: ['#f44336', '#ffb300', '#03a9f4', '#ab47bc', '#26a69a', '#8bc34a', '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'],
+        title: {
+            text: 'Cape Town population, by district and suburb'
+        },
+        subtitle: {
+            text: 'Click the columns to view suburbs'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: 'Population'
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:.1f}'
+                }
+            }
+        },
+
+        tooltip: {
+            pointFormat: '<b>{point.y:.2f}</b>'
+        },
+
+        "series": [
+          {
+            "name": "Suburbs",
+            "colorByPoint": true,
+            "data": [
+              {
+                "name": "City Bowl",
+                "y": 13180 + 4685 + 46508 + 21091 + 39554 + 49254 + 2246 + 28257 + 38086 + 30977 + 19474 + 5950 + 27492 + 21448 + 27303 + 18401,
+                "drilldown": "City Bowl"
+              },
+              {
+                "name": "Northern Suburbs",
+                "y": 20267 + 14581 + 35717 + 49904 + 45558 + 3305 + 39181 + 8069 + 45538 + 12557 + 9753 + 37029 + 10929 + 6110 + 4408 + 16417 + 36546 + 31421 + 8874 + 37523 + 3624 + 14058,
+                "drilldown": "Northern Suburbs"
+              },
+              {
+                "name": "Atlantic Seaboard",
+                "y": 41888 + 35466 + 49252 + 30239 + 17335 + 3305 + 47460 + 46346 + 24046 + 28145 + 2067 + 1921 + 8222 + 15434 + 8975 + 46860 + 32815 + 30253,
+                "drilldown": "Atlantic Seaboard"
+              },
+              {
+                "name": "Southern Suburbs",
+                "y": 8222 + 15434 + 8975 + 46860 + 32815 + 30253 + 34029 + 12212 + 25439 + 48322 + 47346 + 14587 + 17254 + 46476 + 34029 + 11220 + 19918 + 17649 + 34983 + 47444 + 27351 + 41841 + 15934,
+                "drilldown": "Southern Suburbs"
+              },
+            ]
+          }
+        ],
+        "drilldown": {
+          "series": [
+            {
+              "name": "City Bowl",
+              "id": "City Bowl",
+              "data": [
+                ["Bo-Kaap", 13180],
+                ["Devil's Peak Estate", 4685],
+                ["De Waterkant", 46508],
+                ["Foreshore", 21091],
+                ["Gardens", 39554],
+                ["Higgovale", 49254],
+                ["Lower Vrede (District Six)", 2246],
+                ["Oranjezicht", 28257],
+                ["Salt River", 38086],
+                ["Schotse Kloof (Malay Quarter)", 30977],
+                ["Tamboerskloof", 19474],
+                ["University Estate", 5950],
+                ["Vredehoek", 27492],
+                ["Walmer Estate (District Six)", 21448],
+                ["Woodstock (including Upper Woodstock)", 27303],
+                ["Zonnebloem (District Six)", 18401],
+              ]
+            },
+            {
+              "name": "Northern Suburbs",
+              "id": "Northern Suburbs",
+              "data": [
+                ["Bothasig",20267],
+                ["Brooklyn",14581],
+                ["Durbanville" ,35717],
+                ["Edgemead",49904],
+                ["Elsie River"   ,45558],
+                ["Goodwood",3305],
+                ["Kensington",39181],
+                ["Kraaifontein",8069],
+                ["Kuilsriver" ,45538],
+                ["Loevenstein" ,12557],
+                ["Maitland",9753],
+                ["Milnerton" ,37029],
+                ["Monteista"   ,10929],
+                ["Panorama",6110],
+                ["Parow" ,4408],
+                ["Plattekloof" ,16417],
+                ["Rugby" ,36546],
+                ["Thornton",31421],
+                ["Bantry Bay"  ,8874],
+                ["Camps Bay"  ,37523],
+                ["Clifton" ,3624],
+                ["Fresnaye",14058],
+              ]
+            },
+            {
+              "name": "Atlantic Seaboard",
+              "id": "Atlantic Seaboard",
+              "data": [
+                ["Green Point", 41888],
+                ["Hout Bay", 35466],
+                ["Imizamo Yethu", 49252],
+                ["Llandudno", 30239],
+                ["Mouille Point", 17335],
+                ["Sea Point", 3305],
+                ["Three Anchor Bay", 47460],
+                ["Bergvliet", 46346],
+                ["Bishopscourt", 24046],
+                ["Claremont", 28145],
+                ["Constantia", 2067],
+                ["Lansdowne", 1921],
+                ["Diep River", 8222],
+                ["Harfield Village", 15434],
+                ["Heathfield", 8975],
+                ["Kenilworth", 46860],
+                ["Kenwyn", 32815],
+                ["Kirstenhof", 30253],
+              ]
+            },
+            {
+              "name": "Southern Suburbs",
+              "id": "Southern Suburbs",
+              "data": [
+                ["Diep River", 8222],
+                ["Harfield Village", 15434],
+                ["Heathfield", 8975],
+                ["Kenilworth", 46860],
+                ["Kenwyn", 32815],
+                ["Kirstenhof", 30253],
+                ["Kreupelbosch", 34029],
+                ["Meadowridge", 12212],
+                ["Mowbray", 25439],
+                ["Ndabeni", 48322],
+                ["Newlands", 47346],
+                ["Observatory", 14587],
+                ["Pinelands", 17254],
+                ["Plumstead", 46476],
+                ["Retreat", 34029],
+                ["Rondebosch", 11220],
+                ["Rondebosch East", 19918],
+                ["Rosebank", 17649],
+                ["Steenberg", 34983],
+                ["SouthField", 47444],
+                ["Tokai", 27351],
+                ["Wynberg", 41841],
+                ["Capri Village", 15934],
+              ]
+            },
+          ]
+        }
+    });
+  </script>
+
+{% endblock %}

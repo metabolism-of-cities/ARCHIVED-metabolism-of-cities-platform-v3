@@ -1,0 +1,235 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-lg-12">
+
+      <div class="panel">
+          <div class="pad-all media">
+            <p>
+            Space: {{ space.name }}
+            </p>
+            <p>Type: {{ space.type.name }}</p>
+            <p>City: {{ space.city.name }}</p>
+          </div>
+      </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.city-header { min-height:276px;}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    <div class="text-center pad-btm">
+        <h3>{{ info.name }} | <span class="text-thin">{{ info.country.name }}</span></h3>
+        {% if info.slug == "cape-town" %}
+            <p>Population <strong class="text-main">3.8 million (2016)</strong> | Area <strong class="text-main">2,446 km<sup>2</sup></strong> | Income group <strong>low-medium</strong></p>
+        {% elif info.slug == "the-hague" %}
+            <p>Population <strong class="text-main">527,748 (2018)</strong> | Area <strong class="text-main">98.12 km<sup>2</sup></strong> | Density <strong>6,445 people/km<sup>2</sup></strong></p>
+        {% elif info.slug == "montreal" %}
+            <p>Population <strong class="text-main">1.7 million (2016)</strong> | Area <strong class="text-main">431.50 km<sup>2</sup></strong> | Density <strong>3,955 people/km<sup>2</sup></strong></p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static 'ie/js/morris.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ie/js/raphael.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+        var chart = Morris.Area({
+        element: 'largegraph',
+        data: [{
+            period: 'January 16',
+            dl: 77,
+            up: 25
+            }, {
+            period: 'February 16',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 16',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 16',
+            dl: 120,
+            up: 100
+            }, {
+            period: 'May 16',
+            dl: 96,
+            up: 75
+            }, {
+            period: 'June 16',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 16',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 16',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 16',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 16',
+            dl: 201,
+            up: 160
+            }, {
+            period: 'November 16',
+            dl: 180,
+            up: 133
+            }, {
+            period: 'December 16',
+            dl: 133,
+            up: 100
+            }, {
+            period: 'January 17',
+            dl: 101,
+            up: 90
+            }, {
+            period: 'February 17',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 17',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 17',
+            dl: 99,
+            up: 57
+            }, {
+            period: 'May 17',
+            dl: 120,
+            up: 75
+            }, {
+            period: 'June 17',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 17',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 17',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 17',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 17',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'November 17',
+            dl: 110,
+            up: 102
+            }, {
+            period: 'December 17',
+            dl: 65,
+            up: 30
+            }, {
+            period: 'January 18',
+            dl: 120,
+            up: 90
+            }, {
+            period: 'February 18',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 18',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 18',
+            dl: 71,
+            up: 57
+            }, {
+            period: 'May 18',
+            dl: 95,
+            up: 75
+            }, {
+            period: 'June 18',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 18',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 18',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 18',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 18',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'November 18',
+            dl: 90,
+            up: 70
+            }, {
+            period: 'December 18',
+            dl: 65,
+            up: 30
+            }, {
+            period: 'January 19',
+            dl: 77,
+            up: 45
+            }],
+        gridEnabled: true,
+        gridLineColor: 'rgba(0,0,0,.1)',
+        behaveLikeLine: true,
+        smooth: false,
+        axes:true,
+        xkey: 'period',
+        ykeys: ['dl', 'up'],
+        labels: ['Water consumption', 'Waste water'],
+        lineColors: ['#03A9F4', '#9BE0FF'],
+        pointSize: 0,
+        pointStrokeColors : ['#045d97'],
+        lineWidth: 0,
+        resize:true,
+        hideHover: 'auto',
+        fillOpacity: 0.9,
+        parseTime:false
+    });
+
+    chart.options.labels.forEach(function(label, i){
+        var legendItem = $('<div class=\'morris-legend-items\'></div>').text(label);
+        $('<span></span>').css('background-color', chart.options.lineColors[i]).prependTo(legendItem);
+        $('#demo-morris-area-legend-full').append(legendItem)
+    })
+});
+</script>
+{% endblock %}

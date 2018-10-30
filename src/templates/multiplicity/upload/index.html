@@ -1,0 +1,85 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="panel panel-success panel-colorful">
+      <div class="panel-body text-center">
+        <i class="psi-factory icon-5x"></i>
+      </div>
+      <div class="pad-all text-center">
+        <p class="text-2x mar-no">Infrastructure</p>
+        <p class="text-semibold mar-no">Data</p>
+        <p class="text-overflow pad-top">
+          <a class="btn btn-default" href="{% url 'multiplicity:upload_infrastructure' info.slug %}">Upload now</a>
+        </p>
+      </div>
+    </div>
+  </div><div class="col-sm-4">
+    <div class="panel panel-warning panel-colorful">
+      <div class="panel-body text-center">
+        <i class="psi-arrow-shuffle icon-5x"></i>
+      </div>
+      <div class="pad-all text-center">
+        <p class="text-2x mar-no">Material flow</p>
+        <p class="text-semibold mar-no">Data</p>
+        <p class="text-overflow pad-top">
+          <a class="btn btn-default" href="{% url 'multiplicity:upload_flow' info.slug %}">Upload now</a>
+        </p>
+      </div>
+    </div>
+  </div><div class="col-sm-4">
+    <div class="panel panel-pink panel-colorful">
+      <div class="panel-body text-center">
+        <i class="psi-road icon-5x"></i>
+      </div>
+      <div class="pad-all text-center">
+        <p class="text-2x mar-no">Material stock</p>
+        <p class="text-semibold mar-no">Data</p>
+        <p class="text-overflow pad-top">
+          <a class="btn btn-default" href="{% url 'multiplicity:upload_stock' info.slug %}">Upload now</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+textarea.form-control{height:200px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Upload</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li class="active">Upload</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

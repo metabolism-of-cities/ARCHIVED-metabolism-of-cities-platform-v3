@@ -1,0 +1,69 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}{% if info.id %}{{ info.name }} | Edit dataset{% else %}Create dataset{% endif %}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+
+<div class="panel">
+  <div class="panel-heading">
+
+  {% if info.id %}
+    {% include 'staf/includes/dataset.topnav.html' %}
+  {% else %}
+      <h3 class="panel-title">Create new dataset</h3>
+  {% endif %}
+
+  </div>
+  <div class="panel-body">
+
+    <form action="{% if info.id %}{% url 'staf:dataset.edit' info.id %}{% else %}{% url 'staf:dataset.create' %}{% endif %}" method="post" class="form form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        {% buttons submit='Save' layout='horizontal' %}{% endbuttons %}
+    </form>
+
+
+  </div>
+</div>
+    
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{% if info.id %}{{ info.name }} | Edit dataset{% else %}Create dataset{% endif %}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'staf:index' %}">Data</a></li>
+        <li><a href="{% url 'staf:datasets' %}">Datasets</a></li>
+        {% if info.id %}
+          <li><a href="{% url 'staf:dataset' info.id %}">{{ info.name }}</a></li>
+          <li class="active">Settings</li>
+        {% else %}
+          <li class="active">Create dataset</li>
+        {% endif %}
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

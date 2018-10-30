@@ -1,0 +1,36 @@
+Metabolism of Cities
+Weekly status report
+
+-------------------------------------
+Completed tasks:
+-------------------------------------
+{% if completed %}
+{% for details in completed %}
+{% ifchanged details.ticket.taskforce.name %}
+{{ details.ticket.taskforce.name }}
+-------------------------------------
+{% endifchanged %}
+{{ details.created_at|date:"M d" }} | {{ details.user }}
+{{ details.ticket.title }}
+{% endfor %}
+{% else %}
+No tasks completed in your task forces this week.
+{% endif %}
+
+
+-------------------------------------
+Progress updates:
+-------------------------------------
+{% if progress %}
+{% for details in progress %}
+{% ifchanged details.ticket.taskforce.name %}
+{{ details.ticket.taskforce.name }}
+-------------------------------------
+{% endifchanged %}
+{{ details.created_at|date:"M d" }} | {{ details.user }}
+{{ details.ticket.title }}
+{{ details.description }}
+{% endfor %}
+{% else %}
+No progress to report for your task forces this week.
+{% endif %}

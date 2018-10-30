@@ -1,0 +1,71 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.title }} | Videos{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block topstrip %}
+
+    {% if info.website == "youtube" %}
+      <iframe width="100%" height="480" src="https://www.youtube.com/embed/{{ info.url }}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    {% else %}
+      <iframe src="https://player.vimeo.com/video/{{ info.url }}" width="100%" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    {% endif %}
+    {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+          <div class="panel-body">
+            <h3>{{ info.title }}</h3>
+            {% if info.author %}
+            <p><span class="tag">{{ info.author }}</span></p>
+            {% endif %}
+            {{ info.description|safe }}
+
+            <p class="pad-top"><a href="{% url 'core:videos' %}" class="btn btn-success">Back to video list</a></p>
+          </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+#navbar{background:#fff}
+.panel-heading{height:480px}
+#page-content{padding:0}
+#container.boxed-layout{background:#ecf0f5}
+#container.boxed-layout.reveal #content-container, #container.boxed-layout #content-container{min-height:20vh}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">View Video</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="resources">Resources</a></li>
+        <li><a href="{% url 'core:resources' 'multimedia' %}">Multimedia</a></li>
+        <li><a href="{% url 'core:videos' %}">Videos</a></li>
+        <li class="active">{{ info.title }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

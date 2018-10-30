@@ -1,0 +1,74 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Infrastructure</h3>
+  </div>
+  <div class="panel-body">
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Topic</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for details in list %}
+            <tr>
+              <td><a href="{% url 'multiplicity:upload_infrastructure_file' info.slug details.slug %}">{{ details.name }}</a></td>
+              <td>{{ details.topic.name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Infrastructure</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
+        <li class="active">Infrastructure data</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+  <script type="text/javascript">
+  $(function(){
+    $("#water").click(function(e){
+      $('.panel-body .nav').hide();
+      e.preventDefault();
+      $("table").removeClass('hide');
+    });
+  });
+  </script>
+
+{% endblock %}

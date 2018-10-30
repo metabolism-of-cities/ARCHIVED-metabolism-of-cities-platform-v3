@@ -1,0 +1,60 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Prototype overview{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3>Prototype website: an overview</h3>
+        </div>
+        <div class="panel-body">
+          <p>Demo pages as of
+          September 9,
+          2018:
+          </p>
+          <h4>About</h4>
+          <ul>
+            <li><a href="{% url 'core:team' %}">Team</a></li>
+            <li><a href="{% url 'core:taskforces' %}">Task forces</a></li>
+          </ul>
+
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="{% url 'core:people' %}">People</a></li>
+            <li><a href="{% url 'core:videos' %}">Videos</a></li>
+            <li><a href="{% url 'core:journals' %}">Journals</a></li>
+          </ul>
+
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Overview</h1>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

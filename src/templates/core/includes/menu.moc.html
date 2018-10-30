@@ -1,0 +1,251 @@
+
+<li {% if section == "about" %}id="dropdown-active"{% endif %} class="mega-dropdown" data-id="about">
+  <a href="About" class="mega-dropdown-toggle" data-id="about">
+    <span class="ic-user pull-right">
+      <i class="pli-tag"></i>
+      About
+    </span>
+  </a>
+  <div class="dropdown-menu mega-dropdown-menu narrow-dropdown" id="dropdown-about">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-conference icon-fw"></i>About Us</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:about' 'our-story' %}">Our Story</a></li>
+          <li><a href="{% url 'core:about' 'mission' %}">Mission</a></li>
+          <li><a href="{% url 'core:about' 'values' %}">Values</a></li>
+          <li><a href="{% url 'core:about' 'team' %}">Team</a></li>
+          <li><a href="{% url 'core:about' 'task-forces' %}">Task Forces</a></li>
+          <li><a href="{% url 'core:about' 'partners' %}">Partners</a></li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-handshake icon-fw"></i>Support Us</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:about' 'join-us' %}"><span class="pull-right label label-success">Contribute</span>Join Us</a></li>
+          <li><a href="{% url 'core:about' 'donate' %}">Donate</a></li>
+        </ul>
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-pencil icon-fw"></i>Stay in touch</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:about' 'subscribe' %}">Subscribe</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</li>
+
+<li {% if section == "community" %}id="dropdown-active"{% endif %} class="mega-dropdown" data-id="community">
+  <a href="community" class="mega-dropdown-toggle" data-id="community">
+    <span class="ic-user pull-right">
+      <i class="pli-conference"></i>
+      Community
+    </span>
+  </a>
+  <div class="dropdown-menu mega-dropdown-menu narrow-dropdown" id="dropdown-community">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-university icon-fw"></i>Academic</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:organizations' 'universities' %}">Universities</a></li>
+          <li><a href="{% url 'core:community' 'people' %}">People</a></li>
+          <li><a href="{% url 'core:research_projects' %}">Current Research</a></li>
+          <li><a href="{% url 'core:past_research_projects' %}">Past Research</a></li>
+        </ul>
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-hotel icon-fw"></i>Non-academic</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:community' 'institutions' %}">Institutions</a></li>
+          <li><a href="{% url 'core:community' 'private-sector' %}">Private Sector</a></li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-open-book icon-fw"></i>Projects</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:projects' %}">Current Projects</a></li>
+          <li><a href="{% url 'core:past_projects' %}">Past Projects</a></li>
+          <li><a href="{% url 'core:community' 'createprojects' %}"><span class="pull-right label label-success">Contribute</span>Add Projects</a></li>
+        </ul>
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-bulleted-list icon-fw"></i>Updates</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:community' 'events' %}">Events</a></li>
+          <li><a href="{% url 'core:community' 'blog' %}">Blog</a></li>
+          <li><a href="{% url 'core:community' 'news' %}">News</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</li>
+
+<li {% if section == "resources" or page.section == "resources" %}id="dropdown-active"{% endif %} class="mega-dropdown" data-id="resources">
+
+  <a href="resources" class="mega-dropdown-toggle" data-id="resources">
+      <span class="ic-user pull-right">
+          <i class="pli-bulleted-list"></i>
+          Resources
+      </span>
+  </a>
+  <div class="dropdown-menu mega-dropdown-menu" id="dropdown-resources">
+    <div class="row">
+      <div class="col-sm-4 col-md-3">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-star icon-fw"></i>Getting Started</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:resources' 'introduction' %}">Introduction</a></li>
+          <li><a href="{% url 'core:resources' 'glossary' %}">Glossary</a></li>
+          <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter's Kit</a></li>
+          <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
+        </ul>
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-photo icon-fw"></i>Multimedia</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:resources' 'photos' %}">Photos</a></li>
+          <li><a href="{% url 'core:resources' 'videos' %}">Videos</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-books icon-fw"></i>Publications</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:references' %}">Introduction</a></li>
+          <li><a href="{% url 'core:publications' 'library' %}">Library</a></li>
+          <li><a href="{% url 'core:publications' 'region' %}">- By Region</a></li>
+          <li><a href="{% url 'core:publications' 'type' %}">- By Type</a></li>
+          <li><a href="{% url 'core:publications' 'topic' %}">- By Topic</a></li>
+          <li><a href="{% url 'core:publications' 'map' %}">Map</a></li>
+          <li><a href="{% url 'core:resources' 'journals' %}">Journals</a></li>
+          <li><a href="{% url 'core:publications' 'add' %}"><span class="pull-right label label-success">Contribute</span>Add Publication</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-layout-grid icon-fw"></i>Data</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:resources' 'data' %}">Introduction</a></li>
+          <li><a href="{% url 'core:data' 'datasets' %}">Datasets</a></li>
+          <li><a href="{% url 'core:data' 'gumd' %}">GUMD</a></li>
+          <li><a href="{% url 'core:data' 'datavisualizations' %}">Data Visualisations</a></li>
+          <li><a href="{% url 'core:data' 'stafdb' %}">Stocks and Flows</a></li>
+          <li><a href="{% url 'staf:search' %}">Filter Data</a></li>
+          <li><a href="{% url 'core:data' 'add' %}"><span class="pull-right label label-success">Contribute</span>Add Data</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-wrench icon-fw"></i>Tools</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:resources' 'tools' %}">Overview</a></li>
+          <li><a href="{% url 'core:tools' 'mooc' %}">MOOC</a></li>
+          <li><a href="{% url 'core:tools' 'omat' %}">OMAT</a></li>
+          <li><a href="{% url 'core:tools' 'stan' %}">STAN</a></li>
+          <li><a href="{% url 'core:tools' 'um-toolkit' %}">Urban Metabolism Toolkit</a></li>
+          <li><a href="{% url 'core:tools' 'multiplicity' %}">MultipliCity</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</li>
+
+<li {% if section == "cities" or section == "markcities" %}id="dropdown-active"{% endif %} class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle ">
+        <span class="ic-user pull-right">
+          {% if section != "cities" %} 
+            <i class="pli-map-marker-2"></i>
+            {% else %}
+            <i class="psi-map-marker-2"></i>
+            {% endif %}
+            Cities
+        </span>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+        <ul class="head-list">
+            <li><a href="/cities">Introduction</a></li>
+            <li><a href="/cities/page/development-progress">Development progress</a></li>
+            <li><a href="/cities/page/funding">Funding</a></li>
+            <li><a href="/cities/page/video">Video</a></li>
+            <li><a href="/cities/page/materials">Materials</a></li>
+            <li><a href="{% url 'multiplicity:city' 'cape-town' %}">Prototype: Cape Town</a></li>
+            <li><a href="{% url 'multiplicity:city' 'the-hague' %}">Prototype: The Hague</a></li>
+            <li><a href="{% url 'multiplicity:city' 'london' %}">Prototype: London</a></li>
+            <li><a href="/cities/page/hackathon">Hackathon</a></li>
+        </ul>
+    </div>
+</li>
+
+  <li {% if section == "services" %}id="dropdown-active"{% endif %} class="mega-dropdown" data-id="services">
+    <a href="services" class="mega-dropdown-toggle" data-id="services">
+      <span class="ic-user pull-right">
+          <i class="pli-pencil"></i>
+          Services
+      </span>
+    </a>
+    <div class="dropdown-menu mega-dropdown-menu" id="dropdown-services">
+      <div class="row">
+        <div class="col-sm-4 col-md-3">
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" class="media mar-btm">
+                  <div class="media-left">
+                      <i class="pli-data-settings icon-2x"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-semibold text-main mar-no">Our Services</p>
+                      <small class="text-muted">How and why we provide services</small>
+                  </div>
+                </a>
+              </li>
+              <li>
+                  <a href="#" class="media mar-btm">
+                      <div class="media-left">
+                          <i class="pli-map-2 icon-2x"></i>
+                      </div>
+                      <div class="media-body">
+                          <p class="text-semibold text-main mar-no">Our Portfolio</p>
+                          <small class="text-muted">Work we have done so far</small>
+                      </div>
+                  </a>
+              </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-4 col-md-3">
+
+          <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-wifi-2 icon-fw"></i>Provision of Resources</p>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'core:support' 'provision-of-resources' %}">Introduction</a></li>
+            <li><a href="{% url 'core:support' 'tool-development' %}">Tool Development</a></li>
+            <li><a href="{% url 'core:support' 'platform-development' %}">Platform Development</a></li>
+            <li><a href="{% url 'core:support' 'publications-curation' %}">Publications Curation</a></li>
+            <li><a href="{% url 'core:support' 'data-curation' %}">Data Curation</a></li>
+          </ul>
+
+          <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-support icon-fw"></i>Support Services</p>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'core:support' 'omat-support' %}">OMAT Support</a></li>
+            <li><a href="{% url 'core:support' 'multiplicity-support' %}">MultipliCity Support</a></li>
+          </ul>
+
+        </div>
+
+        <div class="col-sm-4 col-md-3">
+
+          <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-pencil icon-fw"></i>Research</p>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'core:research' 'material-flow-analysis' %}">Material Flow Analysis</a></li>
+            <li><a href="{% url 'core:research' 'material-stock-analysis' %}">Material Stock Analysis</a></li>
+            <li><a href="{% url 'core:research' 'urban-metabolism-methodologies' %}">Urban Metabolism Methodologies</a></li>
+          </ul>
+
+        </div>
+        <div class="col-sm-4 col-md-3">
+
+          <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-user icon-fw"></i>Stakeholder Engagement</p>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'core:engagement' 'omat-support' %}">Public Awareness Campaign</a></li>
+            <li><a href="{% url 'core:engagement' 'speaking' %}">Speaking Engagements</a></li>
+            <li><a href="{% url 'core:engagement' 'seminar-organisation' %}">Seminar Organisations</a></li>
+            <li><a href="{% url 'core:engagement' 'facilitation' %}">Facilitation</a></li>
+            <li><a href="{% url 'core:engagement' 'hackathons' %}">Hackathons</a></li>
+            <li><a href="{% url 'core:engagement' 'communications' %}">Communication Services</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </li>

@@ -1,0 +1,41 @@
+{% load humanize %}
+<table class="table table-fullwidth table-striped datatable">
+  <thead>
+    <tr>
+      <th>Timeframe</th>
+      <th>Material</th>
+      <th>Material classification</th>
+      <th>Quantity</th>
+      {% if False %}
+      <th>Origin</th>
+      <th>Destination</th>
+      {% else %}
+      <th>Location</th>
+      {% endif %}
+      <th>Comments</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for details in data %}
+    <tr>
+      <td data-order="{{ details.from }}"><span class="date" title="From {{ details.timeframe.start }} to {{ details.timeframe.end }}">{{ details.timeframe }}</span></td>
+      <td>{{ details.material_name }}</td>
+      <td class="shorten" title="{{ details.material.name }}">{{ details.material.code }}: {{ details.material.name }}</td>
+      <td data-sort="{{ details.quantity }}">{{ details.quantity|intcomma }} {{ details.unit.symbol }}</td>
+  {% if False %}
+      <td>{{ details.origin_space }}</td>
+      <td>{{ details.destination_space }}</td>
+  {% else %}
+    <td>
+      {% if details.origin_space %}
+        {{ details.origin_space }}
+      {% else %}
+        {{ details.destination_space }}
+      {% endif %}
+    </td>
+  {% endif %}
+      <td>{{ details.comments }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

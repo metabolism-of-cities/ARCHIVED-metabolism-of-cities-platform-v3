@@ -1,0 +1,208 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ topic.name }} | {{ topic.parent.name }} | {{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+{% if subs %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>{{ topic.name }}</h3>
+        <p>This category includes the following sections: </p>
+        <ul class="nav nav-list">
+        {% for details in subs %}
+          <li><a href="{% url 'multiplicity:subtopic' info.slug topic.slug details.slug %}">{{ details.name }}</a></li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>{{ topic.name }}</h3>
+        <p>This category includes the following materials from the <a href="{% url 'multiplicity:materials' %}">Eurostat classification</a>: </p>
+        {% for material in topic.materials.all %}
+          <span class="label label-dark">{{ material.name }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Datasets</h3>
+
+{% if datasets %}
+
+<div class="row">
+{% for dataset in datasets %}
+  <div class="col-sm-6 col-lg-6">
+
+<div class="panel widget">
+  {% if dataset.type.image %}
+  <div class="widget-header bg-purple">
+    <a href="{% url 'multiplicity:dataset_slice' info.slug dataset.id topic.slug %}">
+      <img class="widget-bg img-responsive" src="{{ dataset.type.image.url }}" alt="Image">
+    </a>
+  </div>
+  {% endif %}
+  <div class="widget-body text-center">
+        <span class="icon-wrap icon-wrap-sm icon-circle bg-dark">
+          <i class="psi-big-data icon-2x"></i>
+        </span>
+        <h4 class="mar-no text-main"><a href="{% url 'multiplicity:dataset_slice' info.slug dataset.id topic.slug %}">{{ dataset.name }}</a></h4>
+      <p class="text-muted mar-no">{{ dataset.type.name }}</p>
+  </div>
+</div>
+
+
+  </div>
+{% endfor %}
+</div>
+
+{% else %}
+
+  <div class="alert alert-warning">
+    We have no datasets on {{ topic.name }} yet.
+    <a href="/contact">Help us add data</a>
+  </div>
+
+{% endif %}
+
+{% if types %}
+
+<h3>Infrastructure</h3>
+
+<div class="row blog">
+  {% for details in types %}
+    {% if details.id in count %}
+      {% if forloop.counter|divisibleby:4 %}</div><div class="row blog">{% endif %}
+      <div class="col-md-4">
+        <div class="panel">
+            <div class="blog-header">
+              <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">
+                <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
+              </a>
+            </div>
+            <div class="blog-content">
+                <div class="blog-title media-block">
+                    <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}" class="btn-link">
+                        <h2>{{ details.name }}</h2>
+                    </a>
+                </div>
+            </div>
+            <div class="blog-footer">
+                <div class="media-left"><a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">{{ details.total }} records</a> found</div>
+                <div class="media-body text-right">
+                    <img src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
+                </div>
+            </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% endif %}
+
+{% if information.count %}
+
+<h3>Information about {{ topic.name }} in {{ info.name }}</h3>
+<div class="row">
+{% for details in information %}
+  <div class="col-lg-12">
+    <div class="panel panel-body">
+      <h4>{{ details.title }}</h4>
+      {{ details.content|safe }}
+      {% if details.references.count %}
+      <p><strong>References</strong></p>
+      <ul>
+        {% for reference in details.references.all %}
+          <li><a href="{% url 'core:reference' reference.id %}">{{ reference.title }} ({{ reference.year }})</a></li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+{% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.widget-body{padding-top:0;top:-30px}
+.widget-header{min-height:170px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        {% if topic.parent %}
+          <li><a href="{% url 'multiplicity:topic' info.slug topic.parent.slug %}">{{ topic.parent.name }}</a></li>
+        {% endif %}
+        <li class="active">{{ topic.name }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static 'ie/js/sparkline.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+      var hddSparkline = function() {
+        $("#sparkline-area").sparkline([57,69,70,62,73,79,76,77,73,52,57,50,60,55,70,68,57,62,53,69,59,67,69,58,50,47,65], {
+            type: 'line',
+            width: '100%',
+            height: '60',
+            spotRadius: 4,
+            lineWidth: 2,
+            lineColor:'rgba(255,255,255,.85)',
+            fillColor: 'rgba(0,0,0,0.1)',
+            spotColor: 'rgba(255,255,255,.5)',
+            minSpotColor: 'rgba(255,255,255,.5)',
+            maxSpotColor: 'rgba(255,255,255,.5)',
+            highlightLineColor : '#ffffff',
+            highlightSpotColor: '#ffffff',
+            tooltipChartTitle: 'Usage',
+            tooltipSuffix:' %'
+
+        });
+    }
+
+    $(window).on('resizeEnd', function(){
+        hddSparkline();
+    })
+    hddSparkline();
+});
+</script>
+{% endblock %}

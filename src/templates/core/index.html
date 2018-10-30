@@ -1,0 +1,381 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Prototype overview{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+        <div class="col-lg-6">
+          <div class="panel widget">
+              <div class="widget-header bg-purple city-header" style="min-height:266px">
+                
+                  {% if SITE_ID == 1 %}
+                  <img class="widget-bg img-responsive" src="/media/referencespace/capetown.jpg" alt="">
+                  {% else %}
+                    <a href="/cities/antigua-barbuda">
+                    <img class="widget-bg img-responsive" src="http://localhost:8000/media/referencespace/Antigua__Barbuda.jpg" alt="">
+                    </a>
+                  {% endif %}
+                
+              </div>
+              <div class="widget-body text-center">
+                
+                {% if SITE_ID == 1 %}
+                  <img alt="" class="widget-img img-circle img-border-light" src="https://static.metabolismofcities.org/multiplicity/img/cities/map-cape-town.jpg">
+                
+                  <h4 class="mar-no text-main">Cape Town</h4>
+                  <p class="text-muted mar-no">South Africa</p>
+                {% else %}
+                  <img alt="" class="widget-img img-circle img-border-light" src="http://localhost:8000/static/multiplicity/img/cities/map-antigua-barbuda.jpg">
+                
+                  <h4 class="mar-no text-main">Antigua &amp; Barbuda</h4>
+                  <p class="text-muted mar-no">Caribbean</p>
+                {% endif %}
+              </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading">
+                      We aim to advance the use of 
+                      <strong>
+                      urban metabolism 
+                      </strong>
+                      principles 
+                      in policy and practice. 
+                      </p>
+                      <p style="margin-top:20px"><a class="btn btn-default" href="http://">Learn how</a>
+                      <a class="btn btn-default" href="http://">About Us</a> 
+                      <a class="btn btn-default" href="http://">Join Us</a></p>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="panel panel-dark panel-colorful">
+                <div class="pad-all text-center">
+                  <a href="/about/team">
+                    <span class="text-3x text-thin">8</span>
+                    <p>Volunteers</p>
+                  </a>
+                </div>
+              </div>
+            </div>            <div class="col-lg-4">
+              <div class="panel panel-dark panel-colorful">
+                <div class="pad-all text-center">
+                  <a href="/resources/publications">
+                    <span class="text-3x text-thin">477</span>
+                    <p>Publications</p>
+                  </a>
+                </div>
+              </div>
+            </div><div class="col-lg-4">
+              <div class="panel panel-dark panel-colorful">
+                <div class="pad-all text-center">
+                  <a href="/resources/videos">
+                    <span class="text-3x text-thin">23</span>
+                    <p>Videos</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+  </div>
+
+
+  <div class="row">
+  
+   <div class="col-md-4">
+
+          <div class="panel panel-success panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-rain-drop icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading">Getting Started</p>
+                      <span>4 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                 <ul class="list-group bg-trans list-todo mar-no">
+					                        <li class="list-group-item">
+                                    <a href="/resources/introduction" style="color:#fff">Urban metabolism for beginners</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">MOOC</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">Starter's Kit</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">Glossary</a>
+					                        </li>
+					                    </ul> 
+              </div>
+          </div>
+          
+        </div><div class="col-md-4">
+
+          <div class="panel panel-warning panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="fa fa-book icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading">Publications</p>
+                      <span>477 publications</span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                 <ul class="list-group bg-trans list-todo mar-no">
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">Browse library</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">By region</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">By type</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">By topic</a>
+					                        </li>
+					                    </ul> 
+              </div>
+          </div>
+          
+        </div><div class="col-md-4">
+
+          <div class="panel panel-info panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="fa fa-list icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading">Data</p>
+                      <span>62 datasets</span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                 <ul class="list-group bg-trans list-todo mar-no">
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">View all</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">By city</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">By topic</a>
+					                        </li>
+					                        <li class="list-group-item">
+                                    <a href="" style="color:#fff">Data visualizations</a>
+					                        </li>
+					                    </ul> 
+              </div>
+          </div>
+          
+        </div> 
+  </div>
+
+<div class="row">
+        <div class="col-lg-6">
+        <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-calendar icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading">Upcoming events</p>
+                      <span>
+                        Urban metabolism hackathon in The Hague
+                        <br>
+                        <strong>Oct 12, 2018</strong>
+                      </span><br>
+                      <p><a href="http://">Read more</a> | <a href="http://">View all events</a></p>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-user icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading">Call for volunteers</p>
+                      <span>
+                        We are a global network of volunteers looking for people to join
+                        our efforts.
+                      </span>
+                      <p><a href="http://">Read more</a></p>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+  </div>
+
+<div class="row">
+					        <div class="col-sm-6 col-lg-4">
+					            <!--List Todo-->
+					            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					            <div class="panel panel-trans">
+					                <div class="panel-heading">
+					                    <h3 class="panel-title">Latest news</h3>
+					                </div>
+					                <div class="pad-ver">
+					                    <ul class="list-group bg-trans list-todo mar-no">
+                                {% for details in news %}
+					                        <li class="list-group-item">
+                                    <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
+                                    <span >{{ details.created_at|date:"M d, Y" }}</span>
+					                        </li>
+                                {% endfor %}
+					                    </ul>
+					                </div>
+					            </div>
+					            <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					            <!--End todo list-->
+					        </div>
+					        <div class="col-sm-6 col-lg-4">
+					            <div class="panel panel-trans">
+					                <div class="panel-heading">
+					                    <div class="panel-control">
+					                        <a title="" data-html="true" data-container="body" data-original-title="<p class='h4 text-semibold'>Information</p><p style='width:150px'>This is an information bubble to help the user.</p>" href="#" class="psi-information icon-lg icon-fw unselectable text-info add-tooltip"></a>
+					                    </div>
+					                    <h3 class="panel-title">
+                              City Data Dashboards</h3>
+					                </div>
+					                <div class="panel-body">
+                              <p><strong>January 2019 Data Targets</strong>
+                              <a href="http://" class="badge pull-right ">Learn more</a>
+                              </p>
+					                    <div class="pad-btm">
+					                        <p class="text-semibold text-main"><a href="">Cape Town</a></p>
+					                        <div class="progress progress-md">
+					                            <div class="progress-bar progress-bar-purple" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width: 15%;" role="progressbar">
+					                                <span class="sr-only">15%</span>
+					                            </div>
+					                        </div>
+					                        <small>15% Completed</small>
+					                    </div>
+					                    <div>
+					                        <p class="text-semibold text-main"><a href="">Brussels</a></p>
+					                        <div class="progress progress-md">
+					                            <div class="progress-bar progress-bar-success" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%;" role="progressbar">
+					                                <span class="sr-only">70%</span>
+					                            </div>
+					                        </div>
+					                        <small>70% Completed</small>
+					                    </div><div>
+					                        <p class="text-semibold text-main"><a href="">The Hague</a></p>
+					                        <div class="progress progress-md">
+					                            <div class="progress-bar progress-bar-success" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;" role="progressbar">
+					                                <span class="sr-only">90%</span>
+					                            </div>
+					                        </div>
+					                        <small>90% Completed</small>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					        <div class="col-sm-12 col-lg-4">
+					            <div class="panel panel-trans">
+					                <div class="pad-all">
+					                    <div class="media mar-btm">
+					                        <div class="media-body">
+					                            <p class="text-lg text-main text-semibold mar-no">CityMetabolism</p>
+					                            <p><a href="https://twitter.com/CityMetabolism">Our Latest Tweet</a></p>
+					                        </div>
+					                    </div>
+					                    <blockquote class="bq-sm bq-open bq-close">
+                              Hey all, this Friday we'll be hosting our first
+                              #urbanmetabolism data collection hackathon with
+                              @LDE_CfS in The Hague. You are invited to come
+                              have a look and gather/input data!!! For more
+                              info see
+                              https://www.facebook.com/events/270136946941734/ 
+                              </blockquote>
+					                </div>
+					
+					                <div class="bord-top">
+					                    <ul class="list-group bg-trans bord-no">
+					                        <li class="list-group-item list-item-sm">
+					                            <div class="media-left">
+					                                <i class="psi-twitter icon-lg"></i>
+					                            </div>
+					                            <div class="media-body">
+					                                <a href="https://twitter.com/CityMetabolism" class="btn-link text-semibold">@CityMetabolism</a>
+					                            </div>
+					                        </li>
+					                        <li class="list-group-item list-item-sm">
+					                            <div class="media-left">
+					                                <i class="psi-youtube icon-lg"></i>
+					                            </div>
+					                            <div class="media-body">
+					                                <a href="https://www.youtube.com/channel/UCwaliuWsJWhdhk-KUfQHlYA" class="btn-link text-semibold">YouTube</a>
+					                            </div>
+					                        </li>
+					                        <li class="list-group-item list-item-sm">
+					                            <div class="media-left">
+					                                <i class="psi-instagram icon-lg"></i>
+					                            </div>
+					                            <div class="media-body">
+					                                <a href="https://www.instagram.com/metabolism_of_cities/" class="btn-link text-semibold">Instagram</a>
+					                            </div>
+					                        </li>
+					                    </ul>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Metabolism of Cities</h1>
+        <ol class="breadcrumb">
+            <li><a href="./"><i class="pli-home"></i></a></li>
+            <li class="active">Homepage</li>
+          </ol>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

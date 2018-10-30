@@ -1,0 +1,110 @@
+
+<li {% if section == "about" %}id="dropdown-active"{% endif %} class="dropdown" data-id="about">
+    <a href="about" data-toggle="dropdown" class="dropdown-toggle ">
+    <span class="ic-user pull-right">
+      <i class="pli-tag"></i>
+      About
+    </span>
+  </a>
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+        <ul class="head-list">
+          <li><a href="{% url 'core:about' 'who-we-are' %}">Who we are</a></li>
+          <li><a href="{% url 'core:about' 'vision' %}">Vision</a></li>
+          <li><a href="{% url 'core:about' 'join' %}">Join us</a></li>
+          <li><a href="{% url 'core:about' 'about-contact-us' %}">Contact us</a></li>
+        </ul>
+    </div>
+
+</li>
+
+<li {% if section == "community" or section == "research" %}id="dropdown-active"{% endif %} class="dropdown" data-id="community">
+    <a href="community" data-toggle="dropdown" class="dropdown-toggle ">
+    <span class="ic-user pull-right">
+      <i class="pli-conference"></i>
+      Research
+    </span>
+  </a>
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+        <ul class="head-list">
+          <li><a href="/research/projects">Projects</a></li>
+          <li><a href="/research/theses">Theses</a></li>
+        </ul>
+    </div>
+
+</li>
+
+<li {% if section == "resources" or page.section == "resources" %}id="dropdown-active"{% endif %} class="dropdown" data-id="resources">
+
+    <a href="resources" data-toggle="dropdown" class="dropdown-toggle ">
+      <span class="ic-user pull-right">
+          <i class="pli-bulleted-list"></i>
+          Resources
+      </span>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+        <ul class="head-list">
+          <li><a href="/resources/publications">Academic publications</a></li>
+          <li><a href="/resources/reports">Reports</a></li>
+          <li><a href="{% url 'core:resources' 'videos' %}">Videos</a></li>
+          <li><a href="/resources/photos">Photos</a></li>
+          <li><a href="{% url 'core:community' 'links' %}">Links</a></li>
+          <li><a href="/resources/podcasts">Podcasts</a></li>
+        </ul>
+    </div>
+</li>
+
+
+<li {% if section == "cities" or section == "markcities" %}id="dropdown-active"{% endif %} class="mega-dropdown" data-id="islands">
+  <a href="#" data-id="islands" class="mega-dropdown-toggle">
+      <span class="ic-user pull-right">
+        {% if section != "cities" %} 
+          <i class="pli-map-marker-2"></i>
+          {% else %}
+          <i class="psi-map-marker-2"></i>
+          {% endif %}
+          Data
+      </span>
+  </a>
+
+  <div class="dropdown-menu mega-dropdown-menu narrow-dropdown" id="dropdown-community">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="pad-top text-main text-sm text-uppercase text-bold">Island nations</p>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'multiplicity:city' 'grenada' %}">Grenada</a></li>
+            <li><a href="{% url 'multiplicity:city' 'antigua-barbuda' %}">Antigua &amp; Barbuda</a></li>
+            <li><a href="{% url 'multiplicity:city' 'jamaica' %}">Jamaica</a></li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <p class="pad-top text-main text-sm text-uppercase text-bold">Subnational island juristiction</p>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'multiplicity:city' 'trinket-island' %}">Trinket Is.</a></li>
+            <li><a href="{% url 'multiplicity:city' 'samothraki-island' %}">Samothraki Is.</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</li>
+
+
+
+
+<li {% if section == "newsevents" %}id="dropdown-active"{% endif %} class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle ">
+        <span class="ic-user pull-right">
+            <i class="pli-map-marker-2"></i>
+            News &amp; Events
+        </span>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+        <ul class="head-list">
+          <li><a href="{% url 'core:community' 'events' %}">Events</a></li>
+          <li><a href="{% url 'core:community' 'news' %}">News</a></li>
+        </ul>
+    </div>
+</li>
+

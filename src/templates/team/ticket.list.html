@@ -1,0 +1,72 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li class="active">Task report</li>
+    </ol>
+
+    <h3>Task report</h3>
+
+    <p>
+      Show: 
+      <a class="btn btn-{% if show == 'all' %}info{% else %}default{% endif %}" href="{% url 'team:tickets' %}?show=all&amp;status={{ set_status }}&amp;user={{ user }}">All task forces</a>
+      <a class="btn btn-{% if show == 'my_taskforces' %}info{% else %}default{% endif %}" href="{% url 'team:tickets' %}?show=my_taskforces&amp;status={{ set_status }}&amp;user={{ user }}">My task forces</a>
+    </p>
+
+    <p>
+      User: 
+      <a class="btn btn-{% if user == 'all' %}info{% else %}default{% endif %}" href="{% url 'team:tickets' %}?show={{ show }}&amp;status={{ set_status }}&amp;user=all">All</a>
+      {% for userinfo in users %}
+        <a class="btn btn-{% if userinfo.id == user %}info{% else %}default{% endif %}" href="{% url 'team:tickets' %}?show={{ show }}&amp;status={{ set_status }}&amp;user={{ userinfo.id }}">{{ userinfo }}</a>
+      {% endfor %}
+    </p>
+
+    <ul class="nav nav-tabs nav-tabs-inverted">
+      <li class="{% if set_status == "all" %}active{% else %}regular{% endif %}"><a href="{% url 'team:tickets' %}?show={{ show }}&amp;status=all&amp;user={{ user }}">All tasks</a></li>
+      {% for key, status in status_list %}
+        <li class="{% if set_status == key %}active{% else %}regular{% endif %}"><a href="{% url 'team:tickets' %}?show={{ show }}&amp;status={{ key }}&amp;user={{ user }}">{{ status }}</a></li>
+      {% endfor %}
+    </ul>
+    <div class="boxit pad-all">
+    <table class="table table-striped datatable">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Task force</th>
+        <th>Status</th>
+        <th>Assigned to</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for info in list %}
+        <tr>
+          <td><a href="{% url 'team:ticket' info.id %}">{{ info.title }}</a>
+          <td><a href="{% url 'team:taskforce' info.taskforce.id %}">{{ info.taskforce.name }}</a></td>
+          <td>{{ info.get_status_display }}</td>
+          <td>{{ info.assigned_to }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      </div>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

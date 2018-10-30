@@ -1,0 +1,84 @@
+/* This is the right file! */
+/* #068a9b */
+/* also use #c2a060 */
+.stretch-bg-head #page-head, 
+.stretch-bg-head #page-head h1, 
+.stretch-bg-head #page-head h2, 
+.stretch-bg-head #page-head h3, 
+.stretch-bg-head #page-head h4,
+.stretch-bg-head #page-head h5,
+.stretch-bg-head #page-head h6,
+.stretch-bg-head #page-head .text-main,
+.stretch-bg-head #page-head .breadcrumb li,
+.stretch-bg-head #page-head .breadcrumb li a,
+.stretch-bg-head #page-head .breadcrumb .active {
+    color:#fff;
+}
+.navbar-content {
+    background:#Fff;
+}
+.navbar-content a {
+    color:#333 !important;
+}
+.navbar-content #dropdown-active {
+    background:#9175a7;
+}
+.navbar-content li.dropdown > a {
+    font-size:16px;
+}
+.navbar-content #dropdown-active > a{
+    color:#fff !important;
+}
+#container.mainnav-in .brand-title, #container.mainnav-sm .brand-title, #container.mainnav-out .brand-title, #container.mainnav-lg .brand-title {
+    color:#333;
+    background:#fff;
+}
+.navbar-top-links > li > a:not(.mainnav-toggle) > i {
+    color:#999;
+}
+
+#container.boxed-layout .boxed{margin-top:0;position:relative}
+#topstrip{margin-top:59px;background:#9175a7;padding:10px;min-height:120px}
+#topstrip .leftbox{width:220px}
+#topstrip .leftbox img{max-width:120px}
+#topstrip .rightbox{position:absolute;left:220px;top:0;text-align:left}
+#topstrip .container{padding-left:0}
+#content-container{padding-top:0}
+#mainnav-container{padding-top:0}
+.panel{background-color:transparent}
+.narrow-dropdown{width:600px}
+.text-main, a.text-main:hover, a.text-main:focus{color:#000}
+.nav-tabs.nav-justified.topnav > li > a{
+    background:rgba(254, 109, 51, 0.2);
+    color:#333;
+    border-color: #9175a7;
+    border-bottom:none;
+}
+.nav-tabs.nav-justified.topnav > li.active > a{
+    background:#fff;
+}
+
+.navbar-top-links > .open > a, .navbar-top-links > .open > a:focus,
+.navbar-top-links > li > a:hover
+{
+  background-color: #9175a7 !important;
+}
+footer#footer {
+  background-color:#4e374d;
+  color:#fff;
+}
+footer#footer a{
+  color:#fff;
+  text-decoration:underline;
+}
+#footer h4 {
+  color:#fff;
+}
+
+#mainnav-menu > .active-sub > a, #mainnav-menu > .active-sub > a:hover {
+  background-color:#d1ac84;
+}
+
+#mainnav-menu .active:not(.active-sub) > a {
+  color:#9175a7;
+}

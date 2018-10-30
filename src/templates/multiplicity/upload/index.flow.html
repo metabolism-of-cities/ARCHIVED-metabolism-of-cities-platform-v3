@@ -1,0 +1,87 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Material {{ type }} data</h3>
+  </div>
+  <div class="panel-body">
+
+    <div class="row">
+      <div class="col-sm-3">
+        <p><strong>Topic:</strong></p>
+        <ul class="nav nav-list topics">
+          {% for details in topics %}
+            <li><a href="#" data-topic="{{ details.id }}">{{ details.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="col-sm-9 datasets">
+
+          <p><strong>Datasets:</strong></p>
+          <ul class="nav nav-list">
+          {% for details in list %}
+              <li class="{% if details.topic %}topic-{{ details.topic.id }}{% else %}topic-all{% endif %}"><a href="{% url 'multiplicity:upload_flow_file' info.slug details.id %}">{{ details.name }}</a></li>
+          {% endfor %}
+          </ul>
+           
+        </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.datasets p,.datasets li{display:none}
+.nav > li > a:focus, .nav > li > a:hover{background:#fff}
+#page-content .nav-list a:not(.btn):not(.list-group-item):hover{text-decoration:none}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Material {{ type }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
+        <li class="active">Material {{ type }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+  <script type="text/javascript">
+  $(function(){
+    $(".topics a").click(function(e){
+      e.preventDefault();
+      $(".datasets p").show();
+      $(".datasets li").hide();
+      var topic = $(this).data("topic");
+      $(".datasets li.topic-"+topic).show('fast');
+      $(".datasets li.topic-all").show('fast');
+    });
+  });
+  </script>
+{% endblock %}

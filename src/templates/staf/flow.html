@@ -1,0 +1,55 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}{{ flow.name }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+
+<div class="panel">
+  <div class="panel-heading">
+
+  {% include 'staf/includes/dataset.topnav.html' %}
+
+  </div>
+  <div class="panel-body">
+    <h4>{{ flow.name }}</h4>
+  </div>
+</div>
+    
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'staf:index' %}">Data</a></li>
+        <li><a href="{% url 'staf:datasets' %}">Datasets</a></li>
+        <li><a href="{% url 'staf:dataset' info.id %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'staf:flows' info.id %}">Flows</a></li>
+        <li class="active">{{ flow.name }}</li>
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

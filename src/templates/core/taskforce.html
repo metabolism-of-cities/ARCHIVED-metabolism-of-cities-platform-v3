@@ -1,0 +1,154 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+
+        <div class="panel">
+            <div class="panel-body text-center bg-{% if info.color %}{{ info.color.css }}{% else %}success{% endif %}">
+                
+                <i class="{{ info.icon }} icon-5x"></i>
+
+                <h4 class="text-light">{{ info.name }}: Summary</h4>
+                <p class="pad-all"><a href="" class="btn btn-dark">Join this task force</a></p>
+                <ul class="list-unstyled text-center pad-top mar-no row">
+                    <li class="col-xs-4">
+                        <span class="text-lg text-semibold">{{ info.taskforcemember_set.active.count }}</span>
+                        <p class="text-sm mar-no">Members</p>
+                    </li>
+                    <li class="col-xs-4">
+                        <span class="text-lg text-semibold">{{ info.taskforceticket_set.completed.count }}</span>
+                        <p class="text-sm mar-no">Completed tasks</p>
+                    </li>
+                    <li class="col-xs-4">
+                        <span class="text-lg text-semibold">{{ info.taskforceticket_set.pending.count }}</span>
+                        <p class="text-sm mar-no">Open tasks</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="list-group bg-trans pad-btm">
+            {% for member in info.taskforcemember_set.leader %}
+                <a class="list-group-item" href="{% url 'core:peopledetails' member.user.people.id %}"><i class="fa fa-user"></i> {{ member.user.first_name }} {{ member.user.last_name }} <span class="badge badge-dark">Leader</span></a>
+            {% endfor %}
+            {% for member in info.taskforcemember_set.member %}
+                <a class="list-group-item" href="{% url 'core:peopledetails' member.user.people.id %}"><i class="fa fa-user"></i> {{ member.user.first_name }} {{ member.user.last_name }}</a>
+            {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+        <h2>{{ info.name }}</h2>
+        <p>
+            {{ info.category_description }}
+        </p>
+        <p>
+            <a href="http://" class="btn btn-{{ info.color.css }}">Join {{ info.name }}</a>
+        </p>
+    </div>
+    
+</div>
+
+<div class="row">
+    <h2>Our task list</h2>
+    <p>
+        Below you can find a different things that this task force is working on. 
+        This should give you an idea of the kind of activity this task force engages in.
+        If you can help with any of these activities, then we can definitely use your help!
+        If you have other ideas for this task force, then do not hesitate
+        <a href="{% url 'core:contact' %}">to contact us</a>.
+    </p>
+
+    {% if tickets.count %}
+      <div class="boxt ad-all">
+        {% if units %}
+        <ul class="nav nav-tabs nav-tabs-inverted" id="units">
+          <li class="active"><a href="#" data-id="all">All</a></li>
+          {% for unit in units %}
+            <li><a href="#" data-id="{{ unit.id }}">{{ unit.name }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <table class="table table-striped">
+          <tr>
+            <th>Title</th>
+            <th>Urgency</th>
+            <th>Importance</th>
+            <th>Complexity</th>
+          </tr>
+          {% for ticket in tickets %}
+          <tr class="unit unit-{{ ticket.unit.id }} status-{{ ticket.status }}">
+            <td>
+            {% if ticket.status == 'completed' %}
+              <i class="fa fa-check"></i>
+            {% endif %}
+            {{ ticket.title }}</td>
+            <td>{{ ticket.get_urgency_display }}</td>
+            <td>{{ ticket.get_importance_display }}</td>
+            <td>{{ ticket.get_complexity_display }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.widget img.widget-bg {
+  top:-50px;
+}
+.status-completed{text-decoration: line-through}
+.status-completed i{color:#55c155}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:about' %}">About Us</a></li>
+        <li><a href="{% url 'core:taskforces' %}">Task Forces</a></li>
+        <li class="active">{{ info.name }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+      $("#units a").click(function(e){
+        e.preventDefault();
+        $("#units li").removeClass('active');
+        $(this).closest("li").addClass('active');
+        $("tr.unit").hide();
+        var id = $(this).data("id");
+        if (id == "all") {
+          $("tr.unit").show();
+        } else {
+          $("tr.unit-"+id).show();
+        }
+      });
+});
+</script>
+{% endblock %}

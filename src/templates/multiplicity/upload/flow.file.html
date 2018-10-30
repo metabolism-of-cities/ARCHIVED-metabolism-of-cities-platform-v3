@@ -1,0 +1,180 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Material {{ type }} data</h3>
+  </div>
+  <div class="panel-body">
+
+    <div class="row">
+      <div class="col-sm-2">
+        <div class="panel panel-success panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">1</span>
+                <p>Upload data</p>
+                <i class="psi-upload icon-lg"></i>
+            </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-default panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">2</span>
+                <p>Review data</p>
+                <i class="psi-eye icon-lg"></i>
+            </div>
+        </div>
+      </div>
+        <div class="col-sm-2">
+          <div class="panel panel-default panel-colorful">
+              <div class="pad-all text-center">
+                  <span class="text-3x text-thin">3</span>
+                  <p>Meta data</p>
+                  <i class="psi-lock icon-lg"></i>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <p class="alert alert-info">
+      Please enter your data or upload a CSV file with the data. The following columns 
+      should appear in this file (in the same order). 
+    </p>
+
+    <pre>{% if type == "stocks" %}Date{% else %}Timeframe name | From (date) | To (date){% endif %} | Material name | Material code | Quantity | Unit | {% if dataset.flows == 'destination_only' or dataset.flows == 'origin_only' %}Location{% else %}Origin | Destination{% endif %} | Comments</pre>
+
+  </div>
+</div>
+
+<ul class="nav nav-tabs selectform">
+  <li class="active"><a href="#textbox" data-id="textbox">Direct input</a></li>
+  <li><a href="#filebox" data-id="filebox">File upload</a></li>
+</ul>
+
+<div class="panel">
+  <div class="panel-body forms">
+
+    <form action="" method="post" class="form form-horizontal" id="textbox">
+      {% csrf_token %}
+      <textarea class="form-control" name="data" placeholder="Copy the data from a spreadsheet in the format shown above"></textarea>
+      <p><button type="submit" class="btn btn-success">Next</button></p>
+    </form>
+
+
+    <form action="" method="post" class="form form-horizontal" enctype="multipart/form-data" id="filebox">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Type</label>
+          <div class="col-sm-10 label-text">
+              <strong>
+                {{ dataset.name }}
+              </strong>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">File</label>
+          <div class="col-sm-10">
+            <input class="form-control" type="file" name="file" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success">Next</button>
+          </div>
+        </div>
+    </form>
+
+  </div>
+</div>
+
+    {% if previous %}
+
+<div class="panel">
+  <div class="panel-body">
+
+    <h4>Previous uploads</h4>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>File</th>
+          <th>Imported?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for details in previous %}
+          <tr>
+            <td>{{ details.created_at|date:"M d, Y H:i" }}</td>
+            <td><a href="{% url 'multiplicity:upload_flow_review' info.slug dataset.id details.id %}">{{ details.original_name }}</a></td>
+            <td>{% if details.imported %}Yes{% else %}No{% endif %}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+  </div>
+</div>
+
+    {% endif %}
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+#filebox{display:none}
+textarea.form-control{height:250px;display:block;margin-bottom:10px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Material {{ type }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
+        {% if type == "stocks" %}
+          <li><a href="{% url 'multiplicity:upload_stock' info.slug %}">Material {{ type }}</a></li>
+        {% else %}
+          <li><a href="{% url 'multiplicity:upload_flow' info.slug %}">Material {{ type }}</a></li>
+        {% endif %}
+        <li class="active">{{ dataset.name }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+  $(".selectform a").click(function(e){
+    e.preventDefault();
+    $(".selectform li").removeClass("active");
+    $(this).closest("li").addClass("active");
+    var id = $(this).data("id");
+    $(".forms form").hide();
+    $(".forms form#" + id).show();
+  });
+});
+</script>
+{% endblock %}

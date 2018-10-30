@@ -1,0 +1,59 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}People{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li class="active">{{ volunteers|yesno:"Volunteers,People" }}</li>
+    </ol>
+
+  <h3>{{ volunteers|yesno:"Volunteers,People" }}</h3>
+
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="boxit pad-all">
+          <table class="table table-striped datatable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>E-mail</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for details in list %}
+              <tr>
+                <td>{{ details.firstname }} {{ details.lastname }}</td>
+                <td>{{ details.city.name }}</td>
+                <td>{{ details.email }}</td>
+                <td><a class="btn btn-info" href="{% url 'core:admin_people' details.id %}"><i class="fa fa-pencil"></i> Edit</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
+  <p class="pad-top"><a href="{% url 'core:admin_people_create' %}" class="btn btn-success"><i class="fas fa-plus fa-fw"></i> Add new person</a></p>
+</div>
+
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

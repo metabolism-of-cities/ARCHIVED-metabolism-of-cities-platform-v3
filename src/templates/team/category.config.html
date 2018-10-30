@@ -1,0 +1,47 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}
+Edit task force
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+textarea.form-control{height:100px}
+p.jumpdown{margin-top:50px;text-align:right}
+.form-group:first-child{display:none;font-weight:bold}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h2>Configuration: {{ category.name }}</h2>
+
+<form action="{% url 'team:categoryconfig' category.id %}" method="post" class="form form-horizontal">
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons submit='Save' layout='horizontal' %}{% endbuttons %}
+    {% csrf_token %}
+</form>
+
+<p class="jumpdown"><a href="{% url 'team:homepage' %}">Back</a></p>
+
+{% endblock %}
+
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+  $("#id_default_subscription").change(function(){
+    subscription = $(this).val();
+    checkbox = $(".checkbox");
+    if (subscription == "instantly") {
+      $(checkbox).closest(".form-group").hide('fast');
+    } else {
+      $(checkbox).closest(".form-group").show('fast');
+    }
+  });
+  $("#id_default_subscription").change();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}YSTAFDB: {{ info.name }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Units</h3>
+  </div>
+  <div class="panel-body">
+
+  <form class="form form-horizontal">
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Unit</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="name" value="{{ info.name }}" />
+        </div>
+    </div><div class="form-group">
+        <label class="col-sm-2 control-label">Unit</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="symbol" value="{{ info.symbol }}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Notes</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" name="notes">{{ info.notes }}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+
+  </form>
+
+  </div>
+</div>
+    
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">YSTAFDB</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="">Tools</a></li>
+        <li><a href="{% url 'staf:index' %}">YSTAFDB</a></li>
+        <li><a href="{% url 'staf:units' %}">Units</a></li>
+        <li class="active">{{ info.name }}</li>
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,9 @@
+A new message was posted:
+
+Topic: {{ topic }}
+{{ user }} posted the following message:
+
+{{ message_plain }} 
+
+Respond:
+{{ url }}

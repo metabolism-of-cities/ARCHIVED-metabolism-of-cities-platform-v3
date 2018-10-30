@@ -1,0 +1,61 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}
+Discussion board
+{% endblock %}
+
+{% block container %}
+
+{% endblock %}
+
+{% block head %}
+    <link href="{% static 'ie/css/switchery.css' %}" rel="stylesheet">
+    <style type="text/css">
+    .taskforce{list-style:none}
+    .taskforce li{margin-bottom:10px}
+select[multiple], select[size]{height:200px}
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h3>Edit topic</h3>
+
+    {% if saved %}
+      <div class="alert alert-success">Information was saved</div>
+    {% endif %}
+
+    <form action="{% url 'team:edittopic' info.id %}" method="post" class="form form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        {% buttons %}
+            <div class="col-sm-offset-3 col-sm-9">
+              <button type="submit" class="btn btn-success">
+                Next
+              </button>
+            </div>
+           </div>
+        {% endbuttons %}
+    </form>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+
+{% block footer %}
+    <script src="{% static 'ie/js/switchery.min.js' %}"></script>
+  <script type="text/javascript">
+  $(function(){
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+    elems.forEach(function(html) {
+      var switchery = new Switchery(html);
+    });
+  });
+  </script>
+{% endblock %}

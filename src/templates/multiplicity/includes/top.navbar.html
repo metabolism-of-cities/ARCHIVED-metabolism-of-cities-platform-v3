@@ -1,0 +1,34 @@
+<ul class="nav nav-tabs top-page-tabs">
+{% if topic.slug == 'water' %}
+  <li{% if tab == "overview" %} class="active"{% endif %}>
+      <a href="{% url 'multiplicity:infrastructure_list' info.slug topic.slug %}">Overview</a>
+  </li>
+  <li{% if tab == "dams" %} class="active"{% endif %}>
+      <a href="{% url 'multiplicity:space_list' info.slug topic.slug 'dams' %}">Dams</a>
+  </li>
+  <li{% if tab == "water-treatment-works" %} class="active"{% endif %}>
+      <a href="{% url 'multiplicity:space_list' info.slug topic.slug 'water-treatment-works' %}">Water treatment works</a>
+  </li>
+  <li{% if tab == "water-reservoirs" %} class="active"{% endif %}>
+      <a href="{% url 'multiplicity:space_list' info.slug topic.slug 'water-reservoirs' %}">Reservoirs</a>
+  </li>
+  <li{% if tab == "wastewater-treatment-plants" %} class="active"{% endif %}>
+      <a href="{% url 'multiplicity:space_list' info.slug topic.slug 'wastewater-treatment-plants' %}">Wastewater</a>
+  </li>
+{% elif page == 'topic' %}
+  <div class="hide">
+  <li{% if tab == False %} class="active"{% endif %}>
+    <a href="{% url 'multiplicity:subtopic' info.slug topic.parent.slug topic.slug %}">Overview</a>
+  </li>
+  <li{% if tab == "input" %} class="active"{% endif %}>
+    <a href="{% url 'multiplicity:subtopic_input' info.slug topic.parent.slug topic.slug %}">Input</a>
+  </li>
+  <li{% if tab == "use" %} class="active"{% endif %}>
+    <a href="{% url 'multiplicity:subtopic_use' info.slug topic.parent.slug topic.slug %}">Use</a>
+  </li>
+  <li{% if tab == "output" %} class="active"{% endif %}>
+    <a href="{% url 'multiplicity:subtopic_output' info.slug topic.parent.slug topic.slug %}">Output</a>
+  </li>
+  </div>
+{% endif %}
+</ul>

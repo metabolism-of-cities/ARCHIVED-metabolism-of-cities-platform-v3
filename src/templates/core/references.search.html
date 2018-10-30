@@ -1,0 +1,397 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Publications Library{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<h1>Search our database</h1>
+
+
+<p>
+  Please enter search terms below to start your search. You will see a list of common terms
+  appear as you start typing. To confirm each search term, please hit ENTER to add it to 
+  the list. The system will only show records that contain <strong>all</strong> of the 
+  search terms that you enter. Remove search terms to increase the number of results.
+  When you see the results, use the filters on the left hand side to refine your results.
+</p>
+
+<div class="resultbox">
+
+  <form method="get" class="form form-horizontal" action="publications/results">
+
+    <h4>
+      <i class="glyphicon glyphicon-filter"></i>
+      Search: 
+    </h4>
+
+    
+    <div class="row">
+      <div class="col">
+        <select name="search[]" class="form-control" id="searchbox" multiple>
+          <option value=""></option>
+                      <option value="256">Accra</option>
+                      <option value="244">Adelaide</option>
+                      <option value="306">Air</option>
+                      <option value="290">All cities</option>
+                      <option value="291">All countries</option>
+                      <option value="301">Aluminum</option>
+                      <option value="125">Amman</option>
+                      <option value="220">Amsterdam</option>
+                      <option value="132">Antarctica</option>
+                      <option value="47">Argentina</option>
+                      <option value="208">Athens</option>
+                      <option value="198">Austin</option>
+                      <option value="29">Australia</option>
+                      <option value="71">Austria</option>
+                      <option value="137">Bangalore</option>
+                      <option value="138">Bangkok</option>
+                      <option value="162">Bangladesh</option>
+                      <option value="190">Barcelona</option>
+                      <option value="95">Beijing</option>
+                      <option value="177">Belgium</option>
+                      <option value="265">Berlin</option>
+                      <option value="213">Bhutan</option>
+                      <option value="17">Biomass</option>
+                      <option value="273">Birmingham</option>
+                      <option value="121">Bogotá</option>
+                      <option value="119">Bolivia</option>
+                      <option value="75">Brazil</option>
+                      <option value="245">Brisbane</option>
+                      <option value="263">Brittany</option>
+                      <option value="180">Brussels</option>
+                      <option value="280">Buda</option>
+                      <option value="266">Budapest</option>
+                      <option value="102">Buenos Aires</option>
+                      <option value="154">Cairo</option>
+                      <option value="189">Calgary</option>
+                      <option value="114">Canada</option>
+                      <option value="108">Cape Town</option>
+                      <option value="311">Caracas</option>
+                      <option value="282">Carbon</option>
+                      <option value="1">Case Study</option>
+                      <option value="171">Charleroi</option>
+                      <option value="283">Chicago</option>
+                      <option value="56">Chile</option>
+                      <option value="22">China</option>
+                      <option value="33">Chlorine</option>
+                      <option value="215">Chongqing</option>
+                      <option value="185">Circular Economy</option>
+                      <option value="175">City</option>
+                      <option value="248">CO</option>
+                      <option value="26">CO2</option>
+                      <option value="76">Colombia</option>
+                      <option value="193">Colombo</option>
+                      <option value="4">Commentary / Editorial</option>
+                      <option value="316">Company</option>
+                      <option value="31">Comparison</option>
+                      <option value="302">Concrete</option>
+                      <option value="287">Conference proceedings</option>
+                      <option value="294">Conservation of energy</option>
+                      <option value="293">Conservation of mass</option>
+                      <option value="77">Construction Materials</option>
+                      <option value="78">Contemporary Point in Time</option>
+                      <option value="241">Copper</option>
+                      <option value="222">Curitiba</option>
+                      <option value="35">Czech Republic</option>
+                      <option value="230">Dakar</option>
+                      <option value="235">Data Quality</option>
+                      <option value="288">Database</option>
+                      <option value="130">Decoupling</option>
+                      <option value="62">Delhi</option>
+                      <option value="39">Denmark</option>
+                      <option value="199">Denver</option>
+                      <option value="152">Dhaka</option>
+                      <option value="74">Direct Material Consumption (DMC)</option>
+                      <option value="178">Domestic extraction</option>
+                      <option value="37">Dominica</option>
+                      <option value="236">Dwellings</option>
+                      <option value="117">e-Waste</option>
+                      <option value="87">Ecological Footprint Analysis</option>
+                      <option value="85">Economy-Wide Material Flow Analysis (EW MFA)</option>
+                      <option value="57">Ecuador</option>
+                      <option value="89">Egypt</option>
+                      <option value="16">Electricity</option>
+                      <option value="251">Emergy analysis</option>
+                      <option value="63">Emissions</option>
+                      <option value="165">Energy</option>
+                      <option value="53">Energy/Emergy</option>
+                      <option value="28">Europe</option>
+                      <option value="7">EUROSTAT methodology</option>
+                      <option value="68">Finland</option>
+                      <option value="225">Florence</option>
+                      <option value="91">Fluorine</option>
+                      <option value="223">Food</option>
+                      <option value="167">Fossil Fuel</option>
+                      <option value="8">France</option>
+                      <option value="210">Frankfurt</option>
+                      <option value="186">Future Scenario</option>
+                      <option value="194">Geneva</option>
+                      <option value="299">Geographic Information System (GIS)</option>
+                      <option value="110">Germany</option>
+                      <option value="255">Ghana</option>
+                      <option value="166">Giza</option>
+                      <option value="197">Glasgow</option>
+                      <option value="60">Glass</option>
+                      <option value="226">Gliwice</option>
+                      <option value="30">Global</option>
+                      <option value="45">Gothenburg</option>
+                      <option value="315">Gravel</option>
+                      <option value="209">Greece</option>
+                      <option value="221">Greenhouse Gas</option>
+                      <option value="143">Guangzhou</option>
+                      <option value="111">Hamburg</option>
+                      <option value="276">Heat</option>
+                      <option value="286">Hebei</option>
+                      <option value="224">Helsinki</option>
+                      <option value="170">Ho Chi Minh City</option>
+                      <option value="97">Hong Kong</option>
+                      <option value="98">Hong Kong: City</option>
+                      <option value="229">Human Appropriation of Net Primary Production (HANPP)</option>
+                      <option value="271">Hungary</option>
+                      <option value="50">Iceland</option>
+                      <option value="250">Ile-de-France</option>
+                      <option value="129">Imports and Exports</option>
+                      <option value="14">India</option>
+                      <option value="34">Indicators - general</option>
+                      <option value="247">Indonesia</option>
+                      <option value="259">Industrial Symbiosis</option>
+                      <option value="169">Informal</option>
+                      <option value="147">Infra-urban</option>
+                      <option value="160">Iran</option>
+                      <option value="96">Ireland</option>
+                      <option value="298">Iron</option>
+                      <option value="219">Island</option>
+                      <option value="260">Issaquah</option>
+                      <option value="149">Istanbul</option>
+                      <option value="43">Italy</option>
+                      <option value="148">Jakarta</option>
+                      <option value="69">Japan</option>
+                      <option value="126">Jordan</option>
+                      <option value="153">Karachi</option>
+                      <option value="204">Kathmandu</option>
+                      <option value="258">Kawasaki</option>
+                      <option value="172">Kenitra</option>
+                      <option value="274">Kitakyushu</option>
+                      <option value="300">Kitikyushu</option>
+                      <option value="155">Kolkata</option>
+                      <option value="151">Lagos</option>
+                      <option value="218">Laos</option>
+                      <option value="55">Latin America</option>
+                      <option value="253">Le Mans</option>
+                      <option value="277">Lead</option>
+                      <option value="54">Life Cycle Assessment (LCA)</option>
+                      <option value="310">Lima</option>
+                      <option value="270">Limerick</option>
+                      <option value="92">Linköping</option>
+                      <option value="20">Lisbon</option>
+                      <option value="120">Liverpool</option>
+                      <option value="207">Ljubljana</option>
+                      <option value="146">London</option>
+                      <option value="80">Long-Range Historical Perspective</option>
+                      <option value="139">Los Angeles</option>
+                      <option value="313">Macadam</option>
+                      <option value="140">Macao</option>
+                      <option value="191">Madrid</option>
+                      <option value="312">Malargüe</option>
+                      <option value="238">Malmö</option>
+                      <option value="127">Manila</option>
+                      <option value="254">Marne-la-Vallée</option>
+                      <option value="285">Material Flow Analysis</option>
+                      <option value="88">Material Intensity per Unit Service (MIPS)</option>
+                      <option value="135">Material Stock Analysis</option>
+                      <option value="184">Melbourne</option>
+                      <option value="13">Metals</option>
+                      <option value="2">Methodology</option>
+                      <option value="174">Metropolitan</option>
+                      <option value="58">Mexico</option>
+                      <option value="99">Mexico City</option>
+                      <option value="173">Miami</option>
+                      <option value="261">Milan</option>
+                      <option value="168">Minerals</option>
+                      <option value="305">Miramar</option>
+                      <option value="308">Montevideo</option>
+                      <option value="249">Morroco</option>
+                      <option value="142">Moscow</option>
+                      <option value="240">Multi-region Input-Output Analysis</option>
+                      <option value="164">Multi-scale</option>
+                      <option value="156">Mumbai</option>
+                      <option value="292">N/A</option>
+                      <option value="202">Naples</option>
+                      <option value="10">National</option>
+                      <option value="264">Natural Gas</option>
+                      <option value="203">Nepal</option>
+                      <option value="297">New Haven</option>
+                      <option value="61">New Jersey</option>
+                      <option value="134">New Orleans</option>
+                      <option value="64">New York</option>
+                      <option value="159">Nigeria</option>
+                      <option value="93">Nitrogen</option>
+                      <option value="179">Norrköping</option>
+                      <option value="48">Norway</option>
+                      <option value="272">NOx</option>
+                      <option value="144">Osaka</option>
+                      <option value="49">Oslo</option>
+                      <option value="163">Pakistan</option>
+                      <option value="40">Paper</option>
+                      <option value="9">Paris</option>
+                      <option value="243">Perth</option>
+                      <option value="59">Peru</option>
+                      <option value="128">Philippines</option>
+                      <option value="278">Phoenix</option>
+                      <option value="46">Phosphorus</option>
+                      <option value="65">Physical input-output tables (PIOT) / Input-Output Assessment (IOA)</option>
+                      <option value="116">Plastic</option>
+                      <option value="227">Poland</option>
+                      <option value="228">Policy</option>
+                      <option value="246">Political ecology</option>
+                      <option value="200">Portland</option>
+                      <option value="205">Porto</option>
+                      <option value="19">Portugal</option>
+                      <option value="5">Practical Guides and Handbooks</option>
+                      <option value="212">Prague</option>
+                      <option value="70">PVC</option>
+                      <option value="257">Quebec</option>
+                      <option value="309">Quito</option>
+                      <option value="72">Raw Materials Equivalent (RME)</option>
+                      <option value="12">Regional</option>
+                      <option value="252">Rennes</option>
+                      <option value="296">Report</option>
+                      <option value="6">Research and Analysis</option>
+                      <option value="3">Review Paper</option>
+                      <option value="267">Reykjavik</option>
+                      <option value="101">Rio de Janeiro</option>
+                      <option value="195">Rotterdam</option>
+                      <option value="67">Rural</option>
+                      <option value="158">Russia</option>
+                      <option value="284">San Francisco</option>
+                      <option value="279">San Luis Potosí</option>
+                      <option value="314">Sand</option>
+                      <option value="262">Santiago de Chile</option>
+                      <option value="100">Sao Paulo</option>
+                      <option value="281">Scaling</option>
+                      <option value="289">Scenario analysis</option>
+                      <option value="196">Schotland</option>
+                      <option value="201">Seattle</option>
+                      <option value="231">Senegal</option>
+                      <option value="123">Seoul</option>
+                      <option value="122">Shanghai</option>
+                      <option value="239">Shenyang</option>
+                      <option value="150">Shenzhen</option>
+                      <option value="73">Singapore</option>
+                      <option value="112">Singapore: City</option>
+                      <option value="206">Slovenia</option>
+                      <option value="269">Slums and informal settlements</option>
+                      <option value="36">SO2</option>
+                      <option value="217">Social Metabolism</option>
+                      <option value="107">South Africa</option>
+                      <option value="124">South Korea</option>
+                      <option value="90">Spain</option>
+                      <option value="192">Sri Lanka</option>
+                      <option value="307">STAN</option>
+                      <option value="303">Steel</option>
+                      <option value="268">Stellenbosch</option>
+                      <option value="113">Stockholm</option>
+                      <option value="211">Stuttgart</option>
+                      <option value="86">Substance Flow Analysis (SFA)</option>
+                      <option value="23">Suzhou</option>
+                      <option value="44">Sweden</option>
+                      <option value="24">Switzerland</option>
+                      <option value="187">Sydney</option>
+                      <option value="275">Syracuse</option>
+                      <option value="41">Taipei</option>
+                      <option value="42">Taiwan</option>
+                      <option value="304">Tandil</option>
+                      <option value="145">Tehran</option>
+                      <option value="136">Thailand</option>
+                      <option value="32">The Netherlands</option>
+                      <option value="133">Tianjin</option>
+                      <option value="79">Time Series</option>
+                      <option value="141">Tokyo</option>
+                      <option value="115">Toronto</option>
+                      <option value="237">Transportation</option>
+                      <option value="51">Trinidad and Tobago</option>
+                      <option value="161">Turkey</option>
+                      <option value="109">Uncertainty</option>
+                      <option value="38">United Kingdom</option>
+                      <option value="21">United States</option>
+                      <option value="11">Urban</option>
+                      <option value="182">Urban Ecology</option>
+                      <option value="18">Urban Metabolism Analyst Model</option>
+                      <option value="242">Urban Resilience</option>
+                      <option value="188">Vancouver</option>
+                      <option value="27">Various Materials</option>
+                      <option value="118">Venezuela</option>
+                      <option value="104">Vienna</option>
+                      <option value="66">Vietnam</option>
+                      <option value="25">Waste</option>
+                      <option value="214">Wastewater</option>
+                      <option value="15">Water</option>
+                      <option value="52">Wood</option>
+                      <option value="103">York</option>
+                      <option value="216">Zhangye</option>
+                      <option value="295">Zinc</option>
+                                <option value="">Mouse (aliases: Rat, Field Mouse, Ferret)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-3">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+      <div class="col-9">
+        <p class="pull-right">
+                      <a href="publications/all">View all publications</a>
+        </p>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3>Publications</h3>
+        </div>
+        <div class="panel-body">
+          {% include 'core/references.list.html' %}
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Publications</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+        <li class="active">Publications</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

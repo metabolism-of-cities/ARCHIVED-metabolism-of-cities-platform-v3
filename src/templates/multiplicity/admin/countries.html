@@ -1,0 +1,59 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Countries | Back-end {% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="./"><i class="pli-home"></i></a></li>
+  <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+  <li class="active">Countries</li>
+</ol>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3>Countries</h3>
+        </div>
+          <div class="panel-body">
+            <table class="table table-striped datatable">
+              <thead>
+                <tr>
+                  <th>Country</th>
+                  <th>Options</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for info in list %}
+                  <tr>
+                    <td><a href="{% url 'multiplicity:admin_country' info.id %}">{{ info.name }}</a></td>
+                    <td><a href="{% if info.location.id %}{% url 'multiplicity:admin_location' info.location.id %}{% else %}{% url 'multiplicity:admin_country_location' info.id %}{% endif %}">Location</a></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+</div>
+
+<p><a href="{% url 'multiplicity:admin_country_create' %}" class="btn btn-success"><i class="fas fa-plus fa-fw"></i> Create new country</a></p>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

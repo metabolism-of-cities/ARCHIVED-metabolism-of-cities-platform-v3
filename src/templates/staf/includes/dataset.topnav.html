@@ -1,0 +1,33 @@
+
+    <ul class="nav nav-tabs nav-justified topnav">
+        <li{% if page == "overview" %} class="active"{% endif %}>
+            <a href="{% url 'staf:dataset' info.id %}">
+                <i class="psi-layout-grid icon-lg"></i>
+                Overview
+            </a>
+        </li>
+        <li{% if page == "settings" %} class="active"{% endif %}>
+            <a href="{% url 'staf:dataset.edit' info.id %}">
+                <i class="pli-gear icon-lg"></i>
+                Settings
+            </a>
+        </li>
+        <li{% if page == "flows" %} class="active"{% endif %}>
+            <a href="{% url 'staf:flows' info.id %}">
+                <i class="psi-arrow-inside icon-lg"></i>
+                Flows
+            </a>
+        </li>
+        <li{% if page == "data" %} class="active"{% endif %}>
+            <a href="{% url 'staf:dataset.data' info.id %}">
+                <i class="pli-big-data icon-lg"></i>
+                Data
+            </a>
+        </li>
+        <li{% if page == "graphs" %} class="active"{% endif %}>
+            <a href="{% url 'staf:dataset_graphs' info.id %}">
+                <i class="psi-bar-chart icon-lg"></i>
+                Graphs
+            </a>
+        </li>
+      </ul>

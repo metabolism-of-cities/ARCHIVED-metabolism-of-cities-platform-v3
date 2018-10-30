@@ -1,0 +1,8 @@
+Django>=2.0  
+gunicorn>=19.6.0  
+psycopg2>=2.7.5
+django-bootstrap3
+django-tinymce4-lite
+Pillow
+django_cron
+python-dateutil

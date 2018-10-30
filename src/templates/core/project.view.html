@@ -1,0 +1,151 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <h3>{{ info.name }}</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="panel panel-body">
+      <div class="panel-body text-justify">
+        <h4>Summary</h4>
+        <p>{{ info.description|safe }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="panel panel-body panel-colorful panel-default">
+      <div class="panel-body panel-colorful panel-default">
+
+        <dl class="dl">
+          {% if info.type == 'regular' %}
+            <dt>Project leader</dt>
+          {% else %}
+            <dt>Researcher</dt>
+          {% endif %}
+          <dd>{{ info.researcher }}</dd>
+
+          {% if info.supervisor %}
+            <dt>Supervisor</dt>
+            <dd>{{ info.supervisor }}</dd>
+          {% endif %}
+
+          {% if info.email %}
+            <dt>E-mail</dt>
+            <dd>{{ info.email }}</dd>
+          {% endif %}
+
+          {% if info.institution %}
+            <dt>Institution</dt>
+            <dd>{{ info.institution }}</dd>
+          {% endif %}
+
+          {% if info.start_date %}
+            <dt>Start date</dt>
+            <dd>{{ info.start_date|date:"M d, Y" }}</dd>
+          {% endif %}
+
+          {% if info.end_date %}
+            <dt>End date</dt>
+            <dd>{{ info.end_date|date:"M d, Y" }}</dd>
+          {% endif %}
+
+            <dt>Status</dt>
+            <dd>{{ info.get_status_display }}</dd>
+
+          {% if info.status != 'finished' and info.target_finish_date %}
+            <dt>Target completion date</dt>
+            <dd>{{ info.target_finish_date }}</dd>
+          {% endif %}
+
+          {% if info.url %}
+            <dt>Website</dt>
+            <dd>
+              <a href="{{ info.url }}">{{ info.url }}</a>
+            </dd>
+          {% endif %}
+
+        </dl>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>
+{% if info.status == 'ongoing' %}
+  <a href="{% url 'core:research_projects' %}" class="btn btn-info">
+{% else %}
+  <a href="{% url 'core:past_research_projects' %}" class="btn btn-info">
+{% endif %}
+
+Back to list</a></p>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.dl dt{margin-top:30px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+  <div id="page-title">
+    <h1 class="page-header text-overflow">
+    {% if SITE_ID == 1 %}
+      {% if info.status == 'ongoing' %}
+        Current Research
+      {% else %}
+        Past Research
+      {% endif %}
+    {% else %}
+      {% if info.type == 'regular' %}
+        Projects
+      {% else %}
+        Theses
+      {% endif %}
+    {% endif %}
+    </h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="./"><i class="pli-home"></i></a></li>
+    {% if SITE_ID == 1 %}
+      <li><a href="{% url 'core:community_home' %}">Community</a></li>
+      {% if info.status == 'ongoing' %}
+        <li><a href="{% url 'core:research_projects' %}">Current Research</a></li>
+      {% else %}
+        <li><a href="{% url 'core:past_research_projects' %}">Past Research</a></li>
+      {% endif %}
+    {% else %}
+      <li><a href="{% url 'core:section_home' 'research' %}">Research</a></li>
+      {% if info.type == 'regular' %}
+        <li><a href="{% url 'core:regular_research_projects' %}">Projects</a></li>
+      {% else %}
+        <li><a href="{% url 'core:theses_research_projects' %}">Theses</a></li>
+      {% endif %}
+    {% endif %}
+    <li class="active">{{ info.name|truncatechars:40 }}</li>
+  </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

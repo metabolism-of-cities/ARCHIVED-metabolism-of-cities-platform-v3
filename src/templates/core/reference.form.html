@@ -1,0 +1,69 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Add Publication{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3>Add publication</h3>
+        </div>
+        <div class="panel-body">
+          {% if dataset %}
+          <form action="{% url 'core:newflowreference' dataset %}" method="post" class="form form-horizontal">
+          {% else %}
+          <form action="{% url 'core:newreference' %}" method="post" class="form form-horizontal">
+          {% endif %}
+              {% csrf_token %}
+              {% bootstrap_form form layout='horizontal' %}
+              {% buttons submit='Next' layout='horizontal' %}{% endbuttons %}
+          </form>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
+<style type="text/css">
+textarea[name='authorlist']{height:100px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Add publication</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+        <li><a href="{% url 'core:references' %}">Publications</a></li>
+        <li class="active">Add publication</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script type="text/javascript" src="{% static 'ie/js/select2.min.js' %}"></script>
+  <script type="text/javascript">
+  $(function(){
+    $("#id_journal").select2();
+  });
+  </script>
+{% endblock %}

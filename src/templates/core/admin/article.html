@@ -1,0 +1,60 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Article{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        {% if info.id %}
+          <li class="active">Edit page</li>
+        {% else %}
+          <li class="active">Create new page - {% if parent %}{{ parent.title }}{% endif %}</li>
+        {% endif %}
+    </ol>
+
+  <h2>{{ info|yesno:"Edit details,Add new record" }}</h2>
+  <form method="post" class="form form-horizontal boxit pad-all" enctype="multipart/form-data">
+    {% bootstrap_form form layout='horizontal' %}
+    {% if eventform %}
+      {% bootstrap_form eventform layout='horizontal' %}
+    {% endif %}
+    {% buttons %}
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-success">Save</button>
+      </div>
+    {% endbuttons %}
+    {% csrf_token %}
+  </form>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+[for='id_content']{display:none}
+form .col-sm-offset-3{margin-left:0}
+form .col-md-3{width:120px}
+{% if eventform %}
+[for='id_date'], #id_date{display:none}
+{% endif %}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+  $("#id_date").attr("type", "date");
+  $("#id_start").attr("type", "date");
+  $("#id_end").attr("type", "date");
+});
+</script>
+{% endblock %}

@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css?family=Volkhov');
+
+h1, h2, h3, h4, h5, .brand-text {
+  font-family: "Volkhov", serif;
+}
+
+.page-header {
+  font-size: 2em;
+}
+
+.panel h1, .panel h2, .panel h3, .panel h4, .panel h5 {
+  font-family: unset;
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+table.dataTable.no-footer {
+  border-bottom: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 0 !important;
+  background: none !important;
+  border: none !important;
+  color: #3a444e !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: #3a444e !important;
+  color: #efefef !important;
+}
+
+.dataTables_wrapper .dataTables_paginate span .paginate_button:hover {
+  background: #d2d2d2 !important;
+  color: #3a444e !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:not(.disabled):hover, .dataTables_wrapper .dataTables_paginate .paginate_button.previous:not(.disabled):hover {
+  color: #3a444e !important;
+  background: #d2d2d2 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+  box-shadow: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+  color: #999 !important;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+  border-bottom: none !important;
+}
+
+.dataTables_scroll {
+  margin-bottom: 15px;
+}
+
+.dataTables_filter input {
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background: none;
+}
+
+.panel h3 {
+  margin-top: 0;
+}
+
+.panel-data-quality .row {
+  margin-bottom: 6px;
+}
+
+.panel-data-quality .row:last-of-type {
+  margin-bottom: 0;
+}
+
+.rect-dataquality {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  border-left: 2px solid;
+}
+
+.rect-dataquality.is-1 {
+  border-color: #8bc34a;
+  background-color: #8bc34a33;
+}
+
+.rect-dataquality.is-2 {
+  border-color: #03a9f4;
+  background-color: #03a9f433;
+}
+
+.rect-dataquality.is-3 {
+  border-color: #ffb300;
+  background-color: #ffb30033;
+}
+
+.rect-dataquality.is-4 {
+  border-color: #f77947;
+  background-color: #f7794733;
+}
+
+.rect-dataquality.is-5 {
+  border-color: #f44336;
+  background-color: #f4433633;
+}
+
+.is-bold {
+  font-weight: bold;
+}
+
+.highcharts-menu hr {
+  margin: 0;
+}
+
+.nav-tabs {
+  margin-bottom: 24px;
+}
+
+.nav-tabs a {
+  border: none !important;
+  border-bottom: 1px solid #ccc !important;
+  color: #919aa5 !important;
+  font-size: 18px;
+}
+
+.nav-tabs a:hover {
+  cursor: pointer;
+}
+
+.nav-tabs > li, .nav-pills > li {
+  float: none;
+  display: inline-block;
+}
+
+.nav-tabs {
+  text-align: center;
+}
+
+.nav-tabs > .active > a, .nav-tabs a:focus, .nav-tabs > .active > a:hover, .nav-tabs a:hover {
+  border: none;
+  background-color: #fff !important;
+  text-decoration: none !important;
+  font-weight: normal !important;
+  color: #333 !important;
+}
+
+.nav-tabs > .active > a {
+  border-bottom: 1px solid #FE6D33 !important;
+}
+
+section#tab-charts .charts-icons{
+  margin: 10px 0 30px 0;
+}
+
+section#tab-charts .charts-icons img {
+  height: 24px;
+}
+
+#syncChart .chart {
+  height: 300px;
+}
+
+a.label-default:hover {
+  text-decoration: none !important;
+}
+
+table.dataTable {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  width:100% !important;
+  margin: 0;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+  padding: 8px;
+  padding-right: 24px;
+}
+
+table.table-striped .odd {
+  background-color: #f6f6f6;
+}
+
+table.table-striped .even {
+  background: none;
+}
+
+.reference-metadata {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.reference-metadata .panel dt {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.reference-metadata i {
+  font-size: 120px;
+  color: #3a444e;
+  margin-top: 20px;
+  text-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.5);
+}
+
+.reference-metadata .year {
+  margin-top: 15px;
+  font-size: 2.2em;
+  font-weight: 700;
+  color: #333;
+}

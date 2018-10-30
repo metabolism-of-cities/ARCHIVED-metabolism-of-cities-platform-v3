@@ -1,0 +1,84 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}{% if info.id %}{{ info.name }} | Edit material{% else %}Create material{% endif %}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+
+<div class="panel">
+  <div class="panel-heading">
+
+    <h3 class="panel-title">Materials</h3>
+
+  </div>
+  <div class="panel-body">
+
+  {% if success %}
+    <div class="alert alert-success">
+      <p>
+      Information was saved.
+      <span class="text-right">{% now "r" %}</span>
+      </p>
+      <p>
+        <a href="{% url 'staf:material_child' parent.id %}" class="btn btn-default">Add another child to {{ parent.name }}</a>
+      </p>
+    </div>
+  {% endif %}
+
+  {% if parent.id %}
+
+    <div class="alert alert-warning">
+      You are adding a child to: <strong>{{ parent.code }} - {{ parent.name }}</strong>
+    </div>
+
+  {% endif %}
+
+    <form action="" method="post" class="form form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        {% buttons submit='Save' layout='horizontal' %}{% endbuttons %}
+    </form>
+
+
+  </div>
+</div>
+    
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{% if info.id %}{{ info.name }} | Edit material{% else %}Create material{% endif %}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'staf:index' %}">Data</a></li>
+        <li><a href="{% url 'staf:materials' %}">Materials</a></li>
+        {% if info.id %}
+          <li class="active">Edit material</li>
+        {% else %}
+          <li class="active">Create material</li>
+        {% endif %}
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

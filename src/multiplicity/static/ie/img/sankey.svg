@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="300px"
+   width="300px"
+   fill="#000000"
+   viewBox="0 0 100 100"
+   x="0px"
+   y="0px"
+   version="1.1"
+   id="svg1063"
+   sodipodi:docname="sankey.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata1069">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>sankey-solid</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1067" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1060"
+     id="namedview1065"
+     showgrid="false"
+     inkscape:zoom="2.8966667"
+     inkscape:cx="118.31058"
+     inkscape:cy="193.50428"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1063" />
+  <title
+     id="title1059">sankey-solid</title>
+  <path
+     style="fill:#000000;stroke-width:0.07277995"
+     d="M 19.390481,87.928591 10.671802,77.26274 h 6.530831 6.530828 V 63.819761 50.376774 l -8.834018,-10e-4 C 9.3819867,50.374899 5.8950153,50.343974 5.6115205,50.293789 4.166943,50.038352 2.9204493,48.943346 2.2916038,47.377349 1.7915544,46.132092 1.8149812,46.819563 1.8356368,33.996113 l 0.018417,-16.763898 0.1803323,-0.643976 c 0.2381998,-0.85056 0.4918763,-1.372717 0.9719087,-2.000464 0.7021644,-0.918228 1.5812401,-1.478062 2.6052304,-1.65913 0.2974095,-0.05261 13.3343348,-0.08079 37.8130938,-0.0819 l 37.359185,-0.0021 0.01679,-4.676231 0.01674,-6.0095793 8.735314,10.0195293 8.735316,8.686208 -8.751766,10.039193 -8.751765,10.039205 V 33.580178 28.884049 H 74.171095 67.55776 l 0.0166,16.119518 0.0166,16.119508 6.531031,0.04024 6.53102,0.04025 -8.718969,10.665731 -8.718962,10.665729 -8.718963,-10.665729 -8.718967,-10.665731 6.531023,-0.04025 6.531024,-0.04024 V 50.376742 39.630395 L 45.662213,39.61001 32.485214,39.589624 v 18.836484 18.836476 h 6.563727 6.563733 l -8.718678,10.665851 c -4.795272,5.866211 -8.733567,10.665842 -8.751765,10.665842 -0.01821,0 -3.956492,-4.799631 -8.751765,-10.665842 z"
+     id="path1687"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccccssccccccccccccccccccccccccccccccccccsscc" />
+</svg>

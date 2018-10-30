@@ -1,0 +1,276 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% load humanize %}
+
+{% block title %}{{ dataset.name }} | Datasets | {{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<script src="{% static 'ie/js/highcharts.js' %}"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/streamgraph.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/treemap.js"></script>
+<script src="https://code.highcharts.com/modules/sankey.js"></script>
+
+<h2>{{ dataset.name }}</h2>
+<p>{{ dataset.notes|linebreaksbr }}</p>
+
+<section class="intro">
+  <div class="row">
+    <div class="col-lg-7">
+      <div class="panel panel-dark">
+        <div class="panel-heading">
+          <h3 class="panel-title">Overview</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-4 is-bold">
+              City
+            </div>
+            <div class="col-lg-8">
+              {{ dataset.primary_space.name }}, {{ dataset.primary_space.country.name }}
+            </div>
+            <div class="col-lg-4 is-bold">
+              Source(s)
+            </div>
+            <div class="col-lg-8">
+              {% for details in dataset.references.all %}
+                <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
+              {% endfor %}
+            </div>
+            <div class="col-lg-4 is-bold">
+              Data points
+            </div>
+            <div class="col-lg-8">
+              {{ dataset.data_set.count }}
+            </div>
+          </div>
+          <div class="row">
+            {% for csv in csv_files %}
+            <div class="col-lg-4 is-bold">
+              Uploaded by
+            </div>
+            <div class="col-lg-8">
+              <a href="{% url 'core:peopledetails' csv.user.people.id %}">{{ csv.user.people.firstname }} {{ csv.user.people.lastname }}</a>
+            </div>
+            <div class="col-lg-4 is-bold">
+              CSV file
+            </div>
+            <div class="col-lg-8">
+              {{ csv.original_name }}
+            </div>
+            <div class="col-lg-4 is-bold">
+              Date
+            </div>
+            <div class="col-lg-8">
+              {{ csv.created_at }}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="panel panel-default panel-data-quality panel-dark">
+        <div class="panel-heading">
+          <h3 class="panel-title">Data quality</h3>
+        </div>
+        <div class="panel-body">
+          {% if dataset.reliability %}
+            <div class="row">
+              <div class="col-lg-8 is-bold">
+                Reliability
+              </div>
+              <div class="col-lg-3">
+                <span class="rect-dataquality is-{{ dataset.reliability.score }}">{{ dataset.reliability.score }}</span>
+              </div>
+              <div class="col-lg-1 info">
+                <i data-toggle="tooltip" data-placement="left" title="{{ dataset.reliability.description }}" class="fas fa-info-circle"></i>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if dataset.completeness %}
+            <div class="row">
+              <div class="col-lg-8 is-bold">
+                Completeness
+              </div>
+              <div class="col-lg-3">
+                <span class="rect-dataquality is-{{ dataset.completeness.score }}">{{ dataset.completeness.score }}</span>
+              </div>
+              <div class="col-lg-1 info">
+                <i data-toggle="tooltip" data-placement="left" title="{{ dataset.completeness.description }}" class="fas fa-info-circle"></i>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if dataset.access %}
+            <div class="row">
+              <div class="col-lg-8 is-bold">
+                Access
+              </div>
+              <div class="col-lg-3">
+                <span class="rect-dataquality is-{{ dataset.access.score }}">{{ dataset.access.score }}</span>
+              </div>
+              <div class="col-lg-1 info">
+                <i data-toggle="tooltip" data-placement="left" title="{{ dataset.access.description }}" class="fas fa-info-circle"></i>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if dataset.geographical_correlation %}
+            <div class="row">
+              <div class="col-lg-8 is-bold">
+                Geographical correlation
+              </div>
+              <div class="col-lg-3">
+                <span class="rect-dataquality is-{{ dataset.geographical_correlation.score }}">{{ dataset.geographical_correlation.score }}</span>
+              </div>
+              <div class="col-lg-1 info">
+                <i data-toggle="tooltip" data-placement="left" title="{{ dataset.geographical_correlation.description }}" class="fas fa-info-circle"></i>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if topic %}
+
+<div class="panel panel-colorful panel-purple">
+  <div class="panel-body">
+    <p>
+      You are viewing a subset of the entire <strong>{{ topic.name }}</strong> dataset. We are only showing materials that are within the following category:
+      <strong>{{ topic.name }}</strong>.<br><br>
+    </p>
+    <a href="{% url 'multiplicity:dataset' info.slug dataset.id %}" class="btn btn-default">Click here to view the entire dataset</a>
+  </div>
+</div>
+
+{% endif %}
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#tab-charts">Charts</a></li>
+  <li><a data-toggle="tab" href="#tab-table">Table</a></li>
+  <li><a data-toggle="tab" href="#tab-replication">Replication</a></li>
+</ul>
+
+<div class="tab-content">
+  <section id="tab-charts" class="tab-pane active in">
+
+    <div class="text-center charts-icons">
+      <div class="btn-group btn-group-lg">
+        {% for details in graphs %}
+          {% with "multiplicity/img/graphs/"|add:details.slug|add:".svg" as picture %}
+            <a class="btn btn-default" href="{% url 'multiplicity:graph' info.slug dataset.id details.id %}" title="{{ details.title }}"><img src="{% static picture %}"></a>
+          {% endwith %}
+        {% endfor %}
+      </div>
+    </div>
+
+
+    <div id="graph"></div>
+
+  </section>
+
+  <section id="tab-table" class="tab-pane">
+    <table class="table table-fullwidth table-striped datatable">
+      <thead>
+        <tr>
+          <th>Timeframe</th>
+          <th>Material</th>
+          <th>Material classification</th>
+          <th>Quantity</th>
+          <th>Origin</th>
+          <th>Destination</th>
+          <th>Comments</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for details in dataset.data_set.all %}
+
+        {% if not topic or details.material in topic.materials.all or details.material.parent in topic.materials.all %}
+          <tr>
+            <td data-order="{{ details.from }}"><span class="date" title="From {{ details.timeframe.start }} to {{ details.timeframe.end }}">{{ details.timeframe }}</span></td>
+            <td>{{ details.material_name }}</td>
+            <td class="shorten" title="{{ details.material.name }}">{{ details.material.code }}: {{ details.material.name }}</td>
+            <td data-sort="{{ details.quantity }}">{{ details.quantity|intcomma }} {{ details.unit.symbol }}</td>
+            <td>{{ details.origin_space }}</td>
+            <td>{{ details.destination_space }}</td>
+            <td>{{ details.comments }}</td>
+          </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section id="tab-replication" class="tab-pane">
+    <h3>Replication instructions</h3>
+    <p>{{ dataset.replication|linebreaksbr }}</p>
+  </section>
+</div>
+
+{% endblock %}
+
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+	<div id="page-title">
+		<h1 class="page-header text-overflow">{{ info.name }}</h1>
+	</div>
+
+	<ol class="breadcrumb">
+		<li><a href="./"><i class="pli-home"></i></a></li>
+		<li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+		<li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+		<li><a href="{% url 'multiplicity:datasets' info.slug %}">Datasets</a></li>
+		<li class="active">{{ dataset.name }}</li>
+	</ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script>
+    $(function () {
+
+      // make tooltips work
+      $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+      });
+
+      // table width fix https://stackoverflow.com/a/46160726/1685643
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+        $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+      });
+
+      $(".charts-icons a").click(function(e){
+        e.preventDefault();
+        var url = $(this).attr("href");
+        $("#graph").load(url);
+        $(".charts-icons a").removeClass("active");
+        $(this).addClass("active");
+      });
+
+    });
+  </script>
+
+{% endblock %}
