@@ -4,6 +4,7 @@
 {% include 'multiplicity/graphs/series.drill.html' %}
 
 	<script>
+    // use drilldown pie chart data but remove keys from data that indicate it's drilldown
     $(drillSeries[0].data).each(function() {
       this["drilldown"] = null;
     });
