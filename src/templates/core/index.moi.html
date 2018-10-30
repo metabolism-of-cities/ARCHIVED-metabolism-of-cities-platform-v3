@@ -44,7 +44,7 @@
               <div class="panel panel-dark panel-colorful">
                 <div class="pad-all text-center">
                   <a href="/about/team">
-                    <span class="text-3x text-thin">8</span>
+                    <span class="text-3x text-thin">5</span>
                     <p>Islands</p>
                   </a>
                 </div>
@@ -101,7 +101,9 @@
               <ul class="list-group bg-trans list-todo mar-no">
                 {% for details in publications %}
                   <li class="list-group-item">
-                    <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a><br>
+                    <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
+                    <span class="label label-success">{{ details.type.name }}</span>
+                    <br>
                   </li>
                 {% endfor %}
               </ul>

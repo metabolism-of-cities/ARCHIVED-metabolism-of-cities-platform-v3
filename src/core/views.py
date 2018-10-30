@@ -46,7 +46,7 @@ def index(request):
         events = Article.objects.filter(parent=59).order_by('-created_at')[:5]
     else:
         news = Article.objects.filter(parent=142).order_by('-created_at')[:5]
-        publications = Reference.objects.order_by('-id')[:5]
+        publications = Reference.objects.exclude(type=10).order_by('-id')[:5]
         projects = Project.on_site.order_by('-id')[:5]
     context = { 'news': news, 'events': events, 'publications': publications, 'projects': projects }
     if request.site.id == 1:
