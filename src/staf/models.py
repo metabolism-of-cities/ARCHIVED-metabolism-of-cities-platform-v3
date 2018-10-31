@@ -137,8 +137,3 @@ class DataForm(ModelForm):
     class Meta:
         model = Data
         exclude = ['id', 'flow']
-
-class DatasetTimePeriod(models.Model):
-    timeframe = models.ForeignKey(TimePeriod, on_delete=models.CASCADE)
-    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
-

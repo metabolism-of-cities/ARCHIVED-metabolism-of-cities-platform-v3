@@ -120,7 +120,6 @@ def graph(request, city, dataset, id):
     timeframes = Data.objects.filter(dataset=dataset).only('timeframe__start').order_by('timeframe__start').distinct()
     timeframes = serializers.serialize("json", timeframes, fields=('timeframe__start'))
     json = serializers.serialize("json", dataset.data_set.all())
-    json = False
 
     graph = get_object_or_404(GraphType, pk=id)
     context = {'graph': graph, 'dataset': dataset, 'info': info, 'json': json, 'timeframes': timeframes}
