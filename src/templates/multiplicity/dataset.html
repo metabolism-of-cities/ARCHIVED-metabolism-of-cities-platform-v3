@@ -18,6 +18,11 @@
 <script src="https://code.highcharts.com/modules/treemap.js"></script>
 <script src="https://code.highcharts.com/modules/sankey.js"></script>
 
+{% include 'multiplicity/graphs/options.html' %}
+{% include 'multiplicity/graphs/series.time.html' %}
+{% include 'multiplicity/graphs/series.column.html' %}
+{% include 'multiplicity/graphs/series.drill.html' %}
+
 <h2>{{ dataset.name }}</h2>
 <p>{{ dataset.notes|linebreaksbr }}</p>
 
