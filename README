@@ -5,3 +5,5 @@ cp src/ie/settings.sample.py src/ie/settings.py
 
 docker-compose build
 docker-compose up
+
+Then navigate to localhost:8000
