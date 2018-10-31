@@ -55,6 +55,29 @@
             <div class="col-lg-8">
               {{ dataset.data_set.count }}
             </div>
+            <div class="col-lg-4 is-bold">
+              Time frames
+            </div>
+            <div class="col-lg-8">
+              {{ dates.start }} - {{ dates.end }}
+            </div>
+            <div class="col-lg-4 is-bold">
+              Materials
+            </div>
+            <div class="col-lg-8">
+              <ul class="list-unstyled">
+              {% for details in materials %}
+                <li>
+                <span class="label label-info">
+                {{ details.material_name|truncatechars:20 }}
+                </span>
+                </li>
+              {% endfor %}
+              {% if materials_hidden %}
+                <li><span class="label label-success">+{{ materials_hidden }} other materials</span></li>
+              {% endif %}
+              </ul>
+            </div>
           </div>
           <div class="row">
             {% for csv in csv_files %}
@@ -65,13 +88,7 @@
               <a href="{% url 'core:peopledetails' csv.user.people.id %}">{{ csv.user.people.firstname }} {{ csv.user.people.lastname }}</a>
             </div>
             <div class="col-lg-4 is-bold">
-              CSV file
-            </div>
-            <div class="col-lg-8">
-              {{ csv.original_name }}
-            </div>
-            <div class="col-lg-4 is-bold">
-              Date
+              Upload date
             </div>
             <div class="col-lg-8">
               {{ csv.created_at }}
@@ -187,35 +204,7 @@
   </section>
 
   <section id="tab-table" class="tab-pane">
-    <table class="table table-fullwidth table-striped datatable">
-      <thead>
-        <tr>
-          <th>Timeframe</th>
-          <th>Material</th>
-          <th>Material classification</th>
-          <th>Quantity</th>
-          <th>Origin</th>
-          <th>Destination</th>
-          <th>Comments</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for details in dataset.data_set.all %}
-
-        {% if not topic or details.material in topic.materials.all or details.material.parent in topic.materials.all %}
-          <tr>
-            <td data-order="{{ details.from }}"><span class="date" title="From {{ details.timeframe.start }} to {{ details.timeframe.end }}">{{ details.timeframe }}</span></td>
-            <td>{{ details.material_name }}</td>
-            <td class="shorten" title="{{ details.material.name }}">{{ details.material.code }}: {{ details.material.name }}</td>
-            <td data-sort="{{ details.quantity }}">{{ details.quantity|intcomma }} {{ details.unit.symbol }}</td>
-            <td>{{ details.origin_space }}</td>
-            <td>{{ details.destination_space }}</td>
-            <td>{{ details.comments }}</td>
-          </tr>
-        {% endif %}
-        {% endfor %}
-      </tbody>
-    </table>
+    <div id="load_table"></div>
   </section>
 
   <section id="tab-replication" class="tab-pane">
@@ -273,6 +262,15 @@
         $("#graph").load(url);
         $(".charts-icons a").removeClass("active");
         $(this).addClass("active");
+      });
+
+      var table_loaded = false;
+      $("[href='#tab-table']").click(function(){
+        if (!table_loaded) {
+          $("#load_table").html("Loading table...<br><br><i style='font-size:60px;margin-top:30px' class='fa fa-spinner fa-pulse'></i>")
+          $("#load_table").load("{% url 'multiplicity:datatable_dataset' dataset.id %}");
+          table_loaded = true;
+        }
       });
 
     });

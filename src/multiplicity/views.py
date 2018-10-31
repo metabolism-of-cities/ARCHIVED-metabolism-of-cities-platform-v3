@@ -24,6 +24,10 @@ from collections import defaultdict
 import datetime
 from dateutil.parser import parse
 
+# Getting min and max values
+from django.db.models import Max
+from django.db.models import Min
+
 def index(request):
     list = ReferenceSpace.objects.filter(type__id=3)
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
@@ -98,31 +102,37 @@ def dataset(request, city, id, slug=False):
     topic = None
     unit = get_object_or_404(Unit, pk=1)
     graphs = GraphType.objects.all()
-    if slug:
-        topic = Topic.objects.get(slug=slug)
-        data = []
-        for datapoint in dataset.data_set.all():
-            if datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
-                data.append({'name': datapoint.material_name, 'quantity': datapoint.quantity })
-                unit = datapoint.unit
-    else:
-        data = []
-        for datapoint in dataset.data_set.all():
-            data.append({'name': datapoint.material_name, 'quantity': datapoint.quantity })
-            unit = datapoint.unit
+    materials = Data.objects.filter(dataset=dataset).values('material_name').distinct()
+    all_materials = materials.count()
+    materials_hidden = False
+    if all_materials > 5:
+        materials_hidden = all_materials-5
+    materials = materials[:5]
+    dates = Data.objects.filter(dataset=dataset).aggregate(start=Min('timeframe__start'), end=Max('timeframe__end'))
+
+    #for datapoint in dataset.data_set.all():
+    #datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
     deletelink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/delete'
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'topics': topics, 'data': data,  'unit': unit, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs}
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'topics': topics, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden}
     return render(request, 'multiplicity/dataset.html', context)
+
+def datatable(request, dataset=False, material=False):
+    dataset = get_object_or_404(Dataset, pk=dataset)
+    data = Data.objects.filter(dataset=dataset)
+    context = { 'data': data, 'dataset': dataset }
+    return render(request, 'multiplicity/includes/datatable.html', context)
 
 def graph(request, city, dataset, id):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(Dataset, pk=dataset)
     timeframes = Data.objects.filter(dataset=dataset).only('timeframe__start').order_by('timeframe__start').distinct()
+    data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
     timeframes = serializers.serialize("json", timeframes, fields=('timeframe__start'))
     json = serializers.serialize("json", dataset.data_set.all())
+    data = serializers.serialize("json", data)
 
     graph = get_object_or_404(GraphType, pk=id)
-    context = {'graph': graph, 'dataset': dataset, 'info': info, 'json': json, 'timeframes': timeframes}
+    context = {'graph': graph, 'dataset': dataset, 'info': info, 'json': json, 'timeframes': timeframes, 'data': data}
     return render(request, 'multiplicity/graphs/' + graph.slug + '.html', context)
 
 def topicmap(request, city, theme, topic):

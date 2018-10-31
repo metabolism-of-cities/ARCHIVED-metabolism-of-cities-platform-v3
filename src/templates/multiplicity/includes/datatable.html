@@ -1,4 +1,6 @@
 {% load humanize %}
+{% load static %}
+
 <table class="table table-fullwidth table-striped datatable">
   <thead>
     <tr>
@@ -39,3 +41,12 @@
   {% endfor %}
   </tbody>
 </table>
+
+<script type="text/javascript" src="{% static 'ie/js/datatables.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+    $(".datatable").DataTable({
+      "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+    });
+});
+</script>
