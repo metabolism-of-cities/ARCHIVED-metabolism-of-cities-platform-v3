@@ -1,28 +1,50 @@
 <script type="text/javascript">
+  var timeframes1 = {{ t1|safe }};
+  var timeframes2 = {{ t2|safe }};
+  var timeframes3 = {{ t3|safe }};
+  var groups = {{ groups|safe }};
+  var subgroups = {{ subgroups|safe }};
+  var types = {{ spaces|safe }};
+  var data = {{ data|safe }};
 
-var timeframes1 = {{ t1|safe }};
+  var pieSeries = [{
+    data: []
+  }];
 
-var timeframes2 = {{ t2|safe }};
+  var pieDrillDown = {
+    series: []
+  }
 
-var timeframes3 = {{ t3|safe }};
+  $(groups).each(function() {
+    var groupSeries = {
+      name: this.label,
+      drilldown: this.label,
+      y: 0,
+    };
+    pieSeries[0].data.push(groupSeries);
 
-var groups = {{ groups|safe }};
+    var groupDrilldown = {
+      name: this.label,
+      id: this.label,
+      data: [],
+    };
+    pieDrillDown.series.push(groupDrilldown);
 
-var subgroups = {{ subgroups|safe }};
-
-var types = {{ spaces|safe }};
-
-var data = {{ data|safe }};
+    $(data).each(function() {
+      if (this.material_group == groupSeries.name) {
+        groupSeries.y = groupSeries.y + this.quantity;
+        var dataPoint = [this.material_name, this.quantity];
+        groupDrilldown.data.push(dataPoint);
+      };
+    });
+  });
 
 </script>
 
-<div id="pieChart" style="width:100%; height: 600px;"></div>
+<div id="pieDrillChart" style="width:100%; height: 600px;"></div>
 
-	<script>
-    // the non-drilldown pie chart uses the same series as the drilldown pie chart
-    // however, you'll need to remove the "drilldown" key from the data
-
-	  Highcharts.chart('pieChart', {
+  <script>
+    Highcharts.chart('pieDrillChart', {
       chart: {
         type: 'pie'
       },
@@ -32,7 +54,7 @@ var data = {{ data|safe }};
       },
 
       subtitle: {
-        text: 'Cape Town'
+        text: 'Click the slices for more details'
       },
 
       plotOptions: {
@@ -50,13 +72,14 @@ var data = {{ data|safe }};
         pointFormat: '<b>{point.y} t</b>'
       },
 
-	    legend: {
+      legend: {
         enabled: false
-	    },
+      },
 
-      "series": drillSeries
-	  });
+      "series": pieSeries,
+      "drilldown": pieDrillDown,
+    });
 
     // lines for chart burger menu thinner
     $(".highcharts-button-symbol").attr("stroke-width", 1);
-	</script>
+  </script>
