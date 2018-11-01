@@ -1,82 +1,66 @@
 <script src="https://code.highcharts.com/modules/treemap.js"></script>
 
+<script type="text/javascript">
+  var timeframes1 = {{ t1|safe }};
+  var timeframes2 = {{ t2|safe }};
+  var timeframes3 = {{ t3|safe }};
+  var groups = {{ groups|safe }};
+  var subgroups = {{ subgroups|safe }};
+  var types = {{ spaces|safe }};
+  var data = {{ data|safe }};
+
+  var treeData = [];
+
+  $(groups).each(function(i) {
+		var treeSeries = {
+		  name: this.label,
+		  id: this.label,
+		  color: colorScheme[i]
+		};
+		treeData.push(treeSeries);
+
+		$(data).each(function() {
+		  if (this.material_group == treeSeries.name) {
+		  	var dataPoint = {
+		  		name: this.material_name,
+		  		parent: treeSeries.name,
+		  		value: this.quantity,
+		  	}
+			treeData.push(dataPoint);
+		  };
+		});
+  });
+</script>
+
 <div id="treeMapChart" style="width:100%; height: 600px;"></div>
 
-  <script>
-    Highcharts.chart('treeMapChart', {
-        series: [{
-            type: 'treemap',
-            layoutAlgorithm: 'stripes',
-            alternateStartingDirection: true,
-            levels: [{
-                level: 1,
-                layoutAlgorithm: 'sliceAndDice',
-                dataLabels: {
-                    enabled: true,
-                    align: 'left',
-                    verticalAlign: 'top',
-                    style: {
-                        fontSize: '15px',
-                        fontWeight: 'bold'
-                    }
-                }
-            }],
-            colors: colorScheme,
-            data: [{
-                id: 'Cereals',
-                name: 'Cereals',
-                color: colorScheme[0]
-            }, {
-                id: 'Roots, tubers',
-                name: 'Roots, tubers',
-                color: colorScheme[1]
-            }, {
-                id: 'Pulses',
-                name: 'Pulses',
-                color: colorScheme[2]
-            }, {
-                id: 'Oil-bearing crops',
-                name: 'Oil-bearing crops',
-                color: colorScheme[3]
-            }, {
-                name: 'Cabbage',
-                parent: 'Cereals',
-                value: 3
-            }, {
-                name: 'Lettuce',
-                parent: 'Cereals',
-                value: 4
-            }, {
-                name: 'Mushrooms',
-                parent: 'Roots, tubers',
-                value: 4
-            }, {
-                name: 'Cauliflower',
-                parent: 'Roots, tubers',
-                value: 10
-            }, {
-                name: 'Wine Grapes',
-                parent: 'Oil-bearing crops',
-                value: 1
-            }, {
-                name: 'Pears',
-                parent: 'Oil-bearing crops',
-                value: 1
-            }, {
-                name: 'Canola',
-                parent: 'Pulses',
-                value: 3
-            }, {
-                name: 'Olives',
-                parent: 'Pulses',
-                value: 3
-            }]
-        }],
-        title: {
-          text: 'Agricultural production by type'
-        }
-    });
+<script>
+	Highcharts.chart('treeMapChart', {
+		series: [{
+			type: 'treemap',
+			layoutAlgorithm: 'stripes',
+			alternateStartingDirection: true,
+			levels: [{
+				level: 1,
+				layoutAlgorithm: 'sliceAndDice',
+				dataLabels: {
+					enabled: true,
+					align: 'left',
+					verticalAlign: 'top',
+					style: {
+						fontSize: '15px',
+						fontWeight: 'bold'
+					}
+				}
+			}],
+			colors: colorScheme,
+			data: treeData,
+		}],
+		title: {
+		  text: 'Agricultural production by type'
+		}
+	});
 
-    // lines for chart burger menu thinner
-    $(".highcharts-button-symbol").attr("stroke-width", 1);
-  </script>
+	// lines for chart burger menu thinner
+	$(".highcharts-button-symbol").attr("stroke-width", 1);
+</script>
