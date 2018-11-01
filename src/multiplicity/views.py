@@ -28,6 +28,10 @@ from dateutil.parser import parse
 from django.db.models import Max
 from django.db.models import Min
 
+
+# To create json objects
+import json
+
 def index(request):
     list = ReferenceSpace.objects.filter(type__id=3)
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
@@ -102,7 +106,7 @@ def dataset(request, city, id, slug=False):
     topic = None
     unit = get_object_or_404(Unit, pk=1)
     graphs = GraphType.objects.all()
-    materials = Data.objects.filter(dataset=dataset).values('material_name').distinct()
+    materials = Data.objects.filter(dataset=dataset).values('material_name').order_by('material_name').distinct()
     all_materials = materials.count()
     materials_hidden = False
     if all_materials > 5:
@@ -125,14 +129,51 @@ def datatable(request, dataset=False, material=False):
 def graph(request, city, dataset, id):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(Dataset, pk=dataset)
-    timeframes = Data.objects.filter(dataset=dataset).only('timeframe__start').order_by('timeframe__start').distinct()
+    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset).distinct('timeframe__start').order_by('timeframe__start')
     data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
-    timeframes = serializers.serialize("json", timeframes, fields=('timeframe__start'))
-    json = serializers.serialize("json", dataset.data_set.all())
-    data = serializers.serialize("json", data)
+    data_groups = Data.objects.select_related('material').filter(dataset=dataset).distinct('material__name').order_by('material__name')
+    data_subgroups = Data.objects.filter(dataset=dataset).distinct('material_name').order_by('material_name')
+    #json = serializers.serialize("json", dataset.data_set.all())
+    #data = serializers.serialize("json", data)
+
+    t1 = []
+    t2 = []
+    t3 = []
+    t4 = []
+    for row in timeframes:
+        t1.append({'label':row.timeframe.name})
+        t2.append({row.timeframe.id:row.timeframe.name})
+        t3.append({'date':row.timeframe.start.strftime("%Y-%m-%d")})
+        t4.append({'date':row.timeframe.start.strftime("%Y, %m, %d")})
+    t1 = json.dumps(t1)
+    t2 = json.dumps(t2)
+    t3 = json.dumps(t3)
+    t4 = json.dumps(t4)
+
+    groups = []
+    for row in data_groups:
+        groups.append({'label': row.material.name})
+    groups = json.dumps(groups)
+
+    subgroups = []
+    for row in data_subgroups:
+        subgroups.append({'label': row.material_name, 'group': row.material.name})
+    subgroups = json.dumps(subgroups)
+
+    datapoints = []
+    for row in data:
+        datapoints.append({'material_name': row.material_name, 'material_group': row.material.name, 'date': row.timeframe.start.strftime("%Y-%m-%d"), 'date_label': row.timeframe.name, 'date_formatted':row.timeframe.start.strftime("%Y, %m, %d"), 'quantity': row.quantity, 'unit': row.unit.symbol})
+    datapoints = json.dumps(datapoints)
 
     graph = get_object_or_404(GraphType, pk=id)
-    context = {'graph': graph, 'dataset': dataset, 'info': info, 'json': json, 'timeframes': timeframes, 'data': data}
+    context = {'graph': graph, 'dataset': dataset, 'info': info, 
+    't1': t1, 
+    't2': t2,
+    't3': t3,
+    't4': t4,
+    'groups': groups,
+    'subgroups': subgroups,
+    'data': datapoints}
     return render(request, 'multiplicity/graphs/' + graph.slug + '.html', context)
 
 def topicmap(request, city, theme, topic):
