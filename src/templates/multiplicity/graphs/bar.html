@@ -1,3 +1,46 @@
+<script type="text/javascript">
+	var timeframes1 = {{ t1|safe }};
+	var timeframes2 = {{ t2|safe }};
+	var timeframes3 = {{ t3|safe }};
+	var groups = {{ groups|safe }};
+	var subgroups = {{ subgroups|safe }};
+	var types = {{ spaces|safe }};
+	var data = {{ data|safe }};
+
+  var barSeries = [{
+  	data: []
+  }];
+
+  var barDrillDown = {
+  	series: []
+  }
+
+	$(groups).each(function() {
+	  var groupSeries = {
+	    name: this.label,
+	    drilldown: this.label,
+	    y: 0,
+	  };
+	  barSeries[0].data.push(groupSeries);
+
+	  var groupDrilldown = {
+	    name: this.label,
+	    id: this.label,
+	    data: [],
+	  };
+	  barDrillDown.series.push(groupDrilldown);
+
+	  $(data).each(function() {
+	    if (this.material_group == groupSeries.name) {
+	    	groupSeries.y = groupSeries.y + this.quantity;
+	    	var dataPoint = [this.material_name, this.quantity];
+			  groupDrilldown.data.push(dataPoint);
+	    };
+	  });
+	});
+
+</script>
+
 <div id="barChart" style="width:100%; height: 600px;"></div>
 
 	<script>
@@ -6,39 +49,29 @@
 	      type: 'bar'
 	    },
 	    title: {
-	      text: 'City-wide water consumption'
+	      text: 'Title'
 	    },
-
 	    subtitle: {
-	      text: 'Cape Town'
+	      text: 'Subtitle'
 	    },
-
       colors: colorScheme,
-
-	    xAxis: {
-	      categories: ['FY 2013/2014', 'FY 2014/2015', 'FY 2015/2016'],
+      xAxis: {
+        type: 'category'
 	    },
 	    yAxis: {
 	      min: 0,
 	      title: {
-	        text: 'Consumption in liters',
+	        text: 'Y axis text',
 	        style: {
 	          fontWeight: 'bold'
 	        },
 	      }
 	    },
-	    legend: {
-	      reversed: true,
-        verticalAlign: 'top',
-	    },
-	    plotOptions: {
-	      series: {
-	        stacking: 'normal'
-	      }
-	    },
-	    series: barColumnSeries
+	    series: barSeries,
+	    drilldown: barDrillDown,
 	  });
 
 	  // lines for chart burger menu thinner
 	  $(".highcharts-button-symbol").attr("stroke-width", 1);
-	</script>
+
+</script>
