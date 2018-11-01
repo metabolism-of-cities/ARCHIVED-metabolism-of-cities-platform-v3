@@ -133,22 +133,19 @@ def graph(request, city, dataset, id):
     data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
     data_groups = Data.objects.select_related('material').filter(dataset=dataset).distinct('material__name').order_by('material__name')
     data_subgroups = Data.objects.filter(dataset=dataset).distinct('material_name').order_by('material_name')
-    #json = serializers.serialize("json", dataset.data_set.all())
-    #data = serializers.serialize("json", data)
+
+    space = dataset.primary_space
 
     t1 = []
     t2 = []
     t3 = []
-    t4 = []
     for row in timeframes:
         t1.append({'label':row.timeframe.name})
-        t2.append({row.timeframe.id:row.timeframe.name})
-        t3.append({'date':row.timeframe.start.strftime("%Y-%m-%d")})
-        t4.append({'date':row.timeframe.start.strftime("%Y, %m, %d")})
+        t2.append({'date':row.timeframe.start.strftime("%Y-%m-%d")})
+        t3.append({'date':row.timeframe.start.strftime("%Y, %m, %d")})
     t1 = json.dumps(t1)
     t2 = json.dumps(t2)
     t3 = json.dumps(t3)
-    t4 = json.dumps(t4)
 
     groups = []
     for row in data_groups:
@@ -161,19 +158,40 @@ def graph(request, city, dataset, id):
     subgroups = json.dumps(subgroups)
 
     datapoints = []
+    spaces = []
     for row in data:
-        datapoints.append({'material_name': row.material_name, 'material_group': row.material.name, 'date': row.timeframe.start.strftime("%Y-%m-%d"), 'date_label': row.timeframe.name, 'date_formatted':row.timeframe.start.strftime("%Y, %m, %d"), 'quantity': row.quantity, 'unit': row.unit.symbol})
+        unit = False
+        if row.unit:
+            unit = row.unit.symbol
+        this_space = False
+        if row.origin_space and row.origin_space.city == space:
+            this_space = row.origin_space.name
+        elif row.destination_space and row.destination_space.city == space:
+            this_space = row.destination_space.name
+        elif row.destination_space and row.destination_space.city == space:
+            this_space = row.destination_space.name
+        elif row.destination_space == space or row.origin_space == space:
+            this_space = space.name
+
+        if this_space:
+            if this_space not in spaces:
+                spaces.append(this_space)
+
+        datapoints.append({'material_name': row.material_name, 'material_group': row.material.name, 'date': row.timeframe.start.strftime("%Y-%m-%d"), 'date_label': row.timeframe.name, 'date_formatted':row.timeframe.start.strftime("%Y, %m, %d"), 'quantity': row.quantity, 'unit': unit, 'type': this_space})
     datapoints = json.dumps(datapoints)
+
+    spaces = json.dumps(spaces)
 
     graph = get_object_or_404(GraphType, pk=id)
     context = {'graph': graph, 'dataset': dataset, 'info': info, 
     't1': t1, 
     't2': t2,
     't3': t3,
-    't4': t4,
     'groups': groups,
     'subgroups': subgroups,
-    'data': datapoints}
+    'data': datapoints,
+    'spaces': spaces,
+    }
     return render(request, 'multiplicity/graphs/' + graph.slug + '.html', context)
 
 def topicmap(request, city, theme, topic):
