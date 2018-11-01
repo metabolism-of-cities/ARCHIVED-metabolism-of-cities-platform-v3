@@ -1,3 +1,31 @@
+<script type="text/javascript">
+  var timeframes1 = {{ t1|safe }};
+  var timeframes2 = {{ t2|safe }};
+  var timeframes3 = {{ t3|safe }};
+  var groups = {{ groups|safe }};
+  var subgroups = {{ subgroups|safe }};
+  var types = {{ spaces|safe }};
+  var data = {{ data|safe }};
+
+  var lineSeries = [];
+
+  $(types).each(function() {
+    var type = {
+      name: '' + this + '',
+      data: []
+    };
+    lineSeries.push(type);
+
+    $(data).each(function() {
+      if (this.type == type.name) {
+        var timePoint = new Date(this.date_formatted).getTime();
+        var dataPoint = [timePoint ,this.quantity];
+        type.data.push(dataPoint);
+      }
+    });
+  });
+</script>
+
 <div id="lineChart" style="width:100%; height: 600px;"></div>
 
 	<script>
@@ -56,9 +84,10 @@
 	      // Define the data points. All series have a dummy year
 	      // of 1970/71 in order to be compared on the same x axis. Note
 	      // that in JavaScript, months start at 0 for January, 1 for February etc.
-	      series: timeSeries,
+	      series: lineSeries,
 	  });
 
     // lines for chart burger menu thinner
     $(".highcharts-button-symbol").attr("stroke-width", 1);
 	</script>
+
