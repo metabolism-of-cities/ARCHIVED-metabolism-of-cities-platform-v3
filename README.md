@@ -21,15 +21,15 @@ Once this is done, you have completed all the required steps to get the system r
 
 Let's say you have cloned this repository to /home/user/moc
 
-$ cd /home/user/moc
-$ mkdir src/{media,logs,static}
-$ cp src/ie/settings.sample.py src/ie/settings.py
-$ docker-compose build
+    $ cd /home/user/moc
+    $ mkdir src/{media,logs,static}
+    $ cp src/ie/settings.sample.py src/ie/settings.py
+    $ docker-compose build
 
 Now that this is done, you can run the container like so:
 
-$ cd /home/user/moc
-$ docker-compose up
+    $ cd /home/user/moc
+    $ docker-compose up
 
 Wait a few moments, and the website should be up and running at http://localhost:8000
 
