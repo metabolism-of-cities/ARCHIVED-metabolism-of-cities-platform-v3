@@ -218,7 +218,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    hidden = models.BooleanField(db_index=True, default=False, null=True)
+    hidden = models.BooleanField(db_index=True, default=False)
     gps = models.CharField(max_length=255, null=True, blank=True)
     PARENTS = (
  	(1,	'Publication Types'),
