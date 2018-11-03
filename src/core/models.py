@@ -230,6 +230,7 @@ class Tag(models.Model):
  	(10,	'Other'),
     )
     parent = models.CharField(max_length=2, choices=PARENTS)
+    parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
 class Reference(models.Model):
     title = models.CharField(max_length=255)
@@ -241,7 +242,7 @@ class Reference(models.Model):
     year = models.PositiveSmallIntegerField()
     abstract = models.TextField(null=True, blank=True)
     abstract_original_language = models.TextField(null=True, blank=True)
-    date_added = models.DateTimeField(null=True, blank=True);
+    date_added = models.DateTimeField(null=True, blank=True)
     LANGUAGES = (
         ('EN', 'English'),
         ('ES', 'Spanish'),

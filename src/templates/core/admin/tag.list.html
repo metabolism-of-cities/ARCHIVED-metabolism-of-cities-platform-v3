@@ -1,0 +1,70 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Tags{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+{% include 'multiplicity/includes/top.navbar.html' %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Tags</h3>
+
+          <div id="tree"></div>
+          <div id="details"></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/skin-lion/ui.fancytree.min.css" />
+<style type="text/css">
+#tree{overflow:hidden}
+#details{margin-top:20px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/jquery.fancytree-all-deps.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    // Load tree from Ajax JSON
+    $("#tree").fancytree({
+      source: 
+        [
+          {% for details in list %}
+            {title: "{{ details.name }}", key: "{{ details.id }}", lazy: true},
+          {% endfor %}
+        ]
+      ,
+			lazyLoad: function(event, data){
+        var node = data.node;
+				data.result = $.ajax({
+					url: "{% url 'staf:materialajax' %}",
+					dataType: "json",
+          data: {mode: "children", parent: node.key},
+				});
+			},
+      activate: function(event, data) {
+        var node = data.node;
+        var settext = node.title+'<br> <br><a class="btn btn-warning" href="/data/materials/'+node.key+'/edit"><i class="fa fa-pencil-alt"></i> Edit</a> <a class="btn btn-info" href="/data/materials/'+node.key+'/child"><i class="fa fa-plus"></i> Add child</a>';
+        $("#details").html(settext);
+      },
+		});
+    
+});
+
+</script>
+{% endblock %}

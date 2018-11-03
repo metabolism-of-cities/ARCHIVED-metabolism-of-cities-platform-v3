@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType
+from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data
@@ -535,6 +535,13 @@ def admin_project(request, id=False):
             messages.error(request, 'We could not save your form, please correct the errors')
     context = { 'navbar': 'backend', 'form': form, 'info': info, 'tinymce': True }
     return render(request, 'core/admin/project.html', context)
+
+
+@staff_member_required
+def admin_keyword_list(request):
+    list = Tag.objects.all()
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'core/admin/tag.list.html', context)
 
 
 @staff_member_required

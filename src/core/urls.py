@@ -87,6 +87,7 @@ urlpatterns = [
     path('admin/articles/create/parent=<int:parent>', views.admin_article, name='admin_article_parent'),
     path('admin/project/create', views.admin_project, name='admin_project_create'),
     path('admin/project/<int:id>', views.admin_project, name='admin_project'),
+    path('admin/keywords', views.admin_keyword_list, name='admin_keyword_list'),
 
 #temp
     path('updateorgs', views.updateorgs),
