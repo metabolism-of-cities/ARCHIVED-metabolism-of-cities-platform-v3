@@ -217,7 +217,9 @@ class VideoForm(ModelForm):
 class Tag(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    gps = models.CharField(max_length=255)
+    parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    hidden = models.BooleanField(db_index=True, default=False, null=True)
+    gps = models.CharField(max_length=255, null=True, blank=True)
     PARENTS = (
  	(1,	'Publication Types'),
  	(2,	'Metabolism Studies'),
@@ -229,8 +231,7 @@ class Tag(models.Model):
  	(9,	'Methodologies'),
  	(10,	'Other'),
     )
-    parent = models.CharField(max_length=2, choices=PARENTS)
-    parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.CharField(max_length=2, choices=PARENTS, null=True, blank=True)
 
 class Reference(models.Model):
     title = models.CharField(max_length=255)

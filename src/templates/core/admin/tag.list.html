@@ -52,7 +52,7 @@ $(function(){
 			lazyLoad: function(event, data){
         var node = data.node;
 				data.result = $.ajax({
-					url: "{% url 'staf:materialajax' %}",
+					url: "{% url 'core:keyword_ajax' %}",
 					dataType: "json",
           data: {mode: "children", parent: node.key},
 				});

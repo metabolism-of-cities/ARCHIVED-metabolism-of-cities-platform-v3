@@ -476,6 +476,20 @@ def register(request):
             return redirect('/')
     return render(request, 'registration/register.html')
 
+def keyword_ajax(request):
+    if request.GET.get('parent'):
+        tags = Tag.objects.filter(parent_tag=request.GET['parent']).order_by('name')
+    else:
+        tags = Tag.objects.filter(parent_tag__isnull=True).order_by('name')
+    list = []
+    for details in tags:
+        d = {}
+        d['title'] = details.name
+        d['lazy'] = True
+        d['key'] = details.id
+        list.append(d)
+    return JsonResponse(list, safe=False)
+
 # Admin section
 
 @staff_member_required
@@ -539,10 +553,9 @@ def admin_project(request, id=False):
 
 @staff_member_required
 def admin_keyword_list(request):
-    list = Tag.objects.all()
+    list = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     context = { 'navbar': 'backend', 'list': list, 'datatables': True }
     return render(request, 'core/admin/tag.list.html', context)
-
 
 @staff_member_required
 def admin_video_list(request):

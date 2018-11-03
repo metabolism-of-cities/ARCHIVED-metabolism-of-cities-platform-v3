@@ -72,6 +72,7 @@ urlpatterns = [
     path('resources/publications/<slug:slug>', views.page, name='publications'),
     path('resources/<slug:slug>', views.page, name='resources'),
     path('resources/publications/search/ajax', views.reference_search_ajax, name='reference_search_ajax'),
+    path('keywords/ajax', views.keyword_ajax, name='keyword_ajax'),
 
     path('register', views.register),
 
