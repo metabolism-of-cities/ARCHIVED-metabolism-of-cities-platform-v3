@@ -1,10 +1,10 @@
 /* This is the right file! */
 /* #068a9b */
 /* also use #c2a060 */
-.stretch-bg-head #page-head, 
-.stretch-bg-head #page-head h1, 
-.stretch-bg-head #page-head h2, 
-.stretch-bg-head #page-head h3, 
+.stretch-bg-head #page-head,
+.stretch-bg-head #page-head h1,
+.stretch-bg-head #page-head h2,
+.stretch-bg-head #page-head h3,
 .stretch-bg-head #page-head h4,
 .stretch-bg-head #page-head h5,
 .stretch-bg-head #page-head h6,
@@ -75,10 +75,34 @@ footer#footer a{
   color:#fff;
 }
 
+#topstrip {
+  box-shadow: 0 .25rem .2rem 0 rgba(0,0,0,0.15);
+}
+
+#content-container, #page-content {
+  background-color: #fff0;
+}
+
+section.top-banner .welcome-text {
+  text-align: center;
+  font-size: 2em;
+}
+
+section.top-banner .welcome-text span.highlight {
+  font-weight: bold;
+}
+
 #mainnav-menu > .active-sub > a, #mainnav-menu > .active-sub > a:hover {
   background-color:#d1ac84;
 }
 
 #mainnav-menu .active:not(.active-sub) > a {
   color:#9175a7;
+}
+
+.homepage.moi .top-banner .highlight-link {
+  margin-bottom: 0;
+  border-bottom: 2px solid #9175a7;
+  border-radius: 2px 2px 0 0;
+  background-color: #9175a74d ;
 }
