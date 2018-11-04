@@ -10,7 +10,7 @@
   {% if SITE_ID == 1 %}
   <div class="row">
     <div class="col-lg-6">
-      <div class="panel widget">
+      <div class="panel widget ">
           <div class="widget-header bg-purple city-header" style="min-height:266px">
 
               <img class="widget-bg img-responsive" src="/media/referencespace/capetown.jpg" alt="">
@@ -34,7 +34,7 @@
             <div class="pad-all text-center">
               <a href="/about/team">
                 <span class="text-3x text-thin">5</span>
-                <p>Islands</p>
+                <p>Cities</p>
               </a>
             </div>
           </div>
@@ -65,55 +65,49 @@
 
   <div class="row">
     <div class="col-sm-6 col-lg-4">
-        <div class="panel panel-trans">
-            <div class="panel-heading">
-                <h3 class="panel-title">Latest news</h3>
-            </div>
-            <div class="pad-ver">
-                <ul class="list-group bg-trans list-todo mar-no">
-                  {% for details in news %}
-                    <li class="list-group-item">
-                      <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
-                      <span >{{ details.created_at|date:"M d, Y" }}</span>
-                    </li>
-                  {% endfor %}
-                </ul>
-            </div>
+      <div class="panel panel-trans">
+        <div class="panel-heading">
+            <h3 class="panel-title">Latest news</h3>
         </div>
+        <ul class="list-group bg-trans list-todo mar-no">
+          {% for details in news %}
+            <li class="list-group-item">
+              <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
+              <span >{{ details.created_at|date:"M d, Y" }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
     <div class="col-sm-6 col-lg-4">
-        <div class="panel panel-trans">
-            <div class="panel-heading">
-                <h3 class="panel-title">Latest resources</h3>
-            </div>
-            <div class="pad-ver">
-                <ul class="list-group bg-trans list-todo mar-no">
-                  {% for details in publications %}
-                    <li class="list-group-item">
-                      <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
-                      <span class="label label-success">{{ details.type.name }}</span>
-                      <br>
-                    </li>
-                  {% endfor %}
-                </ul>
-            </div>
+      <div class="panel panel-trans">
+        <div class="panel-heading">
+          <h3 class="panel-title">Latest resources</h3>
         </div>
+        <ul class="list-group bg-trans list-todo mar-no">
+          {% for details in publications %}
+            <li class="list-group-item">
+              <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
+              <span class="label label-success">{{ details.type.name }}</span>
+              <br>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
     <div class="col-sm-6 col-lg-4">
-        <div class="panel panel-trans">
-            <div class="panel-heading">
-                <h3 class="panel-title">Latest research</h3>
-            </div>
-            <div class="pad-ver">
-                <ul class="list-group bg-trans list-todo mar-no">
-                  {% for details in projects %}
-                    <li class="list-group-item">
-                      <a href="{% url 'core:project' details.id %}">{{ details.name }}</a><br>
-                    </li>
-                  {% endfor %}
-                </ul>
-            </div>
+      <div class="panel panel-trans">
+        <div class="panel-heading">
+          <h3 class="panel-title">Latest research</h3>
         </div>
+        <ul class="list-group bg-trans list-todo mar-no">
+          {% for details in projects %}
+          <li class="list-group-item">
+            <a href="{% url 'core:project' details.id %}">{{ details.name }}</a><br>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
   {% else %}
@@ -126,10 +120,17 @@
             Metabolism of Islands is dedicated to better <span class="highlight">understanding the sustainability of islands</span> through research into <span class="highlight">material stocks and flows</span>
           </div>
         </div>
+        <div class="welcome-nav text-center">
+          <a class="btn btn-lg btn-default" href="">About</a>
+          <a class="btn btn-lg btn-default" href="">Research</a>
+          <a class="btn btn-lg btn-default" href="">Resources</a>
+          <a class="btn btn-lg btn-default" href="">Data</a>
+          <a class="btn btn-lg btn-default" href="">News & Events</a>
+        </div>
       </div>
       <div class="col-lg-4">
         <div class="panel widget">
-          <div class="widget-header bg-purple city-header slideshow photos" style="min-height:266px">
+          <div class="widget-header bg-purple city-header slideshow photos">
             <img class="widget-bg img-responsive" src="https://prototype.metabolismofislands.org/media/referencespace/English_Barbour_Antigua_resized_800_p.jpg" />
             <img class="widget-bg img-responsive" src="https://prototype.metabolismofislands.org/media/referencespace/Trinket.jpg" alt="">
           </div>
@@ -138,78 +139,76 @@
               <img alt="" class="widget-img img-circle img-border-light" src="https://prototype.metabolismofislands.org/static/multiplicity/img/cities/map-antigua-barbuda.jpg">
               <img alt="" class="widget-img img-circle img-border-light" src="https://prototype.metabolismofislands.org/static/multiplicity/img/cities/map-antwerp.jpg">
             </div>
-            <h4 class="mar-no text-main island-name">Antigua &amp; Barbuda</h4>
-            <p class="text-muted mar-no island-area">Caribbean</p>
+            <h4 class="mar-no text-main island-name">Samothraki</h4>
+            <p class="text-muted mar-no island-area">Europe</p>
           </div>
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="site-overview">
     <div class="row">
       <div class="col-lg-4">
-        <div href="" class="panel media middle pad-all highlight-link">
+        <a href="/cities/antigua-barbuda" class="panel media middle pad-all highlight-link">
           <div class="media-left pad-all">
             <img class="img-lg" src="{% static picture %}multiplicity/img/icons/island.svg">
           </div>
           <div class="media-body pad-lft">
             <p class="text-2x mar-no text-main">5<br>islands</p>
           </div>
-        </div>
-        <div class="panel panel-trans">
+        </a>
+        <div class="panel panel-dark listing-panel">
           <div class="panel-heading">
             <h3 class="panel-title">Latest news</h3>
           </div>
-          <div class="pad-ver">
-            <ul class="list-group bg-trans list-todo mar-no">
-              {% for details in news %}
-                <li class="list-group-item">
-                  <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
-                  <span >{{ details.created_at|date:"M d, Y" }}</span>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+          <ul class="list-group bg-trans list-todo mar-no">
+            {% for details in news %}
+              <li class="list-group-item">
+                <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
+                <span >{{ details.created_at|date:"M d, Y" }}</span>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
       <div class="col-lg-4">
-        <div href="" class="panel media middle pad-all highlight-link">
+        <a href="/resources/publications" class="panel media middle pad-all highlight-link">
           <div class="media-left pad-all">
             <img class="img-lg" src="{% static picture %}multiplicity/img/icons/resources.svg">
           </div>
           <div class="media-body pad-lft">
             <p class="text-2x mar-no text-main">477<br>resources</p>
           </div>
-        </div>
-        <div class="panel panel-trans">
+        </a>
+        <div class="panel panel-dark listing-panel">
           <div class="panel-heading">
             <h3 class="panel-title">Latest resources</h3>
           </div>
-          <div class="pad-ver">
             <ul class="list-group bg-trans list-todo mar-no">
-              {% for details in publications %}
-                <li class="list-group-item">
-                  <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
-                  <span class="label label-success">{{ details.type.name }}</span>
-                  <br>
-                </li>
-              {% endfor %}
-              </ul>
-            </div>
+            {% for details in publications %}
+              <li class="list-group-item">
+                <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
+                <span class="label label-success">{{ details.type.name }}</span>
+                <br>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
       <div class="col-lg-4">
-        <div href="" class="panel media middle pad-all highlight-link">
+        <a href="/resources/projects" class="panel media middle pad-all highlight-link">
           <div class="media-left pad-all">
             <img class="img-lg" src="{% static picture %}multiplicity/img/icons/project.svg">
           </div>
           <div class="media-body pad-lft">
-            <p class="text-2x mar-no text-main">23<br>projects</p>
+            <p class="text-2x mar-no text-main">23<br>research projects</p>
           </div>
-        </div>
-        <div class="panel panel-trans">
+        </a>
+        <div class="panel panel-dark listing-panel">
           <div class="panel-heading">
             <h3 class="panel-title">Latest research</h3>
           </div>
-          <div class="pad-ver">
             <ul class="list-group bg-trans list-todo mar-no">
               {% for details in projects %}
                 <li class="list-group-item">
@@ -218,7 +217,6 @@
               {% endfor %}
             </ul>
         </div>
-      </div>
       </div>
     </div>
   </section>
@@ -252,7 +250,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       var islandNames = ["Antigua & Barbuda", "Samothraki"];
       var islandAreas = ["Caribbean", "Europe"];
-      var count = 1;
+      var count = 2;
       setInterval(function() {
         count = ($(".slideshow :nth-child("+count+")").fadeOut().next().length == 0) ? 1 : count+1;
         $(".slideshow :nth-child("+count+")").fadeIn();

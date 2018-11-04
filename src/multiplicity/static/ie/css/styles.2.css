@@ -86,10 +86,30 @@ footer#footer a{
 section.top-banner .welcome-text {
   text-align: center;
   font-size: 2em;
+  max-width: 700px;
+  margin: 50px auto;
+  border-top: 2px solid #9175a7;
+  border-bottom: 2px solid #9175a7;
+}
+
+section.top-banner {
+  padding-bottom: 48px;
+}
+
+section.site-overview {
+  padding-bottom: 48px 0;
 }
 
 section.top-banner .welcome-text span.highlight {
   font-weight: bold;
+}
+
+section.top-banner .panel {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
+}
+
+section.top-banner .slideshow.photos {
+  min-height: 250px;
 }
 
 #mainnav-menu > .active-sub > a, #mainnav-menu > .active-sub > a:hover {
@@ -100,9 +120,36 @@ section.top-banner .welcome-text span.highlight {
   color:#9175a7;
 }
 
-.homepage.moi .top-banner .highlight-link {
+.homepage section.site-overview .highlight-link {
+  display: block;
   margin-bottom: 0;
-  border-bottom: 2px solid #9175a7;
   border-radius: 2px 2px 0 0;
   background-color: #9175a74d ;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
+  transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
+}
+
+.homepage section.site-overview .highlight-link:hover {
+  text-decoration: none !important;
+  background-color: #9175a766;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5) !important;
+}
+
+.listing-panel {
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
+}
+
+.listing-panel .panel-heading {
+  border-radius: 0;
+}
+
+.listing-panel li.list-group-item {
+  border-radius: 0;
+  border-bottom: 1px solid #9175a74d !important;
+  padding: 15px;
+}
+
+.listing-panel li.list-group-item:last-of-type {
+  border-bottom: none !important;
 }
