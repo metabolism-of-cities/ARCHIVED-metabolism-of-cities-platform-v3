@@ -217,7 +217,9 @@ class VideoForm(ModelForm):
 class Tag(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
+        limit_choices_to={'hidden': False},
+    )
     hidden = models.BooleanField(db_index=True, default=False)
     gps = models.CharField(max_length=255, null=True, blank=True)
     PARENTS = (
@@ -232,6 +234,17 @@ class Tag(models.Model):
  	(10,	'Other'),
     )
     parent = models.CharField(max_length=2, choices=PARENTS, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+
+class TagForm(ModelForm):
+    class Meta:
+        model = Tag
+        exclude = ['id', 'gps', 'parent', 'hidden']
 
 class Reference(models.Model):
     title = models.CharField(max_length=255)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event
+from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data
@@ -489,7 +489,7 @@ def register(request):
             return redirect('/')
     return render(request, 'registration/register.html')
 
-def keyword_ajax(request):
+def tag_ajax(request):
     if request.GET.get('parent'):
         tags = Tag.objects.filter(parent_tag=request.GET['parent']).order_by('name')
     else:
@@ -565,10 +565,41 @@ def admin_project(request, id=False):
 
 
 @staff_member_required
-def admin_keyword_list(request):
+def admin_tag_list(request):
     list = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     context = { 'navbar': 'backend', 'list': list, 'datatables': True }
     return render(request, 'core/admin/tag.list.html', context)
+
+@staff_member_required
+def admin_tag(request, id=False, parent=False):
+    if id:
+        info = get_object_or_404(Tag, pk=id)
+        form = TagForm(instance=info)
+    else:
+        info = False
+        if parent:
+            form = TagForm(initial={'parent_tag': parent})
+        else:
+            form = TagForm()
+
+    if request.method == 'POST':
+        if not id:
+            form = TagForm(request.POST, request.FILES)
+        else:
+            form = TagForm(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            info = form.save(commit=False)
+            if not id:
+                info.site = request.site
+            info.save()
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('core:admin_tag_list'))
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+    context = { 'navbar': 'backend', 'form': form, 'info': info, 'select2': True }
+    return render(request, 'core/admin/tag.html', context)
+
+
 
 @staff_member_required
 def admin_video_list(request):

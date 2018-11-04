@@ -1,0 +1,56 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Tag{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li><a href="{% url 'core:admin_tag_list' %}">Tags</a></li>
+        {% if info.id %}
+          <li class="active">{{ info.name }}</li>
+        {% else %}
+          <li class="active">Create new tag</li>
+        {% endif %}
+    </ol>
+
+  <h2>{{ info|yesno:"Edit details,Add new tag" }}</h2>
+  <form method="post" class="form form-horizontal boxit pad-all" enctype="multipart/form-data">
+
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-success">Save</button>
+      </div>
+    {% endbuttons %}
+    {% csrf_token %}
+  </form>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ie/js/summernote/summernote.min.css' %}" />
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static 'ie/js/summernote/summernote.min.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+  $("#id_date").attr("type", "date");
+  $("#id_website").attr("placeholder", "'youtube' or 'vimeo' (lowercase, no spaces, no quotation marks)");
+  $('#id_description').summernote({
+      height : '230px'
+  });
+  $("#id_people").select2();
+});
+</script>
+{% endblock %}

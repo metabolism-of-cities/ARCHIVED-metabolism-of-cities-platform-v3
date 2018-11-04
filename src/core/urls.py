@@ -73,7 +73,7 @@ urlpatterns = [
     path('resources/publications/<slug:slug>', views.page, name='publications'),
     path('resources/<slug:slug>', views.page, name='resources'),
     path('resources/publications/search/ajax', views.reference_search_ajax, name='reference_search_ajax'),
-    path('keywords/ajax', views.keyword_ajax, name='keyword_ajax'),
+    path('tags/ajax', views.tag_ajax, name='tag_ajax'),
 
     path('register', views.register),
 
@@ -89,7 +89,10 @@ urlpatterns = [
     path('admin/articles/create/parent=<int:parent>', views.admin_article, name='admin_article_parent'),
     path('admin/project/create', views.admin_project, name='admin_project_create'),
     path('admin/project/<int:id>', views.admin_project, name='admin_project'),
-    path('admin/keywords', views.admin_keyword_list, name='admin_keyword_list'),
+    path('admin/tags', views.admin_tag_list, name='admin_tag_list'),
+    path('admin/tags/create', views.admin_tag, name='admin_tag'),
+    path('admin/tags/<int:id>', views.admin_tag, name='admin_tag'),
+    path('admin/tags/<int:parent>/child', views.admin_tag, name='admin_tag'),
 
 #temp
     path('updateorgs', views.updateorgs),
