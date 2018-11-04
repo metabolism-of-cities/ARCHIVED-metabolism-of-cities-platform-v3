@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag
+from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data
@@ -129,6 +129,19 @@ def articles(request, parent):
     addlink = reverse('core:admin_article_parent', args=[parent])
     context = { 'section': section, 'page': page, 'list': list, 'addlink': addlink}
     return render(request, 'core/news.html', context)
+
+def news_and_events(request):
+    match = { 1: 59, 2: 143 }
+    events = match[request.site.id]
+    match = { 1: 61, 2: 142 }
+    news = match[request.site.id]
+    news_list = Article.objects.filter(active=True, parent__id=news, site=request.site).order_by('-created_at')
+    events_list = Event.objects.filter(article__active=True, article__site=request.site).order_by('start')
+    page = Article.objects.get(pk=news)
+    section = page.section
+    addlink = reverse('core:admin_article_parent', args=[news])
+    context = { 'section': section, 'page': page, 'news_list': news_list, 'events_list': events_list, 'addlink': addlink}
+    return render(request, 'core/news.events.html', context)
 
 def people(request):
     list = People.objects.all()

@@ -19,6 +19,7 @@ urlpatterns = [
     path('community/blog/<int:id>', views.article, name='blog'),
     path('community/events', views.articles, {'parent': 'events'}, name='events'),
     path('community/events/<int:id>', views.article, name='event'),
+    path('news_events', views.news_and_events, name='news_and_events'),
     path('page/<slug:slug>', views.page, name='page'),
     path('cities', views.sectionpage, { 'id': 33}, name='sectionpage'),
     path('cities/page/<slug:slug>', views.sectionpage, name='sectionpage'),

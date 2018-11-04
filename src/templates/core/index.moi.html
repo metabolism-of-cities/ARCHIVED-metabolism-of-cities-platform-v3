@@ -7,125 +7,21 @@
 {% block content %}
 
 <div class="homepage {% if SITE_ID == 1 %}moc{% else %}moi{% endif %}">
-  {% if SITE_ID == 1 %}
-  <div class="row">
-    <div class="col-lg-6">
-      <div class="panel widget ">
-          <div class="widget-header bg-purple city-header" style="min-height:266px">
-
-              <img class="widget-bg img-responsive" src="/media/referencespace/capetown.jpg" alt="">
-
-          </div>
-          <div class="widget-body text-center">
-
-              <img alt="" class="widget-img img-circle img-border-light" src="https://static.metabolismofcities.org/multiplicity/img/cities/map-cape-town.jpg">
-
-              <h4 class="mar-no text-main">Cape Town</h4>
-              <p class="text-muted mar-no">South Africa</p>
-          </div>
-      </div>
-    </div>
-
-    <div class="col-lg-6">
-
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="panel panel-dark panel-colorful">
-            <div class="pad-all text-center">
-              <a href="/about/team">
-                <span class="text-3x text-thin">5</span>
-                <p>Cities</p>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="panel panel-dark panel-colorful">
-            <div class="pad-all text-center">
-              <a href="/resources/publications">
-                <span class="text-3x text-thin">477</span>
-                <p>Resources</p>
-              </a>
-            </div>
-          </div>
-        </div><div class="col-lg-4">
-          <div class="panel panel-dark panel-colorful">
-            <div class="pad-all text-center">
-              <a href="/resources/videos">
-                <span class="text-3x text-thin">23</span>
-                <p>Research Projects</p>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-6 col-lg-4">
-      <div class="panel panel-trans">
-        <div class="panel-heading">
-            <h3 class="panel-title">Latest news</h3>
-        </div>
-        <ul class="list-group bg-trans list-todo mar-no">
-          {% for details in news %}
-            <li class="list-group-item">
-              <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
-              <span >{{ details.created_at|date:"M d, Y" }}</span>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-    <div class="col-sm-6 col-lg-4">
-      <div class="panel panel-trans">
-        <div class="panel-heading">
-          <h3 class="panel-title">Latest resources</h3>
-        </div>
-        <ul class="list-group bg-trans list-todo mar-no">
-          {% for details in publications %}
-            <li class="list-group-item">
-              <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
-              <span class="label label-success">{{ details.type.name }}</span>
-              <br>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-    <div class="col-sm-6 col-lg-4">
-      <div class="panel panel-trans">
-        <div class="panel-heading">
-          <h3 class="panel-title">Latest research</h3>
-        </div>
-        <ul class="list-group bg-trans list-todo mar-no">
-          {% for details in projects %}
-          <li class="list-group-item">
-            <a href="{% url 'core:project' details.id %}">{{ details.name }}</a><br>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-  {% else %}
 
   <section class="top-banner">
     <div class="row">
       <div class="col-lg-8">
         <div class="welcome-text pad-all">
           <div>
-            Metabolism of Islands is dedicated to better <span class="highlight">understanding the sustainability of islands</span> through research into <span class="highlight">material stocks and flows</span>
+            Metabolism of Islands is dedicated to improving the understanding of <span class="highlight">sustainability of islands</span> through research into <span class="highlight">material stocks and flows</span>
           </div>
         </div>
         <div class="welcome-nav text-center">
-          <a class="btn btn-lg btn-default" href="">About</a>
-          <a class="btn btn-lg btn-default" href="">Research</a>
-          <a class="btn btn-lg btn-default" href="">Resources</a>
-          <a class="btn btn-lg btn-default" href="">Data</a>
-          <a class="btn btn-lg btn-default" href="">News & Events</a>
+          <a class="btn btn-lg btn-default btn-warning" href="">About</a>
+          <a class="btn btn-lg btn-default btn-warning" href="">Research</a>
+          <a class="btn btn-lg btn-default btn-warning" href="">Resources</a>
+          <a class="btn btn-lg btn-default btn-warning" href="">Data</a>
+          <a class="btn btn-lg btn-default btn-warning" href="">News & Events</a>
         </div>
       </div>
       <div class="col-lg-4">
@@ -189,7 +85,7 @@
             {% for details in publications %}
               <li class="list-group-item">
                 <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
-                <span class="label label-success">{{ details.type.name }}</span>
+                <span class="label label-dark">{{ details.type.name }}</span>
                 <br>
               </li>
             {% endfor %}
@@ -220,7 +116,6 @@
       </div>
     </div>
   </section>
-  {% endif %}
 </div>
 
   {% endblock %}
