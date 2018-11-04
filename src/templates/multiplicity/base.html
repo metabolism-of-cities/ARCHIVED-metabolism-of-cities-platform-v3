@@ -4,6 +4,7 @@
 <head>
 <title>{% block title %}{%endblock %} | {{ SITE_NAME }}</title>
 {% include 'multiplicity/includes/head.html' %}
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-j8y0ITrvFafF4EkV1mPW0BKm6dp3c+J9Fky22Man50Ofxo2wNe5pT1oZejDH9/Dt" crossorigin="anonymous">
 {% if select2 %}
   <link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
 {% endif %}
@@ -250,7 +251,7 @@ You are viewing a prototype site
                                         <i class="pli-administrator"></i>
                                     </span>
                                 </a>
-                            </li>                        
+                            </li>
                           {% endif %}
                         {% endif %}
                     </ul>
