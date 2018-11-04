@@ -411,7 +411,7 @@ You are viewing a prototype site
           <a class="btn btn-lg btn-default" href="{% url 'core:about' 'join-us' %}">Read more</a>
         </p>
       </div>
-      <div class="col-lg-3">
+      <div class="col-lg-{% if EVENT %}3{% else %}6{% endif %}">
         {% if SITE_ID == 1 %}
           <h3>Share your data</h3>
           <p>
@@ -429,22 +429,26 @@ You are viewing a prototype site
           </p>
         {% endif %}
       </div>
-      <div class="col-lg-3">
-        <h3>Upcoming event</h3>
-
-<p>
-              <a href="/community/events/137" style="color:#206387">Engaging Islands: RETI Symposium 2018</a>
+      {% if EVENT %}
+        <div class="col-lg-3">
+          <h3>Upcoming event</h3>
+            <p>
+              <a style="color:#337ab7" href="{% url 'core:event' EVENT.article.id %}">{{ EVENT.article.title }}</a>
               <br>
               <strong>
-              St. John’s, NL, Canada.
+              {{ EVENT.location }}
               </strong>
               <br>
-              Nov 23, 2018-
-              Nov 28, 2018
+              <em>
+                {{ EVENT.start|date:"M d, Y" }}-
+                {{ EVENT.end|date:"M d, Y" }}
+              </em>
             </p>
-
-
-      </div>
+            <p>
+              <a class="btn btn-lg btn-default" href="{% url 'core:event' EVENT.article.id %}">View event</a>
+            </p>
+          </div>
+        {% endif %}
     </div>
   </div>
 
