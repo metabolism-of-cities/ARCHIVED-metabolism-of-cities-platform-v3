@@ -246,12 +246,16 @@ def referenceform(request, id=False, dataset=False):
     return render(request, 'core/reference.form.html', context)
 
 def references(request, type=False):
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219
     if type:
         type = get_object_or_404(ReferenceType, pk=type)
         list = Reference.objects.filter(status='active', type=type).order_by('-year')
         title = type.name + "s"
     else:
-        list = Reference.objects.filter(status='active').order_by('-year')
+        list = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-year')
         title = "Publications"
     addlink = reverse('core:newreference')
     context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title, 'select2': True}

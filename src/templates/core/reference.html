@@ -55,7 +55,10 @@
               {% if info.organizations %}
               {% for details in info.organizations.all %}
                 <dt>Organization</dt>
-                <dd><a href="{% url 'core:organization' details.type details.id %}">{{ details.name }}</a></dd>
+                <dd>
+                  <a href="{% url 'core:organization' details.type details.id %}">{{ details.name }}</a>{% if details.parent %}, 
+                  <a href="{% url 'core:organization' details.parent.type details.parent.id %}">{{ details.parent.name }}</a>{% endif %}
+                </dd>
               {% endfor %}
               {% endif %}
 
