@@ -254,7 +254,7 @@ def references(request, type=False):
         list = Reference.objects.filter(status='active').order_by('-year')
         title = "Publications"
     addlink = reverse('core:newreference')
-    context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title}
+    context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title, 'select2': True}
     return render(request, 'core/references.html', context)
 
 
@@ -602,7 +602,6 @@ def admin_tag(request, id=False, parent=False):
     return render(request, 'core/admin/tag.html', context)
 
 
-
 @staff_member_required
 def admin_video_list(request):
     list = Video.on_site.all()
@@ -686,3 +685,15 @@ def admin_article(request, id=False, type=False, parent=False):
 
     context = { 'navbar': 'backend', 'form': form, 'info': info, 'eventform': eventform, 'parent': parent, 'tinymce': True}
     return render(request, 'core/admin/article.html', context)
+
+@staff_member_required
+def admin_referencetags(request, id):
+    info = get_object_or_404(Reference, pk=id)
+    if request.method == 'POST':
+        for tag in request.POST['tags']:
+            info.tags.add(Tag.objects.find(pk=tag))
+    tags = Tag.objects.filter(hidden=False)
+    parent_tags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
+    context = { 'navbar': 'backend', 'tags': tags, 'info': info, 'parent_tags': parent_tags, 'select2': True }
+    return render(request, 'core/admin/reference.tags.html', context)
+

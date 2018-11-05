@@ -6,6 +6,10 @@
 
 {% block content %}
 
+{% if request.user.is_staff %}
+  <a title="Edit tags" href="{% url 'core:admin_referencetags' info.id %}" id="editextrabutton" class="btn"><i class="psi-tag"></i></a>
+{% endif %}
+
 <div class="row">
   <div class="col-lg-8 col-lg-offset-2">
     <h3>{{ info.title }}</h3>

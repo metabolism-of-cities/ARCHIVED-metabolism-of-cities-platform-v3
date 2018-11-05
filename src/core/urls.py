@@ -93,6 +93,7 @@ urlpatterns = [
     path('admin/tags/<int:id>', views.admin_tag, name='admin_tag'),
     path('admin/tags/<int:parent>/child', views.admin_tag, name='admin_tag'),
     path('admin/publications/<int:id>', views.referenceform, name='admin_reference'),
+    path('admin/publications/<int:id>/tags', views.admin_referencetags, name='admin_referencetags'),
 
 #temp
     path('updateorgs', views.updateorgs),

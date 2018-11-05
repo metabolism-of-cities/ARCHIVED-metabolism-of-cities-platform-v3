@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
 .legend img{position:relative;top:6px}
 
 
-#editpagebutton,#controlpanelbutton, #addpagebutton, #datasetbutton, #deletepagebutton {
+#editpagebutton,#controlpanelbutton, #addpagebutton, #datasetbutton, #deletepagebutton, #editextrabutton {
     display: inline-block;
     background-color: #3a444e;
     border-radius: 7px 0 0 7px !important;
@@ -82,6 +82,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
 #addpagebutton {
   top:300px;
 }
+#editextrabutton {
+  top:400px;
+}
 #datasetbutton {
   top:350px;
 }
@@ -94,7 +97,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
   opacity:1;
   background-color:red;
 }
-#editpagebutton i,#controlpanelbutton i,#addpagebutton i, #datasetbutton i, #deletepagebutton i {
+#editpagebutton i,#controlpanelbutton i,#addpagebutton i, #datasetbutton i, #deletepagebutton i, #editextrabutton i{
     font-size: 25px;
     display: block;
     margin: 5px 0;
@@ -256,6 +259,14 @@ footer#actions{
 }
 .navbar-content {
   text-align:left;
+}
+
+body .select2-container--default .select2-selection--multiple .select2-selection__choice {
+  border-color: #bebebe;
+}
+
+body .select2-container--default .select2-results__option[aria-selected="true"]:hover, body .select2-container--default .select2-selection--multiple .select2-selection__choice, body .select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #8a8684;
 }
 
 /* Temporary increasing size for video 

@@ -1,0 +1,89 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Tags{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+  <ol class="breadcrumb">
+      <li><a href="./"><i class="pli-home"></i></a></li>
+      <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+      <li><a href="{% url 'core:references' %}">Publications</a></li>
+      <li><a href="{% url 'core:admin_reference' info.id %}">{{ info.title|truncatechars:40 }}</a></li>
+        <li class="active">Tags</li>
+  </ol>
+
+  <h2>Edit tags</h2>
+
+  <form method="post" class="form form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Tags</label>
+      <div class="col-sm-10">
+        <select name="tags[]" class="form-control select2" multiple>
+          {% for detail in tags %}
+            <option value="{{ detail.id }}">{{ detail.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Save</button>
+      </div>
+    </div>
+  </form>
+
+  <h3>Browse tag tree</h3>
+
+  <p>Use the list below to see which tags exist.</p>
+
+  <div id="tree"></div>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/skin-lion/ui.fancytree.min.css" />
+<style type="text/css">
+#tree{overflow:hidden}
+#details{margin-top:20px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/jquery.fancytree-all-deps.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    // Load tree from Ajax JSON
+    $("#tree").fancytree({
+      source: 
+        [
+          {% for details in parent_tags %}
+            {title: "{{ details.name }}", key: "{{ details.id }}", lazy: true},
+          {% endfor %}
+        ]
+      ,
+			lazyLoad: function(event, data){
+        var node = data.node;
+				data.result = $.ajax({
+					url: "{% url 'core:tag_ajax' %}",
+					dataType: "json",
+          data: {mode: "children", parent: node.key},
+				});
+			},
+      activate: function(event, data) {
+        var node = data.node;
+      },
+		});
+    
+});
+
+</script>
+{% endblock %}

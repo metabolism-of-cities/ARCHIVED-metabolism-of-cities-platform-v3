@@ -371,7 +371,7 @@ You are viewing a prototype site
 
 {% if request.user.is_authenticated and request.user.is_staff %}
 
-  <a href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
+  <a title="Go to back-end homepage" href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
 
   {% if section == "cities" and info.slug %}
 
@@ -380,19 +380,19 @@ You are viewing a prototype site
   {% endif %}
 
   {% if editlink %}
-    <a href="{{ editlink }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+    <a title="Edit this record" href="{{ editlink }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
   {% endif %}
 
   {% if deletelink %}
-    <a href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
+    <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
   {% endif %}
 
   {% if page.id %}
-    <a href="{% url 'core:admin_article' page.id %}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+    <a title="Edit" href="{% url 'core:admin_article' page.id %}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
   {% endif %}
 
   {% if addlink %}
-    <a href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
+    <a title="Add new record" href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
   {% endif %}
 
 {% endif %}
