@@ -67,7 +67,6 @@ urlpatterns = [
     path('resources/publications', views.references, name='references'),
     path('resources/publication/<int:id>', views.reference),
     path('resources/publications/<int:id>', views.reference, name='reference'),
-    path('resources/publications/<int:id>/edit', views.referenceform, name='editreference'),
     path('resources/publications/add', views.referenceform, name='newreference'),
     path('resources/publications/create/<int:dataset>', views.referenceform, name='newflowreference'),
     path('resources/publications/<slug:slug>', views.page, name='publications'),
@@ -93,6 +92,7 @@ urlpatterns = [
     path('admin/tags/create', views.admin_tag, name='admin_tag'),
     path('admin/tags/<int:id>', views.admin_tag, name='admin_tag'),
     path('admin/tags/<int:parent>/child', views.admin_tag, name='admin_tag'),
+    path('admin/publications/<int:id>', views.referenceform, name='admin_reference'),
 
 #temp
     path('updateorgs', views.updateorgs),

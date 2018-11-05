@@ -216,30 +216,32 @@ def reference(request, id):
     related = Reference.objects.all()[:5]
     authors = info.authors.all()
     data = Data.objects.filter(dataset__references=info)
-    editlink = '/publications/'+str(id)+'/edit'
+    editlink = reverse('core:admin_reference', args=[info.id])
     context = { 'section': 'literature', 'page': 'publications', 'info': info, 'related': related, 'authors': authors, 'editlink': editlink, 'data': data, 'datatables': True }
     return render(request, 'core/reference.html', context)
 
 @login_required
 def referenceform(request, id=False, dataset=False):
-    if request.method == 'POST':
-        post = ReferenceForm(request.POST)
-        info = post.save()
-
-        create_record = get_object_or_404(UserAction, pk=1)
-        log = UserLog(user=request.user, action=create_record, reference=info, points=5)
-
-        if (dataset):
-            return redirect('staf:createflowmeta', dataset=dataset, reference=info.id)
-        else:
-            return redirect('core:reference', id=info.id)
+    if id:
+        info = get_object_or_404(Reference, pk=id)
+        form = ReferenceForm(instance=info)
     else:
-        if id:
-            info = get_object_or_404(Reference, pk=id)
-            form = ReferenceForm(instance=info)
+        info = False
+        form = ReferenceForm()
+    if request.method == 'POST':
+        if not id:
+            form = ReferenceForm(request.POST)
         else:
-            info = False
-            form = ReferenceForm(initial={'type': 16, 'language': 'EN'})
+            form = ReferenceForm(request.POST, instance=info)
+        if form.is_valid():
+            info = form.save()
+            create_record = get_object_or_404(UserAction, pk=1)
+            log = UserLog(user=request.user, action=create_record, reference=info, points=5)
+            messages.success(request, 'Information was saved.')
+            return redirect('core:reference', id=info.id)
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+
     context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset}
     return render(request, 'core/reference.form.html', context)
 
