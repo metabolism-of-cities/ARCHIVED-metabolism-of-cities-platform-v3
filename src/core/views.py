@@ -245,20 +245,25 @@ def referenceform(request, id=False, dataset=False):
     context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset}
     return render(request, 'core/reference.form.html', context)
 
-def references(request, type=False):
+def references(request, type=False, tag=False):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
     else:
         main_filter = 219
     if type:
         type = get_object_or_404(ReferenceType, pk=type)
-        list = Reference.objects.filter(status='active', type=type).order_by('-year')
+        list = Reference.objects.filter(status='active', type=type, tags__id=main_filter).order_by('-year')
         title = type.name + "s"
     else:
-        list = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-year')
-        title = "Publications"
+        if tag:
+            list = Reference.objects.filter(status='active', tags__id=main_filter).filter(tags__id=tag).order_by('-year')
+            tag = get_object_or_404(Tag, pk=tag, hidden=False)
+            title = tag.name + " | Publications"
+        else:
+            list = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-year')
+            title = "Publications"
     addlink = reverse('core:newreference')
-    context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title, 'select2': True}
+    context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title, 'select2': True, 'tag': tag}
     return render(request, 'core/references.html', context)
 
 

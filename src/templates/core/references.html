@@ -1,7 +1,7 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
 
-{% block title %}Publications{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
@@ -18,7 +18,7 @@
     When you see the results, use the filters on the left hand side to refine your results.
   </p>
 
-  <div class="resultbox">
+  <div class="row">
 
     <form action="#" method="post" class="col-xs-12 col-sm-10 col-sm-offset-1 pad-hor">
       <div class="input-group mar-btm">
@@ -30,6 +30,14 @@
     </form>
 
   </div>
+
+  {% if tag %}
+
+    <div class="panel">
+      You searched for: {{ tag.name }}
+    </div>
+
+  {% endif %}
 
   <div class="alert alert-info">
     <a href="publications.export.php" class="btn btn-default">

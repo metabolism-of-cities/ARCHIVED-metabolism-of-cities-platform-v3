@@ -69,6 +69,7 @@ urlpatterns = [
     path('resources/publications/<int:id>', views.reference, name='reference'),
     path('resources/publications/add', views.referenceform, name='newreference'),
     path('resources/publications/create/<int:dataset>', views.referenceform, name='newflowreference'),
+    path('resources/publications/tags/<int:tag>', views.references, name='tag_search'),
     path('resources/publications/<slug:slug>', views.page, name='publications'),
     path('resources/<slug:slug>', views.page, name='resources'),
     path('resources/publications/search/ajax', views.reference_search_ajax, name='reference_search_ajax'),

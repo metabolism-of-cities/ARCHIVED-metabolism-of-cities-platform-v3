@@ -86,7 +86,9 @@
             <dt>Tag(s)</dt>
             <dd>
             {% for tag in info.tags.all %}
-            <a href="http://" class="label label-default">{{ tag.name }}</a>
+              {% if not tag.hidden %}
+                <a href="{% url 'core:tag_search' tag.id %}" class="label label-default">{{ tag.name }}</a>
+              {% endif %}
             {% endfor %}
             </dd>
           </div>
