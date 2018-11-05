@@ -21,9 +21,9 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">Tags</label>
       <div class="col-sm-10">
-        <select name="tags[]" class="form-control select2" multiple>
-          {% for detail in tags %}
-            <option value="{{ detail.id }}">{{ detail.name }}</option>
+        <select name="tags" class="form-control select2" multiple>
+          {% for details in tags %}
+            <option value="{{ details.id }}" {% if details in info.tags.all %}selected{% endif %}>{{ details.name }}</option>
           {% endfor %}
         </select>
       </div>
@@ -41,6 +41,8 @@
   <p>Use the list below to see which tags exist.</p>
 
   <div id="tree"></div>
+
+  <p><a href="{% url 'core:admin_tag_list' %}" target="_blank">Edit tag list</a></p>
 
 {% endblock %}
 

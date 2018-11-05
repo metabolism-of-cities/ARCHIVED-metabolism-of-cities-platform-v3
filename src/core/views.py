@@ -690,9 +690,13 @@ def admin_article(request, id=False, type=False, parent=False):
 def admin_referencetags(request, id):
     info = get_object_or_404(Reference, pk=id)
     if request.method == 'POST':
-        for tag in request.POST['tags']:
-            info.tags.add(Tag.objects.find(pk=tag))
-    tags = Tag.objects.filter(hidden=False)
+        info.tags.clear()
+        selected = request.POST.getlist('tags')
+        for tag in selected:
+            info.tags.add(Tag.objects.get(pk=tag))
+        messages.success(request, 'Information was saved.')
+        return redirect('core:reference', id=info.id)
+    tags = Tag.objects.filter(hidden=False, parent_tag__isnull=False)
     parent_tags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     context = { 'navbar': 'backend', 'tags': tags, 'info': info, 'parent_tags': parent_tags, 'select2': True }
     return render(request, 'core/admin/reference.tags.html', context)
