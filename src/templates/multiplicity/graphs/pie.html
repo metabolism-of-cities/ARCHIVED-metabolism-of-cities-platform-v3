@@ -7,6 +7,7 @@
   var types = {{ spaces|safe }};
   var data = {{ data|safe }};
 
+  // empty arrays we'll fill the data with and use to draw chart
   var pieSeries = [{
     data: []
   }];
@@ -15,6 +16,7 @@
     series: []
   }
 
+  // filling arrays with group names
   $(groups).each(function() {
     var groupSeries = {
       name: this.label,
@@ -30,6 +32,7 @@
     };
     pieDrillDown.series.push(groupDrilldown);
 
+    // filling group names with data
     $(data).each(function() {
       if (this.material_group == groupSeries.name) {
         groupSeries.y = groupSeries.y + this.quantity;
@@ -38,8 +41,6 @@
       };
     });
   });
-
-  // removes drilldown from groups that don't have subgroups
 
   // getting all groups from the subgroups
   var allGroups = []
@@ -63,47 +64,43 @@
     });
   });
 
+  // gets the right unit to use
+  var pieUnit = data[0].unit
+
 </script>
 
 <div id="pieDrillChart" style="width:100%; height: 600px;"></div>
 
-  <script>
-    Highcharts.chart('pieDrillChart', {
-      chart: {
-        type: 'pie'
-      },
-
-      title: {
-        text: 'Agricultural production by type'
-      },
-
-      subtitle: {
-        text: 'Click the slices for more details'
-      },
-
-      plotOptions: {
-        series: {
-          dataLabels: {
-            enabled: true,
-            format: '{point.name}: {point.y} t'
-          }
+<script>
+  Highcharts.chart('pieDrillChart', {
+    chart: {
+      type: 'pie'
+    },
+    title: {
+      text: 'Title'
+    },
+    subtitle: {
+      text: 'Subtitle'
+    },
+    plotOptions: {
+      series: {
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}: {point.y} ' + pieUnit
         }
-      },
+      }
+    },
+    colors: colorScheme,
+    tooltip: {
+      pointFormat: '<b>{point.y} ' + pieUnit + '</b>'
+    },
+    legend: {
+      enabled: false
+    },
+    "series": pieSeries,
+    "drilldown": pieDrillDown,
+  });
 
-      colors: colorScheme,
-
-      tooltip: {
-        pointFormat: '<b>{point.y} t</b>'
-      },
-
-      legend: {
-        enabled: false
-      },
-
-      "series": pieSeries,
-      "drilldown": pieDrillDown,
-    });
-
-    // lines for chart burger menu thinner
-    $(".highcharts-button-symbol").attr("stroke-width", 1);
-  </script>
+  // lines for chart burger menu thinner
+  $(".highcharts-button-symbol").attr("stroke-width", 1);
+</script>
