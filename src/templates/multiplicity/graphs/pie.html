@@ -39,6 +39,30 @@
     });
   });
 
+  // removes drilldown from groups that don't have subgroups
+
+  // getting all groups from the subgroups
+  var allGroups = []
+
+  $(subgroups).each(function() {
+    allGroups.push(this.group);
+  });
+
+  // checks which elements in allGroups only appears once - https://stackoverflow.com/a/8700035
+  for(var index = 0, noDrillGroups = []; index < allGroups.length; index++ ) {
+    if( allGroups.indexOf( allGroups[index], allGroups.indexOf( allGroups[index] ) + 1 ) == -1 ) noDrillGroups.push( allGroups[index] );
+  };
+
+  // removes the
+  $(noDrillGroups).each(function() {
+    var groupToRemove = this;
+    $(pieSeries[0].data).each(function() {
+      if (this.name == groupToRemove) {
+        delete this.drilldown;
+      }
+    });
+  });
+
 </script>
 
 <div id="pieDrillChart" style="width:100%; height: 600px;"></div>
