@@ -53,7 +53,7 @@
     if( allGroups.indexOf( allGroups[index], allGroups.indexOf( allGroups[index] ) + 1 ) == -1 ) noDrillGroups.push( allGroups[index] );
   };
 
-  // removes the
+  // removes the drilldown key from the groups in pieSeries that don't have subgroups
   $(noDrillGroups).each(function() {
     var groupToRemove = this;
     $(pieSeries[0].data).each(function() {
