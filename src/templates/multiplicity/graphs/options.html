@@ -2,16 +2,24 @@
   var colorScheme = ['#03a9f4', '#ffb300', '#f44336', '#ab47bc', '#26a69a', '#8bc34a', '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928'];
 
 	Highcharts.setOptions({
-    credits: false,
+    credits: {
+      text: 'Made by Metabolism of Cities',
+      href: null,
+      style: {
+        fontFamily: "'Lato', sans-serif",
+        fontSize: "14px",
+        cursor: "default",
+      },
+    },
 		chart: {
 			style: {
 				fontFamily: "'Lato', sans-serif"
 			},
 		},
     plotOptions: {
-        series: {
-            animation: false
-        }
+      series: {
+        animation: false
+      }
     }
   });
 </script>
