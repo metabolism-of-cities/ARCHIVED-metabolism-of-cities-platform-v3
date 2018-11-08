@@ -30,9 +30,23 @@
 		});
 
 		if (isMultipleTypes == true) {
-			console.log("isMultipleTypes!");
-		} else {
+			$(types).each(function() {
+			  // filling arrays with subgroup names
+			  var singleType = {
+			    name: this,
+			    data: []
+			  };
 
+			  barSeries.push(singleType);
+
+		    // filling group names with data
+			  $(data).each(function() {
+			    if (this.type == singleType.name) {
+					  singleType.data.push(this.quantity);
+			    };
+			  });
+			});
+		} else {
 			$(subgroups).each(function() {
 			  // filling arrays with subgroup names
 			  var singleSubgroup = {
@@ -140,6 +154,9 @@
 		  },
 		  legend: {
 	      reversed: true
+		  },
+		  tooltip: {
+		    pointFormat: '<b>{point.y} ' + barUnit + '</b>'
 		  },
 		  plotOptions: {
 	      series: {
