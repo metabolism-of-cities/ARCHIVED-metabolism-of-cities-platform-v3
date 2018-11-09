@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('', views.index, name='index'),
     path('<slug:city>/research', views.research, name='research'),
+    path('<slug:city>/overview', views.overview, name='overview'),
 
     path('<slug:city>/maps', views.map, name='map_home'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),

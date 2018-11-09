@@ -89,6 +89,12 @@ def map(request, city, type='boundaries'):
     context = { 'section': 'cities', 'menu':  'maps', 'page': type, 'info': info, 'topics': topics }
     return render(request, 'multiplicity/space.map.html', context)
 
+def overview(request, city):
+    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info, 'topics': topics }
+    return render(request, 'multiplicity/overview.html', context)
+
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     datasets = Dataset.objects.filter(primary_space=info)
