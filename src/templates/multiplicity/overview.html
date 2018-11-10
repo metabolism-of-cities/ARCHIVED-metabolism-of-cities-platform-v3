@@ -10,8 +10,116 @@
   <div class="col-lg-12">
     <div class="panel">
       <div class="panel-body">
-        <h3>Data overview</h3>
-        <p>Here is an overview of the data...</p>
+        <h2>1. External flows</h2>
+
+        <h3>Extraction</h3>
+        <table class="table is-striped">
+        {% for item in extraction %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h3>Imports</h3>
+        <table class="table is-striped">
+        {% for item in maingroups %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h3>Exports</h3>
+        <table class="table is-striped">
+        {% for item in maingroups %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h2>2. Internal flows</h2>
+
+        <h3>Consumption</h3>
+        <table class="table is-striped">
+        {% for item in extraction %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h3>Output to nature</h3>
+        <table class="table is-striped">
+        {% for item in output %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h3>Waste</h3>
+        <table class="table is-striped">
+        {% for item in waste %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h2>3. Built environment</h2>
+
+        <h3>Stocks</h3>
+        <table class="table is-striped">
+        {% for item in stocks %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <h3>Infrastructure</h3>
+        <table class="table is-striped">
+        {% for item in infrastructure %}
+          <tr>
+            <td>{{ item }}</td>
+            <td>12 out out of 15 datasets</td>
+            <td>1 year</td>
+            <td>City-wide</td>
+            <td>46%</td>
+          </tr>
+        {% endfor %}
+        </table>
+
       </div>
     </div>
   </div>

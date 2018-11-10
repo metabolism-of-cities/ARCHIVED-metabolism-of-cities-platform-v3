@@ -90,9 +90,17 @@ def map(request, city, type='boundaries'):
     return render(request, 'multiplicity/space.map.html', context)
 
 def overview(request, city):
+    extraction = ['Agriculture', 'Mining', 'Forestry', 'Fishing', 'Water']
+    maingroups = ['Biomass', 'Fossil fuels', 'Metals', 'Minerals', 'Water', 'Electricity']
+    output = ['To water', 'To air', 'Dissipative flows']
+    waste = ['Landfill', 'Incineration', 'Dumping', 'Others']
+    stocks = ['Roads', 'Biomass', 'Water', 'Buildings']
+    infrastructure = ['Agriculture, Forestry and Fishing', 'Mining and Quarrying', 'Manufacturing', 'Electricity, Gas, Steam and Air Conditioning Supply']
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info, 'topics': topics }
+    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info, 'topics': topics,
+    'extraction': extraction, 'maingroups': maingroups, 'output': output, 'waste': waste, 'stocks': stocks, 'infrastructure': infrastructure
+    }
     return render(request, 'multiplicity/overview.html', context)
 
 def datasets(request, city):
