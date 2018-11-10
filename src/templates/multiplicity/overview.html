@@ -6,124 +6,106 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col-lg-12">
-    <div class="panel">
-      <div class="panel-body">
-        <h2>1. External flows</h2>
+<section class="city-overview">
+  <h2><i class="far fa-fw fa-exchange"></i> External flows</h2>
+  <div class="panel panel-dark">
+    <div class="panel-heading">
+      <h3 class="panel-title">Extraction</h3>
+    </div>
+    <div class="panel-body">
 
-        <h3>Extraction</h3>
-        <table class="table is-striped">
-        {% for item in extraction %}
+      <table class="table">
+        <thead>
           <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
+            <th>Source</th>
+            <th>Data available</th>
+            <th></th>
+            <th>Coverage</th>
+            <th>Smallest scale</th>
+            <th>Work done</th>
+            <th></th>
           </tr>
-        {% endfor %}
-        </table>
-
-        <h3>Imports</h3>
-        <table class="table is-striped">
-        {% for item in maingroups %}
-          <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
-          </tr>
-        {% endfor %}
-        </table>
-
-        <h3>Exports</h3>
-        <table class="table is-striped">
-        {% for item in maingroups %}
-          <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
-          </tr>
-        {% endfor %}
-        </table>
-
-        <h2>2. Internal flows</h2>
-
-        <h3>Consumption</h3>
-        <table class="table is-striped">
-        {% for item in extraction %}
-          <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
-          </tr>
-        {% endfor %}
-        </table>
-
-        <h3>Output to nature</h3>
-        <table class="table is-striped">
-        {% for item in output %}
-          <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
-          </tr>
-        {% endfor %}
-        </table>
-
-        <h3>Waste</h3>
-        <table class="table is-striped">
-        {% for item in waste %}
-          <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
-          </tr>
-        {% endfor %}
-        </table>
-
-        <h2>3. Built environment</h2>
-
-        <h3>Stocks</h3>
-        <table class="table is-striped">
-        {% for item in stocks %}
-          <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
-          </tr>
-        {% endfor %}
-        </table>
-
-        <h3>Infrastructure</h3>
-        <table class="table is-striped">
-        {% for item in infrastructure %}
-          <tr>
-            <td>{{ item }}</td>
-            <td>12 out out of 15 datasets</td>
-            <td>1 year</td>
-            <td>City-wide</td>
-            <td>46%</td>
-          </tr>
-        {% endfor %}
-        </table>
-
-      </div>
+        </thead>
+      {% for item in extraction %}
+        <tr>
+          <td><a href="">{{ item }}</a></td>
+          <td><div class="data-available" available="4" total="7"></div></td>
+          <td class="expand"><i class="fas fa-caret-down"></i></td>
+          <td>1 year</td>
+          <td>City-wide</td>
+          <td>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                60%
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr class="extra-info">
+          <td></td>
+          <td>
+            <span class="label label-success">Grains</span>
+            <span class="label label-success">Fruits</span>
+            <span class="label label-success">Vegetables</span>
+            <span class="label label-success">Something</span>
+            <span class="label label-success">Something else</span>
+            <span class="label label-success">This</span>
+            <span class="label label-success">Other stuff</span>
+            <br>
+            <span class="label label-unavailable">Gone</span>
+            <span class="label label-unavailable">Not here</span>
+            <span class="label label-unavailable">Unavailable</span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      {% endfor %}
+      </table>
     </div>
   </div>
-</div>
+
+  <div class="panel panel-dark">
+    <div class="panel-heading">
+      <h3 class="panel-title">Imports</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th>Data available</th>
+            <th></th>
+            <th>Coverage</th>
+            <th>Smallest scale</th>
+            <th>Work done</th>
+          </tr>
+        </thead>
+      {% for item in maingroups %}
+        <tr>
+          <td>{{ item }}</td>
+          <td><div class="data-available" available="12" total="15"></div></td>
+          <td class="expand"><i class="fas fa-caret-down"></i></td>
+          <td>1 year</td>
+          <td>City-wide</td>
+          <td>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                60%
+              </div>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <h2><i class="far fa-fw fa-sync"></i> Internal flows</h2>
+
+  <h2><i class="far fa-fw fa-city"></i> Built environment</h2>
+</section>
 
 {% endblock %}
 
@@ -137,7 +119,7 @@
 
 {% block pagehead %}
 <div id="page-head">
-    
+
     <div id="page-title">
         <h1 class="page-header text-overflow">{{ info.name }}</h1>
     </div>
@@ -153,5 +135,29 @@
 {% endblock %}
 
 {% block footer %}
+  <script>
+    $(".data-available").each(function() {
+      var available = $(this).attr("available");
+      var total = $(this).attr("total");
+      var unavailable = total - available;
+      var width = 100 / total;
 
+      for (var i = 1; i <= available; i++) {
+        $(document.createElement('div')).addClass("data-box available").css("width", "calc(" + width + "% - 1px)").appendTo(this);
+      };
+
+      for (var i = 1; i <= unavailable; i++) {
+        $(document.createElement('div')).addClass("data-box").css("width", "calc(" + width + "% - 1px)").appendTo(this);
+      };
+    });
+
+    $(".city-overview .table .expand").click(function() {
+      var parentRow = $(this).parent("tr");
+      $(parentRow).children("td").each(function() {
+        $(this).width( $(this).width() );
+      });
+      $("i", this).toggleClass("fa-caret-up");
+      $(this).parent().next("tr.extra-info").toggle();
+    });
+  </script>
 {% endblock %}

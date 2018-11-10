@@ -212,3 +212,63 @@ table.table-striped .even {
 #graph .highcharts-drillup-button {
   cursor: pointer;
 }
+
+.city-overview .table {
+  margin-bottom: 0;
+}
+
+.city-overview .table .expand:hover {
+  cursor: pointer;
+  color: #FE6D33;
+}
+
+.city-overview .table .extra-info {
+  display: none;
+}
+
+.city-overview .table .extra-info td {
+  border-top: none !important;
+  padding-top: 0;
+}
+
+.city-overview .table .progress {
+  margin-bottom: 0;
+  height: 20px;
+}
+
+.city-overview .table .progress .progress-bar {
+  line-height: 20px;
+}
+
+.city-overview .table .data-available {
+  width: 100%;
+  height: 20px;
+}
+
+.city-overview .table tr.expanded td {
+  border-bottom-width: 0px;
+}
+
+.city-overview .table .label.label-unavailable {
+  background-color: rgba(0,0,0,0.1);
+  color: #666;
+}
+
+.city-overview .table .data-available .data-box {
+  background-color: rgba(0,0,0,0.1);
+  height: 20px;
+  border-right: 1px solid #ecf0f5;
+  display: inline-block;
+}
+
+.city-overview .table .data-available .data-box:first-of-type {
+  border-radius: 2px 0 0 2px;
+}
+
+.city-overview .table .data-available .data-box:last-of-type {
+  border-radius: 0 2px 2px 0;
+}
+
+.city-overview .table .data-available .data-box.available {
+  background-color: #8bc34a;
+}
