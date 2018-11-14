@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Test</title>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+	<style>
+		svg	{
+			max-width: 90vw;
+			max-height: 90vh;
+		}
+
+		.red {
+			fill: red;
+		}
+
+		.purple {
+			fill: purple;
+		}
+
+		.green {
+			fill: green;
+		}
+
+		.yellow {
+			fill: yellow;
+		}
+
+		.blue {
+			fill: blue;
+		}
+	</style>
+
+</head>
+<body>
+	<button id="hit">Hit me!</button>
+
+	<svg viewBox="0 0 1000 1000">
+	  <rect x="400" y="400" width="200" height="200"/>
+
+		<!-- up -->
+	  <rect class="up red" x="400" y="0" width="40" height="400"/>
+	  <rect class="up purple" x="440" y="0" width="40" height="400"/>
+	  <rect class="up green" x="480" y="0" width="40" height="400"/>
+	  <rect class="up yellow" x="520" y="0" width="40" height="400"/>
+	  <rect class="up blue" x="560" y="0" width="40" height="400"/>
+
+		<!-- right -->
+	  <rect class="right red" x="600" y="400" width="400" height="40"/>
+	  <rect class="right purple" x="600" y="440" width="400" height="40"/>
+	  <rect class="right green" x="600" y="480" width="400" height="40"/>
+	  <rect class="right yellow" x="600" y="520" width="400" height="40"/>
+	  <rect class="right blue" x="600" y="560" width="400" height="40"/>
+
+		<!-- down -->
+	  <rect class="down red" x="400" y="600" width="40" height="400"/>
+	  <rect class="down purple" x="440" y="600" width="40" height="400"/>
+	  <rect class="down green" x="480" y="600" width="40" height="400"/>
+	  <rect class="down yellow" x="520" y="600" width="40" height="400"/>
+	  <rect class="down blue" x="560" y="600" width="40" height="400"/>
+
+		<!-- left -->
+	  <rect class="left red" x="0" y="400" width="400" height="40"/>
+	  <rect class="left purple" x="0" y="440" width="400" height="40"/>
+	  <rect class="left green" x="0" y="480" width="400" height="40"/>
+	  <rect class="left yellow" x="0" y="520" width="400" height="40"/>
+	  <rect class="left blue" x="0" y="560" width="400" height="40"/>
+	</svg>
+
+	<script>
+		function getRandomInt(max) {
+		  return Math.floor(Math.random() * Math.floor(max));
+		}
+
+		$("#hit").click(function() {
+			var centreHeight = 200;
+			var centreWidth = 200;
+
+			var upWidth = 0;
+			var downWidth = 0;
+			var leftHeight = 0;
+			var rightHeight = 0;
+
+			var upPlaced = 0;
+			var downPlaced = 0;
+			var leftPlaced = 0;
+			var rightPlaced = 0;
+
+			$(".up, .down").each(function() {
+				var newWidth = getRandomInt(40);
+				$(this).attr("width", newWidth);
+
+				if ( $(this).hasClass("up") ) {
+					upWidth = upWidth + newWidth;
+				} else {
+					downWidth = downWidth + newWidth;
+				};
+			});
+			$(".left, .right").each(function() {
+				var newHeight = getRandomInt(40);
+				$(this).attr("height", newHeight);
+
+				if ( $(this).hasClass("left") ) {
+					leftHeight = leftHeight + newHeight;
+				} else {
+					rightHeight = rightHeight + newHeight;
+				};
+			})
+
+			$(".up").each(function() {
+				var startingX = 400 + (centreWidth - upWidth) / 2;
+				var xPosition = startingX - upPlaced;
+				$(this).attr("x", xPosition);
+				upPlaced = upPlaced - $(this).attr("width");
+			});
+
+			$(".down").each(function() {
+				var startingX = 400 + (centreWidth - downWidth) / 2;
+				var xPosition = startingX - downPlaced;
+				$(this).attr("x", xPosition);
+				downPlaced = downPlaced - $(this).attr("width");
+			});
+
+			$(".left").each(function() {
+				var startingY = 400 + (centreHeight - leftHeight) / 2;
+				var yPosition = startingY - leftPlaced;
+				$(this).attr("y", yPosition);
+				leftPlaced = leftPlaced - $(this).attr("height");
+			});
+
+			$(".right").each(function() {
+				var startingY = 400 + (centreHeight - rightHeight) / 2;
+				var yPosition = startingY - rightPlaced;
+				$(this).attr("y", yPosition);
+				rightPlaced = rightPlaced - $(this).attr("height");
+			});
+		});
+	</script>
+</body>
+</html>
