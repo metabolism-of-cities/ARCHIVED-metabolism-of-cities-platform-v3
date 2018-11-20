@@ -6,11 +6,16 @@
 
 {% block content %}
 
+
+
 <section class="city-overview">
-  <h2><i class="far fa-fw fa-exchange"></i> External flows</h2>
+
+<h2><i class="far fa-fw fa-exchange"></i> {{ flow.name }}</h2>
+
+{% for details in types %}
   <div class="panel panel-dark">
     <div class="panel-heading">
-      <h3 class="panel-title">Extraction</h3>
+      <h3 class="panel-title">{{ details.name }}</h3>
     </div>
     <div class="panel-body">
 
@@ -26,7 +31,7 @@
             <th></th>
           </tr>
         </thead>
-      {% for item in extraction %}
+      {% for item in details.datasettype_set.all %}
         <tr>
           <td><a href="">{{ item }}</a></td>
           <td><div class="data-available" available="4" total="7"></div></td>
@@ -66,45 +71,8 @@
     </div>
   </div>
 
-  <div class="panel panel-dark">
-    <div class="panel-heading">
-      <h3 class="panel-title">Imports</h3>
-    </div>
-    <div class="panel-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Material</th>
-            <th>Data available</th>
-            <th></th>
-            <th>Coverage</th>
-            <th>Smallest scale</th>
-            <th>Work done</th>
-          </tr>
-        </thead>
-      {% for item in maingroups %}
-        <tr>
-          <td>{{ item }}</td>
-          <td><div class="data-available" available="12" total="15"></div></td>
-          <td class="expand"><i class="fas fa-caret-down"></i></td>
-          <td>1 year</td>
-          <td>City-wide</td>
-          <td>
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                60%
-              </div>
-            </div>
-          </td>
-        </tr>
-      {% endfor %}
-      </table>
-    </div>
-  </div>
+{% endfor %}
 
-  <h2><i class="far fa-fw fa-sync"></i> Internal flows</h2>
-
-  <h2><i class="far fa-fw fa-city"></i> Built environment</h2>
 </section>
 
 {% endblock %}

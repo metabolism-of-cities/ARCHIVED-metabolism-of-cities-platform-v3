@@ -17,14 +17,18 @@ urlpatterns = [
 
     path('admin/<slug:city>/overview', views.admin_data_overview, name='admin_data_overview'),
 
+    path('admin/datasettype', views.admin_datasettypes, name='admin_datasettypes'),
+    path('admin/datasettype/<int:id>', views.admin_datasettype, name='admin_datasettype'),
+    path('admin/datasettype/create', views.admin_datasettype, name='admin_datasettype'),
 
     # General
-
     path('table/datasets/<int:dataset>', views.datatable, name='datatable_dataset'),
 
     path('', views.index, name='index'),
     path('<slug:city>/research', views.research, name='research'),
-    path('<slug:city>/overview', views.overview, name='overview'),
+
+    path('<slug:city>/material-flows/<slug:slug>', views.overview, name='overview_flows'),
+    path('<slug:city>/material-stocks', views.overview, {'slug': 'material-stocks' }, name='overview_stocks'),
 
     path('<slug:city>/maps', views.map, name='map_home'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),

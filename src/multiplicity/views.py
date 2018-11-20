@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
@@ -89,17 +89,16 @@ def map(request, city, type='boundaries'):
     context = { 'section': 'cities', 'menu':  'maps', 'page': type, 'info': info, 'topics': topics }
     return render(request, 'multiplicity/space.map.html', context)
 
-def overview(request, city):
-    extraction = ['Agriculture', 'Mining', 'Forestry', 'Fishing', 'Water']
-    maingroups = ['Biomass', 'Fossil fuels', 'Metals', 'Minerals', 'Water', 'Electricity']
-    output = ['To water', 'To air', 'Dissipative flows']
-    waste = ['Landfill', 'Incineration', 'Dumping', 'Others']
-    stocks = ['Roads', 'Biomass', 'Water', 'Buildings']
-    infrastructure = ['Agriculture, Forestry and Fishing', 'Mining and Quarrying', 'Manufacturing', 'Electricity, Gas, Steam and Air Conditioning Supply']
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+def overview(request, city, slug):
+    flow = get_object_or_404(DatasetTypeStructure, slug=slug)
+    list = DatasetType.objects.filter(category__parent=flow)
+    types = DatasetTypeStructure.objects.filter(parent=flow)
+    if not types:
+        types = DatasetTypeStructure.objects.filter(pk=flow.id)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info, 'topics': topics,
-    'extraction': extraction, 'maingroups': maingroups, 'output': output, 'waste': waste, 'stocks': stocks, 'infrastructure': infrastructure
+    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
+    'list': list, 'types': types, 'flow': flow, 'slug': slug,
+    'editlink': reverse('multiplicity:admin_datasettypes')
     }
     return render(request, 'multiplicity/overview.html', context)
 
@@ -1080,4 +1079,36 @@ def delete_dataset(request, city, id):
     dataset.save()
     messages.success(request, 'Dataset was deleted')
     return redirect('multiplicity:admin_data_overview', city=city)
+
+@staff_member_required
+def admin_datasettypes(request):
+    list = DatasetType.objects.filter(active=True)
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'multiplicity/admin/datasettypes.html', context)
+
+@staff_member_required
+def admin_datasettype(request, id=False):
+    if id:
+        info = get_object_or_404(DatasetType, pk=id)
+        form = DatasetTypeForm(instance=info)
+    else:
+        info = False
+        form = DatasetTypeForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = DatasetTypeForm(request.POST, request.FILES)
+        else:
+            form = DatasetTypeForm(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            info = form.save()
+            saved = True
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('multiplicity:admin_datasettypes'))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'navbar': 'backend', 'info': info, 'form': form, 'type': type }
+    return render(request, 'multiplicity/admin/datasettype.html', context)
+
 

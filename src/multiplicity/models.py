@@ -61,6 +61,15 @@ class ReferenceSpaceType(models.Model):
     def __str__(self):
         return self.name
 
+class DatasetTypeStructure(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(db_index=True, max_length=255)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    icon = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
 class DatasetType(models.Model):
     name = models.CharField(max_length=255)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
@@ -82,12 +91,20 @@ class DatasetType(models.Model):
     )
     type = models.CharField(max_length=6, choices=TYPES, default='flows')
     image = models.ImageField(null=True, blank=True, upload_to='datasettype')
+    category = models.ForeignKey(DatasetTypeStructure, on_delete=models.CASCADE, null=True, blank=True)
+    active = models.BooleanField()
 
     def __str__(self):
         return self.name
 
     class Meta:
         ordering = ["name"]
+
+class DatasetTypeForm(ModelForm):
+    class Meta:
+        model = DatasetType
+        fields = ['name', 'description', 'flows', 'type', 'category', 'active']
+
 
 class ReferenceSpace(models.Model):
     name = models.CharField(max_length=255, db_index=True)

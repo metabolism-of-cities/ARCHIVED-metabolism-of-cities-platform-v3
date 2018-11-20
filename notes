@@ -1,0 +1,12 @@
+UPDATE auth_user SET username = id, email = id, password = id;
+UPDATE core_people SET email = null;
+UPDATE core_project SET email = null;
+DELETE FROM django_admin_log;
+UPDATE team_topic SET name = id;
+UPDATE team_topic SET last_message_id = null;
+DELETE FROM team_messageread;
+DELETE from team_message;
+DELETE FROM team_project;
+DELETE FROM team_taskforceticket;
+DELETE FROM team_ticketlog;
+DELETE FROM team_taskforceticket;
