@@ -48,6 +48,8 @@ urlpatterns = [
 
     path('resources', views.journals, name='resources_home'),
     path('community', views.empty, name='community_home'),
+    path('register', views.register),
+
     path('<slug:slug>', views.section_home, name='section_home'),
 
     path('about/<slug:slug>', views.page, name='about'),
@@ -74,8 +76,6 @@ urlpatterns = [
     path('resources/<slug:slug>', views.page, name='resources'),
     path('resources/publications/search/ajax', views.reference_search_ajax, name='reference_search_ajax'),
     path('tags/ajax', views.tag_ajax, name='tag_ajax'),
-
-    path('register', views.register),
 
     path('admin/people', views.admin_people_list, name='admin_people_list'),
     path('admin/members', views.admin_member_list, name='admin_member_list'),
