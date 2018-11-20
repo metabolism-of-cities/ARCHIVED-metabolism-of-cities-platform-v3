@@ -29,7 +29,7 @@
   <li class="list-header">Materials</li>
 
   <li{% if menu == "dashboard" %} class="active-sub"{% endif %}><a href="{% url 'multiplicity:city' info.slug %}">
-  <i class="pli-home"></i>
+  <i class="fal fa-home fa-fw"></i>
       <span class="menu-title">
           Overview
       </span>
@@ -38,7 +38,7 @@
 
   <li{% if menu == "materials" %} class="active-sub"{% endif %}>
       <a href="./">
-        <i class="fa fa-blubber"></i>
+        <i class="far fa-fw fa-exchange fa-fw"></i>
         <span class="menu-title">Material flows</span> <i class="arrow"></i>
       </a>
 
@@ -50,7 +50,7 @@
 
   <li{% if menu == "materials" %} class="active-sub"{% endif %}>
       <a href="./">
-        <i class="fa fa-blubber"></i>
+        <i class="fal fa-building fa-fw"></i>
         <span class="menu-title">Material stocks</span> <i class="arrow"></i>
       </a>
 
@@ -65,7 +65,7 @@
 
   <li{% if menu == "infrastructure" %} class="active-sub"{% endif %}>
       <a href="#">
-          <i class="pli-factory"></i>
+          <i class="fal fa-industry fa-fw"></i>
           <span class="menu-title">Infrastructure</span>
           <i class="arrow"></i>
       </a>
@@ -79,7 +79,7 @@
 
   <li{% if menu == "materials" %} class="active-sub"{% endif %}>
       <a href="./">
-        <i class="fa fa-blubber"></i>
+        <i class="fal fa-user-friends fa-fw"></i>
         <span class="menu-title">Socio-economic</span> <i class="arrow"></i>
       </a>
 
@@ -91,7 +91,7 @@
 
   <li{% if menu == "materials" %} class="active-sub"{% endif %}>
       <a href="./">
-        <i class="fa fa-blubber"></i>
+        <i class="fal fa-tree-alt fa-fw"></i>
         <span class="menu-title">Environment</span> <i class="arrow"></i>
       </a>
 
@@ -104,7 +104,7 @@
 
   <li>
       <a href="{% url 'multiplicity:map_home' info.slug %}">
-          <i class="pli-map"></i>
+          <i class="fal fa-map fa-fw"></i>
           <span class="menu-title">Maps</span>
           <i class="arrow"></i>
       </a>
@@ -133,9 +133,9 @@
 
   <li{% if menu == "resources" %} class="active-sub"{% endif %}>
       <a href="#">
-          <i class="pli-paper"></i>
-          <span class="menu-title">Resources</span>
-          <i class="arrow"></i>
+        <i class="fal fa-file fa-fw"></i>
+        <span class="menu-title">Resources</span>
+        <i class="arrow"></i>
       </a>
 
       <ul class="collapse {% if menu == "resources" %}in{%endif %}">
@@ -149,7 +149,7 @@
   </li>
 
   <li{% if menu == "upload" %} class="active-sub"{% endif %}><a href="{% url 'multiplicity:upload' info.slug %}">
-  <i class="pli-upload"></i>
+  <i class="fal fa-upload fa-fw"></i>
       <span class="menu-title">
           Upload data
       </span>
