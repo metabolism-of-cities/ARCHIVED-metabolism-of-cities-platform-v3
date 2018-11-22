@@ -46,7 +46,10 @@
             </div>
           </td>
           {% else %}
-            <td><a href="{% url 'multiplicity:upload_flow_file' info.slug item.id %}"><i class="fa fa-upload"></i> Upload</a></td>
+            <td>
+              <a href="{% url 'multiplicity:upload_flow_file' info.slug item.id %}"><i class="fa fa-upload"></i> Data</a>
+              <a class="hide" href="{% url 'multiplicity:information_form' info.slug %}"><i class="fa fa-upload"></i> Information</a>
+            </td>
           {% endif %}
         </tr>
         <tr class="extra-info">

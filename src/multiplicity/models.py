@@ -208,11 +208,16 @@ class Information(TimestampedModel):
     title = models.CharField(max_length=255)
     content = HTMLField('Content')
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
-    references = models.ManyToManyField('core.Reference', blank=True)
+    references = models.ManyToManyField("core.Reference", blank=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
         return self.title
+
+class InformationForm(ModelForm):
+    class Meta:
+        model = Information
+        fields = ['title', 'content']
 
 class GraphType(models.Model):
     title = models.CharField(max_length=255)

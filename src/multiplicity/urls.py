@@ -37,6 +37,8 @@ urlpatterns = [
     path('<slug:city>/datasets/<int:id>/delete', views.delete_dataset, name='delete_dataset'),
     path('<slug:city>/datasets/<int:dataset>/graph/<int:id>', views.graph, name='graph'),
     path('<slug:city>/datasets/<int:id>/<slug:slug>', views.dataset, name='dataset_slice'),
+    path('<slug:city>/information', views.information_form, name='information_form'),
+    path('<slug:city>/information/<int:id>', views.information_form, name='information_form'),
 
     # Uploading data
     path('<slug:city>/upload', views.upload, name='upload'),
