@@ -13,21 +13,23 @@
   <div class="panel-body">
 
     <div class="row">
-      <div class="col-sm-3">
-        <p><strong>Topic:</strong></p>
-        <ul class="nav nav-list topics">
-          {% for details in topics %}
-            <li><a href="#" data-topic="{{ details.id }}">{{ details.name }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
+      {% if type == 'flows' %}
+        <div class="col-sm-3">
+          <p><strong>Topic:</strong></p>
+          <ul class="nav nav-list types">
+            {% for details in types %}
+              <li><a href="#" data-type="{{ details.id }}">{{ details.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
 
       <div class="col-sm-9 datasets">
 
           <p><strong>Datasets:</strong></p>
           <ul class="nav nav-list">
           {% for details in list %}
-              <li class="{% if details.topic %}topic-{{ details.topic.id }}{% else %}topic-all{% endif %}"><a href="{% url 'multiplicity:upload_flow_file' info.slug details.id %}">{{ details.name }}</a></li>
+              <li class="type-{{ details.category.id }}"><a href="{% url 'multiplicity:upload_flow_file' info.slug details.id %}">{{ details.name }}</a></li>
           {% endfor %}
           </ul>
            
@@ -41,7 +43,7 @@
 
 {% block head %}
 <style type="text/css">
-.datasets p,.datasets li{display:none}
+{% if type == 'flows' %}.datasets p,.datasets li{display:none}{% endif %}
 .nav > li > a:focus, .nav > li > a:hover{background:#fff}
 #page-content .nav-list a:not(.btn):not(.list-group-item):hover{text-decoration:none}
 </style>
@@ -74,13 +76,12 @@
 
   <script type="text/javascript">
   $(function(){
-    $(".topics a").click(function(e){
+    $(".types a").click(function(e){
       e.preventDefault();
       $(".datasets p").show();
       $(".datasets li").hide();
-      var topic = $(this).data("topic");
-      $(".datasets li.topic-"+topic).show('fast');
-      $(".datasets li.topic-all").show('fast');
+      var type = $(this).data("type");
+      $(".datasets li.type-"+type).show('fast');
     });
   });
   </script>

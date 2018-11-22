@@ -104,7 +104,7 @@ def overview(request, city, slug):
 
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    datasets = Dataset.objects.filter(primary_space=info)
+    datasets = Dataset.objects.filter(primary_space=info, deleted=False)
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'datasets': datasets, 'topics': topics }
     return render(request, 'multiplicity/datasets.html', context)
@@ -225,10 +225,12 @@ def topicmap(request, city, theme, topic):
 @login_required
 def upload_flow(request, city, type='flows'):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    types = False
+    if type == 'flows':
+        types = DatasetTypeStructure.objects.filter(pk__in=[8,9,10,11,6])
     list = DatasetType.objects.filter(type=type)
     addlink = '/admin/multiplicity/datasettype/add/'
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'topics': topics, 'addlink': addlink, 'type': type}
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'types': types, 'addlink': addlink, 'type': type}
     return render(request, 'multiplicity/upload/index.flow.html', context)
 
 @login_required

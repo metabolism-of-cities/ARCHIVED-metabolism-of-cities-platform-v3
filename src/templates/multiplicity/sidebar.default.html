@@ -44,7 +44,7 @@
 
       <ul class="collapse {% if flow.parent.slug == "material-flows" and menu == "overview" %}in{% endif %}">
           <li{% if slug == "external" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_flows' info.slug 'external' %}">External flows</a></li>
-          <li{% if slug == "internal" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_flows' info.slug 'internal' %}""">Internal flows flows</a></li>
+          <li{% if slug == "internal" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_flows' info.slug 'internal' %}""">Internal flows</a></li>
       </ul>
   </li>
 

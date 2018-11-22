@@ -467,8 +467,11 @@ def project_view(request, type, status, id):
     context = { 'section': 'community', 'list': list, 'info': info, 'editlink': editlink}
     return render(request, 'core/project.view.html', context)
 
-def reference_search_ajax(request):
-    references = Reference.objects.filter(title__icontains=request.GET['term'],status='active').order_by('title')
+def reference_search_ajax(request, active_only=False):
+    if active_only:
+        references = Reference.objects.filter(title__icontains=request.GET['term'],status='active').order_by('title')
+    else:
+        references = Reference.objects.filter(title__icontains=request.GET['term']).order_by('title')
     list = []
     for details in references:
         d = {}
