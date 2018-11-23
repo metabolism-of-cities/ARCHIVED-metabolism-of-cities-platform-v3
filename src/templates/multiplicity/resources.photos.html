@@ -1,0 +1,56 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Photos | {{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Photos</h3>
+        <p>We have the following photos available for <strong>{{ info.name }}</strong>:</p>
+        <ul>
+          {% for details in photos %}
+            <li>
+              <img src="{{ details.image.thumbnail.url }}" alt="" />
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li class="active">Photos</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

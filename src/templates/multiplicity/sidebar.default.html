@@ -140,11 +140,11 @@
 
       <ul class="collapse {% if menu == "resources" %}in{%endif %}">
           <li {% if page == "datasets" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Datasets</a></li>
-          <li {% if page == "aaaa" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Journal articles</a></li>
-          <li {% if page == "aaaa" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Reports</a></li>
-          <li {% if page == "aaaa" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Theses</a></li>
-          <li {% if page == "aaaa" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Videos</a></li>
-          <li {% if page == "aaaa" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Photos</a></li>
+          <li {% if page == "journalarticles" %} class="active" {% endif %}><a href="{% url 'multiplicity:photos' info.slug %}">Journal articles</a></li>
+          <li {% if page == "reports" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Reports</a></li>
+          <li {% if page == "theses" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Theses</a></li>
+          <li {% if page == "videos" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Videos</a></li>
+          <li {% if page == "photos" %} class="active" {% endif %}><a href="{% url 'multiplicity:photos' info.slug %}">Photos</a></li>
       </ul>
   </li>
 

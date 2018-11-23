@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', 'web']
 
 # MoC = 1, MoI = 2
-SITE_ID = 2
+SITE_ID = 1
 
 # Application definition
 INSTALLED_APPS = [
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'tinymce',
     'django_cron',
+    'stdimage',
 ]
 
 MIDDLEWARE = [

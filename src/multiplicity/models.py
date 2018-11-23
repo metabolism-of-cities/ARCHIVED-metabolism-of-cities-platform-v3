@@ -5,6 +5,9 @@ from django.contrib.auth import get_user_model
 from tinymce import HTMLField
 from django.forms import ModelForm
 
+# Used for image resizing
+from stdimage.models import StdImageField
+
 User = get_user_model()
 
 class TimestampedModel(models.Model):
@@ -226,3 +229,21 @@ class GraphType(models.Model):
     notes = HTMLField('Content', null=True, blank=True)
     def __str__(self):
         return self.title
+
+class Photo(TimestampedModel):
+    image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780),})
+    author = models.CharField(max_length=255)
+    source_url = models.CharField(max_length=255, null=True, blank=True)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'parent__isnull': True})
+    description = models.TextField(null=True, blank=True)
+    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    deleted = models.BooleanField(default=False, db_index=True)
+
+    def __str__(self):
+        return self.name
+
+class PhotoForm(ModelForm):
+    class Meta:
+        model = Photo
+        exclude = ['id', 'uploaded_by', 'primary_space', 'deleted']

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
@@ -27,7 +27,6 @@ from dateutil.parser import parse
 # Getting min and max values
 from django.db.models import Max
 from django.db.models import Min
-
 
 # To create json objects
 import json
@@ -101,6 +100,15 @@ def overview(request, city, slug):
     'editlink': reverse('multiplicity:admin_datasettypes')
     }
     return render(request, 'multiplicity/overview.html', context)
+
+def photos(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    photos = Photo.objects.filter(primary_space=info, deleted=False)
+    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    addlink = reverse('multiplicity:photo_form', args=[info.slug])
+
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'photos', 'info': info, 'photos': photos, 'topics': topics, 'addlink': addlink }
+    return render(request, 'multiplicity/resources.photos.html', context)
 
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -983,9 +991,6 @@ def materials(request):
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True}
     return render(request, 'multiplicity/materials.html', context)
 
-
-# Admin
-
 @login_required
 def information_form(request, city, id=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -1010,7 +1015,39 @@ def information_form(request, city, id=False):
             messages.warning(request, 'We could not save your form, please correct the errors')
 
     context = { 'section': 'cities', 'info': info, 'form': form, 'type': type }
-    return render(request, 'multiplicity/information.form.html', context)
+    return render(request, 'multiplicity/form.information.html', context)
+
+@login_required
+def photo_form(request, city, id=False):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    if id:
+        photo = get_object_or_404(Photo, pk=id)
+        form = PhotoForm(instance=info)
+    else:
+        photo = False
+        form = PhotoForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = PhotoForm(request.POST, request.FILES)
+        else:
+            form = PhotoForm(request.POST, request.FILES, instance=photo)
+        if form.is_valid():
+            photo = form.save(commit=False)
+            photo.primary_space = info
+            photo.uploaded_by = request.user
+            photo.save()
+            saved = True
+            messages.success(request, 'Photo was saved.')
+            return redirect(reverse('multiplicity:photos', args=[info.slug]))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type }
+    return render(request, 'multiplicity/form.photo.html', context)
+
+
+# Admin
 
 
 @staff_member_required
