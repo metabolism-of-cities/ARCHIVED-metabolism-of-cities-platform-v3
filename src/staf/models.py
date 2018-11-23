@@ -67,7 +67,7 @@ class MaterialTree(models.Model):
         managed = False
 
 class Unit(models.Model):
-    symbol = models.CharField(max_length=10)
+    symbol = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
     def __str__(self):
