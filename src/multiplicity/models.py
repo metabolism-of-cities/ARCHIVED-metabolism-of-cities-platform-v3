@@ -95,6 +95,7 @@ class DatasetType(models.Model):
     type = models.CharField(max_length=6, choices=TYPES, default='flows')
     image = models.ImageField(null=True, blank=True, upload_to='datasettype')
     category = models.ForeignKey(DatasetTypeStructure, on_delete=models.CASCADE, null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True)
     active = models.BooleanField()
 
     def __str__(self):
@@ -106,7 +107,7 @@ class DatasetType(models.Model):
 class DatasetTypeForm(ModelForm):
     class Meta:
         model = DatasetType
-        fields = ['name', 'description', 'flows', 'type', 'category', 'active']
+        fields = ['name', 'description', 'flows', 'type', 'category', 'slug', 'active']
 
 
 class ReferenceSpace(models.Model):

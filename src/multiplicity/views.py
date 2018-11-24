@@ -101,6 +101,22 @@ def overview(request, city, slug):
     }
     return render(request, 'multiplicity/overview.html', context)
 
+def flow(request, city, slug, id):
+    flow = get_object_or_404(DatasetType, pk=id)
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
+    'list': list, 'types': types, 'flow': flow, 'slug': slug
+    }
+    return render(request, 'multiplicity/flow.html', context)
+
+def stock(request, city, id):
+    stock = get_object_or_404(DatasetType, pk=id)
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
+    'list': list, 'types': types, 'flow': flow, 'slug': slug
+    }
+    return render(request, 'multiplicity/stock.html', context)
+
 def photos(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     photos = Photo.objects.filter(primary_space=info, deleted=False)

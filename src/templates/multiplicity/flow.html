@@ -32,7 +32,7 @@
         </thead>
       {% for item in details.datasettype_set.all %}
         <tr>
-          <td><a href="{% url 'multiplicity:flow' info.slug item.slug item.id %}">{{ item.name }}</a></td>
+          <td><a href="{% url 'multiplicity:upload_flow_file' info.slug flow.name item.id %}">{{ item.name }}</a></td>
           <td><div class="data-available" available="4" total="7"></div></td>
           <td class="expand"><i class="fas fa-caret-down"></i></td>
           <td>1 year</td>
