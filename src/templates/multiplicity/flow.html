@@ -6,20 +6,78 @@
 
 {% block content %}
 
-
-
 <section>
 
 <h2>{{ type.name }}</h2>
 
-{{ type.category }}
-
+<div class="row">
+{% for dataset in list %}
+  <div class="col-lg-6">
+    <div class="panel panel-dark">
+      <div class="panel-heading">
+        <h3 class="panel-title"><a href="{% url 'multiplicity:dataset' info.slug dataset.id %}">{{ dataset.name }}</a></h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-lg-4 is-bold">
+            City
+          </div>
+          <div class="col-lg-8">
+            {{ dataset.primary_space.name }}, {{ dataset.primary_space.country.name }}
+          </div>
+          <div class="col-lg-4 is-bold">
+            Source(s)
+          </div>
+          <div class="col-lg-8">
+            {% for details in dataset.references.all %}
+              <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
+            {% endfor %}
+          </div>
+          <div class="col-lg-4 is-bold">
+            Data points
+          </div>
+          <div class="col-lg-8">
+            {{ dataset.data_set.count }}
+          </div>
+          <div class="col-lg-4 is-bold">
+            Time frames
+          </div>
+          <div class="col-lg-8">
+            {{ dataset.timeframe.start }} - {{ dataset.timeframe.end }}
+          </div>
+          <div class="col-lg-4 is-bold">
+            Materials
+          </div>
+          <div class="col-lg-8">
+            <ul class="list-unstyled">
+            {% for details in dataset.materials %}
+              <li>
+              <span class="label label-info">
+              {{ details.material_name|truncatechars:20 }}
+              </span>
+              </li>
+            {% endfor %}
+            {% if materials_hidden %}
+              <li><span class="label label-success">+{{ materials_hidden }} other materials</span></li>
+            {% endif %}
+            </ul>
+          </div>
+        </div>
+        <p class="pull-right"><a href="{% url 'multiplicity:dataset' info.slug dataset.id %}" class="btn btn-success">View dataset</a></p>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
 
 </section>
 
 {% endblock %}
 
 {% block head %}
+<style type="text/css">
+.main-content-block h3.panel-title a{color:#fff}
+</style>
 {% endblock %}
 
 {% block sidebar %}

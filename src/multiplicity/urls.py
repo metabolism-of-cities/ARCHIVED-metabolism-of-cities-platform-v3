@@ -27,7 +27,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('<slug:city>/research', views.research, name='research'),
 
-    path('<slug:city>/material-stocks/<slug:slug>', views.stock, name='stock'),
+    path('<slug:city>/material-stocks/<slug:type>', views.flow, name='stock'),
     path('<slug:city>/material-flows/<slug:slug>', views.overview, name='overview_flows'),
     path('<slug:city>/material-flows/<slug:slug>/<slug:type>', views.flow, name='flow'),
     path('<slug:city>/material-stocks', views.overview, {'slug': 'material-stocks' }, name='overview_stocks'),

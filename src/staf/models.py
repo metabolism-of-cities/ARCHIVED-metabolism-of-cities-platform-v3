@@ -100,6 +100,14 @@ class Dataset(models.Model):
     def __str__(self):
         return self.name
 
+    def timeframe(self):
+        from django.db.models import Max
+        from django.db.models import Min
+        return Data.objects.filter(dataset=self.id).aggregate(start=Min('timeframe__start'), end=Max('timeframe__end'))
+    
+    def materials(self):
+        return Data.objects.filter(dataset=self.id).values('material_name').order_by('material_name').distinct()
+
 class DatasetForm(ModelForm):
     class Meta:
         model = Dataset

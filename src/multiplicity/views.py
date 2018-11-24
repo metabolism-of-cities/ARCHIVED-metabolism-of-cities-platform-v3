@@ -111,10 +111,10 @@ def overview(request, city, slug):
     }
     return render(request, 'multiplicity/overview.html', context)
 
-def flow(request, city, slug, type):
+def flow(request, city, type, slug=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     type = get_object_or_404(DatasetType, slug=type)
-    datasets = Dataset.objects.filter(type=type)
+    list = Dataset.objects.filter(type=type)
     if type.category.slug == 'internal': 
       page = 'internal'
     else:
@@ -130,7 +130,7 @@ def stock(request, city, type):
     context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
     'list': list, 'types': types, 'flow': flow, 'slug': slug
     }
-    return render(request, 'multiplicity/stock.html', context)
+    return render(request, 'multiplicity/flow.html', context)
 
 def photos(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
