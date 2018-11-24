@@ -107,7 +107,7 @@ class DatasetType(models.Model):
 class DatasetTypeForm(ModelForm):
     class Meta:
         model = DatasetType
-        fields = ['name', 'description', 'flows', 'type', 'category', 'slug', 'active']
+        fields = ['name', 'description', 'flows', 'type', 'category', 'topic', 'slug', 'active']
 
 
 class ReferenceSpace(models.Model):

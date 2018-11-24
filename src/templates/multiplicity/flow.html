@@ -10,6 +10,20 @@
 
 <h2>{{ type.name }}</h2>
 
+<p>Topic: <strong>{{ type.topic }}</strong></p>
+
+{% if information %}
+
+  {% for details in information %}
+
+      <h3>{{ details.title }}</h3>
+
+      {{ details.content|safe }}
+
+    {% endfor %}
+
+{% endif %}
+
 <div class="row">
 {% for dataset in list %}
   <div class="col-lg-6">
@@ -71,6 +85,10 @@
 </div>
 
 </section>
+
+{% if photos %}
+PHOTOS
+{% endif %}
 
 {% endblock %}
 

@@ -41,6 +41,7 @@ urlpatterns = [
     path('<slug:city>/datasets/<int:dataset>/graph/<int:id>', views.graph, name='graph'),
     path('<slug:city>/datasets/<int:id>/<slug:slug>', views.dataset, name='dataset_slice'),
     path('<slug:city>/information', views.information_form, name='information_form'),
+    path('<slug:city>/information/topic/<int:topic>', views.information_form, name='information_form_topic'),
     path('<slug:city>/information/<int:id>', views.information_form, name='information_form'),
     path('<slug:city>/photo', views.photo_form, name='photo_form'),
     path('<slug:city>/photo/<int:id>', views.photo_form, name='photo_form'),

@@ -119,16 +119,17 @@ def flow(request, city, type, slug=False):
       page = 'internal'
     else:
       page = 'external'
+    editlink = reverse('multiplicity:admin_datasettype', args=[type.id])
+    addlink = False
+    information = False
+    photos = False
+    if type.topic:
+        addlink = reverse('multiplicity:information_form_topic', args=[info.slug, type.topic.id])
+        information = Information.objects.filter(space=info, topic=type.topic)
+        photos = Photo.objects.filter(primary_space=info, topic=type.topic, deleted__isnull=False)
     context = { 'section': 'cities', 'menu':  'material-flows', 'page': page, 'info': info,
-        'list': list, 'flow': flow, 'slug': slug, 'type': type,
-    }
-    return render(request, 'multiplicity/flow.html', context)
-
-def stock(request, city, type):
-    stock = get_object_or_404(DatasetType, slug=type)
-    info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
-    'list': list, 'types': types, 'flow': flow, 'slug': slug
+        'list': list, 'flow': flow, 'slug': slug, 'type': type, 'editlink': editlink,
+        'addlink': addlink, 'information': information, 'photos': photos,
     }
     return render(request, 'multiplicity/flow.html', context)
 
@@ -1023,7 +1024,7 @@ def materials(request):
     return render(request, 'multiplicity/materials.html', context)
 
 @login_required
-def information_form(request, city, id=False):
+def information_form(request, city, id=False, topic=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     if id:
         information = get_object_or_404(Information, pk=id)
@@ -1038,14 +1039,21 @@ def information_form(request, city, id=False):
         else:
             form = InformationForm(request.POST, request.FILES, instance=information)
         if form.is_valid():
-            information = form.save()
+            if id:
+                information = form.save()
+            else:
+                information = form.save(commit=False)
+                information.space = info
+                information.topic = Topic.objects.get(pk=topic)
+                information.user = request.user
+                information.save()
             saved = True
             messages.success(request, 'Information was saved.')
             return redirect(reverse('multiplicity:admin_datasettypes'))
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type }
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True }
     return render(request, 'multiplicity/form.information.html', context)
 
 @login_required
