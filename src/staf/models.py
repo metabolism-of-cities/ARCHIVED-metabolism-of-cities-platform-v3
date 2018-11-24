@@ -95,7 +95,7 @@ class Dataset(models.Model):
     replication = models.TextField(blank=True, null=True)
     type = models.ForeignKey('multiplicity.DatasetType', on_delete=models.CASCADE, null=True, blank=True)
     graph = models.ForeignKey('multiplicity.GraphType', on_delete=models.CASCADE, null=True, blank=True)
-    topics = models.ManyToManyField(Topic)
+    topics = models.ManyToManyField(Topic, blank=True)
     deleted = models.BooleanField(default=False, db_index=True)
     def __str__(self):
         return self.name

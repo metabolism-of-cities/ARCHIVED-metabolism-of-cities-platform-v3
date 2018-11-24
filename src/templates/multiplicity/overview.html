@@ -6,8 +6,6 @@
 
 {% block content %}
 
-
-
 <section class="city-overview">
 
 <h2><i class="far fa-fw fa-exchange"></i> {{ flow.name }}</h2>
@@ -32,8 +30,14 @@
         </thead>
       {% for item in details.datasettype_set.all %}
         <tr>
-          <td><a href="{% url 'multiplicity:flow' info.slug item.slug item.id %}">{{ item.name }}</a></td>
-          <td><div class="data-available" available="4" total="7"></div></td>
+
+          {% if slug == "material-stocks" %}
+            <td><a href="{% url 'multiplicity:stock' info.slug item.slug %}">{{ item.name }}</a></td>
+          {% else %}
+            <td><a href="{% url 'multiplicity:flow' info.slug flow.slug item.slug %}">{{ item.name }}</a></td>
+          {% endif %}
+
+          <td><div class="data-available" available="{{ item.dataset_set.all.count }}" total="7"></div></td>
           <td class="expand"><i class="fas fa-caret-down"></i></td>
           <td>1 year</td>
           <td>City-wide</td>

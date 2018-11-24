@@ -95,22 +95,37 @@ def overview(request, city, slug):
     if not types:
         types = DatasetTypeStructure.objects.filter(pk=flow.id)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
+
+    if flow.parent and flow.parent.name == "Material Flows":
+      menu = 'material-flows'
+    elif flow.parent and flow.parent.parent and flow.parent.parent.name == "Material Flows":
+      menu = 'material-flows'
+      slug = flow.parent.slug
+    else:
+      menu = 'material-stocks'
+
+    page = slug
+    context = { 'section': 'cities', 'menu':  menu, 'page': slug, 'info': info,
     'list': list, 'types': types, 'flow': flow, 'slug': slug,
     'editlink': reverse('multiplicity:admin_datasettypes')
     }
     return render(request, 'multiplicity/overview.html', context)
 
-def flow(request, city, slug, id):
-    flow = get_object_or_404(DatasetType, pk=id)
+def flow(request, city, slug, type):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
-    'list': list, 'types': types, 'flow': flow, 'slug': slug
+    type = get_object_or_404(DatasetType, slug=type)
+    datasets = Dataset.objects.filter(type=type)
+    if type.category.slug == 'internal': 
+      page = 'internal'
+    else:
+      page = 'external'
+    context = { 'section': 'cities', 'menu':  'material-flows', 'page': page, 'info': info,
+        'list': list, 'flow': flow, 'slug': slug, 'type': type,
     }
     return render(request, 'multiplicity/flow.html', context)
 
-def stock(request, city, id):
-    stock = get_object_or_404(DatasetType, pk=id)
+def stock(request, city, type):
+    stock = get_object_or_404(DatasetType, slug=type)
     info = get_object_or_404(ReferenceSpace, slug=city)
     context = { 'section': 'cities', 'menu':  'overview', 'page': 'overview', 'info': info,
     'list': list, 'types': types, 'flow': flow, 'slug': slug

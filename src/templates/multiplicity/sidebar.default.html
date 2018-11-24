@@ -36,27 +36,27 @@
   </a>
   </li>
 
-  <li{% if menu == "materials" %} class="active-sub"{% endif %}>
+  <li>
       <a href="./">
         <i class="far fa-fw fa-exchange fa-fw"></i>
         <span class="menu-title">Material flows</span> <i class="arrow"></i>
       </a>
 
-      <ul class="collapse {% if flow.parent.slug == "material-flows" and menu == "overview" %}in{% endif %}">
-          <li{% if slug == "external" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_flows' info.slug 'external' %}">External flows</a></li>
-          <li{% if slug == "internal" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_flows' info.slug 'internal' %}""">Internal flows</a></li>
+      <ul class="collapse {% if menu == "material-flows" %}in{% endif %}">
+          <li{% if page == "external" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_flows' info.slug 'external' %}">External flows</a></li>
+          <li{% if page == "internal" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_flows' info.slug 'internal' %}">Internal flows</a></li>
       </ul>
   </li>
 
-  <li{% if menu == "materials" %} class="active-sub"{% endif %}>
+  <li>
       <a href="./">
         <i class="fal fa-building fa-fw"></i>
         <span class="menu-title">Material stocks</span> <i class="arrow"></i>
       </a>
 
-      <ul class="collapse {% if flubber == details and menu == "materials" %}in{% endif %}">
-          <li{% if menu == "materials" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Overview</a></li>
-          <li{% if menu == "materials" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Buildings</a></li>
+      <ul class="collapse {% if menu == "material-stocks" %}in{% endif %}">
+          <li{% if page == "material-stocks" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Overview</a></li>
+          <li{% if page == "aaaa" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Buildings</a></li>
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Roads</a></li>
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Vehicles</a></li>
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Other</a></li>
