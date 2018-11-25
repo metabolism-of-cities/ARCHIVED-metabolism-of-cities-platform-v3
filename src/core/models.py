@@ -280,7 +280,7 @@ class Reference(models.Model):
     status = models.CharField(max_length=8, choices=STATUS, db_index=True)
     authors = models.ManyToManyField(People, blank=True)
     organizations = models.ManyToManyField(Organization, through='ReferenceOrganization')
-    tags = models.ManyToManyField(Tag, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, limit_choices_to={'hidden': False})
 
     def __str__(self):
         return self.title
