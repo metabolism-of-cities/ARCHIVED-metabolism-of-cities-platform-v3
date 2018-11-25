@@ -34,6 +34,7 @@ class Topic(models.Model):
     position = models.PositiveSmallIntegerField()
     description = models.TextField(null=True, blank=True)
     materials = models.ManyToManyField('staf.Material', blank=True)
+    deleted = models.BooleanField(default=False, db_index=True)
     def __str__(self):
         return self.name
     class Meta:
@@ -99,7 +100,7 @@ class DatasetType(models.Model):
     active = models.BooleanField()
 
     def __str__(self):
-        return self.name
+        return '%s (%s)' % (self.name, self.category.name)
 
     class Meta:
         ordering = ["name"]
@@ -214,7 +215,8 @@ class Information(TimestampedModel):
     content = HTMLField('Content')
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
     references = models.ManyToManyField("core.Reference", blank=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
+    dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
         return self.title
@@ -222,7 +224,7 @@ class Information(TimestampedModel):
 class InformationForm(ModelForm):
     class Meta:
         model = Information
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'dataset_types']
 
 class GraphType(models.Model):
     title = models.CharField(max_length=255)

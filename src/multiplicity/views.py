@@ -120,13 +120,10 @@ def flow(request, city, type, slug=False):
     else:
       page = 'external'
     editlink = reverse('multiplicity:admin_datasettype', args=[type.id])
-    addlink = False
-    information = False
+    addlink = reverse('multiplicity:information_form', args=[info.slug])
     photos = False
-    if type.topic:
-        addlink = reverse('multiplicity:information_form_topic', args=[info.slug, type.topic.id])
-        information = Information.objects.filter(space=info, topic=type.topic)
-        photos = Photo.objects.filter(primary_space=info, topic=type.topic, deleted__isnull=False)
+    information = Information.objects.filter(space=info, dataset_types=type)
+     #   photos = Photo.objects.filter(primary_space=info, topic=type.topic, deleted__isnull=False)
     context = { 'section': 'cities', 'menu':  'material-flows', 'page': page, 'info': info,
         'list': list, 'flow': flow, 'slug': slug, 'type': type, 'editlink': editlink,
         'addlink': addlink, 'information': information, 'photos': photos,
@@ -1029,7 +1026,7 @@ def information_form(request, city, id=False, topic=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     if id:
         information = get_object_or_404(Information, pk=id)
-        form = InformationForm(instance=info)
+        form = InformationForm(instance=information)
     else:
         information = False
         form = InformationForm()
@@ -1045,12 +1042,12 @@ def information_form(request, city, id=False, topic=False):
             else:
                 information = form.save(commit=False)
                 information.space = info
-                information.topic = Topic.objects.get(pk=topic)
                 information.user = request.user
                 information.save()
+                information.save_m2m()
             saved = True
             messages.success(request, 'Information was saved.')
-            return redirect(reverse('multiplicity:admin_datasettypes'))
+            return redirect(reverse('multiplicity:information_form', args=[info.slug, information.id]))
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
