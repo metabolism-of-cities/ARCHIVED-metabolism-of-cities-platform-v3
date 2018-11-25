@@ -121,6 +121,7 @@ class ReferenceSpace(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='referencespace')
     location = models.ForeignKey('multiplicity.ReferenceSpaceLocation', on_delete=models.SET_NULL, null=True, blank=True)
     csv = models.ForeignKey('multiplicity.ReferenceSpaceCSV', on_delete=models.CASCADE, null=True, blank=True)
+    tag = models.ForeignKey('core.Tag', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

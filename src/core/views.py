@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm
+from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data
@@ -224,15 +224,27 @@ def reference(request, id):
 def referenceform(request, id=False, dataset=False):
     if id:
         info = get_object_or_404(Reference, pk=id)
-        form = ReferenceForm(instance=info)
+        if request.user.is_staff:
+            form = ReferenceFormAdmin(instance=info)
+        else:
+            form = ReferenceForm(instance=info)
     else:
         info = False
-        form = ReferenceForm()
+        if request.user.is_staff:
+            form = ReferenceFormAdmin()
+        else:
+            form = ReferenceForm()
     if request.method == 'POST':
         if not id:
-            form = ReferenceForm(request.POST)
+            if request.user.is_staff:
+                form = ReferenceFormAdmin(request.POST)
+            else:
+                form = ReferenceForm(request.POST)
         else:
-            form = ReferenceForm(request.POST, instance=info)
+            if request.user.is_staff:
+                form = ReferenceFormAdmin(request.POST, instance=info)
+            else:
+                form = ReferenceForm(request.POST, instance=info)
         if form.is_valid():
             info = form.save()
             create_record = get_object_or_404(UserAction, pk=1)
@@ -712,4 +724,10 @@ def admin_referencetags(request, id):
     parent_tags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     context = { 'navbar': 'backend', 'tags': tags, 'info': info, 'parent_tags': parent_tags, 'select2': True }
     return render(request, 'core/admin/reference.tags.html', context)
+
+@staff_member_required
+def admin_references(request):
+    list = Reference.objects.all()
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'core/admin/references.list.html', context)
 

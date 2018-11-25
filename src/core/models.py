@@ -188,6 +188,8 @@ class Event(models.Model):
     type = models.CharField(max_length=20, choices=EVENT_TYPE)
     location = models.CharField(max_length=255, null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
+    def __str__(self):
+        return self.article.title
 
 class EventForm(ModelForm):
     class Meta:
@@ -248,7 +250,7 @@ class TagForm(ModelForm):
 
 class Reference(models.Model):
     title = models.CharField(max_length=255)
-    title_original_language = models.CharField(max_length=255)
+    title_original_language = models.CharField(max_length=255, blank=True, null=True)
     authorlist = models.TextField()
     type = models.ForeignKey(ReferenceType, on_delete=models.CASCADE)
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
@@ -263,6 +265,7 @@ class Reference(models.Model):
         ('CH', 'Chinese'),
         ('FR', 'French'),
         ('GE', 'German'),
+        ('NL', 'Dutch'),
         ('OT', 'Other'),
     )
     language = models.CharField(max_length=2, choices=LANGUAGES)
@@ -295,6 +298,16 @@ class ReferenceForm(ModelForm):
     class Meta:
         model = Reference
         fields = ['title', 'authorlist', 'type', 'journal', 'year', 'abstract', 'language', 'open_access', 'doi', 'url']
+        labels = {
+            'authorlist': 'Author(s)',
+            'doi': 'DOI',
+            'url': 'URL',
+        }
+
+class ReferenceFormAdmin(ModelForm):
+    class Meta:
+        model = Reference
+        exclude = ['id', 'organizations']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',
