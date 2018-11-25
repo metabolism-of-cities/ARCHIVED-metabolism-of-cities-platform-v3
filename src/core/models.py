@@ -278,7 +278,7 @@ class Reference(models.Model):
         ('deleted', 'Deleted'),
     )
     status = models.CharField(max_length=8, choices=STATUS, db_index=True)
-    authors = models.ManyToManyField(People)
+    authors = models.ManyToManyField(People, blank=True)
     organizations = models.ManyToManyField(Organization, through='ReferenceOrganization')
     tags = models.ManyToManyField(Tag, blank=True)
 
