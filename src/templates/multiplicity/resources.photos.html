@@ -12,13 +12,9 @@
       <div class="panel-body">
         <h3>Photos</h3>
         <p>We have the following photos available for <strong>{{ info.name }}</strong>:</p>
-        <ul>
-          {% for details in photos %}
-            <li>
-              <img src="{{ details.image.thumbnail.url }}" alt="" />
-            </li>
-          {% endfor %}
-        </ul>
+
+          {% include 'multiplicity/includes/photos.html' %}
+
       </div>
     </div>
   </div>

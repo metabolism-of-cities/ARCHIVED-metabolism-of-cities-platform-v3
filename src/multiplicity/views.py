@@ -130,6 +130,7 @@ def flow(request, city, type, slug=False):
     context = { 'section': 'cities', 'menu':  'material-flows', 'page': page, 'info': info,
         'list': list, 'flow': flow, 'slug': slug, 'type': type, 'editlink': editlink,
         'addlink': addlink, 'information': information, 'photos': photos,
+        'gallery': True,
     }
     return render(request, 'multiplicity/flow.html', context)
 
@@ -139,7 +140,7 @@ def photos(request, city):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
 
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'photos', 'info': info, 'photos': photos, 'topics': topics, 'addlink': addlink }
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'photos', 'info': info, 'photos': photos, 'topics': topics, 'addlink': addlink, 'gallery': True }
     return render(request, 'multiplicity/resources.photos.html', context)
 
 def datasets(request, city):

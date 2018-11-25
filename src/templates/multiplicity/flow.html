@@ -87,7 +87,7 @@
 </section>
 
 {% if photos %}
-PHOTOS
+  {% include 'multiplicity/includes/photos.html' %}
 {% endif %}
 
 {% endblock %}
@@ -99,8 +99,7 @@ PHOTOS
 {% endblock %}
 
 {% block sidebar %}
-{% include 'multiplicity/sidebar.default.html' %}
-
+  {% include 'multiplicity/sidebar.default.html' %}
 {% endblock %}
 
 {% block pagehead %}
@@ -123,29 +122,31 @@ PHOTOS
 {% endblock %}
 
 {% block footer %}
-  <script>
-    $(".data-available").each(function() {
-      var available = $(this).attr("available");
-      var total = $(this).attr("total");
-      var unavailable = total - available;
-      var width = 100 / total;
+  <script type="text/javascript">
+    $(function(){
+      $(".data-available").each(function() {
+        var available = $(this).attr("available");
+        var total = $(this).attr("total");
+        var unavailable = total - available;
+        var width = 100 / total;
 
-      for (var i = 1; i <= available; i++) {
-        $(document.createElement('div')).addClass("data-box available").css("width", "calc(" + width + "% - 1px)").appendTo(this);
-      };
+        for (var i = 1; i <= available; i++) {
+          $(document.createElement('div')).addClass("data-box available").css("width", "calc(" + width + "% - 1px)").appendTo(this);
+        };
 
-      for (var i = 1; i <= unavailable; i++) {
-        $(document.createElement('div')).addClass("data-box").css("width", "calc(" + width + "% - 1px)").appendTo(this);
-      };
-    });
-
-    $(".city-overview .table .expand").click(function() {
-      var parentRow = $(this).parent("tr");
-      $(parentRow).children("td").each(function() {
-        $(this).width( $(this).width() );
+        for (var i = 1; i <= unavailable; i++) {
+          $(document.createElement('div')).addClass("data-box").css("width", "calc(" + width + "% - 1px)").appendTo(this);
+        };
       });
-      $("i", this).toggleClass("fa-caret-up");
-      $(this).parent().next("tr.extra-info").toggle();
+
+      $(".city-overview .table .expand").click(function() {
+        var parentRow = $(this).parent("tr");
+        $(parentRow).children("td").each(function() {
+          $(this).width( $(this).width() );
+        });
+        $("i", this).toggleClass("fa-caret-up");
+        $(this).parent().next("tr.extra-info").toggle();
+      });
     });
   </script>
 {% endblock %}

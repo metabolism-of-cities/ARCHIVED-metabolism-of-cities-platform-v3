@@ -1,0 +1,18 @@
+{% load static %}
+
+<div id="gallery">
+  {% for photo in photos %}
+    <figure>
+      <a href="{{ photo.image.large.url }}" data-fancybox="gallery">
+        <img 
+           src="{{ photo.image.thumbnail.url }}"
+        >
+        <figcaption>
+          <p><strong>{{ photo.description|linebreaksbr }}</strong></p>
+          <p>Photo by 
+         {{ photo.author }}</p>
+        </figcaption>
+      </a>
+    </figure>
+  {% endfor %}
+</div>

@@ -3,3 +3,15 @@
 <script src="{% static 'ie/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'ie/js/nifty.js' %}"></script>
 
+{% if gallery %}
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('[data-fancybox]').fancybox({
+      caption : function( instance, item ) {
+        return $(this).find('figcaption').html();
+      }
+    });
+  });
+</script>
+{% endif %}

@@ -272,3 +272,10 @@ table.table-striped .even {
 .city-overview .table .data-available .data-box.available {
   background-color: #8bc34a;
 }
+#gallery img {
+  border:1px solid #ccc;
+  padding:5px;
+  margin:5px;
+  float:left;
+}
+#gallery figcaption{display:none}
