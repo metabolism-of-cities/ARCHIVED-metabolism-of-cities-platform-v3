@@ -1062,7 +1062,7 @@ def information_form(request, city, id=False, topic=False):
                 information.space = info
                 information.user = request.user
                 information.save()
-                information.save_m2m()
+                form.save_m2m()
             saved = True
             messages.success(request, 'Information was saved.')
             return redirect(reverse('multiplicity:information_form', args=[info.slug, information.id]))
