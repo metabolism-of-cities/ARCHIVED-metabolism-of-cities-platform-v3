@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, ReferenceSpaceLocation, ReferenceSpaceFeature, Feature, ReferenceSpaceTypeDescription, DQIRating, DQI, Information, ReferenceSpaceCSV, GraphType, DatasetTypeStructure
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, ReferenceSpaceLocation, ReferenceSpaceFeature, Feature, ReferenceSpaceTypeDescription, DQIRating, DQI, Information, ReferenceSpaceCSV, GraphType, DatasetTypeStructure, Photo
 
 class ReferenceSpaceTypeAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
@@ -21,3 +21,4 @@ admin.site.register(ReferenceSpaceTypeDescription)
 admin.site.register(ReferenceSpaceCSV)
 admin.site.register(GraphType)
 admin.site.register(DatasetTypeStructure)
+admin.site.register(Photo)
