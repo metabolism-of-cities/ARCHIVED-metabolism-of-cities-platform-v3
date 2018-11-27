@@ -100,7 +100,10 @@ class DatasetType(models.Model):
     active = models.BooleanField()
 
     def __str__(self):
-        return '%s (%s)' % (self.name, self.category.name)
+        if self.category:
+            return '%s (%s)' % (self.name, self.category.name)
+        else:
+            return self.name
 
     class Meta:
         ordering = ["name"]
