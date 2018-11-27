@@ -6,38 +6,32 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col-lg-12">
-    <div class="panel">
-      <div class="panel-body">
-        <h3>{{ type.name }} List</h3>
-        <p>Below you can find a list of {% if type.name == "Thesis" %}Theses{% else %}{{ type.name }}s{% endif %} that are related to {{ info.name }}. Is anything missing? 
-        <a href="{% url 'core:newreference' %}">Add missing information here.</a>
-        </p>
-      </div>
-    </div>
-  </div>
+<h2>{% if type.name == "Thesis" %}Theses{% else %}{{ type.name }}s{% endif %}</h2>
+<div class="alert alert-info" role="alert">
+  Do you know of any <span style="text-transform: lowercase;">{% if type.name == "Thesis" %}theses{% else %}{{ type.name }}s{% endif %}</span> related to {{ info.name }} not on this list? <a href="{% url 'core:newreference' %}">Add missing information</a>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>
 
-<div class="row">
-  <div class="col-lg-12">
-    <div class="panel">
-      <div class="panel-body resourcelist">
-    
-        {% for details in list %}
-          <h3><a href="{% url 'core:reference' details.id %}">{{ details.title }}</a></h3>
-          <p>{{ details.year }}</p>
-          <p>{{ details.journal.name }}</p>
-          <p>
+<div class="resourcelist">
+  {% for details in list %}
+    <div class="single-resource" href="{% url 'core:reference' details.id %}">
+      <div class="row">
+        <div class="col-lg-9">
+          <h3 class="title">{{ details.title }}</h3>
           {% for author in details.authors.all %}
-            {{ author.lastname }}<span class="comma">,</span>
+          <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == details.authors.all|length %},{% endif %}
           {% endfor %}
-          </p>
-        {% endfor %}
-
+        </div>
+        <div class="col-lg-3">
+          {% if details.journal.name %}<div class="journal-name">{{ details.journal.name }}</div>{% endif %}
+          {% if details.type %}<div class="type">{{ details.type }}</div>{% endif %}
+          {% if details.year %}<div class="year">{{ details.year }}</div>{% endif %}
+        </div>
       </div>
     </div>
-  </div>
+  {% endfor %}
 </div>
 
 {% endblock %}
@@ -56,7 +50,7 @@ h3 a{font-size:16px}
 
 {% block pagehead %}
 <div id="page-head">
-    
+
     <div id="page-title">
         <h1 class="page-header text-overflow">{{ info.name }}</h1>
     </div>
@@ -72,5 +66,15 @@ h3 a{font-size:16px}
 {% endblock %}
 
 {% block footer %}
+
+<script>
+  $(".single-resource").click(function() {
+      window.location.href = $(this).attr("href");
+  });
+
+  $(".single-resource a").click(function (event) {
+      event.stopPropagation();
+  });
+</script>
 
 {% endblock %}

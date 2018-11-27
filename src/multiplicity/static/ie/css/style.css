@@ -279,3 +279,39 @@ table.table-striped .even {
   float:left;
 }
 #gallery figcaption{display:none}
+
+.resourcelist .single-resource {
+  background-color: #f5f5f5;
+  padding: 15px;
+  margin-bottom: 3px;
+}
+
+.resourcelist .single-resource:hover {
+  background-color: #ecf0f5;
+  cursor: pointer;
+}
+
+.resourcelist .single-resource:first-of-type {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.resourcelist .single-resource:last-of-type {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.resourcelist .single-resource .title {
+  margin: 0 0 10px 0;
+  font-family: unset;
+  font-size: 18px;
+}
+
+.resourcelist .single-resource .journal-name, .resourcelist .single-resource .type {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 3px;
+}
+
+.resourcelist .single-resource .journal-name {
+  padding-bottom: 3px;
+}
