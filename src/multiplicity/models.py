@@ -151,7 +151,7 @@ class ReferenceSpaceLocation(models.Model):
     source = models.CharField(max_length=255, null=True, blank=True)
     geojson = models.TextField(null=True, blank=True)
     def __str__(self):
-        return self.name
+        return self.name or 'Location for ' + self.space.name
     class Meta:
         ordering = ["name"]
 

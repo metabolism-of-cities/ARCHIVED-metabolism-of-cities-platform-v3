@@ -76,9 +76,10 @@ def space(request, city, topic, type, space):
         features[details.feature.name] = details.value
     topic = type.topic
     tab = type.slug
+    editlink = '/admin/multiplicity/referencespace/'+str(info.id)+'/change/'
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu': 'infrastructure', 'page': type.topic.slug, 'info': info, 'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 'feature_list': feature_list,
+    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 'feature_list': feature_list, 'editlink': editlink,
     }
     return render(request, 'multiplicity/space.html', context)
 
