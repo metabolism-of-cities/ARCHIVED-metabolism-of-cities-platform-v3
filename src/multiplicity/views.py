@@ -125,9 +125,8 @@ def flow(request, city, type, slug=False):
       page = 'external'
     editlink = reverse('multiplicity:admin_datasettype', args=[type.id])
     addlink = reverse('multiplicity:information_form', args=[info.slug])
-    photos = False
     information = Information.objects.filter(space=info, dataset_types=type)
-     #   photos = Photo.objects.filter(primary_space=info, topic=type.topic, deleted__isnull=False)
+    photos = Photo.objects.filter(primary_space=info, topic=type.topic, deleted__isnull=False)
     context = { 'section': 'cities', 'menu':  'material-flows', 'page': page, 'info': info,
         'list': list, 'flow': flow, 'slug': slug, 'type': type, 'editlink': editlink,
         'addlink': addlink, 'information': information, 'photos': photos,
