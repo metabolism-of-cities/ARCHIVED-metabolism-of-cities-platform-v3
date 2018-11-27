@@ -46,7 +46,7 @@
               <h4 class="text-lg text-overflow mar-no">{{ space.name }}</h4>
               <p class="text-sm text-muted">{{ space.type.name }}</p>
 
-              {% if data_out %}
+              {% if data_out or data_out %}
                 <a href="" class="btn btn-block btn-success btn-lg">Download Data</a>
               {% endif %}
           </div>
@@ -101,7 +101,33 @@
               {% for details in data_out %}
                 <tr>
                   <td data-sort="{{ details.timeframe.start|date:"Y-m-d" }}">{{ details.timeframe.name }}</td>
-                  <td>{{ details.quantity }} {{ details.unit.symbol }}</td>
+                  <td>{{ details.quantity|intcomma }} {{ details.unit.symbol }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {% elif data_in %}
+
+          {% if data_in.count > 1 %}
+            <h3>Graph</h3>
+            <canvas id="data_in" width="400" height="200"></canvas>
+          {% endif %}
+
+          <h3>Data</h3>
+
+          <table class="table table-striped datatable">
+            <thead>
+              <tr>
+                <th>Time period</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for details in data_in %}
+                <tr>
+                  <td data-sort="{{ details.timeframe.start|date:"Y-m-d" }}">{{ details.timeframe.name }}</td>
+                  <td>{{ details.quantity|intcomma }} {{ details.unit.symbol }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -199,6 +225,32 @@ dl.featureslist dd{margin-bottom:20px}
             datasets: [{
                 label: 'ML/month',
                 data: [{% for details in data_out %}{{ details.quantity }},{% endfor %}],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+    </script>
+  {% endif %}
+  {% if data_in %}
+    <script>
+
+    var ctx = document.getElementById("data_in");
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for details in data_in %}"{{ details.timeframe.name }}", {% endfor %}],
+            datasets: [{
+                label: 'ML/month',
+                data: [{% for details in data_in %}{{ details.quantity }},{% endfor %}],
                 borderWidth: 1
             }]
         },
