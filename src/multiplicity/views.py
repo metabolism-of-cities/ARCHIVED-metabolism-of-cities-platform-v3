@@ -176,8 +176,9 @@ def dataset(request, city, id, slug=False):
     editlink = '/admin/staf/dataset/' + str(id) + '/change/'
     topic = None
     unit = get_object_or_404(Unit, pk=1)
-    graphs = GraphType.objects.all()
+    graphs = GraphType.objects.exclude(pk__in=[7,8,10])
     materials = Data.objects.filter(dataset=dataset).values('material_name').order_by('material_name').distinct()
+    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset).distinct('timeframe__start').order_by('timeframe__start').count()
     all_materials = materials.count()
     materials_hidden = False
     if all_materials > 5:
@@ -188,7 +189,7 @@ def dataset(request, city, id, slug=False):
     #for datapoint in dataset.data_set.all():
     #datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
     deletelink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/delete'
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'topics': topics, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden}
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'topics': topics, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden, 'timeframes': timeframes, }
     return render(request, 'multiplicity/dataset.html', context)
 
 def datatable(request, dataset=False, material=False):

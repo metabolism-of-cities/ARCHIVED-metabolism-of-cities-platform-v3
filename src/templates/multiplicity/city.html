@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-3 noclick">
 
           <div class="panel panel-success panel-colorful">
               <div class="pad-all media">
@@ -81,7 +81,7 @@
 
         </div>
         
-        <div class="col-lg-3">
+        <div class="col-lg-3 noclick">
 
           <div class="panel panel-warning panel-colorful">
               <div class="pad-all media">
@@ -297,6 +297,7 @@
 .city-header { min-height:330px;previous:298px;}
 .morris-legend-items{padding-top:20px}
 #page-content .icon-fw{margin-right:-5px;position:relative;top:10px}
+.noclick a:hover{cursor:text;text-decoration:none}
 </style>
 {% endblock %}
 
@@ -323,6 +324,10 @@
 <script type="text/javascript" src="{% static 'ie/js/raphael.js' %}"></script>
 <script type="text/javascript">
 $(function(){
+  $(".noclick a").click(function(e){
+    e.preventDefault();
+  });
+
         var chart = Morris.Area({
         element: 'largegraph',
         data: [{

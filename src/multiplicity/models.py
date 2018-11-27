@@ -235,6 +235,19 @@ class GraphType(models.Model):
     slug = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True, blank=True)
     notes = HTMLField('Content', null=True, blank=True)
+    TIMEFRAMES = (
+        ('single', 'Single timeframe'),
+        ('multiple', 'Multiple timeframes'),
+        ('both', 'Does not matter'),
+    )
+    timeframes = models.CharField(max_length=25, choices=TIMEFRAMES, default='both')
+    MATERIALS = (
+        ('single', 'Single material'),
+        ('multiple', 'Multiple materials'),
+        ('both', 'Does not matter'),
+    )
+    materials = models.CharField(max_length=25, choices=MATERIALS, default='both')
+
     def __str__(self):
         return self.title
 

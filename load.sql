@@ -10,3 +10,4 @@ ALTER "id" SET NOT NULL;
 
 SELECT setval('core_tag_id_seq', (SELECT MAX(id) FROM core_tag)+1);
 
+delete from multiplicity_graphtype where id = 1;
