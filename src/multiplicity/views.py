@@ -6,7 +6,7 @@ from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feat
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
-from core.models import UserAction, UserLog, ReferenceForm, Reference
+from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType
 from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset
 from django.db.models import Count
 from django.contrib import messages
@@ -139,6 +139,22 @@ def photos(request, city):
 
     context = { 'section': 'cities', 'menu':  'resources', 'page': 'photos', 'info': info, 'photos': photos, 'topics': topics, 'addlink': addlink, 'gallery': True }
     return render(request, 'multiplicity/resources.photos.html', context)
+
+def resources(request, city, slug):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    if slug == "reports":
+        type = 27
+    elif slug == "journal-articles":
+        type = 16
+    elif slug == "theses":
+        type = 29
+    type = get_object_or_404(ReferenceType, pk=type)
+    list = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
+    addlink = reverse('multiplicity:photo_form', args=[info.slug])
+
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 'list': list, 'topics': topics, 'addlink': addlink, 'type': type, 'slug': slug}
+    return render(request, 'multiplicity/resources.list.html', context)
 
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -956,6 +972,7 @@ def detail(request, slug):
     types = ReferenceSpaceType.objects.filter(topic__id=2).annotate(total=Count('referencespace'))
     spaces = ReferenceSpace.objects.filter(city=info, type__topic__id=2)
     # TODO Surely we can do better than this? A single db query should be possible.
+    editlink = reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id])
     count = {}
     for details in spaces:
         if details.type.id in count:
@@ -971,6 +988,7 @@ def detail(request, slug):
         'types': types, 
         'count': count,
         'topic': topic,
+        'editlink': editlink,
     }
     return render(request, 'multiplicity/city.html', context)
 
