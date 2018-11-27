@@ -192,8 +192,10 @@
       <div class="btn-group btn-group-lg graphlinks">
         {% for details in graphs %}
           {% with "multiplicity/img/graphs/"|add:details.slug|add:".svg" as picture %}
-            {% if timeframes > 1 and details.timeframes == "single" or details.timeframes == "both" or timeframes == 1 and details.tiemframes == "multiple" %}
-              <a class="btn btn-default" href="{% url 'multiplicity:graph' info.slug dataset.id details.id %}" title="{{ details.title }}"><img src="{% static picture %}"></a>
+            {% if timeframes > 1 and details.timeframes == "multiple" or details.timeframes == "both" or timeframes == 1 and details.timeframes == "single" %}
+              {% if materials.count > 1 and details.materials == "multiple" or details.materials == "both" or materials.count == 1 and details.materials == "single" %}
+                <a class="btn btn-default" href="{% url 'multiplicity:graph' info.slug dataset.id details.id %}" title="{{ details.title }}"><img src="{% static picture %}"></a>
+              {% endif %}
             {% endif %}
           {% endwith %}
         {% endfor %}
