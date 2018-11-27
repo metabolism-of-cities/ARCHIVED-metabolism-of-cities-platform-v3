@@ -18,6 +18,7 @@ class ProcessType(models.Model):
 
 class Process(models.Model):
     name = models.CharField(max_length=255, db_index=True)
+    code = models.CharField(max_length=255, null=True, blank=True, db_index=True)
     description = models.TextField(null=True, blank=True)
     type = models.ForeignKey(ProcessType, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
