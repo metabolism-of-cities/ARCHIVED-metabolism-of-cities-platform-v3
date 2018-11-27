@@ -20,9 +20,13 @@
       <div class="row">
         <div class="col-lg-9">
           <h3 class="title">{{ details.title }}</h3>
-          {% for author in details.authors.all %}
-          <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == details.authors.all|length %},{% endif %}
-          {% endfor %}
+          {% if details.authors.all %}
+            {% for author in details.authors.all %}
+              <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == details.authors.all|length %},{% endif %}
+            {% endfor %}
+          {% else %}
+            {{ details.authorlist }}
+          {% endif %}
         </div>
         <div class="col-lg-3">
           {% if details.journal.name %}<div class="journal-name">{{ details.journal.name }}</div>{% endif %}

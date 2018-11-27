@@ -31,6 +31,9 @@ from django.db.models import Min
 # To create json objects
 import json
 
+# To search annotate
+from django.db.models import Q
+
 def index(request):
     list = ReferenceSpace.objects.filter(type__id=3)
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
@@ -266,7 +269,7 @@ def topicmap(request, city, theme, topic):
     info = get_object_or_404(ReferenceSpace, slug=city)
     topic = get_object_or_404(Topic, slug=topic)
     spaces = ReferenceSpace.objects.filter(city=info, type__topic=topic)
-    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace'))
+    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace', filter=Q(city=info)))
     # TODO Surely we can do better than this? A single db query should be possible.
     count = {}
     for details in spaces:
@@ -970,16 +973,12 @@ def detail(request, slug):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     topic = Topic.objects.get(pk=2)
     info = get_object_or_404(ReferenceSpace, slug=slug)
-    types = ReferenceSpaceType.objects.filter(topic__id=2).annotate(total=Count('referencespace'))
-    spaces = ReferenceSpace.objects.filter(city=info, type__topic__id=2)
-    # TODO Surely we can do better than this? A single db query should be possible.
+    types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1)
+    references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]
+    datasets_stocks = Dataset.objects.filter(primary_space=info, type__type='stocks').order_by('-id')[:5]
+    datasets_flows = Dataset.objects.filter(primary_space=info, type__type='flows').order_by('-id')[:5]
+
     editlink = reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id])
-    count = {}
-    for details in spaces:
-        if details.type.id in count:
-            count[details.type.id] += 1
-        else:
-            count[details.type.id] = 1
 
     context = {
         'section': 'cities', 
@@ -987,9 +986,11 @@ def detail(request, slug):
         'menu' : 'dashboard',
         'topics': topics,
         'types': types, 
-        'count': count,
         'topic': topic,
         'editlink': editlink,
+        'references': references,
+        'datasets_flows': datasets_flows,
+        'datasets_stocks': datasets_stocks,
     }
     return render(request, 'multiplicity/city.html', context)
 

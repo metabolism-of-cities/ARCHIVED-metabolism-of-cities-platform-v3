@@ -316,3 +316,7 @@ table.table-striped .even {
 .resourcelist .single-resource .journal-name {
   padding-bottom: 3px;
 }
+
+.resourcelist .single-resource .year {
+  opacity:0.6;
+}
