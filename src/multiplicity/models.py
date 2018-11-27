@@ -262,7 +262,7 @@ class Photo(TimestampedModel):
     deleted = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
-        return self.name
+        return self.author or 'No name'
 
 class PhotoForm(ModelForm):
     class Meta:
