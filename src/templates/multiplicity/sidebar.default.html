@@ -56,10 +56,6 @@
 
       <ul class="collapse {% if menu == "material-stocks" %}in{% endif %}">
           <li{% if page == "material-stocks" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Overview</a></li>
-          <li{% if page == "aaaa" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Buildings</a></li>
-          <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Roads</a></li>
-          <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Vehicles</a></li>
-          <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Other</a></li>
       </ul>
   </li>
 
@@ -77,7 +73,7 @@
       </ul>
   </li>
 
-  <li{% if menu == "materials" %} class="active-sub"{% endif %}>
+  <li class="hide" {% if menu == "socioeconomic" %} class="active-sub"{% endif %}>
       <a href="./">
         <i class="fal fa-user-friends fa-fw"></i>
         <span class="menu-title">Socio-economic</span> <i class="arrow"></i>
@@ -89,7 +85,7 @@
       </ul>
   </li>
 
-  <li{% if menu == "materials" %} class="active-sub"{% endif %}>
+  <li class="hide" {% if menu == "environment" %} class="active-sub"{% endif %}>
       <a href="./">
         <i class="fal fa-tree-alt fa-fw"></i>
         <span class="menu-title">Environment</span> <i class="arrow"></i>
@@ -143,7 +139,6 @@
           <li {% if menu == "resources" and type.id == 16 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'journal-articles' %}">Journal articles</a></li>
           <li {% if menu == "resources" and type.id == 27 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'reports' %}">Reports</a></li>
           <li {% if menu == "resources" and type.id == 29 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'theses' %}">Theses</a></li>
-          <li {% if page == "videos" %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'videos' %}">Videos</a></li>
           <li {% if page == "photos" %} class="active" {% endif %}><a href="{% url 'multiplicity:photos' info.slug %}">Photos</a></li>
       </ul>
   </li>
