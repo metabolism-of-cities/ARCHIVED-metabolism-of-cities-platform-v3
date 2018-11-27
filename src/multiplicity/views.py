@@ -263,6 +263,8 @@ def graph(request, city, dataset, id):
     'subgroups': subgroups,
     'data': datapoints,
     'spaces': spaces,
+    'info': info,
+    'dataset': dataset,
     }
     return render(request, 'multiplicity/graphs/' + graph.slug + '.html', context)
 

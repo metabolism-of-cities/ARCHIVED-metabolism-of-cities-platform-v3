@@ -140,10 +140,10 @@
 		    type: 'column',
 		  },
 		  title: {
-		    text: 'Title'
+		    text: '{{ dataset.name }}'
 		  },
 		  subtitle: {
-		    text: 'Subtitle'
+		    text: '{{ info.name }}'
 		  },
 		  xAxis: {
 	      categories: columnCategories
@@ -151,7 +151,7 @@
 		  yAxis: {
 	      min: 0,
 	      title: {
-          text: 'Y axis label'
+          text: 'Quantity'
 	      }
 		  },
 		  legend: {
@@ -173,10 +173,10 @@
 	      type: 'column',
 	    },
 	    title: {
-	      text: 'Title'
+	      text: '{{ dataset.name }}'
 	    },
 	    subtitle: {
-	      text: 'Subtitle'
+	      text: '{{ info.name }}'
 	    },
 	    xAxis: {
 	      type: 'category'
