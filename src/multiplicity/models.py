@@ -218,6 +218,7 @@ class Information(TimestampedModel):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
     dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE, null=True, blank=True)
+    processes = models.ManyToManyField("staf.Process", blank=True, limit_choices_to={'is_separator': False})
     def __str__(self):
         return self.title
 

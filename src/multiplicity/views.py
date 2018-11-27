@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
 from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType
-from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset
+from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset, Process
 from django.db.models import Count
 from django.contrib import messages
 
@@ -1042,6 +1042,7 @@ def materials(request):
 @login_required
 def information_form(request, city, id=False, topic=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
+    processes = Process.objects.filter(parent=398480).order_by('id')
     if id:
         information = get_object_or_404(Information, pk=id)
         form = InformationForm(instance=information)
@@ -1063,13 +1064,20 @@ def information_form(request, city, id=False, topic=False):
                 information.user = request.user
                 information.save()
                 form.save_m2m()
+
+            information.processes.clear()
+
+            selected = request.POST.getlist('processes')
+            for process in selected:
+                information.processes.add(Process.objects.get(pk=process))
+
             saved = True
             messages.success(request, 'Information was saved.')
             return redirect(reverse('multiplicity:information_form', args=[info.slug, information.id]))
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True }
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information }
     return render(request, 'multiplicity/form.information.html', context)
 
 @login_required
