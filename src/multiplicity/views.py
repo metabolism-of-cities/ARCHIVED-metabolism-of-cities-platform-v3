@@ -975,7 +975,7 @@ def detail(request, slug):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     topic = Topic.objects.get(pk=2)
     info = get_object_or_404(ReferenceSpace, slug=slug)
-    types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1)
+    types = ReferenceSpaceType.objects.exclude(pk=8).annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1)
     references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]
     datasets_stocks = Dataset.objects.filter(primary_space=info, type__type='stocks').order_by('-id')[:5]
     datasets_flows = Dataset.objects.filter(primary_space=info, type__type='flows').order_by('-id')[:5]
