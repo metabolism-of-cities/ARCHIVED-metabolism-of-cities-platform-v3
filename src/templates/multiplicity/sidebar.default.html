@@ -68,8 +68,11 @@
 
       <ul class="collapse {% if menu == "infrastructure" %}in{% endif %}">
         {% for details in topics %}
-          <li{% if menu == "infrastructure" and topic == details %} class="active"{% endif %}><a href="{% url 'multiplicity:infrastructure_list' info.slug details.slug %}">{{ details.name }}</a></li>
-        {% endfor %}
+          {% if False %}<li{% if menu == "infrastructure" and topic == details %} class="active"{% endif %}><a href="{% url 'multiplicity:infrastructure_list' info.slug details.slug %}">{{ details.name }}</a></li>{% endif %}
+          {% endfor %}
+                <li><a href="{% url 'multiplicity:space_list' info.slug 'water' 'wastewater-treatment-plants' %}">Water</a></li>
+                <li><a href="{% url 'multiplicity:space_list' info.slug 'energy' 'energy-storage' %}">Energy</a></li>
+                <li><a href="{% url 'multiplicity:space_list' info.slug 'agriculture' 'farms' %}">Agriculture</a></li>
       </ul>
   </li>
 
