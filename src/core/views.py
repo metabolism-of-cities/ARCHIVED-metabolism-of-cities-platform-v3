@@ -38,7 +38,7 @@ def search(request):
     return render(request, 'core/search.html', context)
 
 def home(request):
-    context = { 'section': 'resources', 'page': ''  }
+    context = { 'section': 'home', 'page': ''  }
     return render(request, 'core/home.html', context)
 
 def index(request):
