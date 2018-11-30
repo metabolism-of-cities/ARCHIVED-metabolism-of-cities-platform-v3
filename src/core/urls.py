@@ -8,7 +8,7 @@ app_name = 'core'
 
 urlpatterns = [
     path('', views.index, name='homepage'),
-    path('home', views.index, name='home'),
+    path('home', views.home, name='home'),
     path('search', views.search, name='search'),
     path('more', views.empty, name='more'),
     path('resources/videos', views.videos, name='videos'),

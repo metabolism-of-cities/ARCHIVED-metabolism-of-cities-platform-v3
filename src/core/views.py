@@ -37,6 +37,10 @@ def search(request):
     context = { 'section': 'resources', 'page': ''  }
     return render(request, 'core/search.html', context)
 
+def home(request):
+    context = { 'section': 'resources', 'page': ''  }
+    return render(request, 'core/home.html', context)
+
 def index(request):
     publications = False
     events = False
