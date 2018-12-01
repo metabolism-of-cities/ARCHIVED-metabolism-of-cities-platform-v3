@@ -268,3 +268,13 @@ class PhotoForm(ModelForm):
     class Meta:
         model = Photo
         exclude = ['id', 'uploaded_by', 'primary_space', 'deleted']
+
+class ProcessGroup(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.CharField(max_length=255, null=True, blank=True)
+    slug = models.SlugField(db_index=True, max_length=255, unique=True)
+    description = models.TextField(null=True, blank=True)
+    processes = models.ManyToManyField('staf.Process', blank=True)
+
+    def __str__(self):
+        return self.name

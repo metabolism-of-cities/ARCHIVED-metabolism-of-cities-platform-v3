@@ -24,7 +24,10 @@ class Process(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     is_separator = models.BooleanField()
     def __str__(self):
-        return self.name
+        if self.code:
+            return self.code + " - " + self.name
+        else:
+            return self.name
 
 class ProcessForm(ModelForm):
     class Meta:
