@@ -29,6 +29,9 @@ class Process(models.Model):
         else:
             return self.name
 
+    class Meta:
+        ordering = ["id"]
+
 class ProcessForm(ModelForm):
     class Meta:
         model = Process
