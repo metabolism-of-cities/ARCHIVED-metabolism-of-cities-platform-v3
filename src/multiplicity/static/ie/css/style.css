@@ -347,7 +347,7 @@ article.home .panel-heading i {
   line-height: 1.7em;
 }
 
-article.home section.what-is .panel hr, article.home section.feeds hr {
+article.home section.do-what .panel hr, article.home section.feeds hr {
   margin-top: -10px;
   margin-bottom: 15px;
 }
@@ -384,4 +384,26 @@ article.home section.feeds .single-feed {
 
 article.home section.feeds .single-feed:last-of-type {
   margin-bottom: 0;
+}
+
+article.home section.what-is img {
+  max-width: 100%;
+}
+
+article.home section.what-is .images {
+  margin-top: 30px;
+}
+
+@media screen and (min-width: 1200px) {
+  .flex {
+    display: flex;
+  }
+
+  .height-100 {
+    height: 100%;
+  }
+
+  .panel.height-100 {
+    height: calc(100% - 20px);
+  }
 }
