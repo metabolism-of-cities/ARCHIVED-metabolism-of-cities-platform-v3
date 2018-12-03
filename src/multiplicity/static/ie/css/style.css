@@ -327,6 +327,7 @@ article.home section {
 
 article.home section:first-of-type {
   padding-top: 0;
+  padding-bottom: 0;
 }
 
 article.home section:last-of-type {
@@ -345,6 +346,18 @@ article.home h3.panel-title {
 article.home .panel-heading i {
   font-size: 1.5em;
   line-height: 1.7em;
+}
+
+article.home section {
+  padding: 30px 0;
+}
+
+article.home section.what-is img {
+  width: 100%;
+}
+
+article.home section.what-is .images {
+  margin-top: 30px;
 }
 
 article.home section.do-what .panel hr, article.home section.feeds hr {
@@ -384,14 +397,6 @@ article.home section.feeds .single-feed {
 
 article.home section.feeds .single-feed:last-of-type {
   margin-bottom: 0;
-}
-
-article.home section.what-is img {
-  max-width: 100%;
-}
-
-article.home section.what-is .images {
-  margin-top: 30px;
 }
 
 @media screen and (min-width: 1200px) {
