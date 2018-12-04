@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
@@ -93,6 +93,7 @@ def map(request, city, type='boundaries'):
     return render(request, 'multiplicity/space.map.html', context)
 
 def overview(request, city, slug):
+    groups = ProcessGroup.objects.order_by('name')
     flow = get_object_or_404(DatasetTypeStructure, slug=slug)
     list = DatasetType.objects.filter(category__parent=flow)
     types = DatasetTypeStructure.objects.filter(parent=flow)
@@ -111,7 +112,8 @@ def overview(request, city, slug):
     page = slug
     context = { 'section': 'cities', 'menu':  menu, 'page': slug, 'info': info,
     'list': list, 'types': types, 'flow': flow, 'slug': slug,
-    'editlink': reverse('multiplicity:admin_datasettypes')
+    'editlink': reverse('multiplicity:admin_datasettypes'),
+    'groups': groups
     }
     return render(request, 'multiplicity/overview.html', context)
 
