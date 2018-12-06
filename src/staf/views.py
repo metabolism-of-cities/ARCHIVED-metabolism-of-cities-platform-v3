@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Material, Process, Unit, Dataset, DatasetForm, CSV, MaterialForm, ProcessForm, Data
 from core.models import Reference
-from multiplicity.models import ReferenceSpace, DatasetType
+from multiplicity.models import ReferenceSpace, DatasetType, ProcessGroup
 from django.contrib.auth.decorators import login_required
 
 # For file uploads
@@ -26,12 +26,16 @@ def search(request):
     return render(request, 'staf/search.html', context)
 
 @login_required
-def catalogs(request):
-    materials = Material.objects.filter(parent__isnull=True)
-    processes = Process.objects.filter(parent__isnull=True)
-    datasets = Dataset.objects.all()
-    context = { 'section': 'tools', 'menu': 'staf', 'materials': materials, 'processes': processes, 'datasets': datasets }
-    return render(request, 'staf/index.html', context)
+def processgroups(request):
+    list = ProcessGroup.objects.order_by('name')
+    context = { 'list': list, 'datatables': True }
+    return render(request, 'staf/processgroup.list.html', context)
+
+@login_required
+def processgroup(request, id):
+    info = ProcessGroup.objects.get(pk=id)
+    context = { 'info': info }
+    return render(request, 'staf/processgroup.html', context)
 
 @login_required
 def materiallist(request, id=False):
@@ -196,7 +200,7 @@ def processtree(request):
 def units(request):
     list = Unit.objects.all()
     context = { 'section': 'tools', 'menu': 'staf', 'list': list}
-    return render(request, 'staf/unit.browser.html', context)
+    return render(request, 'staf/unit.list.html', context)
 
 @login_required
 def unit(request, id):

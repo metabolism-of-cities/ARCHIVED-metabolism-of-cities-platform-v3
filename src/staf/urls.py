@@ -6,7 +6,8 @@ app_name = 'staf'
 urlpatterns = [
     path('', views.index, name='index'),
     path('search', views.search, name='search'),
-    path('catalogs', views.catalogs, name='catalogs'),
+    path('processgroups', views.processgroups, name='processgroups'),
+    path('processgroups/<int:id>', views.processgroup, name='processgroup'),
 
     path('materials', views.materiallist, name='materials'),
     path('materials/<int:id>', views.materiallist, name='materiallist'),
