@@ -320,3 +320,95 @@ table.table-striped .even {
 .resourcelist .single-resource .year {
   opacity:0.6;
 }
+
+article.home section {
+  padding: 30px 0;
+}
+
+article.home section:first-of-type {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+article.home section:last-of-type {
+  padding-bottom: 0;
+}
+
+article.home .panel-heading {
+  padding-top: 10px;
+  height: unset;
+}
+
+article.home h3.panel-title {
+  font-size: 1.5em;
+}
+
+article.home .panel-heading i {
+  font-size: 1.5em;
+  line-height: 1.7em;
+}
+
+article.home section {
+  padding: 30px 0;
+}
+
+article.home section.what-is img {
+  width: 100%;
+}
+
+article.home section.what-is .images {
+  margin-top: 30px;
+}
+
+article.home section.do-what .panel hr, article.home section.feeds hr {
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+
+article.home ol {
+  padding-left: 30px;
+}
+
+article.home li {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+article.home section.for-whom hr {
+  margin: 10px 0;
+}
+
+article.home section.for-whom h3 {
+  text-align: center;
+}
+
+article.home section.feeds .list-group-item {
+  background-color: #fff;
+  border: none;
+}
+
+article.home section.feeds .single-feed {
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.07);
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 10px;
+}
+
+article.home section.feeds .single-feed:last-of-type {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 1200px) {
+  .flex {
+    display: flex;
+  }
+
+  .height-100 {
+    height: 100%;
+  }
+
+  .panel.height-100 {
+    height: calc(100% - 20px);
+  }
+}
