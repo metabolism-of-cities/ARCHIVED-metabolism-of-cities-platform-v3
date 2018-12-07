@@ -47,6 +47,7 @@ urlpatterns = [
     path('<slug:city>/information/<int:id>', views.information_form, name='information_form'),
     path('<slug:city>/photo', views.photo_form, name='photo_form'),
     path('<slug:city>/photo/<int:id>', views.photo_form, name='photo_form'),
+    path('<slug:city>/sectors/<slug:sector>', views.sector, name='sector'),
 
     # Uploading data
     path('<slug:city>/upload', views.upload, name='upload'),

@@ -36,6 +36,21 @@
   </a>
   </li>
 
+  <li{% if menu == "infrastructure" %} class="active-sub"{% endif %}>
+      <a href="#">
+          <i class="fal fa-industry fa-fw"></i>
+          <span class="menu-title">Sectors</span>
+          <i class="arrow"></i>
+      </a>
+
+      <ul class="collapse {% if menu == "sectors" %}in{% endif %}">
+        {% for details in PROCESSGROUPS %}
+            <li{% if menu == "sectors" and sector == details %} class="active"{% endif %}><a href="{% url 'multiplicity:sector' info.slug details.slug %}">{{ details.name }}</a></li>
+        {% endfor %}
+      </ul>
+  </li>
+
+
   <li>
       <a href="./">
         <i class="far fa-fw fa-exchange fa-fw"></i>
@@ -73,30 +88,6 @@
 
       <ul class="collapse {% if menu == "material-stocks" %}in{% endif %}">
           <li{% if page == "material-stocks" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Overview</a></li>
-      </ul>
-  </li>
-
-  <li{% if menu == "infrastructure" %} class="active-sub"{% endif %}>
-      <a href="#">
-          <i class="fal fa-industry fa-fw"></i>
-          <span class="menu-title">Infrastructure</span>
-          <i class="arrow"></i>
-      </a>
-
-      <ul class="collapse {% if menu == "infrastructure" %}in{% endif %}">
-        <li{% if menu == "infrastructure" and topic == details %} class="active"{% endif %}><a href="{% url 'multiplicity:infrastructure_list' info.slug 'agriculture' %}">Agriculture</a></li>
-        <li><a href="XXXX">Communication</a></li>
-        <li><a href="XXXX">Construction</a></li>
-        <li><a href="XXXX">Energy</a></li>
-        <li{% if menu == "infrastructure" and topic == "forestry" %} class="active"{% endif %}><a href="{% url 'multiplicity:infrastructure_list' info.slug 'forestry' %}">Forestry</a></li>
-        <li{% if menu == "infrastructure" and topic == "fishing" %} class="active"{% endif %}><a href="{% url 'multiplicity:infrastructure_list' info.slug 'fishing' %}">Fishing</a></li>
-        <li><a href="XXXX">Manufacturing</a></li>
-        <li><a href="XXXX">Mining</a></li>
-        <li><a href="XXXX">Retail and wholesale</a></li>
-        <li><a href="XXXX">Tourism</a></li>
-        <li><a href="XXXX">Transport</a></li>
-        <li><a href="XXXX">Waste</a></li>
-        <li><a href="XXXX">Water</a></li>
       </ul>
   </li>
 

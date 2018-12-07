@@ -212,6 +212,16 @@ class DQIRating(models.Model):
     class Meta:
         ordering = ["score"]
 
+class ProcessGroup(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.CharField(max_length=255, null=True, blank=True)
+    slug = models.SlugField(db_index=True, max_length=255, unique=True)
+    description = models.TextField(null=True, blank=True)
+    processes = models.ManyToManyField('staf.Process', blank=True)
+
+    def __str__(self):
+        return self.name
+
 class Information(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
@@ -222,13 +232,14 @@ class Information(TimestampedModel):
     dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE, null=True, blank=True)
     processes = models.ManyToManyField("staf.Process", blank=True, limit_choices_to={'is_separator': False})
+    processgroup = models.ManyToManyField(ProcessGroup, blank=True)
     def __str__(self):
         return self.title
 
 class InformationForm(ModelForm):
     class Meta:
         model = Information
-        fields = ['title', 'content', 'dataset_types']
+        fields = ['title', 'content', 'dataset_types', 'processgroup']
 
 class GraphType(models.Model):
     title = models.CharField(max_length=255)
@@ -269,12 +280,3 @@ class PhotoForm(ModelForm):
         model = Photo
         exclude = ['id', 'uploaded_by', 'primary_space', 'deleted']
 
-class ProcessGroup(models.Model):
-    name = models.CharField(max_length=255)
-    icon = models.CharField(max_length=255, null=True, blank=True)
-    slug = models.SlugField(db_index=True, max_length=255, unique=True)
-    description = models.TextField(null=True, blank=True)
-    processes = models.ManyToManyField('staf.Process', blank=True)
-
-    def __str__(self):
-        return self.name

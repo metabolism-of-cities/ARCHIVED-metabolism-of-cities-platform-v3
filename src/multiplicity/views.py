@@ -92,6 +92,12 @@ def map(request, city, type='boundaries'):
     context = { 'section': 'cities', 'menu':  'maps', 'page': type, 'info': info, 'topics': topics }
     return render(request, 'multiplicity/space.map.html', context)
 
+def sector(request, city, sector):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    sector = get_object_or_404(ProcessGroup, slug=sector)
+    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info}
+    return render(request, 'multiplicity/sector.html', context)
+
 def overview(request, city, slug):
     groups = ProcessGroup.objects.order_by('name')
     flow = get_object_or_404(DatasetTypeStructure, slug=slug)
