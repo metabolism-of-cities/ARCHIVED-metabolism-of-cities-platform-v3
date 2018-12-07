@@ -95,7 +95,10 @@ def map(request, city, type='boundaries'):
 def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)
-    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info}
+    information = Information.objects.filter(processgroup=sector, space=info)
+    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information,
+    
+    }
     return render(request, 'multiplicity/sector.html', context)
 
 def overview(request, city, slug):
@@ -1209,7 +1212,9 @@ def admin_data_overview(request, city):
     datasets = Dataset.objects.filter(primary_space=info, deleted=False)
     csv = CSV.objects.filter(space=info)
     space_csv = ReferenceSpaceCSV.objects.filter(space=info)
-    context = { 'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 'space_csv': space_csv, 'datatables': True }
+    information = Information.objects.filter(space=info)
+    context = { 'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 'space_csv': space_csv, 'datatables': True,
+    'information': information }
     return render(request, 'multiplicity/admin/overview.data.html', context)
 
 @staff_member_required

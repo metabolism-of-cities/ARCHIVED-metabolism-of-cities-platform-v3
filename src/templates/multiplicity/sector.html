@@ -6,16 +6,27 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col-lg-12">
-    <div class="panel">
-      <div class="panel-body">
-        <h3>{{ sector.name }}</h3>
-        <p>Start putting content on grids or panels, you can also use different combinations of grids.
-      </div>
-    </div>
+<div class="panel">
+  <div class="panel-body">
+    <h2>{{ sector.name }}</h2>
+    {% for details in information %}
+      <h3>{{ details.title }}</h3>
+      {{ details.content|safe }}
+    {% endfor %}
   </div>
 </div>
+
+{% if request.user.is_staff %}
+  <div class="panel panel-colorful panel-success">
+    <div class="panel-body">
+      <h3>Admin options</h3>
+      <ul>
+        <li><a href="{% url 'multiplicity:information_form' info.slug %}">Add information</a></li>
+        <li><a href="{% url 'multiplicity:admin_data_overview' info.slug %}">City admin page</a></li>
+      </ul>
+    </div>
+  </div>
+{% endif %}
 
 {% endblock %}
 
