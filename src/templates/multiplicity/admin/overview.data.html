@@ -188,6 +188,16 @@
 
 {% endif %}
 
+{% if photos %}
+
+  <div class="panel">
+    {% for details in photos %}
+      <a href="{% url 'multiplicity:photo_form' info.slug details.id %}"><img src="{{ details.image.thumbnail.url }}" alt="" /></a>
+    {% endfor %}
+  </div>
+
+{% endif %}
+
 
 {% endblock %}
 

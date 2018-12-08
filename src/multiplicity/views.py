@@ -1104,9 +1104,10 @@ def information_form(request, city, id=False, topic=False):
 @login_required
 def photo_form(request, city, id=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
     if id:
         photo = get_object_or_404(Photo, pk=id)
-        form = PhotoForm(instance=info)
+        form = PhotoForm(instance=photo)
     else:
         photo = False
         form = PhotoForm()
@@ -1117,9 +1118,14 @@ def photo_form(request, city, id=False):
         else:
             form = PhotoForm(request.POST, request.FILES, instance=photo)
         if form.is_valid():
+            if request.POST['process']:
+                process = Process.objects.get(pk=request.POST['process'])
+            else:
+                process = None
             photo = form.save(commit=False)
             photo.primary_space = info
             photo.uploaded_by = request.user
+            photo.process = process
             photo.save()
             saved = True
             messages.success(request, 'Photo was saved.')
@@ -1127,7 +1133,7 @@ def photo_form(request, city, id=False):
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type }
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'processes': processes, 'photo': photo }
     return render(request, 'multiplicity/form.photo.html', context)
 
 
@@ -1219,9 +1225,10 @@ def admin_data_overview(request, city):
     csv = CSV.objects.filter(space=info)
     space_csv = ReferenceSpaceCSV.objects.filter(space=info)
     spaces = ReferenceSpace.objects.filter(city=info)
+    photos = Photo.objects.filter(primary_space=info)
     information = Information.objects.filter(space=info)
-    context = { 'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 'space_csv': space_csv, 'datatables': True,
-    'information': information, 'spaces': spaces }
+    context = { 'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 'space_csv': space_csv, 'datatables': True, 
+    'information': information, 'spaces': spaces, 'photos': photos }
     return render(request, 'multiplicity/admin/overview.data.html', context)
 
 @staff_member_required

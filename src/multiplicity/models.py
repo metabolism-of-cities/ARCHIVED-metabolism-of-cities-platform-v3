@@ -260,6 +260,10 @@ class GraphType(models.Model):
     def __str__(self):
         return self.title
 
+class License(models.Model):
+    name = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, null=True, blank=True)
+
 class Photo(TimestampedModel):
     image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780),})
     author = models.CharField(max_length=255)
@@ -269,6 +273,7 @@ class Photo(TimestampedModel):
     primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False, db_index=True)
+    license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.author or 'No name'
