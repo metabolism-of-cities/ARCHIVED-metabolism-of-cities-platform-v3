@@ -20,9 +20,10 @@
               <div class="form-group">
                 <label class="col-md-3 control-label" for="processes">Processes</label>
                 <div class="col-md-9">
-                  <select class="form-control select2" name="processes" multiple id="processes">
+                  <select class="form-control" name="process" id="processes">
+                    <option value=""></option>
                     {% for details in processes %}
-                      <option value="{{ details.id }}" {% if details in information.processes.all %}selected{% endif %}>{{ details.code }}. {{ details.name }}</option>
+                      <option value="{{ details.id }}" {% if information.process == details %}selected{% endif %}>{{ details.code }}. {{ details.name }}</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -46,7 +47,6 @@
 {% block head %}
 <style type="text/css">
 .form-horizontal .col-md-3[for='id_content']{width:90%;text-align:left}
-#processes, #id_dataset_types{height:300px}
 </style>
 {% endblock %}
 

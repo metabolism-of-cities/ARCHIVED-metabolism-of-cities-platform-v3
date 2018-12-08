@@ -229,18 +229,15 @@ class Information(TimestampedModel):
     content = HTMLField('Content')
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
     references = models.ManyToManyField("core.Reference", blank=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
     dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
-    type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE, null=True, blank=True)
-    processes = models.ManyToManyField("staf.Process", blank=True)
-    processgroup = models.ManyToManyField(ProcessGroup, blank=True)
+    process = models.ForeignKey("staf.Process", on_delete=models.CASCADE, blank=True, null=True, limit_choices_to={'slug__isnull': False})
     def __str__(self):
         return self.title
 
 class InformationForm(ModelForm):
     class Meta:
         model = Information
-        fields = ['title', 'content', 'dataset_types', 'processgroup']
+        fields = ['title', 'content']
 
 class GraphType(models.Model):
     title = models.CharField(max_length=255)

@@ -1062,7 +1062,7 @@ def materials(request):
 @login_required
 def information_form(request, city, id=False, topic=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    processes = Process.objects.order_by('id')
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
     if id:
         information = get_object_or_404(Information, pk=id)
         form = InformationForm(instance=information)
@@ -1076,20 +1076,21 @@ def information_form(request, city, id=False, topic=False):
         else:
             form = InformationForm(request.POST, request.FILES, instance=information)
         if form.is_valid():
+            if request.POST['process']:
+                process = Process.objects.get(pk=request.POST['process'])
+            else:
+                process = None
             if id:
                 information = form.save()
+                information.process = process
+                information.save()
             else:
                 information = form.save(commit=False)
+                information.process = process
                 information.space = info
                 information.user = request.user
                 information.save()
                 form.save_m2m()
-
-            information.processes.clear()
-
-            selected = request.POST.getlist('processes')
-            for process in selected:
-                information.processes.add(Process.objects.get(pk=process))
 
             saved = True
             messages.success(request, 'Information was saved.')
@@ -1097,8 +1098,7 @@ def information_form(request, city, id=False, topic=False):
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,
-    'select2': True}
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,}
     return render(request, 'multiplicity/form.information.html', context)
 
 @login_required
