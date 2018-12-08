@@ -96,7 +96,12 @@ def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)
     information = Information.objects.filter(processgroup=sector, space=info)
-    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information,
+    datasets = Dataset.objects.filter(process__in=sector.processes.all())
+    spaces = ReferenceSpace.objects.filter(city=info, type__process__in=sector.processes.all())
+    map = False
+    if spaces:
+        map = True
+    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 'spaces': spaces, 'map': map
     
     }
     return render(request, 'multiplicity/sector.html', context)
@@ -1057,7 +1062,7 @@ def materials(request):
 @login_required
 def information_form(request, city, id=False, topic=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    processes = Process.objects.filter(parent=398480).order_by('id')
+    processes = Process.objects.order_by('id')
     if id:
         information = get_object_or_404(Information, pk=id)
         form = InformationForm(instance=information)
@@ -1092,7 +1097,8 @@ def information_form(request, city, id=False, topic=False):
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information }
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,
+    'select2': True}
     return render(request, 'multiplicity/form.information.html', context)
 
 @login_required
@@ -1212,9 +1218,10 @@ def admin_data_overview(request, city):
     datasets = Dataset.objects.filter(primary_space=info, deleted=False)
     csv = CSV.objects.filter(space=info)
     space_csv = ReferenceSpaceCSV.objects.filter(space=info)
+    spaces = ReferenceSpace.objects.filter(city=info)
     information = Information.objects.filter(space=info)
     context = { 'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 'space_csv': space_csv, 'datatables': True,
-    'information': information }
+    'information': information, 'spaces': spaces }
     return render(request, 'multiplicity/admin/overview.data.html', context)
 
 @staff_member_required

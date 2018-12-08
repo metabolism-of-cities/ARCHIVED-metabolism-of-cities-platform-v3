@@ -17,6 +17,49 @@
   </div>
 </div>
 
+{% if datasets %}
+
+  <div class="panel panel-dark">
+    <div class="panel-heading">
+      <h3 class="panel-title">Datasets</h3>
+    </div>
+    <div class="panel-body">
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="300">Dataset</th>
+            <th>Coverage</th>
+            {% if False %}
+            <th></th>
+            <th>Smallest scale</th>
+            {% endif %}
+            <th>Upload</th>
+          </tr>
+        </thead>
+      {% for details in datasets %}
+        <tr>
+
+          <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
+          <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
+          <td>
+            {% for material in details.materials %}
+              {{ material.name }}
+            {% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+      </table>
+    </div>
+  </div>
+
+
+{% endif %}
+
+{% if spaces %}
+  {% include 'multiplicity/includes/map.html' %}
+{% endif %}
+
 {% if request.user.is_staff %}
   <div class="panel panel-colorful panel-success">
     <div class="panel-body">
@@ -32,6 +75,9 @@
 {% endblock %}
 
 {% block head %}
+<style type="text/css">
+#map{height:700px}
+</style>
 {% endblock %}
 
 {% block sidebar %}

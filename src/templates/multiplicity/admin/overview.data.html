@@ -158,6 +158,36 @@
 
 {% endif %}
 
+{% if spaces %}
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Reference spaces</h3>
+        <table class="table table-striped datatable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for details in spaces %}
+                <tr>
+                    <td><a href="{% url 'multiplicity:space' info.slug details.type.topic.slug details.type.slug details.slug %}">{{ details.name }}</a></td>
+                    <td>{{ details.type.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
 
 {% endblock %}
 

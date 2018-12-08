@@ -20,7 +20,7 @@
               <div class="form-group">
                 <label class="col-md-3 control-label" for="processes">Processes</label>
                 <div class="col-md-9">
-                  <select class="form-control" name="processes" multiple id="processes">
+                  <select class="form-control select2" name="processes" multiple id="processes">
                     {% for details in processes %}
                       <option value="{{ details.id }}" {% if details in information.processes.all %}selected{% endif %}>{{ details.code }}. {{ details.name }}</option>
                     {% endfor %}

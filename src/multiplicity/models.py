@@ -44,6 +44,7 @@ class ReferenceSpaceType(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
+    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True)
     SPACE_TYPE = (
         ('SOC', 'Socio-economic System'),
         ('NAT', 'Natural Environment'),
@@ -231,7 +232,7 @@ class Information(TimestampedModel):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
     dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE, null=True, blank=True)
-    processes = models.ManyToManyField("staf.Process", blank=True, limit_choices_to={'is_separator': False})
+    processes = models.ManyToManyField("staf.Process", blank=True)
     processgroup = models.ManyToManyField(ProcessGroup, blank=True)
     def __str__(self):
         return self.title
@@ -266,7 +267,7 @@ class Photo(TimestampedModel):
     image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780),})
     author = models.CharField(max_length=255)
     source_url = models.CharField(max_length=255, null=True, blank=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'parent__isnull': True})
+    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
     description = models.TextField(null=True, blank=True)
     primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -278,5 +279,5 @@ class Photo(TimestampedModel):
 class PhotoForm(ModelForm):
     class Meta:
         model = Photo
-        exclude = ['id', 'uploaded_by', 'primary_space', 'deleted']
+        exclude = ['id', 'uploaded_by', 'primary_space', 'deleted', 'process']
 

@@ -20,6 +20,7 @@ class Process(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     code = models.CharField(max_length=255, null=True, blank=True, db_index=True)
     description = models.TextField(null=True, blank=True)
+    slug = models.SlugField(db_index=True, max_length=255, null=True, blank=True)
     type = models.ForeignKey(ProcessType, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     is_separator = models.BooleanField()
@@ -103,6 +104,7 @@ class Dataset(models.Model):
     type = models.ForeignKey('multiplicity.DatasetType', on_delete=models.CASCADE, null=True, blank=True)
     graph = models.ForeignKey('multiplicity.GraphType', on_delete=models.CASCADE, null=True, blank=True)
     topics = models.ManyToManyField(Topic, blank=True)
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, null=True, blank=True)
     deleted = models.BooleanField(default=False, db_index=True)
     def __str__(self):
         return self.name
