@@ -95,7 +95,7 @@ def map(request, city, type='boundaries'):
 def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)
-    information = Information.objects.filter(processgroup=sector, space=info)
+    information = Information.objects.filter(process__in=sector.processes.all(), space=info)
     datasets = Dataset.objects.filter(process__in=sector.processes.all())
     spaces = ReferenceSpace.objects.filter(city=info, type__process__in=sector.processes.all())
     map = False
