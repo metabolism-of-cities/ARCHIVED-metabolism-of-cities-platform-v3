@@ -263,6 +263,9 @@ class GraphType(models.Model):
 class License(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
 
 class Photo(TimestampedModel):
     image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780),})
