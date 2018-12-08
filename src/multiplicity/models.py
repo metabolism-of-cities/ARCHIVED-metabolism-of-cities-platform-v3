@@ -44,7 +44,7 @@ class ReferenceSpaceType(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
-    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True)
+    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
     SPACE_TYPE = (
         ('SOC', 'Socio-economic System'),
         ('NAT', 'Natural Environment'),
