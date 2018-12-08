@@ -112,6 +112,12 @@ def processlist(request, id=False):
     return render(request, 'staf/process.list.html', context)
 
 @login_required
+def processtable(request, id=False):
+    processes = Process.objects.order_by('id')
+    context = { 'section': 'data', 'menu': 'processes', 'processes': processes, 'datatables': True}
+    return render(request, 'staf/process.table.html', context)
+
+@login_required
 def processform(request, id=False):
     if id:
         info = Process.objects.get(id=id)
