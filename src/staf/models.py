@@ -104,7 +104,7 @@ class Dataset(models.Model):
     type = models.ForeignKey('multiplicity.DatasetType', on_delete=models.CASCADE, null=True, blank=True)
     graph = models.ForeignKey('multiplicity.GraphType', on_delete=models.CASCADE, null=True, blank=True)
     topics = models.ManyToManyField(Topic, blank=True)
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, null=True, blank=True)
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
     deleted = models.BooleanField(default=False, db_index=True)
     def __str__(self):
         return self.name
