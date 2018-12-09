@@ -324,13 +324,22 @@ def upload_infrastructure_file(request, city, type):
     features = Feature.objects.filter(type=type.id)
     previous = ReferenceSpaceCSV.objects.filter(user=request.user, type=type, space=info)
     if request.method == 'POST':
-        file = request.FILES['file']
-        filename = str(uuid.uuid4())
-        path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
+        if 'data' in request.POST:
+            input = request.POST['data']
+            filename = str(uuid.uuid4())
+            file = 'Data entry on ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
+            in_txt = csv.reader(input.split('\n'), delimiter = '\t')
+            out_csv = csv.writer(open(path, 'w', newline=''))
+            out_csv.writerows(in_txt)
+        else:
+            file = request.FILES['file']
+            filename = str(uuid.uuid4())
+            path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
 
-        with open(path, 'wb+') as destination:
-            for chunk in file.chunks():
-                destination.write(chunk)
+            with open(path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
 
         csv_file = ReferenceSpaceCSV(name=filename, original_name=file, imported=False, user=request.user, type=type, space=info)
         csv_file.save()

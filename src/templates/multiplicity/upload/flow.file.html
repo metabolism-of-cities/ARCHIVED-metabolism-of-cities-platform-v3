@@ -96,36 +96,36 @@
   </div>
 </div>
 
-    {% if previous %}
+{% if previous %}
 
-<div class="panel">
-  <div class="panel-body">
+  <div class="panel">
+    <div class="panel-body">
 
-    <h4>Previous uploads</h4>
+      <h4>Previous uploads</h4>
 
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>File</th>
-          <th>Imported?</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for details in previous %}
+      <table class="table table-striped">
+        <thead>
           <tr>
-            <td>{{ details.created_at|date:"M d, Y H:i" }}</td>
-            <td><a href="{% url 'multiplicity:upload_flow_review' info.slug dataset.id details.id %}">{{ details.original_name }}</a></td>
-            <td>{% if details.imported %}Yes{% else %}No{% endif %}</td>
+            <th>Date</th>
+            <th>File</th>
+            <th>Imported?</th>
           </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+        </thead>
+        <tbody>
+          {% for details in previous %}
+            <tr>
+              <td>{{ details.created_at|date:"M d, Y H:i" }}</td>
+              <td><a href="{% url 'multiplicity:upload_flow_review' info.slug dataset.id details.id %}">{{ details.original_name }}</a></td>
+              <td>{% if details.imported %}Yes{% else %}No{% endif %}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
 
+    </div>
   </div>
-</div>
 
-    {% endif %}
+{% endif %}
 
 {% endblock %}
 

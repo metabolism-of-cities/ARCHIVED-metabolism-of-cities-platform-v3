@@ -13,34 +13,35 @@
   <div class="panel-body">
 
     <div class="row">
-              <div class="col-sm-2">
-                <div class="panel panel-success panel-colorful">
-                    <div class="pad-all text-center">
-                        <span class="text-3x text-thin">1</span>
-                        <p>Upload data</p>
-                        <i class="psi-upload icon-lg"></i>
-                    </div>
-                </div>
-              </div>
-              <div class="col-sm-2">
-                <div class="panel panel-default panel-colorful">
-                    <div class="pad-all text-center">
-                        <span class="text-3x text-thin">2</span>
-                        <p>Review data</p>
-                        <i class="psi-eye icon-lg"></i>
-                    </div>
-                </div>
-              </div>
-                <div class="col-sm-2">
-                  <div class="panel panel-default panel-colorful">
-                      <div class="pad-all text-center">
-                          <span class="text-3x text-thin">3</span>
-                          <p>Meta data</p>
-                          <i class="psi-lock icon-lg"></i>
-                      </div>
-                  </div>
-                </div>
+      <div class="col-sm-2">
+        <div class="panel panel-success panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">1</span>
+                <p>Upload data</p>
+                <i class="psi-upload icon-lg"></i>
             </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-default panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">2</span>
+                <p>Review data</p>
+                <i class="psi-eye icon-lg"></i>
+            </div>
+        </div>
+      </div>
+        <div class="col-sm-2">
+          <div class="panel panel-default panel-colorful">
+              <div class="pad-all text-center">
+                  <span class="text-3x text-thin">3</span>
+                  <p>Meta data</p>
+                  <i class="psi-lock icon-lg"></i>
+              </div>
+          </div>
+        </div>
+    </div>
+
     <h4>Upload file</h4>
     <p class="alert alert-info">
       Please upload a CSV file with the data. The following columns 
@@ -49,7 +50,25 @@
 
     <pre>Name | Latitude | Longitude | Description | Website URL{% for details in features %} | {{ details.name }}{% if details.unit %} ({{ details.unit.symbol }}){% endif %}{% endfor %}</pre>
 
-    <form action="" method="post" class="form form-horizontal" enctype="multipart/form-data">
+  </div>
+
+</div>
+
+<ul class="nav nav-tabs selectform">
+  <li class="active"><a href="#textbox" data-id="textbox">Direct input</a></li>
+  <li><a href="#filebox" data-id="filebox">File upload</a></li>
+</ul>
+
+<div class="panel">
+  <div class="panel-body forms">
+
+    <form action="" method="post" class="form form-horizontal" id="textbox">
+      {% csrf_token %}
+      <textarea class="form-control" name="data" placeholder="Copy the data from a spreadsheet in the format shown above"></textarea>
+      <p><button type="submit" class="btn btn-success">Next</button></p>
+    </form>
+
+    <form action="" method="post" class="form form-horizontal" enctype="multipart/form-data" id="filebox">
         {% csrf_token %}
 
         <div class="form-group">
@@ -75,35 +94,46 @@
         </div>
     </form>
 
-    {% if previous %}
-    <h4>Previous uploads</h4>
-
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>File</th>
-          <th>Imported?</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for details in previous %}
-          <tr>
-            <td>{{ details.created_at|date:"M d, Y H:i" }}</td>
-            <td><a href="{% url 'multiplicity:upload_infrastructure_review' info.slug type.slug details.id %}">{{ details.original_name }}</a></td>
-            <td>{% if details.imported %}Yes{% else %}No{% endif %}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-
-    {% endif %}
-
   </div>
 </div>
+
+{% if previous %}
+  <div class="panel">
+    <div class="panel-body">
+
+      <h4>Previous uploads</h4>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>File</th>
+            <th>Imported?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for details in previous %}
+            <tr>
+              <td>{{ details.created_at|date:"M d, Y H:i" }}</td>
+              <td><a href="{% url 'multiplicity:upload_infrastructure_review' info.slug type.slug details.id %}">{{ details.original_name }}</a></td>
+              <td>{% if details.imported %}Yes{% else %}No{% endif %}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+    </div>
+  </div>
+
+{% endif %}
+
 {% endblock %}
 
 {% block head %}
+<style type="text/css">
+#filebox{display:none}
+textarea.form-control{height:250px;display:block;margin-bottom:10px}
+</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -131,5 +161,16 @@
 {% endblock %}
 
 {% block footer %}
-
+<script type="text/javascript">
+$(function(){
+  $(".selectform a").click(function(e){
+    e.preventDefault();
+    $(".selectform li").removeClass("active");
+    $(this).closest("li").addClass("active");
+    var id = $(this).data("id");
+    $(".forms form").hide();
+    $(".forms form#" + id).show();
+  });
+});
+</script>
 {% endblock %}
