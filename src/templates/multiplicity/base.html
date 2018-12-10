@@ -3,10 +3,10 @@
 <html lang="en">
 <head>
 <title>{% block title %}{%endblock %} | {{ SITE_NAME }}</title>
-{% include 'multiplicity/includes/head.html' %}
 {% if select2 %}
   <link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
 {% endif %}
+{% include 'multiplicity/includes/head.html' %}
 {% block head %}{% endblock %}
 {% if navbar == "backend" or navbar == "team" %}
 <style type="text/css">

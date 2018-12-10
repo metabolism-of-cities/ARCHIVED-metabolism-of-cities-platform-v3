@@ -6,96 +6,124 @@
 
 {% block content %}
 
-<div class="container">
-
+<div class="container references">
   <h1>Search our database</h1>
-
-  <p>
-    Please enter search terms below to start your search. You will see a list of common terms
-    appear as you start typing. To confirm each search term, please hit ENTER to add it to 
-    the list. The system will only show records that contain <strong>all</strong> of the 
-    search terms that you enter. Remove search terms to increase the number of results.
-    When you see the results, use the filters on the left hand side to refine your results.
-  </p>
-
-  <div class="row">
-
-    <form action="#" method="post" class="col-xs-12 col-sm-10 col-sm-offset-1 pad-hor">
-      <div class="input-group mar-btm">
-        <select name="search[]" class="form-control select2" id="searchbox" multiple></select>
-          <span class="input-group-btn">
-            <button class="btn btn-success btn-lg" type="button">Search</button>
-          </span>
+  <section class="search mar-btm">
+    <p>
+      Please enter search terms below to start your search. You will see a list of common terms appear as you start typing.
+    </p>
+    <p>
+      To confirm each search term, please hit ENTER to add it to the list. The system will only show records that contain <strong>all</strong> of the search terms that you enter. Remove search terms to increase the number of results. When you see the results, use the filters on the left hand side to refine your results.
+    </p>
+    <p>
+      You can also <a href="publications.export.php">download the full publications database</a> including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
+    </p>
+    <form action="#" method="post">
+      <select id="searchbox" multiple="multiple" class="form-control">
+        <optgroup label="Alaskan/Hawaiian Time Zone">
+          <option value="AK">Alaska</option>
+          <option value="HI">Hawaii</option>
+        </optgroup>
+        <optgroup label="Pacific Time Zone">
+          <option value="CA">California</option>
+          <option value="NV">Nevada</option>
+          <option value="OR">Oregon</option>
+          <option value="WA">Washington</option>
+        </optgroup>
+      </select>
+      <div class="row mar-top">
+        <div class="col-lg-6">
+          <button class="btn btn-success" type="button">Search</button>
+        </div>
+        <div class="col-lg-6 text-right">
+          <a href="">Reset all filters</a> | <a href="">View all publications</a>
+        </div>
       </div>
     </form>
+    {% if tag %}
+      <p>You searched for: <b>{{ tag.name }}</b></p>
+    {% endif %}
+  </section>
 
-  </div>
-
-  {% if tag %}
-
-    <div class="panel">
-      You searched for: {{ tag.name }}
-    </div>
-
-  {% endif %}
-
-  <div class="alert alert-info">
-    <a href="publications.export.php" class="btn btn-default">
-      <i class="fa fa-table"></i>
-      Download
-    </a>
-    You can download the full publications database including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
-  </div>
-
-  <div class="row filters">
-  
-    <div class="col-md-3 ">
+  <div class="row mar-top">
+    <section class="col-md-3 filters">
       <ul class="nav nav-section-menu nav-sidebar">
-        <li class="nav-header">Filter by Year</li>
+        <li class="nav-header text-bold">Filter by Year</li>
           <li class="">
-            <a href="#" class="nav-link filter" data-id="2017" data-type="year">2017 
-              <span class="pull-right badge badge-default">1</span>
+            <a href="#" class="nav-link filter" data-id="2018" data-type="year">2018
+              <span class="pull-right badge badge-default">3</span>
             </a>
           </li>
-        <li>
-          <a href="#" class="show-all nav-link" data-type="year">Show all 
-            <i class="fa fa-angle-down"></i>
-          </a>
-        </li>
+          <li class="">
+            <a href="#" class="nav-link filter" data-id="2017" data-type="year">2017
+              <span class="pull-right badge badge-default">24</span>
+            </a>
+          </li>
+          <li class="">
+            <a href="#" class="nav-link filter" data-id="2016" data-type="year">2016
+              <span class="pull-right badge badge-default">63</span>
+            </a>
+          </li>
+          <li class="">
+            <a href="#" class="nav-link filter" data-id="2015" data-type="year">2015
+              <span class="pull-right badge badge-default">48</span>
+            </a>
+          </li>
       </ul>
-    </div>
+      <ul class="nav nav-section-menu nav-sidebar">
+        <li class="nav-header text-bold">Filter by Type</li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="16" data-type="type">Journal Article
+              <span class="badge badge-default pull-right">405</span>
+            </a>
+          </li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="27" data-type="type">Report
+              <span class="badge badge-default pull-right">28</span>
+            </a>
+          </li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="29" data-type="type">Thesis
+              <span class="badge badge-default pull-right">19</span>
+            </a>
+          </li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="5" data-type="type">Book
+              <span class="badge badge-default pull-right">13</span>
+            </a>
+          </li>
+        </ul>
+    </section>
+    <section class="col-md-9 main records resourcelist">
 
-    
-    <div class="col-md-9 main records">
-
-      <div class="resultbox">
+      <div class="resultbox mar-btm">
         <i class="fa fa-info-circle"></i>
         <strong>{{ list.count }}</strong>
         publications found.
       </div>
 
       {% for details in list %}
-
-        <div class="panel">
-          <div class="panel-heading">
-              <h3 class="panel-title">
-                <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
-              </h3>
+        <div class="single-resource" href="{% url 'core:reference' details.id %}">
+          <div class="row">
+            <div class="col-lg-9">
+              <h3 class="title">{{ details.title }}</h3>
+              {% if details.authors.all %}
+                {% for author in details.authors.all %}
+                  <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == details.authors.all|length %},{% endif %}
+                {% endfor %}
+              {% else %}
+                {{ details.authorlist }}
+              {% endif %}
+            </div>
+            <div class="col-lg-3">
+              {% if details.journal.name %}<div class="journal-name">{{ details.journal.name }}</div>{% endif %}
+              {% if details.type %}<div class="type">{{ details.type }}</div>{% endif %}
+              {% if details.year %}<div class="year">{{ details.year }}</div>{% endif %}
+            </div>
           </div>
-          <div class="panel-body">
-            {{ details.authorlist }}
-          </div>
-          <div class="panel-footer">
-            <span class="type">{{ details.type.name }}
-            </span>
-          </div>
-
         </div>
-
       {% endfor %}
-
-    </div>
-
+    </section>
   </div>
 
 </div>
@@ -112,7 +140,7 @@
 
 {% block pagehead %}
 <div id="page-head">
-    
+
     <div id="page-title">
         <h1 class="page-header text-overflow">{{ title }}</h1>
     </div>
@@ -127,6 +155,15 @@
 {% endblock %}
 
 {% block footer %}
+  <script>
+    $(".single-resource").click(function() {
+        window.location.href = $(this).attr("href");
+    });
+
+    $(".single-resource a").click(function (event) {
+        event.stopPropagation();
+    });
+  </script>
 
   <script type="text/javascript">
   $(function(){
