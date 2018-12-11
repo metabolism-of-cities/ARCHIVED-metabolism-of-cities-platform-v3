@@ -39,7 +39,8 @@ class ReferenceType(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True, blank=True)
-    location = models.ForeignKey(ReferenceSpace, on_delete=models.SET_NULL, null=True, blank=True)
+    processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
+    reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True)
     description = models.TextField(null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     ORG_TYPE = (
@@ -60,6 +61,11 @@ class Organization(models.Model):
         return self.name
     class Meta:
         ordering = ["name"]
+
+class OrganizationForm(ModelForm):
+    class Meta:
+        model = Organization
+        exclude = ['id', 'processes']
 
 class Publisher(models.Model):
     name = models.CharField(max_length=255)

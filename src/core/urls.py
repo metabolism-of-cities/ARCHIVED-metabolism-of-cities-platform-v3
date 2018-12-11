@@ -97,6 +97,11 @@ urlpatterns = [
     path('admin/publications/<int:id>/tags', views.admin_referencetags, name='admin_referencetags'),
     path('admin/publications', views.admin_references, name='admin_references'),
 
+    path('admin/organizations', views.admin_organization_list, name='admin_organization_list'),
+    path('admin/organizations/<int:id>', views.admin_organization, name='admin_organization'),
+    path('admin/organizations/create', views.admin_organization, name='admin_organization'),
+    path('admin/organizations/create/<slug:slug>', views.admin_organization, name='admin_organization_referencespace'),
+
 #temp
     path('updateorgs', views.updateorgs),
 ]

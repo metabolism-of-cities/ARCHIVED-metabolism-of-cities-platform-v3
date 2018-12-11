@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm
+from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process
@@ -257,6 +257,13 @@ def referenceform(request, id=False, dataset=False):
             if new_record:
                 create_record = get_object_or_404(UserAction, pk=1)
                 log = UserLog(user=request.user, action=create_record, reference=info, points=5)
+            else:
+                info.processes.clear()
+
+            selected = request.POST.getlist('process')
+            for process in selected:
+                info.processes.add(Process.objects.get(pk=process))
+
             messages.success(request, 'Information was saved.')
             return redirect('core:reference', id=info.id)
         else:
@@ -664,6 +671,46 @@ def admin_video(request, id=False):
             messages.error(request, 'We could not save your form, please correct the errors')
     context = { 'navbar': 'backend', 'form': form, 'info': info, 'select2': True }
     return render(request, 'core/admin/video.html', context)
+
+
+@staff_member_required
+def admin_organization_list(request):
+    list = Organization.on_site.all()
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'core/admin/organizations.list.html', context)
+
+@staff_member_required
+def admin_organization(request, id=False, slug=False):
+    space = False
+    if slug:
+        space = get_object_or_404(ReferenceSpace, slug=slug)
+    if id:
+        info = get_object_or_404(Organization, pk=id)
+        form = OrganizationForm(instance=info)
+    else:
+        info = False
+        form = OrganizationForm()
+    if request.method == 'POST':
+        if not id:
+            form = OrganizationForm(request.POST, request.FILES)
+        else:
+            form = OrganizationForm(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            info = form.save()
+            if id:
+                info.processes.clear()
+
+            selected = request.POST.getlist('process')
+            for process in selected:
+                info.processes.add(Process.objects.get(pk=process))
+
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('core:admin_organization', args=[info.id]))
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    context = { 'navbar': 'backend', 'form': form, 'info': info, 'select2': True, 'space': space, 'processes': processes }
+    return render(request, 'core/admin/organization.html', context)
 
 
 @staff_member_required
