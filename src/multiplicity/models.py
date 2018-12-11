@@ -246,7 +246,7 @@ class Photo(TimestampedModel):
         if self.description:
           cleanr = re.compile('<.*?>')
           description = re.sub(cleanr, '', self.description)
-          description = description[30:] + " - " + self.author + " - #" + str(self.id)
+          description = description[:30] + " - " + self.author + " - #" + str(self.id)
         else:
           description = "Photo by " + self.author + " - #" + str(self.id)
         return description
