@@ -688,9 +688,39 @@ article.home section.feeds .single-feed:last-of-type {
   color: #333;
 }
 
+section.sector .single-subsector-content, .back-subsector {
+  display: none;
+}
+
+section.sector .single-subsector-content section.photos {
+  border-radius: 2px;
+}
+
+section.sector .single-subsector-content section.photos .single-photo {
+  margin: 5px 0;
+}
+
+section.sector .single-subsector-content section.photos img {
+  height: 100px;
+  width: 100%;
+  object-fit: scale-down;
+}
+
+.back-subsectors-wrap {
+  margin-top: 20px;
+}
+
 @media screen and (min-width: 1200px) {
   .flex {
     display: flex;
+  }
+
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+
+  .flex-none {
+    flex: none;
   }
 
   .height-100 {

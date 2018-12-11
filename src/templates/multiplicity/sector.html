@@ -6,59 +6,143 @@
 
 {% block content %}
 
-<div class="panel">
-  <div class="panel-body">
-
-    <h2>{{ sector.name }}</h2>
-    {% for details in information %}
-      <h3>{{ details.title }}</h3>
-      {{ details.content|safe }}
-    {% endfor %}
+<div class="row">
+  <div class="col-lg-6">
+    <h2 id="sector-title">{{ sector.name }}</h2>
+  </div>
+  <div class="col-lg-6 text-right back-subsectors-wrap">
+    <a class="btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
   </div>
 </div>
 
-{% if datasets %}
-
-  <div class="panel panel-dark">
-    <div class="panel-heading">
-      <h3 class="panel-title">Datasets</h3>
-    </div>
-    <div class="panel-body">
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th width="300">Dataset</th>
-            <th>Coverage</th>
-            {% if False %}
-            <th></th>
-            <th>Smallest scale</th>
-            {% endif %}
-            <th>Upload</th>
-          </tr>
-        </thead>
-      {% for details in datasets %}
-        <tr>
-
-          <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
-          <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
-          <td>
-            {% for material in details.materials %}
-              {{ material.name }}
-            {% endfor %}
-          </td>
-        </tr>
+<section class="sector">
+    <div class="row flex flex-wrap subsector-panels">
+      {% for details in information %}
+        <div class="col-lg-4 flex-none single-subsector-panel">
+          <div class="panel height-100">
+            <div class="blog-header">
+              <img class="img-responsive" src="https://prototype.metabolismofcities.org/media/photos/32486.thumbnail.jpg" alt="">
+            </div>
+            <div class="pad-all">
+              <h3>{{ details.title }}</h3>
+              <p>{{ details.content|safe|truncatechars:200 }}</p>
+              <a class="btn btn-dark" onclick="showSubSector('{{ details.title }}')">Show more</a>
+            </div>
+          </div>
+        </div>
       {% endfor %}
-      </table>
+      <div class="col-lg-4 flex-none single-subsector-panel">
+        <div class="panel height-100">
+          <div class="blog-header">
+            <img class="img-responsive" src="https://prototype.metabolismofcities.org/media/photos/DSC00622.thumbnail.JPG" alt="">
+          </div>
+          <div class="pad-all">
+            <h3>Major companies</h3>
+            <p>Aspernatur quidem id vero in veritatis. Repellat aut esse vero a eum reprehenderit. A et sunt delectus. Aut temporibus quas sint ullam.</p>
+            <a class="btn btn-dark" onclick="showSubSector('Major companies')">Show more</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 flex-none single-subsector-panel">
+        <div class="panel height-100">
+          <div class="blog-header">
+            <img class="img-responsive" src="https://i.imgur.com/bENXY0q.png" alt="">
+          </div>
+          <div class="pad-all">
+            <h3>Datasets</h3>
+            <p>Aspernatur quidem id vero in veritatis. Repellat aut esse vero a eum reprehenderit. A et sunt delectus. Aut temporibus quas sint ullam.</p>
+            <a class="btn btn-dark" onclick="showSubSector('Datasets')">Show more</a>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <div class="subsector-content">
+    {% for details in information %}
+      <div class="single-subsector-content" subsector="{{ details.title }}">
+        <h3>{{ details.title }}</h3>
+        <p>{{ details.content|safe }}</p>
+        <section class="photos mar-top bg-gray-light pad-all bord-all">
+          <div class="row">
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/DSC00628.large.JPG"><img src="https://prototype.metabolismofcities.org/media/photos/DSC00628.thumbnail.JPG"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/zoek-de-verschillen-1-e1396440591891.large.jpg"><img src="https://prototype.metabolismofcities.org/media/photos/zoek-de-verschillen-1-e1396440591891.thumbnail.jpg"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/IMG_0163.large.JPG"><img src="https://prototype.metabolismofcities.org/media/photos/IMG_0163.thumbnail.JPG"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/31552.large.jpg"><img src="https://prototype.metabolismofcities.org/media/photos/31552.thumbnail.jpg"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/32478.large.jpg"><img src="https://prototype.metabolismofcities.org/media/photos/32478.thumbnail.jpg"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/32334.large.jpg"><img src="https://prototype.metabolismofcities.org/media/photos/32334.thumbnail.jpg"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/IMG_2499.large.JPG"><img src="https://prototype.metabolismofcities.org/media/photos/IMG_2499.thumbnail.JPG"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/IMG_2489.large.JPG"><img src="https://prototype.metabolismofcities.org/media/photos/IMG_2489.thumbnail.JPG"></a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+              <a href="https://prototype.metabolismofcities.org/media/photos/south-africa-2267795_960_720.large.jpg"><img src="https://prototype.metabolismofcities.org/media/photos/south-africa-2267795_960_720.thumbnail.jpg"></a>
+            </div>
+          </div>
+        </section>
+      </div>
+    {% endfor %}
+    </div>
+
+  {% if datasets %}
+
+    <div id="datasets" class="single-subsector-content panel panel-dark" subsector="Datasets">
+      <div class="panel-heading">
+        <h3 class="panel-title">Datasets</h3>
+      </div>
+      <div class="panel-body">
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="300">Dataset</th>
+              <th>Coverage</th>
+              {% if False %}
+              <th></th>
+              <th>Smallest scale</th>
+              {% endif %}
+              <th>Upload</th>
+            </tr>
+          </thead>
+        {% for details in datasets %}
+          <tr>
+
+            <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
+            <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
+            <td>
+              {% for material in details.materials %}
+                {{ material.name }}
+              {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+        </table>
+      </div>
+    </div>
 
 
-{% endif %}
+  {% endif %}
 
-{% if spaces %}
-  {% include 'multiplicity/includes/map.html' %}
-{% endif %}
+  {% if spaces %}
+    <div id="map" class="hidden">
+      {% include 'multiplicity/includes/map.html' %}
+    </div>
+  {% endif %}
+</section>
+
 
 {% if request.user.is_staff %}
   <div class="panel panel-colorful panel-success">
@@ -87,22 +171,46 @@
 
 {% block pagehead %}
 <div id="page-head">
-    
-    <div id="page-title">
-        <h1 class="page-header text-overflow">{{ info.name }}</h1>
-    </div>
 
-    <ol class="breadcrumb">
-        <li><a href="./"><i class="pli-home"></i></a></li>
-        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
-        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
-        <li><a href="{% url 'multiplicity:map_home' info.slug %}">Maps</a></li>
-        <li class="active">Boundaries</li>
-    </ol>
+  <div id="page-title">
+    <h1 class="page-header text-overflow">{{ info.name }}</h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="./"><i class="pli-home"></i></a></li>
+    <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+    <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+    <li><a href="{% url 'multiplicity:map_home' info.slug %}">Maps</a></li>
+    <li class="active">Boundaries</li>
+  </ol>
 
 </div>
 {% endblock %}
 
 {% block footer %}
+  <script>
+    function showSubSector(subSectorTitle){
+      $(".subsector-panels").slideUp();
+      $(".back-subsectors").show();
+      $(".single-subsector-content").hide();
+      $(".single-subsector-content").each(function() {
+        if ($(this).attr("subsector") == subSectorTitle) {
+          $(this).fadeIn();
+        }
+      });
+      scrollToDiv("sector-title");
+    };
 
+    function backSubsectors() {
+      $(".subsector-panels").slideDown();
+      $(".single-subsector-content").hide();
+      $(".back-subsectors").hide();
+    };
+
+    function scrollToDiv(id){
+      $('html,body').animate({
+       scrollTop: $("#" + id).offset().top - 20
+      }, 'slow');
+    }
+  </script>
 {% endblock %}
