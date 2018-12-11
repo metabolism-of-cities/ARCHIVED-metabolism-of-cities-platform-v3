@@ -1073,6 +1073,7 @@ def materials(request):
 def information_form(request, city, id=False, topic=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    references = Reference.objects.filter(status='active')
     if id:
         information = get_object_or_404(Information, pk=id)
         form = InformationForm(instance=information)
@@ -1102,13 +1103,21 @@ def information_form(request, city, id=False, topic=False):
                 information.save()
                 form.save_m2m()
 
+            information.references.clear()
+
+            selected = request.POST.getlist('references')
+            for reference in selected:
+                information.references.add(Reference.objects.get(pk=reference))
+
             saved = True
             messages.success(request, 'Information was saved.')
             return redirect(reverse('multiplicity:information_form', args=[info.slug, information.id]))
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,}
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,
+    'references': references, 'select2': True
+    }
     return render(request, 'multiplicity/form.information.html', context)
 
 @login_required

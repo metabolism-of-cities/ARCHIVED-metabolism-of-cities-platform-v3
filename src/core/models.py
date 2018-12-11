@@ -258,7 +258,7 @@ class Reference(models.Model):
     year = models.PositiveSmallIntegerField()
     abstract = models.TextField(null=True, blank=True)
     abstract_original_language = models.TextField(null=True, blank=True)
-    date_added = models.DateTimeField(null=True, blank=True)
+    date_added = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     LANGUAGES = (
         ('EN', 'English'),
         ('ES', 'Spanish'),
@@ -281,6 +281,8 @@ class Reference(models.Model):
     authors = models.ManyToManyField(People, blank=True)
     organizations = models.ManyToManyField(Organization, through='ReferenceOrganization')
     tags = models.ManyToManyField(Tag, blank=True, limit_choices_to={'hidden': False})
+    processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
+    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -307,7 +309,7 @@ class ReferenceForm(ModelForm):
 class ReferenceFormAdmin(ModelForm):
     class Meta:
         model = Reference
-        exclude = ['id', 'organizations']
+        exclude = ['id', 'organizations', 'processes', 'date_added']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',

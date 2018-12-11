@@ -3,7 +3,7 @@ from django.urls import reverse
 from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
-from staf.models import Data
+from staf.models import Data, Process
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -226,6 +226,8 @@ def reference(request, id):
 
 @login_required
 def referenceform(request, id=False, dataset=False):
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    new_record = False
     if id:
         info = get_object_or_404(Reference, pk=id)
         if request.user.is_staff:
@@ -235,11 +237,12 @@ def referenceform(request, id=False, dataset=False):
     else:
         info = False
         if request.user.is_staff:
-            form = ReferenceFormAdmin()
+            form = ReferenceFormAdmin(initial={'language': 'EN', 'status': 'active'})
         else:
             form = ReferenceForm()
     if request.method == 'POST':
         if not id:
+            new_record = True
             if request.user.is_staff:
                 form = ReferenceFormAdmin(request.POST)
             else:
@@ -251,14 +254,15 @@ def referenceform(request, id=False, dataset=False):
                 form = ReferenceForm(request.POST, instance=info)
         if form.is_valid():
             info = form.save()
-            create_record = get_object_or_404(UserAction, pk=1)
-            log = UserLog(user=request.user, action=create_record, reference=info, points=5)
+            if new_record:
+                create_record = get_object_or_404(UserAction, pk=1)
+                log = UserLog(user=request.user, action=create_record, reference=info, points=5)
             messages.success(request, 'Information was saved.')
             return redirect('core:reference', id=info.id)
         else:
             messages.error(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset}
+    context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset, 'processes': processes }
     return render(request, 'core/reference.form.html', context)
 
 def references(request, type=False, tag=False):

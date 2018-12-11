@@ -28,6 +28,17 @@
                   </select>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="references">References</label>
+                <div class="col-md-9">
+                  <select class="form-control select2" name="references" id="references" multiple>
+                    <option value=""></option>
+                    {% for details in references %}
+                      <option value="{{ details.id }}" {% if details in information.references.all %}selected{% endif %}>{{ details.title }} ({{ details.year }})</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
 
                 <div class="col-sm-offset-3 col-sm-9">
                   <button type="submit" class="btn btn-success">
