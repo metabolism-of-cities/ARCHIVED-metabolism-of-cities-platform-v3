@@ -98,11 +98,12 @@ def sector(request, city, sector):
     information = Information.objects.filter(process__in=sector.processes.all(), space=info)
     datasets = Dataset.objects.filter(process__in=sector.processes.all())
     spaces = ReferenceSpace.objects.filter(city=info, type__process__in=sector.processes.all())
+    addlink = reverse('multiplicity:information_form', args=[info.slug])
     map = False
     if spaces:
         map = True
-    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 'spaces': spaces, 'map': map
-    
+    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 'spaces': spaces, 'map': map,
+    'addlink': addlink,
     }
     return render(request, 'multiplicity/sector.html', context)
 
