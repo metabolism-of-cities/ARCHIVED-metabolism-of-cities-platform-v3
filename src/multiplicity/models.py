@@ -7,6 +7,7 @@ from django.forms import ModelForm
 
 # Used for image resizing
 from stdimage.models import StdImageField
+import re
 
 User = get_user_model()
 
@@ -223,11 +224,44 @@ class ProcessGroup(models.Model):
     def __str__(self):
         return self.name
 
+class License(models.Model):
+    name = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
+
+class Photo(TimestampedModel):
+    image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780),})
+    author = models.CharField(max_length=255)
+    source_url = models.CharField(max_length=255, null=True, blank=True)
+    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
+    description = models.TextField(null=True, blank=True)
+    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    deleted = models.BooleanField(default=False, db_index=True)
+    license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        if self.description:
+          cleanr = re.compile('<.*?>')
+          description = re.sub(cleanr, '', self.description)
+          description = description[30:] + " - " + self.author + " - #" + str(self.id)
+        else:
+          description = "Photo by " + self.author + " - #" + str(self.id)
+        return description
+
+class PhotoForm(ModelForm):
+    class Meta:
+        model = Photo
+        exclude = ['id', 'uploaded_by', 'primary_space', 'deleted', 'process']
+
 class Information(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = HTMLField('Content')
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE, null=True, blank=True)
     references = models.ManyToManyField("core.Reference", blank=True)
     dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
     process = models.ForeignKey("staf.Process", on_delete=models.CASCADE, blank=True, null=True, limit_choices_to={'slug__isnull': False})
@@ -237,7 +271,7 @@ class Information(TimestampedModel):
 class InformationForm(ModelForm):
     class Meta:
         model = Information
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'photo']
 
 class GraphType(models.Model):
     title = models.CharField(max_length=255)
@@ -259,30 +293,4 @@ class GraphType(models.Model):
 
     def __str__(self):
         return self.title
-
-class License(models.Model):
-    name = models.CharField(max_length=255)
-    url = models.CharField(max_length=255, null=True, blank=True)
-    
-    def __str__(self):
-        return self.name
-
-class Photo(TimestampedModel):
-    image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780),})
-    author = models.CharField(max_length=255)
-    source_url = models.CharField(max_length=255, null=True, blank=True)
-    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
-    description = models.TextField(null=True, blank=True)
-    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    deleted = models.BooleanField(default=False, db_index=True)
-    license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        return self.author or 'No name'
-
-class PhotoForm(ModelForm):
-    class Meta:
-        model = Photo
-        exclude = ['id', 'uploaded_by', 'primary_space', 'deleted', 'process']
 
