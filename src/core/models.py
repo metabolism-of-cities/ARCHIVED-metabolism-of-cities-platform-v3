@@ -259,6 +259,7 @@ class Reference(models.Model):
     abstract = models.TextField(null=True, blank=True)
     abstract_original_language = models.TextField(null=True, blank=True)
     date_added = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    file = models.FileField(null=True, blank=True, upload_to='references')
     LANGUAGES = (
         ('EN', 'English'),
         ('ES', 'Spanish'),

@@ -244,12 +244,12 @@ def referenceform(request, id=False, dataset=False):
         if not id:
             new_record = True
             if request.user.is_staff:
-                form = ReferenceFormAdmin(request.POST)
+                form = ReferenceFormAdmin(request.POST, request.FILES)
             else:
                 form = ReferenceForm(request.POST)
         else:
             if request.user.is_staff:
-                form = ReferenceFormAdmin(request.POST, instance=info)
+                form = ReferenceFormAdmin(request.POST, request.FILES, instance=info)
             else:
                 form = ReferenceForm(request.POST, instance=info)
         if form.is_valid():
