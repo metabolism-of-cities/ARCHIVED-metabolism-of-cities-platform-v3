@@ -16,13 +16,13 @@
 
 <div class="resourcelist">
   {% for details in list %}
-    <div class="single-resource" href="{% url 'core:reference' details.id %}">
-      <div class="row">
+    <a class="single-resource bg-gray-light" href="{% url 'core:reference' details.id %}">
+      <div class="row pad-all">
         <div class="col-lg-9">
           <h3 class="title">{{ details.title }}</h3>
           {% if details.authors.all %}
             {% for author in details.authors.all %}
-              <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == details.authors.all|length %},{% endif %}
+              <span class="author">{{ author.firstname }} {{ author.lastname }}</span>{% if not forloop.counter == details.authors.all|length %},{% endif %}
             {% endfor %}
           {% else %}
             {{ details.authorlist }}
@@ -34,7 +34,7 @@
           {% if details.year %}<div class="year">{{ details.year }}</div>{% endif %}
         </div>
       </div>
-    </div>
+    </a>
   {% endfor %}
 </div>
 
@@ -70,15 +70,5 @@ h3 a{font-size:16px}
 {% endblock %}
 
 {% block footer %}
-
-<script>
-  $(".single-resource").click(function() {
-      window.location.href = $(this).attr("href");
-  });
-
-  $(".single-resource a").click(function (event) {
-      event.stopPropagation();
-  });
-</script>
 
 {% endblock %}

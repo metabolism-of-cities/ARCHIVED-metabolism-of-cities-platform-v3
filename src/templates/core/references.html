@@ -33,10 +33,10 @@
       </select>
       <div class="row mar-top">
         <div class="col-lg-6">
-          <button class="btn btn-success" type="button">Search</button>
+          <button class="btn btn-dark" type="button">Search</button>
         </div>
         <div class="col-lg-6 text-right">
-          <a href="">Reset all filters</a> | <a href="">View all publications</a>
+          <strong>{{ list.count }}</strong> publications found | <a href="">Reset all filters</a> | <a href="">View all publications</a>
         </div>
       </div>
     </form>
@@ -47,69 +47,64 @@
 
   <div class="row mar-top">
     <section class="col-md-3 filters">
-      <ul class="nav nav-section-menu nav-sidebar">
-        <li class="nav-header text-bold">Filter by Year</li>
-          <li class="">
-            <a href="#" class="nav-link filter" data-id="2018" data-type="year">2018
-              <span class="pull-right badge badge-default">3</span>
-            </a>
-          </li>
-          <li class="">
-            <a href="#" class="nav-link filter" data-id="2017" data-type="year">2017
-              <span class="pull-right badge badge-default">24</span>
-            </a>
-          </li>
-          <li class="">
-            <a href="#" class="nav-link filter" data-id="2016" data-type="year">2016
-              <span class="pull-right badge badge-default">63</span>
-            </a>
-          </li>
-          <li class="">
-            <a href="#" class="nav-link filter" data-id="2015" data-type="year">2015
-              <span class="pull-right badge badge-default">48</span>
-            </a>
-          </li>
-      </ul>
-      <ul class="nav nav-section-menu nav-sidebar">
+      <div class="bg-gray-light pad-all">
+        <ul class="nav nav-section-menu nav-sidebar mar-btm mat-top">
+          <li class="nav-header text-bold">Filter by Year</li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2018" data-type="year">2018
+                <span class="pull-right badge badge-dark">3</span>
+              </a>
+            </li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2017" data-type="year">2017
+                <span class="pull-right badge badge-dark">24</span>
+              </a>
+            </li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2016" data-type="year">2016
+                <span class="pull-right badge badge-dark">63</span>
+              </a>
+            </li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2015" data-type="year">2015
+                <span class="pull-right badge badge-dark">48</span>
+              </a>
+            </li>
+        </ul>
+        <ul class="nav nav-section-menu nav-sidebar mar-btm">
         <li class="nav-header text-bold">Filter by Type</li>
           <li class="reg">
             <a href="#" class="nav-link filter" data-id="16" data-type="type">Journal Article
-              <span class="badge badge-default pull-right">405</span>
+              <span class="badge badge-dark pull-right">405</span>
             </a>
           </li>
           <li class="reg">
             <a href="#" class="nav-link filter" data-id="27" data-type="type">Report
-              <span class="badge badge-default pull-right">28</span>
+              <span class="badge badge-dark pull-right">28</span>
             </a>
           </li>
           <li class="reg">
             <a href="#" class="nav-link filter" data-id="29" data-type="type">Thesis
-              <span class="badge badge-default pull-right">19</span>
+              <span class="badge badge-dark pull-right">19</span>
             </a>
           </li>
           <li class="reg">
             <a href="#" class="nav-link filter" data-id="5" data-type="type">Book
-              <span class="badge badge-default pull-right">13</span>
+              <span class="badge badge-dark pull-right">13</span>
             </a>
           </li>
         </ul>
+      </div>
     </section>
     <section class="col-md-9 main records resourcelist">
-
-      <div class="resultbox mar-btm">
-        <i class="fa fa-info-circle"></i>
-        <strong>{{ list.count }}</strong>
-        publications found.
-      </div>
-
       {% for details in list %}
-        <div class="single-resource" href="{% url 'core:reference' details.id %}">
-          <div class="row">
+        <a class="single-resource bg-gray-light" href="{% url 'core:reference' details.id %}">
+          <div class="row pad-all">
             <div class="col-lg-9">
               <h3 class="title">{{ details.title }}</h3>
               {% if details.authors.all %}
                 {% for author in details.authors.all %}
-                  <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == details.authors.all|length %},{% endif %}
+                  <span class="author">{{ author.firstname }} {{ author.lastname }}</span>{% if not forloop.counter == details.authors.all|length %},{% endif %}
                 {% endfor %}
               {% else %}
                 {{ details.authorlist }}
@@ -121,7 +116,7 @@
               {% if details.year %}<div class="year">{{ details.year }}</div>{% endif %}
             </div>
           </div>
-        </div>
+        </a>
       {% endfor %}
     </section>
   </div>
@@ -155,16 +150,6 @@
 {% endblock %}
 
 {% block footer %}
-  <script>
-    $(".single-resource").click(function() {
-        window.location.href = $(this).attr("href");
-    });
-
-    $(".single-resource a").click(function (event) {
-        event.stopPropagation();
-    });
-  </script>
-
   <script type="text/javascript">
   $(function(){
     $(".filters .filter").click(function(e){
