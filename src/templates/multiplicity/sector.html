@@ -108,6 +108,11 @@
 
     <!-- space for a chart -->
 
+    <div id="graph">
+      <i class="fa fa-spinner"></i>
+      Loading a graph, stay tuned...
+    </div>
+
     <table class="table">
       <thead>
         <tr>
@@ -198,6 +203,25 @@
 {% endblock %}
 
 {% block head %}
+<script src="{% static 'ie/js/highcharts.js' %}"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/streamgraph.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/treemap.js"></script>
+<script src="https://code.highcharts.com/modules/sankey.js"></script>
+
+{% include 'multiplicity/graphs/options.html' %}
+{% include 'multiplicity/graphs/series.time.html' %}
+{% include 'multiplicity/graphs/series.column.html' %}
+{% include 'multiplicity/graphs/series.drill.html' %}
+
+
+<style type="text/css">
+#graph{height:500px;}
+</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -257,4 +281,12 @@
       leafletMap.invalidateSize();
     })
   </script>
+
+  <script type="text/javascript">
+  $(function(){
+    url = '/cities/cape-town/datasets/16/graph/4';
+    $("#graph").load(url)
+  });
+  </script>
+
 {% endblock %}
