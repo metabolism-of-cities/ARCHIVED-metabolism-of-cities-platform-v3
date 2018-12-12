@@ -6,16 +6,23 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col-lg-6">
-    <h2 id="sector-title">{{ sector.name }}</h2>
-  </div>
-  <div class="col-lg-6 text-right back-subsectors-wrap">
-    <a class="btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
-  </div>
-</div>
+<h2 id="sector-title">{{ sector.name }}</h2>
 
-<section class="sector">
+<article class="sector">
+  <section id="info">
+    <div class="row">
+      <div class="col-lg-6">
+        <h3>General information</h3>
+      </div>
+      <div class="col-lg-6 text-right">
+        <div class="section-menu">
+          General information | <a onclick="scrollToDiv('datasets')">Datasets</a> | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a>
+        </div>
+      </div>
+    </div>
+
+    <a class="btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
+
     <div class="row flex flex-wrap subsector-panels">
       {% for details in information %}
         <div class="col-lg-4 flex-none single-subsector-panel">
@@ -43,18 +50,6 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 flex-none single-subsector-panel">
-        <div class="panel height-100">
-          <div class="blog-header">
-            <img class="img-responsive" src="https://i.imgur.com/bENXY0q.png" alt="">
-          </div>
-          <div class="pad-all">
-            <h3>Datasets</h3>
-            <p>Aspernatur quidem id vero in veritatis. Repellat aut esse vero a eum reprehenderit. A et sunt delectus. Aut temporibus quas sint ullam.</p>
-            <a class="btn btn-dark" onclick="showSubSector('Datasets')">Show more</a>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="subsector-content">
@@ -62,7 +57,7 @@
       <div class="single-subsector-content" subsector="{{ details.title }}">
         <h3>{{ details.title }}</h3>
         <p>{{ details.content|safe }}</p>
-        <section class="photos mar-top bg-gray-light pad-all bord-all">
+        <div class="photos mar-top bg-gray-light pad-all bord-all">
           <div class="row">
             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
               <a data-fancybox="gallery" href="https://prototype.metabolismofcities.org/media/photos/DSC00628.large.JPG"><img src="https://prototype.metabolismofcities.org/media/photos/DSC00628.thumbnail.JPG"></a>
@@ -92,92 +87,100 @@
               <a data-fancybox="gallery" href="https://prototype.metabolismofcities.org/media/photos/south-africa-2267795_960_720.large.jpg"><img src="https://prototype.metabolismofcities.org/media/photos/south-africa-2267795_960_720.thumbnail.jpg"></a>
             </div>
           </div>
-        </section>
+        </div>
       </div>
     {% endfor %}
     </div>
+  </section>
 
   {% if datasets %}
-
-    <div id="datasets" class="single-subsector-content panel panel-dark" subsector="Datasets">
-      <div class="panel-heading">
-        <h3 class="panel-title">Datasets</h3>
+  <section id="datasets">
+    <div class="row">
+      <div class="col-lg-6">
+        <h3>Datasets</h3>
       </div>
-      <div class="panel-body">
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th width="300">Dataset</th>
-              <th>Coverage</th>
-              {% if False %}
-              <th></th>
-              <th>Smallest scale</th>
-              {% endif %}
-              <th>Upload</th>
-            </tr>
-          </thead>
-        {% for details in datasets %}
-          <tr>
-
-            <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
-            <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
-            <td>
-              {% for material in details.materials %}
-                {{ material.name }}
-              {% endfor %}
-            </td>
-          </tr>
-        {% endfor %}
-        </table>
+      <div class="col-lg-6 text-right">
+        <div class="section-menu">
+          <a onclick="scrollToDiv('info')">General information</a> | Datasets | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a>
+        </div>
       </div>
     </div>
 
+    <!-- space for a chart -->
 
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="300">Name</th>
+          <th>Coverage</th>
+          {% if False %}
+          <th></th>
+          <th>Smallest scale</th>
+          {% endif %}
+          <th>Upload</th>
+        </tr>
+      </thead>
+    {% for details in datasets %}
+      <tr>
+        <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
+        <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
+        <td>
+          {% for material in details.materials %}
+            {{ material.name }}
+          {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
+  </section>
   {% endif %}
 
   {% if spaces %}
-    <div id="map">
-      {% include 'multiplicity/includes/map.html' %}
+  <section id="infrastructure">
+    <div class="row">
+      <div class="col-lg-6">
+        <h3>Infrastructure</h3>
+      </div>
+      <div class="col-lg-6 text-right">
+        <div class="section-menu">
+          <a onclick="scrollToDiv('info')">General information</a> | <a onclick="scrollToDiv('datasets')">Datasets</a> | Infrastructure
+        </div>
+      </div>
     </div>
-  {% endif %}
-
-  {% if types %}
-
-    <div class="row blog">
-      {% for details in types %}
-        {% if details.total %}
-          {% if forloop.counter|divisibleby:4 %}</div><div class="row hide blog">{% endif %}
-          <div class="col-md-4">
+    <div class="row">
+      <div class="col-lg-6">
+        <div id="map">
+          {% include 'multiplicity/includes/map.html' %}
+        </div>
+      </div>
+      <div class="col-lg-6 col-panels">
+        {% if types %}
+          {% for details in types %}
+            {% if details.total %}
             <div class="panel">
-                <div class="blog-header">
-                  <a href="#">
-                    <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
-                  </a>
+              <div class="row flex flex-wrap">
+                <div class="col-lg-4">
+                  <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
                 </div>
-                <div class="blog-content">
-                    <div class="blog-title media-block">
-                        <a href="#" class="btn-link">
-                            <h2>{{ details.name }}</h2>
-                        </a>
-                    </div>
+                <div class="col-lg-8 pad-all">
+                  <h3>{{ details.name }}</h3>
+                  <p>
+                    {{ details.total }} records</a> found
+                    <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
+                  </p>
+                  <a class="btn btn-dark" onclick="showInfrastructure('{{ details.title }}')">Show more</a>
                 </div>
-                <div class="blog-footer">
-                    <div class="media-left"><a href="#">{{ details.total }} records</a> found</div>
-                    <div class="media-body text-right">
-                        <img src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
-                    </div>
-                </div>
+              </div>
+
             </div>
-          </div>
+            {% endif %}
+          {% endfor %}
         {% endif %}
-      {% endfor %}
+      </div>
     </div>
-
+  </section>
   {% endif %}
-
-
-</section>
+</article>
 
 
 {% if request.user.is_staff %}
@@ -195,9 +198,6 @@
 {% endblock %}
 
 {% block head %}
-<style type="text/css">
-#map{height:700px}
-</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -243,10 +243,18 @@
       $(".back-subsectors").hide();
     };
 
+    // smooth scroll to an element on the page
     function scrollToDiv(id){
       $('html,body').animate({
        scrollTop: $("#" + id).offset().top - 20
       }, 'slow');
     }
+
+    // map same height as panel column
+    $( window ).on( "load", function() {
+      var infrastructurePanelsHeight = $(".col-panels").height();
+      $("#map").height(infrastructurePanelsHeight - 20);
+      leafletMap.invalidateSize();
+    })
   </script>
 {% endblock %}

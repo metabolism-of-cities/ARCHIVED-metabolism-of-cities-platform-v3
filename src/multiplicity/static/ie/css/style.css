@@ -688,22 +688,61 @@ article.home section.feeds .single-feed:last-of-type {
   color: #333;
 }
 
-section.sector .single-subsector-content, .back-subsector {
+article.sector section:not(:last-of-type) {
+  margin-bottom: 60px;
+}
+
+article.sector section#info .single-subsector-content, .back-subsectors {
   display: none;
 }
 
-section.sector .single-subsector-content section.photos {
+article.sector section#info .single-subsector-content .photos {
   border-radius: 2px;
 }
 
-section.sector .single-subsector-content section.photos .single-photo, , #gallery figure.single-photo {
-  margin: 5px 0;
+article.sector section#info .single-subsector-content .photos .single-photo, #gallery figure.single-photo {
+  margin: 7.5px 0;
 }
 
-section.sector .single-subsector-content section.photos img, #gallery figure.single-photo img {
+article.sector section#info .single-subsector-content .photos img, #gallery figure.single-photo img {
   height: 100px;
   width: 100%;
   object-fit: scale-down;
+}
+
+article.sector section#infrastructure #map {
+  border-radius: 2px;
+}
+
+article.sector section#infrastructure #map .leaflet-control-zoom a {
+  color: unset;
+  text-decoration: unset;
+}
+
+article.sector section .section-menu {
+  margin-top: 20px;
+  line-height: 26.4px;
+  vertical-align: middle;
+  color: #999;
+}
+
+article.sector section#info .panel .img-responsive {
+  border-radius: 2px 2px 0 0;
+}
+
+article.sector section#infrastructure img.marker {
+  height: 20px;
+  margin-top: -5px;
+}
+
+article.sector section#infrastructure .panel .img-responsive {
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px 0 0 2px;
+}
+
+article.sector section .section-menu a:hover {
+  cursor: pointer;
 }
 
 .back-subsectors-wrap {
