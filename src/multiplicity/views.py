@@ -100,10 +100,11 @@ def sector(request, city, sector):
     spaces = ReferenceSpace.objects.filter(city=info, type__process__in=sector.processes.all())
     addlink = reverse('multiplicity:information_form', args=[info.slug])
     map = False
+    types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
     if spaces:
         map = True
     context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 'spaces': spaces, 'map': map,
-    'addlink': addlink,
+    'addlink': addlink, 'types': types,
     }
     return render(request, 'multiplicity/sector.html', context)
 
