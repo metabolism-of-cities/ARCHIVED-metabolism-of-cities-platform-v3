@@ -25,6 +25,19 @@
 
         leafletMap.scrollWheelZoom.disable();
 
+        var capetown      = L.marker([-33.8161, 18.2675], {icon:darkbluemarker}),
+            durban        = L.marker([-33.8661, 18.2675], {icon:darkbluemarker}),
+            joburg        = L.marker([-33.9161, 18.2675], {icon:redmarker}),
+            pretoria      = L.marker([-33.9661, 18.2675], {icon:redmarker});
+            port_elizabth = L.marker([-33.9661, 18.2975], {icon:greenmarker});
+            bloemfontein  = L.marker([-33.9661, 18.2375], {icon:greenmarker});
+
+        var coast = L.featureGroup([capetown, durban]).addTo(leafletMap);
+        var inland = L.featureGroup([joburg, pretoria]).addTo(leafletMap);
+        var more = L.featureGroup([port_elizabth, bloemfontein]).addTo(leafletMap);
+
+        allGroups = [coast, inland, more];
+
         {% for details in spaces %}
           {% if details.location.lat %}
             L.marker([{{ details.location.lat }}, {{details.location.lng }}], {icon:{{ details.type.marker_color}}marker, riseOnHover: true}).addTo(leafletMap)
@@ -32,4 +45,21 @@
           {% endif %}
         {% endfor %}
 
+        // remove and add layers
+        function showAllGroups(){
+          $(allGroups).each(function() {
+            leafletMap.addLayer(this);
+          })
+        };
+
+        function removeAllGroups() {
+          $(allGroups).each(function() {
+            leafletMap.removeLayer(this);
+          })
+        };
+
+        function showOneGroup(group) {
+          removeAllGroups();
+          leafletMap.addLayer(group);
+        }
     </script>

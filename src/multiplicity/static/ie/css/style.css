@@ -730,6 +730,10 @@ article.sector section#info .panel .img-responsive {
   border-radius: 2px 2px 0 0;
 }
 
+article.sector section#datasets #graph {
+  height: 600px;
+}
+
 article.sector section#infrastructure img.marker {
   height: 20px;
   margin-top: -5px;

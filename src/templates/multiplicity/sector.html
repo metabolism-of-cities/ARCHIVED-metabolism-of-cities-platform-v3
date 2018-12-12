@@ -106,11 +106,11 @@
       </div>
     </div>
 
-    <!-- space for a chart -->
-
     <div id="graph">
-      <i class="fa fa-spinner"></i>
-      Loading a graph, stay tuned...
+      <div class="loading text-center text-2x pad-all mar-top">
+        <span class="mar-top pad-all">Loading graph</span>
+        <i class="fas fa-cog fa-spin mar-top"></i>
+      </div>
     </div>
 
     <table class="table">
@@ -157,6 +157,11 @@
         <div id="map">
           {% include 'multiplicity/includes/map.html' %}
         </div>
+        <a class="btn btn-dark" onclick="showOneGroup(inland)">Filter markers 1</a>
+        <a class="btn btn-dark" onclick="showOneGroup(coast)">Filter markers 2</a>
+        <a class="btn btn-dark" onclick="showOneGroup(more)">Filter markers 3</a>
+        <a class="btn btn-dark" onclick="removeAllGroups()">Remove them</a>
+        <a class="btn btn-dark" onclick="showAllGroups()">Show all</a>
       </div>
       <div class="col-lg-6 col-panels">
         {% if types %}
@@ -218,10 +223,6 @@
 {% include 'multiplicity/graphs/series.column.html' %}
 {% include 'multiplicity/graphs/series.drill.html' %}
 
-
-<style type="text/css">
-#graph{height:500px;}
-</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -285,7 +286,7 @@
   <script type="text/javascript">
   $(function(){
     url = '/cities/cape-town/datasets/16/graph/4';
-    $("#graph").load(url)
+    $("#graph").load(url);
   });
   </script>
 
