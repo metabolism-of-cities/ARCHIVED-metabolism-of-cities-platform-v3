@@ -157,9 +157,9 @@
         <div id="map">
           {% include 'multiplicity/includes/map.html' %}
         </div>
-        <a class="btn btn-dark" onclick="showOneGroup(inland)">Filter markers 1</a>
-        <a class="btn btn-dark" onclick="showOneGroup(coast)">Filter markers 2</a>
-        <a class="btn btn-dark" onclick="showOneGroup(more)">Filter markers 3</a>
+        <a class="btn btn-dark" onclick="showInfrastructure(inland, 'inland')">Filter markers 1</a>
+        <a class="btn btn-dark" onclick="showInfrastructure(coast, 'coast')">Filter markers 2</a>
+        <a class="btn btn-dark" onclick="showInfrastructure(more, 'more')">Filter markers 3</a>
         <a class="btn btn-dark" onclick="removeAllGroups()">Remove them</a>
         <a class="btn btn-dark" onclick="showAllGroups()">Show all</a>
       </div>
@@ -175,18 +175,37 @@
                 <div class="col-lg-8 pad-all">
                   <h3>{{ details.name }}</h3>
                   <p>
-                    {{ details.total }} records</a> found
+                    <a href="">{{ details.total }} records</a> found
                     <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
                   </p>
                   <a class="btn btn-dark" onclick="showInfrastructure('{{ details.title }}')">Show more</a>
                 </div>
               </div>
-
             </div>
             {% endif %}
           {% endfor %}
         {% endif %}
       </div>
+    </div>
+    <div class="data mar-top">
+      <table class="table inland">
+        <tr>
+          <td>Data 1</td>
+          <td>Data 1</td>
+        </tr>
+      </table>
+      <table class="table coast">
+        <tr>
+          <td>Data 2</td>
+          <td>Data 2</td>
+        </tr>
+      </table>
+      <table class="table more">
+        <tr>
+          <td>Data 3</td>
+          <td>Data 3</td>
+        </tr>
+      </table>
     </div>
   </section>
   {% endif %}
@@ -250,6 +269,7 @@
 
 {% block footer %}
   <script>
+    // show content of a subsector
     function showSubSector(subSectorTitle){
       $(".subsector-panels").slideUp();
       $(".back-subsectors").show();
@@ -262,6 +282,7 @@
       scrollToDiv("sector-title");
     };
 
+    // show cards with subsectors, hide content
     function backSubsectors() {
       $(".subsector-panels").slideDown();
       $(".single-subsector-content").hide();
@@ -276,11 +297,18 @@
     }
 
     // map same height as panel column
-    $( window ).on( "load", function() {
+    $(window).on("load", function() {
       var infrastructurePanelsHeight = $(".col-panels").height();
       $("#map").height(infrastructurePanelsHeight - 20);
       leafletMap.invalidateSize();
     })
+
+    // show markers and data of specific infrastructure
+    function showInfrastructure(leaflet, table){
+      showOneGroup(leaflet);
+      $("section#infrastructure .data table.table").hide();
+      $("section#infrastructure .data table.table." + table).show();
+    };
   </script>
 
   <script type="text/javascript">

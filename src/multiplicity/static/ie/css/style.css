@@ -745,6 +745,10 @@ article.sector section#infrastructure .panel .img-responsive {
   border-radius: 2px 0 0 2px;
 }
 
+article.sector section#infrastructure .data table.table {
+  display: none;
+}
+
 article.sector section .section-menu a:hover {
   cursor: pointer;
 }
