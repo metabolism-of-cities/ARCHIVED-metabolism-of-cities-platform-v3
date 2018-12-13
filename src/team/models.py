@@ -21,7 +21,8 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
     google_drive = models.CharField(max_length=255, null=True, blank=True)
     icon = models.CharField(max_length=255, null=True, blank=True)
-    category_description = models.TextField(null=True);
+    category_description = models.TextField(null=True, blank=True);
+    entry_exam = models.TextField(null=True, blank=True);
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True, blank=True)
     slug = models.SlugField()
     GROUPS = (
