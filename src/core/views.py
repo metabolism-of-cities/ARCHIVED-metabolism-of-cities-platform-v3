@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.contrib import messages
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
@@ -207,6 +207,21 @@ def reference(request, id):
     context = { 'section': 'literature', 'page': 'publications', 'info': info, 'related': related, 'authors': authors, 'editlink': editlink, 'data': data, 'datatables': True }
     return render(request, 'core/reference.html', context)
 
+#GW: Export reference funcion 10/12
+def export_reference(request,id, export_method):
+    info = get_object_or_404(Reference, pk=id)
+    data = Data.objects.filter(dataset__references=info)
+    context = {'info': info}
+    '''if export_method == 'bibtext':
+        response= "Hello, world. You're at bibtext."
+    elif export_method == 'zotero':
+        response = "Hello, world. You're at zotero."
+    elif export_method == 'endnote':
+        response = "Hello, world. You're at endnote."
+    else:
+        response = "Ups" #return redirect(obj)'''
+    return render(request, 'core/'+export_method+'.html', context)
+
 @login_required
 def referenceform(request, id=False, dataset=False):
     if request.method == 'POST':
@@ -376,7 +391,7 @@ def updateorgs(request):
             info.type = 'universities'
             info.parent = Organization.objects.get(pk=49)
             info.save()
-            
+
         if info.id == 51:
             info.parent = Organization.objects.get(pk=57)
             info.name = "Department of Environmental & Geographical Science"

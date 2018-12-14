@@ -6,6 +6,8 @@
 
 {% block content %}
 
+{% include 'core/bibtext.html' %}
+
 <div class="row">
   <div class="col-lg-8 col-lg-offset-2">
     <h3>{{ info.title }}</h3>
@@ -127,9 +129,10 @@
         <h2 class="panel-title">Download reference</h2>
       </div>
       <div class="panel-body">
-        <a class="btn btn-info" href="http://">Bibtex</a>
+        <a class="btn btn-info" data-toggle="modal" href="{% url 'core:export_reference' info.id 'bibtext' %}" data-target="#bibtext-modal">Bibtex</a>
         <a class="btn btn-info" href="http://">EndNote</a>
         <a class="btn btn-info" href="http://">Zotero</a>
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#bibtext-modal">Open Modal</button>
       </div>
     </div>
     <div class="panel panel-dark">
