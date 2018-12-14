@@ -31,22 +31,22 @@
 #page-content .nav-tabs.nav-tabs-inverted a:hover,#page-content .leaflet-container a:hover,#page-content .nav a:hover{text-decoration:none}
 
 .bluemarker {
-  background:url('../../multiplicity/img/markers/marker.blue.png');
+  background:url('../../multiplicity/img/markers/marker.blue.svg');
 }
 .redmarker {
-  background:url('../../multiplicity/img/markers/marker.red.png');
+  background:url('../../multiplicity/img/markers/marker.red.svg');
 }
 .greenmarker {
-  background:url('../../multiplicity/img/markers/marker.green.png');
+  background:url('../../multiplicity/img/markers/marker.green.svg');
 }
 .darkbluemarker {
-  background:url('../../multiplicity/img/markers/marker.darkblue.png');
+  background:url('../../multiplicity/img/markers/marker.darkblue.svg');
 }
 .purplemarker {
-  background:url('../../multiplicity/img/markers/marker.purple.png');
+  background:url('../../multiplicity/img/markers/marker.purple.svg');
 }
 .yellowmarker {
-  background:url('../../multiplicity/img/markers/marker.yellow.png');
+  background:url('../../multiplicity/img/markers/marker.yellow.svg');
 }
 .top-page-tabs.nav-tabs li{background:#ecf0f5;opacity:0.67;margin-right:2px}
 .top-page-tabs.nav-tabs li.active{opacity:1}
@@ -771,11 +771,11 @@ article.sector section .section-menu a:hover {
 }
 
 #map .leaflet-control-layers-selector {
-  top: 4px;
+  top: 5px;
 }
 
 #map .leaflet-control-layers-overlays img {
-  height: 18px;
+  height: 14px;
 }
 
 @media screen and (min-width: 1200px) {

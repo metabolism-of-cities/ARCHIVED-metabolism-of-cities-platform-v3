@@ -178,7 +178,7 @@
                     <h4 class="name">{{ details.name }}</h4>
                     <p>
                       <a href="">{{ details.total }} records</a> found
-                      <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
+                      <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.svg" alt="" />
                     </p>
                     <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.name }}')">Show more</a>
                   </div>
@@ -362,12 +362,14 @@
       showAllLayers();
     }
 
+    // show a preview of the dataset's chart, id = dataset id, type = chart type id
     function previewChart(id, type){
       $("#graph").html("<div class='loading text-center text-2x pad-all mar-top'><span class='mar-top pad-all'>Loading graph</span><i class='fas fa-cog fa-spin mar-top'></i></div>");
       url = '/cities/cape-town/datasets/' + id + '/graph/' + type;
       $("#graph").load(url);
     };
 
+    // make clicked button active, scroll to top of chart
     $("article.sector section#datasets .table a.btn").on("click", function() {
       $("article.sector section#datasets .table a.btn").removeClass("active");
       $(this).addClass("active");
