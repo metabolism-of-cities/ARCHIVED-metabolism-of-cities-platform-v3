@@ -32,12 +32,15 @@
             port_elizabth = L.marker([-33.9661, 18.2975], {icon:greenmarker});
             bloemfontein  = L.marker([-33.9661, 18.2375], {icon:greenmarker});
 
+        // these variable names are used in the showOneLayer function below
         var dams = L.featureGroup([capetown, durban]).addTo(leafletMap);
         var reservoirs = L.featureGroup([joburg, pretoria]).addTo(leafletMap);
         var treatment = L.featureGroup([port_elizabth, bloemfontein]).addTo(leafletMap);
 
+        // this group exists in order to show or hide all layers on the map
         allFeatureGroups = [dams, reservoirs, treatment];
 
+        // this group exists to show the checkboxes on the map. The format is "label": variable. It can contain html, as shown in the current example
         allLayers = {
           "<img src='/static/multiplicity/img/markers/marker.blue.png'/> dams": dams,
           "reservoirs": reservoirs,

@@ -117,20 +117,36 @@
           <th></th>
           <th>Smallest scale</th>
           {% endif %}
-          <th>Upload</th>
         </tr>
       </thead>
-    {% for details in datasets %}
+      {% for details in datasets %}
+        <tr>
+          <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
+          <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
+          <td>
+            {% for material in details.materials %}
+              {{ material.name }}
+            {% endfor %}
+          </td>
+          <td><a class="btn btn-sm btn-mint" onclick="previewChart({{ details.id }}, 4)"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a></td>
+        </tr>
+      {% endfor %}
       <tr>
-        <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
-        <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
+        <td><a href="">Bricks!</a></td>
+        <td>asdfads</td>
         <td>
-          {% for material in details.materials %}
-            {{ material.name }}
-          {% endfor %}
+          Bricks!
         </td>
+        <td><a class="btn btn-sm btn-mint" onclick="previewChart(15, 4)"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a></td>
       </tr>
-    {% endfor %}
+      <tr>
+        <td><a href="">Vegatables</a></td>
+        <td>Bla bla</td>
+        <td>
+          Carrots
+        </td>
+        <td><a class="btn btn-sm btn-mint active" onclick="previewChart(15, 2)"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a></td>
+      </tr>
     </table>
   </section>
   {% endif %}
@@ -147,22 +163,19 @@
         </div>
       </div>
     </div>
-    <div id="map">
-      {% include 'multiplicity/includes/map.html' %}
-    </div>
     <div id="infrastructure-anchor"></div>
     <div id="infrastructure-list" class="row col-panels mar-top">
       {% if types %}
         {% for details in types %}
           {% if details.total %}
-            <div class="col-lg-6">
+            <div class="col-lg-6 single-infrastructure">
               <div class="panel">
                 <div class="row flex flex-wrap">
                   <div class="col-lg-4">
                     <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
                   </div>
                   <div class="col-lg-8 pad-all">
-                    <h3>{{ details.name }}</h3>
+                    <h4 class="name">{{ details.name }}</h4>
                     <p>
                       <a href="">{{ details.total }} records</a> found
                       <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
@@ -183,6 +196,7 @@
             <div class="single-dataset" infrastructure="{{ details.name }}">
               <a class="btn btn-dark" onclick="backInfrastructure()"><i class="fas fa-arrow-left fa-fw"></i> Back to list</a>
               <a class="btn btn-mint" onclick="showInfrastructureMap(dams)"><i class="fas fa-map fa-fw"></i> Show on map</a>
+              <!-- this uses dams as an example. It should be one of the variables in allFeatureGroups in map.html -->
               <table class="table mar-top">
                 <thead>
                   <tr>
@@ -229,6 +243,9 @@
         {% endfor %}
       </div>
     {% endif %}
+    <div id="map">
+      {% include 'multiplicity/includes/map.html' %}
+    </div>
   </section>
   {% endif %}
 </article>
@@ -342,14 +359,22 @@
       $("#infrastructure-list").slideDown();
       $(".single-dataset").hide();
       scrollToDiv("infrastructure-anchor");
+      showAllLayers();
     }
-  </script>
 
-  <script type="text/javascript">
-  $(function(){
-    url = '/cities/cape-town/datasets/16/graph/4';
-    $("#graph").load(url);
-  });
+    function previewChart(id, type){
+      $("#graph").html("<div class='loading text-center text-2x pad-all mar-top'><span class='mar-top pad-all'>Loading graph</span><i class='fas fa-cog fa-spin mar-top'></i></div>");
+      url = '/cities/cape-town/datasets/' + id + '/graph/' + type;
+      $("#graph").load(url);
+    };
+
+    $("article.sector section#datasets .table a.btn").on("click", function() {
+      $("article.sector section#datasets .table a.btn").removeClass("active");
+      $(this).addClass("active");
+      scrollToDiv("datasets");
+    });
+
+    previewChart(15, 2)
   </script>
 
 {% endblock %}

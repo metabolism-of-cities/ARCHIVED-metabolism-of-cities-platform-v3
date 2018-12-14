@@ -750,8 +750,8 @@ article.sector section#infrastructure .panel .img-responsive {
   border-radius: 2px 0 0 2px;
 }
 
-article.sector section#infrastructure #infrastructure-list {
-  /*margin-top: 30px;*/
+article.sector section#infrastructure #infrastructure-list .single-infrastructure .name {
+  margin-top: 5px;
 }
 
 article.sector section#infrastructure .data .single-dataset {
