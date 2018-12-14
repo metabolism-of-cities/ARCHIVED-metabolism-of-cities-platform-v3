@@ -199,7 +199,7 @@ class TicketQuerySet(models.QuerySet):
 
 class TaskForceTicket(models.Model):
     taskforce = models.ForeignKey(Category, on_delete=models.CASCADE)
-    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'is_staff': True})
     title = models.CharField(max_length=255)
     description = HTMLField('description', null=True, blank=True)
     STATUS = (
@@ -223,12 +223,13 @@ class TaskForceTicket(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
     unit = models.ForeignKey(TaskForceUnit, on_delete=models.CASCADE, null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
+    good_entry_task = models.BooleanField(default=False)
     objects = TicketQuerySet.as_manager()
 
 class TaskForceTicketForm(ModelForm):
     class Meta:
         model = TaskForceTicket
-        fields = ['title', 'description', 'assigned_to', 'status', 'importance', 'urgency', 'complexity', 'unit', 'deadline']
+        fields = ['title', 'description', 'assigned_to', 'status', 'importance', 'urgency', 'complexity', 'unit', 'deadline', 'good_entry_task']
 
 class TicketLog(models.Model):
     ticket = models.ForeignKey(TaskForceTicket, on_delete=models.CASCADE)

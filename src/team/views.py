@@ -477,7 +477,7 @@ def taskforce(request, id):
 def ticketdetails(request, id):
     info = TaskForceTicket.objects.get(pk=id)
     log = info.ticketlog_set.all().order_by('created_at')
-    users = User.objects.all()
+    users = User.objects.filter(is_staff=True)
 
     choices = TaskForceTicket.STATUS
     context = { 'navbar': 'backend', 'info': info, 'choices': choices, 'log': log, 'users': users }
