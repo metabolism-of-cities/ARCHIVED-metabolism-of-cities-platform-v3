@@ -212,14 +212,6 @@ def export_reference(request,id, export_method):
     info = get_object_or_404(Reference, pk=id)
     data = Data.objects.filter(dataset__references=info)
     context = {'info': info}
-    '''if export_method == 'bibtext':
-        response= "Hello, world. You're at bibtext."
-    elif export_method == 'zotero':
-        response = "Hello, world. You're at zotero."
-    elif export_method == 'endnote':
-        response = "Hello, world. You're at endnote."
-    else:
-        response = "Ups" #return redirect(obj)'''
     return render(request, 'core/'+export_method+'.html', context)
 
 @login_required
