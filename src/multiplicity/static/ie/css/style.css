@@ -696,6 +696,10 @@ article.sector section#info .single-subsector-content, .back-subsectors {
   display: none;
 }
 
+article.sector section#info .subsector-panels .single-subsector-panel .panel img {
+  width: 100%;
+}
+
 article.sector section#info .single-subsector-content .photos {
   border-radius: 2px;
 }
@@ -707,11 +711,12 @@ article.sector section#info .single-subsector-content .photos .single-photo, #ga
 article.sector section#info .single-subsector-content .photos img, #gallery figure.single-photo img {
   height: 100px;
   width: 100%;
-  object-fit: scale-down;
+  object-fit: cover;
 }
 
 article.sector section#infrastructure #map {
   border-radius: 2px;
+  height: 600px;
 }
 
 article.sector section#infrastructure #map .leaflet-control-zoom a {
@@ -745,7 +750,11 @@ article.sector section#infrastructure .panel .img-responsive {
   border-radius: 2px 0 0 2px;
 }
 
-article.sector section#infrastructure .data table.table {
+article.sector section#infrastructure #infrastructure-list {
+  /*margin-top: 30px;*/
+}
+
+article.sector section#infrastructure .data .single-dataset {
   display: none;
 }
 
@@ -755,6 +764,18 @@ article.sector section .section-menu a:hover {
 
 .back-subsectors-wrap {
   margin-top: 20px;
+}
+
+#map .leaflet-control-layers-scrollbar {
+  overflow-y: hidden;
+}
+
+#map .leaflet-control-layers-selector {
+  top: 4px;
+}
+
+#map .leaflet-control-layers-overlays img {
+  height: 18px;
 }
 
 @media screen and (min-width: 1200px) {

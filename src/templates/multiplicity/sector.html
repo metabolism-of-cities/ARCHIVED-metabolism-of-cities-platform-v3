@@ -21,15 +21,11 @@
       </div>
     </div>
 
-    <a class="btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
-
     <div class="row flex flex-wrap subsector-panels">
       {% for details in information %}
-        <div class="col-lg-4 flex-none single-subsector-panel">
+        <div class="col-lg-4 col-sm-6 flex-none single-subsector-panel">
           <div class="panel height-100">
-            <div class="blog-header">
-              <img class="img-responsive" src="https://prototype.metabolismofcities.org/media/photos/32486.thumbnail.jpg" alt="">
-            </div>
+            <img class="img-responsive" src="https://prototype.metabolismofcities.org/media/photos/32486.thumbnail.jpg" alt="">
             <div class="pad-all">
               <h3>{{ details.title }}</h3>
               <p>{{ details.content|safe|truncatechars:200 }}</p>
@@ -38,11 +34,9 @@
           </div>
         </div>
       {% endfor %}
-      <div class="col-lg-4 flex-none single-subsector-panel">
+      <div class="col-lg-4 col-sm-6 flex-none single-subsector-panel">
         <div class="panel height-100">
-          <div class="blog-header">
-            <img class="img-responsive" src="https://prototype.metabolismofcities.org/media/photos/DSC00622.thumbnail.JPG" alt="">
-          </div>
+          <img class="img-responsive" src="https://prototype.metabolismofcities.org/media/photos/DSC00622.thumbnail.JPG" alt="">
           <div class="pad-all">
             <h3>Major companies</h3>
             <p>Aspernatur quidem id vero in veritatis. Repellat aut esse vero a eum reprehenderit. A et sunt delectus. Aut temporibus quas sint ullam.</p>
@@ -55,6 +49,7 @@
     <div class="subsector-content">
     {% for details in information %}
       <div class="single-subsector-content" subsector="{{ details.title }}">
+        <a class="btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
         <h3>{{ details.title }}</h3>
         <p>{{ details.content|safe }}</p>
         <div class="photos mar-top bg-gray-light pad-all bord-all">
@@ -152,61 +147,88 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-6">
-        <div id="map">
-          {% include 'multiplicity/includes/map.html' %}
-        </div>
-        <a class="btn btn-dark" onclick="showInfrastructure(inland, 'inland')">Filter markers 1</a>
-        <a class="btn btn-dark" onclick="showInfrastructure(coast, 'coast')">Filter markers 2</a>
-        <a class="btn btn-dark" onclick="showInfrastructure(more, 'more')">Filter markers 3</a>
-        <a class="btn btn-dark" onclick="removeAllGroups()">Remove them</a>
-        <a class="btn btn-dark" onclick="showAllGroups()">Show all</a>
-      </div>
-      <div class="col-lg-6 col-panels">
-        {% if types %}
-          {% for details in types %}
-            {% if details.total %}
-            <div class="panel">
-              <div class="row flex flex-wrap">
-                <div class="col-lg-4">
-                  <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
-                </div>
-                <div class="col-lg-8 pad-all">
-                  <h3>{{ details.name }}</h3>
-                  <p>
-                    <a href="">{{ details.total }} records</a> found
-                    <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
-                  </p>
-                  <a class="btn btn-dark" onclick="showInfrastructure('{{ details.title }}')">Show more</a>
+    <div id="map">
+      {% include 'multiplicity/includes/map.html' %}
+    </div>
+    <div id="infrastructure-anchor"></div>
+    <div id="infrastructure-list" class="row col-panels mar-top">
+      {% if types %}
+        {% for details in types %}
+          {% if details.total %}
+            <div class="col-lg-6">
+              <div class="panel">
+                <div class="row flex flex-wrap">
+                  <div class="col-lg-4">
+                    <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
+                  </div>
+                  <div class="col-lg-8 pad-all">
+                    <h3>{{ details.name }}</h3>
+                    <p>
+                      <a href="">{{ details.total }} records</a> found
+                      <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
+                    </p>
+                    <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.name }}')">Show more</a>
+                  </div>
                 </div>
               </div>
             </div>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% if types %}
+      <div class="data mar-top">
+        {% for details in types %}
+          {% if details.total %}
+            <div class="single-dataset" infrastructure="{{ details.name }}">
+              <a class="btn btn-dark" onclick="backInfrastructure()"><i class="fas fa-arrow-left fa-fw"></i> Back to list</a>
+              <a class="btn btn-mint" onclick="showInfrastructureMap(dams)"><i class="fas fa-map fa-fw"></i> Show on map</a>
+              <table class="table mar-top">
+                <thead>
+                  <tr>
+                    <th>{{ details.name }}</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                  </tr>
+                  <tr>
+                    <td>Mary</td>
+                    <td>Moe</td>
+                    <td>mary@example.com</td>
+                  </tr>
+                  <tr>
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>july@example.com</td>
+                  </tr>
+                  <tr>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                  </tr>
+                  <tr>
+                    <td>Mary</td>
+                    <td>Moe</td>
+                    <td>mary@example.com</td>
+                  </tr>
+                  <tr>
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>july@example.com</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
-    </div>
-    <div class="data mar-top">
-      <table class="table inland">
-        <tr>
-          <td>Data 1</td>
-          <td>Data 1</td>
-        </tr>
-      </table>
-      <table class="table coast">
-        <tr>
-          <td>Data 2</td>
-          <td>Data 2</td>
-        </tr>
-      </table>
-      <table class="table more">
-        <tr>
-          <td>Data 3</td>
-          <td>Data 3</td>
-        </tr>
-      </table>
-    </div>
+    {% endif %}
   </section>
   {% endif %}
 </article>
@@ -269,6 +291,13 @@
 
 {% block footer %}
   <script>
+    // smooth scroll to an element on the page
+    function scrollToDiv(id){
+      $('html,body').animate({
+       scrollTop: $("#" + id).offset().top - 20
+      }, 'slow');
+    }
+
     // show content of a subsector
     function showSubSector(subSectorTitle){
       $(".subsector-panels").slideUp();
@@ -286,29 +315,34 @@
     function backSubsectors() {
       $(".subsector-panels").slideDown();
       $(".single-subsector-content").hide();
-      $(".back-subsectors").hide();
     };
 
-    // smooth scroll to an element on the page
-    function scrollToDiv(id){
-      $('html,body').animate({
-       scrollTop: $("#" + id).offset().top - 20
-      }, 'slow');
-    }
-
-    // map same height as panel column
+    // map with golden ratio
     $(window).on("load", function() {
-      var infrastructurePanelsHeight = $(".col-panels").height();
-      $("#map").height(infrastructurePanelsHeight - 20);
+      var containerWidth = $("article.sector").width();
+      $("#map").height(containerWidth / 1.618);
       leafletMap.invalidateSize();
     })
 
-    // show markers and data of specific infrastructure
-    function showInfrastructure(leaflet, table){
-      showOneGroup(leaflet);
-      $("section#infrastructure .data table.table").hide();
-      $("section#infrastructure .data table.table." + table).show();
+    // show data of specific infrastructure
+    function showInfrastructureData(infrastructure){
+      $("section#infrastructure .data .single-dataset, #infrastructure-list").hide();
+      $("section#infrastructure .data .single-dataset[infrastructure='" + infrastructure + "']").show();
+      scrollToDiv("infrastructure-anchor");
     };
+
+    // show specific infrastructure on map
+    function showInfrastructureMap(infrastructure){
+      showOneLayer(infrastructure);
+      scrollToDiv("map");
+    };
+
+    // show infrastructure list, hide dataset
+    function backInfrastructure() {
+      $("#infrastructure-list").slideDown();
+      $(".single-dataset").hide();
+      scrollToDiv("infrastructure-anchor");
+    }
   </script>
 
   <script type="text/javascript">
