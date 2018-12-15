@@ -95,25 +95,30 @@ def map(request, city, type='boundaries'):
 def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)
-    information = Information.objects.filter(process__in=sector.processes.all(), space=info)
+    information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
     datasets = Dataset.objects.filter(process__in=sector.processes.all())
     addlink = reverse('multiplicity:information_form', args=[info.slug])
+    photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
     map = False
+    infrastructure = False
     types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
     spaces_list = {}
     for type in types:
         get_list = ReferenceSpace.objects.filter(city=info, type=type)
         if get_list:
             spaces_list[type.id] = get_list
+            # We should build in a check to see if the spaces really have coordinates available; if not map = false
             map = True
+            infrastructure = True
 
     features_list = ReferenceSpaceFeature.objects.filter(space__type__process__in=sector.processes.all(), feature__show_in_table=True)
     feature = defaultdict(dict)
     for details in features_list:
         feature[details.space.id][details.feature.id] = details.value
 
-    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 'map': map,
-    'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature
+    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 
+    'map': map, 'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature, 
+    'infrastructure': infrastructure, 'photos': photos
     }
     return render(request, 'multiplicity/sector.html', context)
 
@@ -231,6 +236,7 @@ def graph(request, city, dataset, id):
     data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
     data_groups = Data.objects.select_related('material').filter(dataset=dataset).distinct('material__name').order_by('material__name')
     data_subgroups = Data.objects.filter(dataset=dataset).distinct('material_name').order_by('material_name')
+    unit = False
 
     space = dataset.primary_space
 
@@ -291,6 +297,7 @@ def graph(request, city, dataset, id):
     'spaces': spaces,
     'info': info,
     'dataset': dataset,
+    'unit': unit,
     }
     return render(request, 'multiplicity/graphs/' + graph.slug + '.html', context)
 

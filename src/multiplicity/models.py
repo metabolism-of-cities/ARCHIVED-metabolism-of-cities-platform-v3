@@ -235,7 +235,7 @@ class License(models.Model):
         return self.name
 
 class Photo(TimestampedModel):
-    image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780),})
+    image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780), 'medium': (640, 480)})
     author = models.CharField(max_length=255)
     source_url = models.CharField(max_length=255, null=True, blank=True)
     process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
@@ -265,6 +265,7 @@ class Information(TimestampedModel):
     content = HTMLField('Content')
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
     photo = models.ForeignKey(Photo, on_delete=models.CASCADE, null=True, blank=True)
+    position = models.IntegerField(null=True, blank=True)
     references = models.ManyToManyField("core.Reference", blank=True)
     dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
     process = models.ForeignKey("staf.Process", on_delete=models.CASCADE, blank=True, null=True, limit_choices_to={'slug__isnull': False})
@@ -274,7 +275,7 @@ class Information(TimestampedModel):
 class InformationForm(ModelForm):
     class Meta:
         model = Information
-        fields = ['title', 'content', 'photo']
+        fields = ['title', 'content', 'photo', 'position']
 
 class GraphType(models.Model):
     title = models.CharField(max_length=255)

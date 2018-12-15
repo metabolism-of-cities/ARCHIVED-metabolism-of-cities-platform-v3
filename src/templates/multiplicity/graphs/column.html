@@ -131,8 +131,6 @@
 
 <div id="columnChart" style="width:100%; height: 600px;"></div>
 
-<div id="not-testing" style="width:100%; height: 600px;"></div>
-
 <script>
 	if (isTimeSeries == true) {
 		Highcharts.chart('columnChart', {
@@ -184,7 +182,7 @@
 	    yAxis: {
 	      min: 0,
 	      title: {
-	        text: 'Y axis text',
+	        text: 'Quantity ({{ unit }})',
 	        style: {
 	          fontWeight: 'bold'
 	        },
