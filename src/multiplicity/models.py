@@ -52,14 +52,17 @@ class ReferenceSpaceType(models.Model):
     )
     type = models.CharField(max_length=3, choices=SPACE_TYPE)
     COLORS = (
-        ('green', 'Green'),
         ('blue', 'Blue'),
-        ('darkblue', 'Dark Blue'),
-        ('black', 'Black'),
-        ('purple', 'Purple'),
         ('red', 'Red'),
+        ('green', 'Green'),
+        ('darkblue', 'Dark Blue'),
+        ('purple', 'Purple'),
         ('yellow', 'yellow'),
         ('orange', 'Orange'),
+        ('black', 'Black'),
+        ('grey', 'Grey'),
+        ('pink', 'Pink'),
+        ('brightgreen', 'Bright green'),
         ('white', 'White'),
     )
     marker_color = models.CharField(max_length=10, choices=COLORS, null=True, blank=True, default='blue')

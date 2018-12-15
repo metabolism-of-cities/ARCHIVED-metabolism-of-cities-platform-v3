@@ -96,6 +96,7 @@ def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)
     information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
+    references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).order_by('title')
     datasets = Dataset.objects.filter(process__in=sector.processes.all())
     addlink = reverse('multiplicity:information_form', args=[info.slug])
     photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
@@ -118,7 +119,7 @@ def sector(request, city, sector):
 
     context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 
     'map': map, 'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature, 
-    'infrastructure': infrastructure, 'photos': photos
+    'infrastructure': infrastructure, 'photos': photos, 'references': references,
     }
     return render(request, 'multiplicity/sector.html', context)
 
@@ -185,10 +186,10 @@ def resources(request, city, slug):
     elif slug == "theses":
         type = 29
     type = get_object_or_404(ReferenceType, pk=type)
-    list = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
+    references = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
 
-    context = { 'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 'list': list, 'topics': topics, 'addlink': addlink, 'type': type, 'slug': slug}
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 'references': references, 'topics': topics, 'addlink': addlink, 'type': type, 'slug': slug}
     return render(request, 'multiplicity/resources.list.html', context)
 
 def datasets(request, city):

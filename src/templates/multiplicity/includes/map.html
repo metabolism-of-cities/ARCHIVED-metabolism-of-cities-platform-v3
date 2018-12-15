@@ -10,10 +10,17 @@
         var leafletMap = L.map('map').setView([{{ info.location.lat }}, {{ info.location.lng }}], {{ info.location.default_zoom|default_if_none:12 }});
 
         var bluemarker = L.divIcon({className: 'bluemarker'});
-        var darkbluemarker = L.divIcon({className: 'darkbluemarker'});
-        var greenmarker = L.divIcon({className: 'greenmarker'});
-        var yellowmarker = L.divIcon({className: 'yellowmarker'});
         var redmarker = L.divIcon({className: 'redmarker'});
+        var greenmarker = L.divIcon({className: 'greenmarker'});
+        var darkbluemarker = L.divIcon({className: 'darkbluemarker'});
+        var purplemarker = L.divIcon({className: 'purplemarker'});
+        var yellowmarker = L.divIcon({className: 'yellowmarker'});
+        var orangemarker = L.divIcon({className: 'orangemarker'});
+        var blackmarker = L.divIcon({className: 'blackmarker'});
+        var greymarker = L.divIcon({className: 'greymarker'});
+        var pinkmarker = L.divIcon({className: 'pinkmarker'});
+        var brightgreenmarker = L.divIcon({className: 'brightgreenmarker'});
+        var whitemarker = L.divIcon({className: 'whitemarker'});
 
         var basemap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {
           maxZoom: 19,

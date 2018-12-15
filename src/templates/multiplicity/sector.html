@@ -19,6 +19,7 @@
         <div class="section-menu">
           General information {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a>{% endif %}
           {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a>{% endif %}
+          {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
           {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
         </div>
       </div>
@@ -29,7 +30,7 @@
         <div class="col-lg-4 col-sm-6 flex-none single-subsector-panel">
           <div class="panel height-100">
             {% if details.photo %}
-            <img class="img-responsive" src="{% if details.photo.image.medium %}{{ details.photo.image.medium.url }}{% else %}{{ details.photo.image.large.url }}{% endif %}" alt="">
+              <img class="img-responsive showpointer" onclick="showSubSector('{{ details.title }}')" src="{{ details.photo.image.medium.url }}" alt="">
             {% endif %}
             <div class="pad-all">
               <h3>{{ details.title }}</h3>
@@ -57,6 +58,17 @@
         <a class="btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
         <h3>{{ details.title }}</h3>
         <p>{{ details.content|safe }}</p>
+        <a class="pull-right btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
+        {% if details.references.all %}
+        <div class="source_box">
+          <h4>Source(s)</h4>
+          <ul>
+            {% for reference in details.references.all %}
+              <li><a href="{% url 'core:reference' reference.id %}">{{ reference.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        </div>
       </div>
     {% endfor %}
     </div>
@@ -71,6 +83,7 @@
       <div class="col-lg-6 text-right">
         <div class="section-menu">
           <a onclick="scrollToDiv('info')">General information</a> | Datasets {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a> {% endif %}
+          {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
           {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
         </div>
       </div>
@@ -111,6 +124,7 @@
       <div class="col-lg-6 text-right">
         <div class="section-menu">
           <a onclick="scrollToDiv('info')">General information</a> {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a> {% endif %} | Infrastructure
+          {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
           {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
         </div>
       </div>
@@ -182,6 +196,26 @@
   </section>
   {% endif %}
 
+  {% if references %}
+    <section id="references">
+      <div class="row">
+        <div class="col-lg-6">
+          <h3>Documents</h3>
+        </div>
+        <div class="col-lg-6 text-right">
+          <div class="section-menu">
+            <a onclick="scrollToDiv('info')">General information</a> {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a> {% endif %}
+            {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a> {% endif %}
+            | Documents
+            {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% include 'core/includes/references.list.html' %}
+    </section>
+  {% endif %}
+
   {% if photos %}
     <section id="photos">
       <div class="row">
@@ -192,6 +226,7 @@
           <div class="section-menu">
             <a onclick="scrollToDiv('info')">General information</a> {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a> {% endif %}
             {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a> {% endif %}
+            {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
             | Photos
           </div>
         </div>
@@ -283,6 +318,7 @@
     function backSubsectors() {
       $(".subsector-panels").slideDown();
       $(".single-subsector-content").slideUp();
+      scrollToDiv('info');
     };
 
     // map with golden ratio
