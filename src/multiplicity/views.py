@@ -97,14 +97,23 @@ def sector(request, city, sector):
     sector = get_object_or_404(ProcessGroup, slug=sector)
     information = Information.objects.filter(process__in=sector.processes.all(), space=info)
     datasets = Dataset.objects.filter(process__in=sector.processes.all())
-    spaces = ReferenceSpace.objects.filter(city=info, type__process__in=sector.processes.all())
     addlink = reverse('multiplicity:information_form', args=[info.slug])
     map = False
     types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
-    if spaces:
-        map = True
-    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 'spaces': spaces, 'map': map,
-    'addlink': addlink, 'types': types,
+    spaces_list = {}
+    for type in types:
+        get_list = ReferenceSpace.objects.filter(city=info, type=type)
+        if get_list:
+            spaces_list[type.id] = get_list
+            map = True
+
+    features_list = ReferenceSpaceFeature.objects.filter(space__type__process__in=sector.processes.all(), feature__show_in_table=True)
+    feature = defaultdict(dict)
+    for details in features_list:
+        feature[details.space.id][details.feature.id] = details.value
+
+    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 'map': map,
+    'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature
     }
     return render(request, 'multiplicity/sector.html', context)
 

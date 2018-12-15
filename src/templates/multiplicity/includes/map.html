@@ -25,36 +25,47 @@
 
         leafletMap.scrollWheelZoom.disable();
 
-        var capetown      = L.marker([-33.8161, 18.2675], {icon:darkbluemarker}),
-            durban        = L.marker([-33.8661, 18.2675], {icon:darkbluemarker}),
-            joburg        = L.marker([-33.9161, 18.2675], {icon:redmarker}),
-            pretoria      = L.marker([-33.9661, 18.2675], {icon:redmarker});
-            port_elizabth = L.marker([-33.9661, 18.2975], {icon:greenmarker});
-            bloemfontein  = L.marker([-33.9661, 18.2375], {icon:greenmarker});
+        {% for type in types %}
+          {% for space in spaces_list|get_item:type.id %}
+            {% if space.location.lat %}
+              var space_{{ space.id }} = L.marker([{{ space.location.lat }}, {{ space.location.lng }}], {icon:{{ type.marker_color }}marker})
+             .bindPopup("<b>{{ space.name }}</b><br>{{ space.type.name }}<br />{% if space.image %}<a href='{% url 'multiplicity:space' info.slug space.type.topic.slug space.type.slug space.slug %}'><img src='{{ space.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug space.type.topic.slug space.type.slug space.slug %}'>View details</a>. ", {minWidth:200}) ;
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
 
+
+        var all_markers = new L.featureGroup([{% for type in types %}{% for space in spaces_list|get_item:type.id %}{% if space.location.lat %}space_{{ space.id }},{% endif %}{% endfor %}{% endfor %}]);
+         leafletMap.fitBounds(all_markers.getBounds());
         // these variable names are used in the showOneLayer function below
-        var dams = L.featureGroup([capetown, durban]).addTo(leafletMap);
-        var reservoirs = L.featureGroup([joburg, pretoria]).addTo(leafletMap);
-        var treatment = L.featureGroup([port_elizabth, bloemfontein]).addTo(leafletMap);
+        {% for type in types %}
+            var type_{{ type.id }} = L.featureGroup([{% for space in spaces_list|get_item:type.id %}{% if space.location.lat %} space_{{ space.id }}, {% endif %}{% endfor %}]).addTo(leafletMap);
+        {% endfor %}
 
         // this group exists in order to show or hide all layers on the map
-        allFeatureGroups = [dams, reservoirs, treatment];
+        allFeatureGroups = [{% for details in types %} type_{{ details.id }},{% endfor %}];
+
+        var boundaryStyle = {
+            "color": "#ff7800",
+            "weight": 5,
+            "opacity": 0.35
+        };
+
+        var geojson = {{ info.location.geojson|safe }}
+        var geojsonlayer = L.geoJSON(geojson, { style: boundaryStyle }).addTo(leafletMap);
 
         // this group exists to show the checkboxes on the map. The format is "label": variable. It can contain html, as shown in the current example
         allLayers = {
-          "<img src='/static/multiplicity/img/markers/marker.blue.svg'/> dams": dams,
-          "reservoirs": reservoirs,
-          "treatment": treatment,
+          {% for type in types %}
+            {% if spaces_list|get_item:type.id %}
+              "<img src='/static/multiplicity/img/markers/marker.{{ type.marker_color }}.svg'/> {{ type.name }}": type_{{ type.id }},
+            {% endif %}
+          {% endfor %}
+          "{{ info.name }} boundaries": geojsonlayer,
         }
 
         L.control.layers(null, allLayers, {collapsed: false}).addTo(leafletMap);
 
-        {% for details in spaces %}
-          {% if details.location.lat %}
-            L.marker([{{ details.location.lat }}, {{details.location.lng }}], {icon:{{ details.type.marker_color}}marker, riseOnHover: true}).addTo(leafletMap)
-            .bindPopup("<b>{{ details.name }}</b><br>{{ details.type.name }}<br />{% if details.image %}<a href='{% url 'multiplicity:space' info.slug details.type.topic.slug details.type.slug details.slug %}'><img src='{{ details.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug details.type.topic.slug details.type.slug details.slug %}'>View details</a>. ", {minWidth:200});
-          {% endif %}
-        {% endfor %}
 
         // remove and add layers
         function showAllLayers(){

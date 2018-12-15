@@ -67,6 +67,9 @@ class ReferenceSpaceType(models.Model):
     def __str__(self):
         return self.name
 
+    def features(self):
+        return Feature.objects.filter(type=self.id, show_in_table=True)
+
 class DatasetTypeStructure(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True, max_length=255)

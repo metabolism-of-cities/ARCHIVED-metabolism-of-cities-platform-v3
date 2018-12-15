@@ -1,5 +1,6 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
+{% load multiplicity_extras %}
 
 {% block title %}{{ sector.name }} | {{ info.name }} | {{ info.country }}{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
@@ -151,7 +152,7 @@
   </section>
   {% endif %}
 
-  {% if spaces %}
+  {% if map %}
   <section id="infrastructure">
     <div class="row">
       <div class="col-lg-6">
@@ -172,15 +173,17 @@
               <div class="panel">
                 <div class="row flex flex-wrap">
                   <div class="col-lg-4">
-                    <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
+                    <a onclick="showInfrastructureData('{{ details.slug }}')">
+                      <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
+                    </a>
                   </div>
                   <div class="col-lg-8 pad-all">
                     <h4 class="name">{{ details.name }}</h4>
                     <p>
-                      <a href="">{{ details.total }} records</a> found
+                      <a onclick="showInfrastructureData('{{ details.slug }}')">{{ details.total }} records</a> found
                       <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.svg" alt="" />
                     </p>
-                    <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.name }}')">Show more</a>
+                    <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.slug }}')">Show more</a>
                   </div>
                 </div>
               </div>
@@ -191,51 +194,30 @@
     </div>
     {% if types %}
       <div class="data mar-top">
-        {% for details in types %}
-          {% if details.total %}
-            <div class="single-dataset" infrastructure="{{ details.name }}">
+        {% for type in types %}
+          {% if type.total %}
+            <div class="single-dataset" infrastructure="{{ type.slug }}">
               <a class="btn btn-dark" onclick="backInfrastructure()"><i class="fas fa-arrow-left fa-fw"></i> Back to list</a>
-              <a class="btn btn-mint" onclick="showInfrastructureMap(dams)"><i class="fas fa-map fa-fw"></i> Show on map</a>
-              <!-- this uses dams as an example. It should be one of the variables in allFeatureGroups in map.html -->
-              <table class="table mar-top">
+              <a class="btn btn-mint" onclick="showInfrastructureMap(type_{{ type.id }})"><i class="fas fa-map fa-fw"></i> Show on map</a>
+              <h3>{{ type.name }}</h3>
+              <table class="table table-striped datatable mar-top">
                 <thead>
-                  <tr>
-                    <th>{{ details.name }}</th>
-                    <th>Lastname</th>
-                    <th>Email</th>
-                  </tr>
+                <tr>
+                  <th>Name</th>
+                  {% for featuredetails in type.features %}
+                    <th>{{ featuredetails.name }}</th>
+                  {% endfor %}
+                </tr>
                 </thead>
                 <tbody>
+                {% for details in spaces_list|get_item:type.id %}
                   <tr>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
+                    <td><a href="{% url 'multiplicity:space' info.slug type.topic.slug type.slug details.slug %} ">{{ details.name }}</a></td>
+                      {% for featuredetails in type.features %}
+                        <td>{% nested_get feature details.id featuredetails.id %}</td>
+                      {% endfor %}
                   </tr>
-                  <tr>
-                    <td>Mary</td>
-                    <td>Moe</td>
-                    <td>mary@example.com</td>
-                  </tr>
-                  <tr>
-                    <td>July</td>
-                    <td>Dooley</td>
-                    <td>july@example.com</td>
-                  </tr>
-                  <tr>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
-                  </tr>
-                  <tr>
-                    <td>Mary</td>
-                    <td>Moe</td>
-                    <td>mary@example.com</td>
-                  </tr>
-                  <tr>
-                    <td>July</td>
-                    <td>Dooley</td>
-                    <td>july@example.com</td>
-                  </tr>
+                {% endfor %}
                 </tbody>
               </table>
             </div>
@@ -343,8 +325,8 @@
 
     // show data of specific infrastructure
     function showInfrastructureData(infrastructure){
-      $("section#infrastructure .data .single-dataset, #infrastructure-list").hide();
-      $("section#infrastructure .data .single-dataset[infrastructure='" + infrastructure + "']").show();
+      $("section#infrastructure .data .single-dataset, #infrastructure-list").slideUp();
+      $("section#infrastructure .data .single-dataset[infrastructure='" + infrastructure + "']").slideDown();
       scrollToDiv("infrastructure-anchor");
     };
 
@@ -357,7 +339,7 @@
     // show infrastructure list, hide dataset
     function backInfrastructure() {
       $("#infrastructure-list").slideDown();
-      $(".single-dataset").hide();
+      $(".single-dataset").slideUp();
       scrollToDiv("infrastructure-anchor");
       showAllLayers();
     }
