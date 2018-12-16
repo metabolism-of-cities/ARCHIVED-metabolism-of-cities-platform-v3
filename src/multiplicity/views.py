@@ -97,7 +97,7 @@ def sector(request, city, sector):
     sector = get_object_or_404(ProcessGroup, slug=sector)
     information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
     references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).order_by('title')
-    datasets = Dataset.objects.filter(process__in=sector.processes.all())
+    datasets = Dataset.objects.filter(process__in=sector.processes.all(), deleted=False)
     addlink = reverse('multiplicity:information_form', args=[info.slug])
     photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
     map = False
