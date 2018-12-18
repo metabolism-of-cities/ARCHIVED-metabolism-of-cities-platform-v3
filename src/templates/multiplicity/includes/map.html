@@ -62,7 +62,7 @@
     };
 
     var geojson = {{ info.location.geojson|safe }}
-    var geojsonlayer = L.geoJSON(geojson, { style: boundaryStyle }).addTo(leafletMap);
+    var geojsonlayer = L.geoJSON(geojson, {style: boundaryStyle, interactive: false}).addTo(leafletMap);
 
     // this group exists to show the checkboxes on the map. The format is "label": variable. It can contain html, as shown in the current example
     allLayers = {
