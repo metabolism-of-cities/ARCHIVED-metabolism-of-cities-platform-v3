@@ -563,12 +563,18 @@ table.table-striped .even {
 .city-overview .table .data-available .data-box.available {
   background-color: #8bc34a;
 }
+
 #gallery img {
-  border:1px solid #ccc;
-  padding:5px;
-  margin:5px;
-  float:left;
+  border: 1px solid #ccc;
+  padding: 2px;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
+  border-radius: 3px;
 }
+
+#gallery img:hover {
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
+}
+
 #gallery figcaption{display:none}
 
 .resourcelist .single-resource {
@@ -755,10 +761,6 @@ article.sector section .section-menu {
 
 article.sector section#info .panel .img-responsive {
   border-radius: 2px 2px 0 0;
-}
-
-article.sector section#datasets #graph {
-  height: 600px;
 }
 
 article.sector section#infrastructure img.marker {

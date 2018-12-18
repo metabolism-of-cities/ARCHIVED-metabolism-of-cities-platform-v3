@@ -165,32 +165,34 @@
               <a class="btn btn-dark" onclick="backInfrastructure()"><i class="fas fa-arrow-left fa-fw"></i> Back to list</a>
               <a class="btn btn-mint" onclick="showInfrastructureMap(type_{{ type.id }})"><i class="fas fa-map fa-fw"></i> Show on map</a>
               <h3>{{ type.name }}</h3>
-              <table class="table table-striped datatable mar-top">
-                <thead>
-                <tr>
-                  <th>Name</th>
-                  {% for featuredetails in type.features %}
-                    <th>{{ featuredetails.name }}</th>
-                  {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for details in spaces_list|get_item:type.id %}
+              <div class="table-responsive">
+                <table class="table table-striped datatable mar-top">
+                  <thead>
                   <tr>
-                    <td><a href="{% url 'multiplicity:space' info.slug type.topic.slug type.slug details.slug %} ">{{ details.name }}</a></td>
-                      {% for featuredetails in type.features %}
-                        <td>{% nested_get feature details.id featuredetails.id %}</td>
-                      {% endfor %}
+                    <th>Name</th>
+                    {% for featuredetails in type.features %}
+                      <th>{{ featuredetails.name }}</th>
+                    {% endfor %}
                   </tr>
-                {% endfor %}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                  {% for details in spaces_list|get_item:type.id %}
+                    <tr>
+                      <td><a href="{% url 'multiplicity:space' info.slug type.topic.slug type.slug details.slug %} ">{{ details.name }}</a></td>
+                        {% for featuredetails in type.features %}
+                          <td>{% nested_get feature details.id featuredetails.id %}</td>
+                        {% endfor %}
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
           {% endif %}
         {% endfor %}
       </div>
     {% endif %}
-    <div id="map">
+    <div id="map" class="mar-top">
       {% include 'multiplicity/includes/map.html' %}
     </div>
   </section>
