@@ -98,7 +98,7 @@
   <li {% if menu == "socioeconomic" %} class="active-sub"{% endif %}>
       <a href="./">
         <i class="fal fa-user-friends fa-fw"></i>
-        <span class="menu-title">City profile</span> <i class="arrow"></i>
+        <span class="menu-title">{% if SITE_ID == 1 %}City{% else %}Island{% endif %} profile</span> <i class="arrow"></i>
       </a>
 
       <ul class="collapse {% if flubber == details and menu == "materials" %}in{% endif %}">
