@@ -56,7 +56,12 @@
     {% for details in information %}
       <div class="single-subsector-content" subsector="{{ details.title }}">
         <a class="btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
-        <h3>{{ details.title }}</h3>
+        <h3>
+          {{ details.title }}
+          {% if request.user.is_staff %}
+            <a href="{% url 'multiplicity:information_form' info.slug details.id %}" class="pull-right btn btn-warning"><i class="fa fa-pencil"></i></a>
+          {% endif %}
+        </h3>
         <p>{{ details.content|safe }}</p>
         <a class="pull-right btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
         {% if details.references.all %}
