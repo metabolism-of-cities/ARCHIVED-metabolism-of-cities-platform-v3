@@ -81,6 +81,9 @@ textarea[name='authorlist']{height:100px}
     $("#id_organizations").select2();
     $("#id_tags").select2();
     $("#id_primary_space").select2();
+    {% if SITE_ID == 2 %}
+    $("#processes").closest(".form-group").hide();
+    {% endif %}
   });
   </script>
 {% endblock %}

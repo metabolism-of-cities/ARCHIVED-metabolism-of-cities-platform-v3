@@ -56,8 +56,8 @@
               {% for details in info.organizations.all %}
                 <dt>Organization</dt>
                 <dd>
-                  <a href="{% url 'core:organization' details.type details.id %}">{{ details.name }}</a>{% if details.parent %}, 
-                  <a href="{% url 'core:organization' details.parent.type details.parent.id %}">{{ details.parent.name }}</a>{% endif %}
+                  <a href="{% url 'core:organization' details.id %}">{{ details.name }}</a>{% if details.parent %}, 
+                  <a href="{% url 'core:organization' details.parent.id %}">{{ details.parent.name }}</a>{% endif %}
                 </dd>
               {% endfor %}
               {% endif %}
@@ -114,7 +114,7 @@
   <div class="col-lg-8">
     <div class="panel panel-dark">
       <div class="panel-heading">
-        <h2 class="panel-title">Related publications</h2>
+        <h2 class="panel-title">Recently added publications</h2>
       </div>
       <div class="panel-body">
         <div class="list-group bord-no references">

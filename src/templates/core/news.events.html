@@ -35,6 +35,10 @@
           {% endfor %}
           </tbody>
         </table>
+
+        {% if request.user.is_staff %}
+          <p><a href="{{ add_news_link }}?ref={{ request.get_full_path|urlencode }}" class="btn btn-success">Add news</a></p>
+        {% endif %}
       </div>
   </div><div class="col-lg-6">
     <div class="panel panel-body panel-colorful panel-default events">
@@ -53,6 +57,9 @@
             </li>
           {% endfor %}
         </ul>
+        {% if request.user.is_staff %}
+          <p><a href="{{ add_events_link }}?ref={{ request.get_full_path|urlencode }}" class="btn btn-success">Add event</a></p>
+        {% endif %}
       </div>
   </div>
 </div>
@@ -66,6 +73,7 @@
 .panel-body img{max-width:200px;float:right;border:1px solid #ccc; padding:4px;margin:5px}
 td span{margin-right:10px}
 .events .list-unstyled li{margin-bottom:20px}
+.btn-success{margin-top:30px}
 </style>
 {% endblock %}
 

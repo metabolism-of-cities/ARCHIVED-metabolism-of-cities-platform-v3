@@ -316,7 +316,7 @@ class ReferenceForm(ModelForm):
 class ReferenceFormAdmin(ModelForm):
     class Meta:
         model = Reference
-        exclude = ['id', 'organizations', 'processes', 'date_added']
+        exclude = ['id', 'organizations', 'processes', 'date_added', 'event', 'authors']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',

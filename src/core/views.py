@@ -13,7 +13,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 
 # Create your views here.
 def videos(request):
@@ -148,8 +148,9 @@ def news_and_events(request):
     events_list = Event.objects.filter(article__active=True, article__site=request.site).order_by('start')
     page = Article.objects.get(pk=news)
     section = page.section
-    addlink = reverse('core:admin_article_parent', args=[news])
-    context = { 'section': section, 'page': page, 'news_list': news_list, 'events_list': events_list, 'addlink': addlink}
+    add_news_link = reverse('core:admin_article_parent', args=[news])
+    add_events_link = reverse('core:admin_article_parent', args=[events])
+    context = { 'section': section, 'page': page, 'news_list': news_list, 'events_list': events_list, 'add_news_link': add_news_link, 'add_events_link': add_events_link }
     return render(request, 'core/news.events.html', context)
 
 def people(request):
@@ -222,7 +223,11 @@ def publisher(request, id):
 
 def reference(request, id):
     info = get_object_or_404(Reference, pk=id)
-    related = Reference.objects.all()[:5]
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219
+    related = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-id')[:5]
     authors = info.authors.all()
     data = Data.objects.filter(dataset__references=info)
     editlink = reverse('core:admin_reference', args=[info.id])
@@ -233,6 +238,11 @@ def reference(request, id):
 def referenceform(request, id=False, dataset=False):
     processes = Process.objects.filter(slug__isnull=False).order_by('id')
     new_record = False
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219
+
     if id:
         info = get_object_or_404(Reference, pk=id)
         if request.user.is_staff:
@@ -242,7 +252,7 @@ def referenceform(request, id=False, dataset=False):
     else:
         info = False
         if request.user.is_staff:
-            form = ReferenceFormAdmin(initial={'language': 'EN', 'status': 'active'})
+            form = ReferenceFormAdmin(initial={'language': 'EN', 'status': 'active', 'tags': main_filter})
         else:
             form = ReferenceForm()
     if request.method == 'POST':
@@ -746,7 +756,7 @@ def admin_article(request, id=False, type=False, parent=False):
             form = SimpleArticleForm(request.POST, instance=info)
             if type == 'event':
                 eventform = EventForm(request.POST, instance=info.event)
-        if form.is_valid() and eventform.is_valid():
+        if (form.is_valid() and eventform and eventform.is_valid()) or (form.is_valid() and not eventform):
             info = form.save(commit=False)
             if parent:
                 info.parent = parent
@@ -760,10 +770,8 @@ def admin_article(request, id=False, type=False, parent=False):
 
             saved = True
             messages.success(request, 'Information was saved.')
-            if type == 'event':
-                return redirect(reverse('core:event', args=[info.id]))
-            else:
-                return redirect(reverse('core:news', args=[info.id]))
+            redirect = request.POST.get('redirect', '/')
+            return HttpResponseRedirect(redirect)
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 

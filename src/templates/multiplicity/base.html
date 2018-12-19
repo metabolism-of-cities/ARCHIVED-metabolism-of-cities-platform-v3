@@ -381,7 +381,7 @@
   {% endif %}
 
   {% if editlink %}
-    <a title="Edit this record" href="{{ editlink }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+    <a title="Edit this record" href="{{ editlink }}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
   {% endif %}
 
   {% if deletelink %}
@@ -389,7 +389,7 @@
   {% endif %}
 
   {% if page.id %}
-    <a title="Edit" href="{% url 'core:admin_article' page.id %}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+    <a title="Edit" href="{% url 'core:admin_article' page.id %}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
   {% endif %}
 
   {% if addlink %}
