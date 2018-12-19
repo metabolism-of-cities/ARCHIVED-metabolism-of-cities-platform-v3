@@ -7,6 +7,7 @@
 {% block content %}
 
 <div class="container references">
+{% if False %}
   <h1>Search our database</h1>
   <section class="search mar-btm">
     <p>
@@ -45,8 +46,16 @@
     {% endif %}
   </section>
 
+  {% else %}
+
+  <h1>{{ title }}</h1>
+  <p>
+    <strong>{{ list.count }}</strong> record(s) found.
+  </p>
+  {% endif %}
+
   <div class="row mar-top">
-    <section class="col-md-3 filters">
+    <section class="col-md-3 filters hide">
       <div class="bg-gray-light pad-all">
         <ul class="nav nav-section-menu nav-sidebar mar-btm mat-top">
           <li class="nav-header text-bold">Filter by Year</li>

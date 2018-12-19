@@ -66,6 +66,7 @@ urlpatterns = [
     path('publishers/<int:id>', views.publisher, name='publisher'),
     path('resources/podcasts', views.references, {'type': 24}),
     path('resources/reports', views.references, {'type': 27}),
+    path('resources/presentations', views.references, {'type': 25}),
     path('resources/publications', views.references, name='references'),
     path('resources/publication/<int:id>', views.reference),
     path('resources/publications/<int:id>', views.reference, name='reference'),

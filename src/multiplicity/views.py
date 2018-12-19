@@ -211,6 +211,8 @@ def resources(request, city, slug):
         type = 16
     elif slug == "theses":
         type = 29
+    elif slug == "presentations":
+        type = 25
     type = get_object_or_404(ReferenceType, pk=type)
     references = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
     addlink = reverse('multiplicity:photo_form', args=[info.slug])

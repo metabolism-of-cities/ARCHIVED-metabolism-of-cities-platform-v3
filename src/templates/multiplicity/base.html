@@ -16,15 +16,17 @@
 </style>
 {% endif %}
 <style type="text/css">
-#footerwarning{position:fixed;bottom:0;z-index:100000;display:none}
+#footerwarning{;z-index:100000;margin-bottom:0;text-align:center}
 </style>
 </head>
 
 <body>
 
+{% if SITE_ID == 2 %}
 <div class="alert alert-warning" id="footerwarning">
-You are viewing a prototype site
+  This website is under active development. Official launch will take place early 2019.
 </div>
+{% endif %}
 
 <div id="container" class="effect boxed-layout aside-float slide {% if mainnav %}{{ mainnav }}{% elif section == 'cities' or sidenav %}mainnav-lg{% else %}mainnav-out{% endif %} {% block container %}{% endblock %}">
 <!--<div id="container" class="effect aside-left aside-bright aside-in boxed-layout mainnav-lg">-->

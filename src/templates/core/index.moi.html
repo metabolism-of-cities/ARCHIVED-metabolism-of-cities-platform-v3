@@ -17,11 +17,11 @@
           </div>
         </div>
         <div class="welcome-nav text-center">
-          <a class="btn btn-lg btn-default btn-warning" href="">About</a>
-          <a class="btn btn-lg btn-default btn-warning" href="">Research</a>
-          <a class="btn btn-lg btn-default btn-warning" href="">Resources</a>
+          <a class="btn btn-lg btn-default btn-warning" href="/about/who-we-are">About</a>
+          <a class="btn btn-lg btn-default btn-warning" href="/research/projects">Research</a>
+          <a class="btn btn-lg btn-default btn-warning" href="/resources/publications">Resources</a>
           <a class="btn btn-lg btn-default btn-warning" href="">Data</a>
-          <a class="btn btn-lg btn-default btn-warning" href="">News & Events</a>
+          <a class="btn btn-lg btn-default btn-warning" href="news_events">News & Events</a>
         </div>
       </div>
       <div class="col-lg-4">
@@ -56,15 +56,14 @@
         </a>
         <div class="panel panel-dark listing-panel">
           <div class="panel-heading">
-            <h3 class="panel-title">Latest news</h3>
+            <h3 class="panel-title">Islands</h3>
           </div>
           <ul class="list-group bg-trans list-todo mar-no">
-            {% for details in news %}
-              <li class="list-group-item">
-                <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
-                <span >{{ details.created_at|date:"M d, Y" }}</span>
-              </li>
-            {% endfor %}
+              <li class="list-group-item"><a href="/cities/antigua-barbuda">Antigua &amp; Barbuda</a></li>
+              <li class="list-group-item"><a href="/cities/grenada">Grenada</a></li>
+              <li class="list-group-item"><a href="/cities/jamaica">Jamaica</a></li>
+              <li class="list-group-item"><a href="/cities/samothraki-island">Samothraki Island</a></li>
+              <li class="list-group-item"><a href="/cities/trinket-island">Trinket Island</a></li>
           </ul>
         </div>
       </div>

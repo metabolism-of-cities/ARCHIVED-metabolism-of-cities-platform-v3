@@ -42,6 +42,10 @@ def home(request):
     return render(request, 'core/home.html', context)
 
 def index(request):
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219
     publications = False
     events = False
     projects = False
@@ -50,7 +54,8 @@ def index(request):
         events = Article.objects.filter(parent=59).order_by('-created_at')[:5]
     else:
         news = Article.objects.filter(parent=142).order_by('-created_at')[:5]
-        publications = Reference.objects.exclude(type=10).order_by('-id')[:5]
+        #publications = Reference.objects.exclude(type=10).order_by('-id')[:5]
+        publications = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-id').exclude(type=10)
         projects = Project.on_site.order_by('-id')[:5]
     context = { 'news': news, 'events': events, 'publications': publications, 'projects': projects }
     if request.site.id == 1:

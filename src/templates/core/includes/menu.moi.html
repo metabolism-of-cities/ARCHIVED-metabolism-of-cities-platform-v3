@@ -50,6 +50,7 @@
           <li><a href="/resources/photos">Photos</a></li>
           <li><a href="{% url 'core:community' 'links' %}">Links</a></li>
           <li><a href="/resources/podcasts">Podcasts</a></li>
+          <li><a href="/resources/presentations">Presentations</a></li>
         </ul>
     </div>
 </li>
@@ -92,20 +93,12 @@
 
 
 
-<li {% if section == "newsevents" %}id="dropdown-active"{% endif %} class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle ">
+<li {% if section == "newsevents" %}id="dropdown-active"{% endif %}>
+    <a href="{% url 'core:news_and_events' %}">
         <span class="ic-user pull-right">
             <i class="pli-map-marker-2"></i>
             News &amp; Events
         </span>
     </a>
-
-    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
-        <ul class="head-list">
-          <li><a href="{% url 'core:news_and_events' %}">News &amp; Events</a></li>
-          <li><a href="{% url 'core:community' 'events' %}">Events</a></li>
-          <li><a href="{% url 'core:community' 'news' %}">News</a></li>
-        </ul>
-    </div>
 </li>
 
