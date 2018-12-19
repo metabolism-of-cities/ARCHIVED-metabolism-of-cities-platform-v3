@@ -456,11 +456,10 @@ a.label-default:hover {
 }
 
 table.dataTable {
-  display: block;
   overflow-x: auto;
   white-space: nowrap;
   width:100% !important;
-  margin: 0;
+  margin-bottom: 20px;
 }
 
 table.dataTable thead th, table.dataTable thead td {
