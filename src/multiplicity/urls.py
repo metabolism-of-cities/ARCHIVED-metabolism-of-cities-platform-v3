@@ -21,6 +21,10 @@ urlpatterns = [
     path('admin/datasettype/<int:id>', views.admin_datasettype, name='admin_datasettype'),
     path('admin/datasettype/create', views.admin_datasettype, name='admin_datasettype'),
 
+    path('admin/referencephotos', views.admin_referencephoto, name='admin_referencephotos'),
+    path('admin/referencephotos/<int:id>', views.admin_referencephoto, name='admin_referencephoto'),
+    path('admin/referencephotos/create', views.admin_referencephoto, name='admin_referencephoto'),
+
     # General
     path('table/datasets/<int:dataset>', views.datatable, name='datatable_dataset'),
 

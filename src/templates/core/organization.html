@@ -21,7 +21,7 @@
       </div>
       <div class="panel-body">
         {% if info.description %}
-          <p>{{ info.description }}</p>
+          <p>{{ info.description|safe }}</p>
         {% endif %}
         {% if info.url %}
           <a class="btn btn-pink btn-icon btn-circle" href="{{ info.url }}"><i class="psi-home icon-lg"></i></a> 
@@ -44,7 +44,7 @@
         {% endif %}
 
         <h4>Relevant publications</h4>
-        {% include 'core/references.list.html' %}
+        {% include 'core/includes/references.list.html' %}
         <p><a href="{% url 'core:organizations' info.type %}" class="btn btn-info">View all {{ info.get_type_display }}</a></p>
       </div>
     </div>

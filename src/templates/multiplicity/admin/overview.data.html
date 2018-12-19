@@ -198,6 +198,20 @@
 
 {% endif %}
 
+<p><a href="{% url 'multiplicity:photo_form' info.slug %}">Add new photo</a></p>
+
+{% if referencephotos %}
+
+  <div class="panel">
+    {% for details in referencephotos %}
+      <a href="{% url 'multiplicity:photo_form' info.slug details.id %}"><img src="{{ details.image.thumbnail.url }}" alt="" /></a>
+    {% endfor %}
+  </div>
+
+{% endif %}
+
+<p><a href="{% url 'multiplicity:admin_referencephoto' %}">Add new reference photo</a></p>
+
 
 {% endblock %}
 

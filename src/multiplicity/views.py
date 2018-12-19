@@ -2,11 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup, ReferencePhoto, ReferencePhotoForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
-from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType
+from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization
 from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset, Process
 from django.db.models import Count
 from django.contrib import messages
@@ -97,6 +97,7 @@ def sector(request, city, sector):
     sector = get_object_or_404(ProcessGroup, slug=sector)
     information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
     references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).order_by('title')
+    organizations = Organization.objects.filter(processes__in=sector.processes.all(), reference_spaces=info).order_by('name')
     datasets = Dataset.objects.filter(process__in=sector.processes.all(), deleted=False)
     addlink = reverse('multiplicity:information_form', args=[info.slug])
     photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
@@ -119,7 +120,7 @@ def sector(request, city, sector):
 
     context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 
     'map': map, 'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature, 
-    'infrastructure': infrastructure, 'photos': photos, 'references': references,
+    'infrastructure': infrastructure, 'photos': photos, 'references': references, 'organizations': organizations, 
     }
     return render(request, 'multiplicity/sector.html', context)
 
@@ -1307,5 +1308,30 @@ def admin_datasettype(request, id=False):
 
     context = { 'navbar': 'backend', 'info': info, 'form': form, 'type': type }
     return render(request, 'multiplicity/admin/datasettype.html', context)
+
+@staff_member_required
+def admin_referencephoto(request, id=False):
+    if id:
+        info = get_object_or_404(ReferencePhoto, pk=id)
+        form = ReferencePhotoForm(instance=info)
+    else:
+        info = False
+        form = ReferencePhotoForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = ReferencePhotoForm(request.POST)
+        else:
+            form = ReferencePhotoForm(request.POST, instance=info)
+        if form.is_valid():
+            info = form.save()
+            saved = True
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('multiplicity:admin_datasettypes'))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'navbar': 'backend', 'info': info, 'form': form }
+    return render(request, 'multiplicity/admin/referencephoto.html', context)
 
 

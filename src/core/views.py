@@ -185,7 +185,7 @@ def organizations(request, type):
     context = { 'section': 'community', 'page': 'organizations', 'list': list, 'page': page}
     return render(request, 'core/organizations.html', context)
 
-def organization(request, id, type):
+def organization(request, id):
     info = get_object_or_404(Organization, pk=id)
     list = Reference.objects.filter(Q(organizations__id=id) | Q(organizations__parent__id=id)).order_by('-year')
     divisions = Organization.objects.filter(parent=info)
