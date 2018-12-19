@@ -31,11 +31,15 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('<slug:city>/research', views.research, name='research'),
 
-    path('<slug:city>/material-stocks/<slug:type>', views.flow, name='stock'),
-    path('<slug:city>/material-flows/<slug:slug>', views.overview, name='flows'),
-    path('<slug:city>/material-flows/<slug:slug>', views.overview, name='overview_flows'),
-    path('<slug:city>/material-flows/<slug:slug>/<slug:type>', views.flow, name='flow'),
-    path('<slug:city>/material-stocks', views.overview, {'slug': 'material-stocks' }, name='overview_stocks'),
+    #path('<slug:city>/material-stocks/<slug:type>', views.flow, name='stock'),
+
+    path('<slug:city>/material-flows/<slug:topic>', views.datasets_overview, name='flows'),
+    path('<slug:city>/material-stocks/<slug:topic>', views.datasets_overview, {'type': 'stocks' }, name='stocks'),
+    path('<slug:city>/energy-flows/<slug:topic>', views.datasets_overview, {'type': 'energy'}, name='energy_flows'),
+
+    #path('<slug:city>/material-flows/<slug:slug>', views.overview, name='overview_flows'),
+    #path('<slug:city>/material-flows/<slug:slug>/<slug:type>', views.flow, name='flow'),
+    #path('<slug:city>/material-stocks', views.overview, {'slug': 'material-stocks' }, name='overview_stocks'),
 
     path('<slug:city>/maps', views.map, name='map_home'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),

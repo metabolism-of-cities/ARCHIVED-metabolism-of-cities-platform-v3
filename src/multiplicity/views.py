@@ -89,7 +89,7 @@ def space(request, city, topic, type, space):
 def map(request, city, type='boundaries'):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'maps', 'page': type, 'info': info, 'topics': topics }
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 'topics': topics }
     return render(request, 'multiplicity/space.map.html', context)
 
 def sector(request, city, sector):
@@ -123,6 +123,31 @@ def sector(request, city, sector):
     'infrastructure': infrastructure, 'photos': photos, 'references': references, 'organizations': organizations, 
     }
     return render(request, 'multiplicity/sector.html', context)
+
+def overview(request, city, slug):
+    groups = ProcessGroup.objects.order_by('name')
+    flow = get_object_or_404(DatasetTypeStructure, slug=slug)
+    list = DatasetType.objects.filter(category__parent=flow)
+    types = DatasetTypeStructure.objects.filter(parent=flow)
+    if not types:
+        types = DatasetTypeStructure.objects.filter(pk=flow.id)
+    info = get_object_or_404(ReferenceSpace, slug=city)
+
+    if flow.parent and flow.parent.name == "Material Flows":
+      menu = 'material-flows'
+    elif flow.parent and flow.parent.parent and flow.parent.parent.name == "Material Flows":
+      menu = 'material-flows'
+      slug = flow.parent.slug
+    else:
+      menu = 'material-stocks'
+
+    page = slug
+    context = { 'section': 'cities', 'menu':  menu, 'page': slug, 'info': info,
+    'list': list, 'types': types, 'flow': flow, 'slug': slug,
+    'editlink': reverse('multiplicity:admin_datasettypes'),
+    'groups': groups
+    }
+    return render(request, 'multiplicity/overview.html', context)
 
 def overview(request, city, slug):
     groups = ProcessGroup.objects.order_by('name')
@@ -198,6 +223,13 @@ def datasets(request, city):
     datasets = Dataset.objects.filter(primary_space=info, deleted=False)
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'datasets': datasets, 'topics': topics }
+    return render(request, 'multiplicity/datasets.html', context)
+
+def datasets_overview(request, city, topic, type='flows'):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    topic = Topic.objects.get(slug=topic)
+    datasets = Dataset.objects.filter(primary_space=info, deleted=False, topics=topic, type__type=type)
+    context = { 'section': 'cities', 'menu':  type, 'page': topic.slug, 'info': info, 'datasets': datasets, 'topic': topic}
     return render(request, 'multiplicity/datasets.html', context)
 
 def dataset(request, city, id, slug=False):

@@ -57,12 +57,14 @@
         <span class="menu-title">Material flows</span> <i class="arrow"></i>
       </a>
 
-      <ul class="collapse {% if menu == "material-flows" %}in{% endif %}">
-          <li{% if page == "biomass" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'biomass' %}">Biomass</a></li>
+      <ul class="collapse {% if menu == "flows" %}in{% endif %}">
+          <li{% if menu == "flows" and page == "biomass" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'biomass' %}">Biomass</a></li>
           <li{% if page == "fossil-fuels" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'fossil-fuels' %}">Fossil fuels</a></li>
-          <li{% if page == "metals" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'fossil-fuels' %}">Metals</a></li>
-          <li{% if page == "minerals" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'fossil-fuels' %}">Minerals</a></li>
-          <li{% if page == "water" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'fossil-fuels' %}">Water</a></li>
+          <li{% if menu == "flows" and page == "metals" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'metals' %}">Metals</a></li>
+          <li{% if menu == "flows" and page == "minerals" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'minerals' %}">Minerals</a></li>
+          <li{% if page == "water" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'water' %}">Water</a></li>
+          <li{% if page == "waste" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'waste' %}">Waste</a></li>
+          <li{% if page == "emissions" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'emissions' %}">Emissions</a></li>
       </ul>
   </li>
 
@@ -72,11 +74,11 @@
         <span class="menu-title">Energy flows</span> <i class="arrow"></i>
       </a>
 
-      <ul class="collapse {% if menu == "energy-flows" %}in{% endif %}">
-          <li{% if page == "electricity" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'electricity' %}">Electricity</a></li>
-          <li{% if page == "fossil-fuels" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'fossil-fuels' %}">Fossil fuels</a></li>
-          <li{% if page == "renewables" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'renewables' %}">Renewables</a></li>
-          <li{% if page == "nuclear" %} class="active"{% endif %}><a href="{% url 'multiplicity:flows' info.slug 'fossil-fuels' %}">Nuclear energy</a></li>
+      <ul class="collapse {% if menu == "energy" %}in{% endif %}">
+          <li{% if page == "electricity" %} class="active"{% endif %}><a href="{% url 'multiplicity:energy_flows' info.slug 'electricity' %}">Electricity</a></li>
+          <li{% if page == "fossil-fuels" %} class="active"{% endif %}><a href="{% url 'multiplicity:energy_flows' info.slug 'fossil-fuels' %}">Fossil fuels</a></li>
+          <li{% if page == "renewables" %} class="active"{% endif %}><a href="{% url 'multiplicity:energy_flows' info.slug 'renewables' %}">Renewables</a></li>
+          <li{% if page == "nuclear" %} class="active"{% endif %}><a href="{% url 'multiplicity:energy_flows' info.slug 'nuclear' %}">Nuclear energy</a></li>
       </ul>
   </li>
 
@@ -86,46 +88,25 @@
         <span class="menu-title">Material stocks</span> <i class="arrow"></i>
       </a>
 
-      <ul class="collapse {% if menu == "material-stocks" %}in{% endif %}">
-          <li{% if page == "material-stocks" %} class="active"{% endif %}><a href="{% url 'multiplicity:overview_stocks' info.slug %}">Overview</a></li>
+      <ul class="collapse {% if menu == "stocks" %}in{% endif %}">
+          <li{% if menu == "stocks" and page == "biomass" %} class="active"{% endif %}><a href="{% url 'multiplicity:stocks' info.slug 'biomass' %}">Biomass</a></li>
+          <li{% if menu == "stocks" and page == "metals" %} class="active"{% endif %}><a href="{% url 'multiplicity:stocks' info.slug 'metals' %}">Metals</a></li>
+          <li{% if menu == "stocks" and page == "minerals" %} class="active"{% endif %}><a href="{% url 'multiplicity:stocks' info.slug 'minerals' %}">Minerals</a></li>
       </ul>
   </li>
 
   <li {% if menu == "socioeconomic" %} class="active-sub"{% endif %}>
       <a href="./">
         <i class="fal fa-user-friends fa-fw"></i>
-        <span class="menu-title">Socio-economic</span> <i class="arrow"></i>
+        <span class="menu-title">City profile</span> <i class="arrow"></i>
       </a>
 
       <ul class="collapse {% if flubber == details and menu == "materials" %}in{% endif %}">
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Population</a></li>
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Income</a></li>
-      </ul>
-  </li>
-
-  <li  {% if menu == "environment" %} class="active-sub"{% endif %}>
-      <a href="./">
-        <i class="fal fa-tree-alt fa-fw"></i>
-        <span class="menu-title">Environment</span> <i class="arrow"></i>
-      </a>
-
-      <ul class="collapse {% if flubber == details and menu == "materials" %}in{% endif %}">
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Land use</a></li>
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Biodiversity</a></li>
           <li{% if menu == "materials" %} class="active"{% endif %}><a href="/">Climate</a></li>
-      </ul>
-  </li>
-
-  <li>
-      <a href="{% url 'multiplicity:map_home' info.slug %}">
-          <i class="fal fa-map fa-fw"></i>
-          <span class="menu-title">Maps</span>
-          <i class="arrow"></i>
-      </a>
-
-      <ul class="collapse  {% if menu == "maps" %}in{% endif %}">
-          <li {% if page == "boundaries" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:map_home' info.slug %}">Boundaries</a></li>
-          <li {% if page == "satellite" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:map' info.slug 'satellite' %}">Satellite</a></li>
       </ul>
   </li>
 
@@ -154,6 +135,7 @@
 
       <ul class="collapse {% if menu == "resources" %}in{%endif %}">
           <li {% if page == "datasets" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Datasets</a></li>
+          <li {% if page == "boundaries" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:map_home' info.slug %}">Maps</a></li>
           <li {% if menu == "resources" and type.id == 16 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'journal-articles' %}">Journal articles</a></li>
           <li {% if menu == "resources" and type.id == 27 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'reports' %}">Reports</a></li>
           <li {% if menu == "resources" and type.id == 29 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'theses' %}">Theses</a></li>
