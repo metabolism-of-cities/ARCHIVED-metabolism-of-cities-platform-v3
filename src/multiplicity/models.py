@@ -265,6 +265,18 @@ class PhotoForm(ModelForm):
             'deleted': 'Do not show in the gallery'
         }
 
+class ReferencePhoto(models.Model):
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)
+    space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    def __str__(self):
+        description = "Photo for " + self.type + " in " + self.space
+
+class ReferencePhotoForm(ModelForm):
+    class Meta:
+        model = ReferencePhoto
+        exclude = ['id']
+
 class Information(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)

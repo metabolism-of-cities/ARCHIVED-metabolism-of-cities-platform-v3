@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup, ReferencePhoto, ReferencePhotoForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
@@ -1308,5 +1308,30 @@ def admin_datasettype(request, id=False):
 
     context = { 'navbar': 'backend', 'info': info, 'form': form, 'type': type }
     return render(request, 'multiplicity/admin/datasettype.html', context)
+
+@staff_member_required
+def admin_referencephoto(request, id=False):
+    if id:
+        info = get_object_or_404(ReferencePhoto, pk=id)
+        form = ReferencePhotoForm(instance=info)
+    else:
+        info = False
+        form = ReferencePhotoForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = ReferencePhotoForm(request.POST)
+        else:
+            form = ReferencePhotoForm(request.POST, instance=info)
+        if form.is_valid():
+            info = form.save()
+            saved = True
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('multiplicity:admin_datasettypes'))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'navbar': 'backend', 'info': info, 'form': form }
+    return render(request, 'multiplicity/admin/referencephoto.html', context)
 
 

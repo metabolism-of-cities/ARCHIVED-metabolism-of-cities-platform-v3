@@ -1,0 +1,57 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Reference photo{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="./"><i class="pli-home"></i></a></li>
+  <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+  {% if info.id %}
+    <li class="active">{{ info.name }}</li>
+  {% else %}
+    <li class="active">Reference photo</li>
+  {% endif %}
+</ol>
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-body">
+        <div class="panel-heading">
+          <h3>Reference photo</h3>
+        </div>
+          <div class="panel-body" style="margin-top:30px">
+            <form method="post" class="form form-horizontal">
+              {% bootstrap_form form layout='horizontal' %}
+              {% buttons %}
+                <div class="col-sm-offset-3 col-sm-9">
+                  <button type="submit" class="btn btn-success">
+                    Save
+                  </button>
+                </div>
+              {% endbuttons %}
+              {% csrf_token %}
+          </form>
+        </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
