@@ -40,16 +40,6 @@
           </div>
         </div>
       {% endfor %}
-      <div class="col-lg-4 col-sm-6 flex-none single-subsector-panel">
-        <div class="panel height-100">
-          <img class="img-responsive" src="https://prototype.metabolismofcities.org/media/photos/DSC00622.thumbnail.JPG" alt="">
-          <div class="pad-all">
-            <h3>Major companies</h3>
-            <p>Aspernatur quidem id vero in veritatis. Repellat aut esse vero a eum reprehenderit. A et sunt delectus. Aut temporibus quas sint ullam.</p>
-            <a class="btn btn-dark" onclick="showSubSector('Major companies')">Show more</a>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="subsector-content">
@@ -63,6 +53,19 @@
           {% endif %}
         </h3>
         <p>{{ details.content|safe }}</p>
+
+        {% if details.title == "Related Organizations" and organizations %}
+
+          <ul>
+
+            {% for organization in organizations %}
+              <li><a href="{% url 'core:organization' organization.id %}">{{ organization.name }}</a> - {{ organization.get_type_display }}</li>
+            {% endfor %}
+
+          </ul>
+
+        {% endif %}
+
         <a class="pull-right btn btn-dark back-subsectors" onclick="backSubsectors()"><i class="fas fa-arrow-left fa-fw"></i> Back to subsectors</a>
         {% if details.references.all %}
         <div class="source_box">
@@ -72,8 +75,8 @@
               <li><a href="{% url 'core:reference' reference.id %}">{{ reference.title }}</a></li>
             {% endfor %}
           </ul>
-        {% endif %}
         </div>
+        {% endif %}
       </div>
     {% endfor %}
     </div>

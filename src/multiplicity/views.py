@@ -6,7 +6,7 @@ from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feat
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
-from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType
+from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization
 from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset, Process
 from django.db.models import Count
 from django.contrib import messages
@@ -97,6 +97,7 @@ def sector(request, city, sector):
     sector = get_object_or_404(ProcessGroup, slug=sector)
     information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
     references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).order_by('title')
+    organizations = Organization.objects.filter(processes__in=sector.processes.all(), reference_spaces=info).order_by('name')
     datasets = Dataset.objects.filter(process__in=sector.processes.all(), deleted=False)
     addlink = reverse('multiplicity:information_form', args=[info.slug])
     photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
@@ -119,7 +120,7 @@ def sector(request, city, sector):
 
     context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 
     'map': map, 'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature, 
-    'infrastructure': infrastructure, 'photos': photos, 'references': references,
+    'infrastructure': infrastructure, 'photos': photos, 'references': references, 'organizations': organizations, 
     }
     return render(request, 'multiplicity/sector.html', context)
 

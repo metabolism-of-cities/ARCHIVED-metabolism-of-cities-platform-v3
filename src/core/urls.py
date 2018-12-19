@@ -40,7 +40,7 @@ urlpatterns = [
     path('community/projects/past/<int:id>', views.project_view, {'type': 'projects', 'status': 'finished'}, name='past_project'),
     path('resources/journals', views.journals, name='journals'),
     path('resources/journals/<int:id>', views.journal, name='journal'),
-    path('community/organizations/<slug:type>/<int:id>', views.organization, name='organization'),
+    path('community/organizations/<int:id>', views.organization, name='organization'),
     path('community/organizations/<slug:type>', views.organizations, name='organizations'),
 
     path('research/projects', views.projects, {'type': 'regular', 'page': 149}, name='regular_research_projects'),
