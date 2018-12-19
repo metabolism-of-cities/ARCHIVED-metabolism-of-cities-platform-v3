@@ -260,7 +260,10 @@ class Photo(TimestampedModel):
 class PhotoForm(ModelForm):
     class Meta:
         model = Photo
-        exclude = ['id', 'uploaded_by', 'primary_space', 'deleted', 'process']
+        exclude = ['id', 'uploaded_by', 'primary_space', 'process']
+        labels = {
+            'deleted': 'Do not show in the gallery'
+        }
 
 class Information(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
