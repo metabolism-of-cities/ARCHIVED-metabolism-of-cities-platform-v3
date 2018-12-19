@@ -30,41 +30,46 @@
 #page-content a:not(.btn):not(.list-group-item):hover{text-decoration:underline}
 #page-content .nav-tabs.nav-tabs-inverted a:hover,#page-content .leaflet-container a:hover,#page-content .nav a:hover{text-decoration:none}
 
+.leaflet-marker-icon {
+  border: 1px solid #000;
+  border-radius: 50%;
+}
+
 .bluemarker {
-  background:url('../../multiplicity/img/markers/marker.blue.svg');
+  background-color: #52accd;
 }
 .redmarker {
-  background:url('../../multiplicity/img/markers/marker.red.svg');
+  background-color: #d40000;
 }
 .greenmarker {
-  background:url('../../multiplicity/img/markers/marker.green.svg');
+  background-color: #447b2d;
 }
 .darkbluemarker {
-  background:url('../../multiplicity/img/markers/marker.darkblue.svg');
+  background-color: #365b6f;
 }
 .purplemarker {
-  background:url('../../multiplicity/img/markers/marker.purple.svg');
+  background-color: #7b2d76;
 }
 .yellowmarker {
-  background:url('../../multiplicity/img/markers/marker.yellow.svg');
+  background-color: #e4d555;
 }
 .orangemarker {
-  background:url('../../multiplicity/img/markers/marker.orange.svg');
+  background-color: #fc9d00;
 }
 .blackmarker {
-  background:url('../../multiplicity/img/markers/marker.black.svg');
+  background-color: #000;
 }
 .greymarker {
-  background:url('../../multiplicity/img/markers/marker.grey.svg');
+  background-color: #979797;
 }
 .pinkmarker {
-  background:url('../../multiplicity/img/markers/marker.pink.svg');
+  background-color: #ff5599;
 }
 .brightgreenmarker {
-  background:url('../../multiplicity/img/markers/marker.brightgreen.svg');
+  background-color: #29fc7e;
 }
 .whitemarker {
-  background:url('../../multiplicity/img/markers/marker.white.svg');
+  background-color: #fff;
 }
 
 .showpointer {

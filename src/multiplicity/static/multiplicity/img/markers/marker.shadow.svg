@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="12"
-   height="12"
-   viewBox="0 0 3.1749999 3.1750001"
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="marker.black.svg">
+   sodipodi:docname="marker.shadow.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -53,18 +53,18 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-293.82498)">
+     transform="translate(0,-292.76665)">
     <circle
-       style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.98823529;stroke:none;stroke-width:0.16853079;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.5;stroke-opacity:1"
-       id="path817"
-       cx="1.5875"
-       cy="295.41248"
-       r="1.5875" />
+       style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.29411766;stroke:none;stroke-width:0.19661929;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.5;stroke-opacity:1"
+       id="path817-3-3"
+       cx="2.1166666"
+       cy="294.88333"
+       r="1.8520833" />
     <circle
-       style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.98823529;stroke:none;stroke-width:0.15448657;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.5;stroke-opacity:1"
-       id="path817-3"
-       cx="1.5875"
-       cy="295.41248"
-       r="1.4552083" />
+       style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.29411766;stroke:none;stroke-width:0.22470777;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.5;stroke-opacity:1"
+       id="path817-3-3-6"
+       cx="2.1166666"
+       cy="294.88333"
+       r="2.1166666" />
   </g>
 </svg>
