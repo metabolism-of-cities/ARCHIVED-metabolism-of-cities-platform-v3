@@ -1,0 +1,103 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ page|title }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="panel panel-body panel-colorful panel-default">
+      <h3>News</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for details in news_list %}
+            <tr>
+              <td><a href="{% url 'core:news' details.id %}">{{ details.title }}</a>
+              {% if page.title == "Blog" and details.authors %}
+              <br>
+                {% for author in details.authors.all %}
+                  <span>
+                    {{ author }}
+                  </span>
+                {% endfor %}
+              {% endif %}
+              </td>
+              <td>{{ details.created_at|date:"M d, Y" }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        {% if request.user.is_staff %}
+          <p><a href="{{ add_news_link }}?ref={{ request.get_full_path|urlencode }}" class="btn btn-success">Add news</a></p>
+        {% endif %}
+      </div>
+  </div><div class="col-lg-6">
+    <div class="panel panel-body panel-colorful panel-default events">
+      <h3>Events</h3>
+        <ul class="list-unstyled">
+          {% for details in events_list %}
+            <li>
+              <a href="{% url 'core:event' details.article.id %}">{{ details.article.title }}</a>
+              <br>
+              <strong>
+              {{ details.location }}
+              </strong>
+              <br>
+              {{ details.start|date:"M d, Y" }}-
+              {{ details.end|date:"M d, Y" }}
+            </li>
+          {% endfor %}
+        </ul>
+        {% if request.user.is_staff %}
+          <p><a href="{{ add_events_link }}?ref={{ request.get_full_path|urlencode }}" class="btn btn-success">Add event</a></p>
+        {% endif %}
+      </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.date{color:#333;opacity:0.7}
+.col-sm-4 img{max-width:100%}
+.panel-body img{max-width:200px;float:right;border:1px solid #ccc; padding:4px;margin:5px}
+td span{margin-right:10px}
+.events .list-unstyled li{margin-bottom:20px}
+.btn-success{margin-top:30px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ page|title }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:community_home' %}">Community</a></li>
+        <li class="active">{{ page|title }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

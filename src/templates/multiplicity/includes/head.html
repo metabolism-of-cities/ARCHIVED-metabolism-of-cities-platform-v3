@@ -8,13 +8,12 @@
 <link href="{% static 'ie/css/themes/type-a/theme-dust.min.css' %}" rel="stylesheet">
 <link href="{% static 'ie/premium/icon-sets/icons/line-icons/premium-line-icons.min.css' %}" rel="stylesheet">
 <link href="{% static 'ie/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css' %}" rel="stylesheet">
-<link href="{% static 'ie/css/fontawesome-all.min.css' %}" rel="stylesheet">
-<link href="{% static 'ie/css/styles.general.css' %}" rel="stylesheet">
-<link href="{% static 'ie/css/datatables.css' %}" rel="stylesheet"/>
-<link href="{% static 'ie/css/style.css' %}" rel="stylesheet">
+{% if datatables %}
+  <link href="{% static 'ie/css/datatables.css' %}" rel="stylesheet"/>
+{% endif %}
+<link href="{% static 'ie/css/style.css' %}?refresh" rel="stylesheet">
 <link rel="shortcut icon" type="image/ico" href="{% static 'ie/img/favicon.ico' %}"/>
-
-<!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-j8y0ITrvFafF4EkV1mPW0BKm6dp3c+J9Fky22Man50Ofxo2wNe5pT1oZejDH9/Dt" crossorigin="anonymous">
 
 {% if SITE_ID == 1 %}
   <link href="{% static 'ie/css/styles.1.css' %}?sep092018" rel="stylesheet">
@@ -23,4 +22,12 @@
 {% endif %}
 {% if tinymce %}
   <script type="text/javascript" src="{% static 'tinymce/js/tinymce/tinymce.min.js' %}"></script>
+{% endif %}
+{% if gallery %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+{% endif %}
+
+{% if map %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
+<link rel="stylesheet" href="{% static 'ie/css/leaflet-fullscreen.css' %}" />
 {% endif %}

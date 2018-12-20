@@ -48,7 +48,7 @@
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
 <link rel="stylesheet" href="{% static 'ie/css/datatables.css' %}" />
 <style type="text/css">
 #map{height:700px}
@@ -79,17 +79,17 @@
 {% endblock %}
 
 {% block footer %}
-  <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
   <script type="text/javascript" src="{% static 'ie/js/datatables.js' %}"></script>
   <script type="text/javascript">
 
 		var mymap = L.map('map').setView([{{ info.location.lat }}, {{ info.location.lng }}], {{ info.location.default_zoom|default_if_none:12 }});
 
-    var bluemarker = L.divIcon({className: 'bluemarker', iconSize: [38,38]});
-    var darkbluemarker = L.divIcon({className: 'darkbluemarker', iconSize: [38,38]});
-    var greenmarker = L.divIcon({className: 'greenmarker', iconSize: [38,38]});
-    var yellowmarker = L.divIcon({className: 'yellowmarker', iconSize: [38,38]});
-    var redmarker = L.divIcon({className: 'redmarker', iconSize: [38,38]});
+    var bluemarker = L.divIcon({className: 'bluemarker'});
+    var darkbluemarker = L.divIcon({className: 'darkbluemarker'});
+    var greenmarker = L.divIcon({className: 'greenmarker'});
+    var yellowmarker = L.divIcon({className: 'yellowmarker'});
+    var redmarker = L.divIcon({className: 'redmarker'});
 
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY29tbXVuaXRyZWUiLCJhIjoiY2lzdHZuanl1MDAwODJvcHR1dzU5NHZrbiJ9.0ETJ3fXYJ_biD7R7FiwAEg', {
 			maxZoom: 19,

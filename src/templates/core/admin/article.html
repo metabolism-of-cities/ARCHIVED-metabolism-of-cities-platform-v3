@@ -24,6 +24,7 @@
       {% bootstrap_form eventform layout='horizontal' %}
     {% endif %}
     {% buttons %}
+    <input type="hidden" name="redirect" value="{{ request.GET.ref }}">
       <div class="col-sm-offset-3 col-sm-9">
         <button type="submit" class="btn btn-success">Save</button>
       </div>

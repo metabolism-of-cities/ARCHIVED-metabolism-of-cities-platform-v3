@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-3 noclick">
 
           <div class="panel panel-success panel-colorful">
               <div class="pad-all media">
@@ -81,7 +81,7 @@
 
         </div>
         
-        <div class="col-lg-3">
+        <div class="col-lg-3 noclick">
 
           <div class="panel panel-warning panel-colorful">
               <div class="pad-all media">
@@ -144,8 +144,8 @@
   </div>
   <div class="row blog">
     {% for details in types %}
-      {% if details.id in count %}
-        {% if forloop.counter|divisibleby:4 %}</div><div class="row blog">{% endif %}
+      {% if details.total %}
+        {% if forloop.counter|divisibleby:4 %}</div><div class="row hide blog">{% endif %}
         <div class="col-md-4">
           <div class="panel">
               <div class="blog-header">
@@ -172,9 +172,52 @@
     {% endfor %}
   </div>
 
-  
+  <h2>Resources</h2>
 
-   
+  <div class="alert alert-warning">
+    The following resources have been recently added:
+  </div>
+
+  <div class="row">
+  
+    <div class="col-md-4">
+    
+      <h4>Material Flows</h4>
+
+      <ul class="nav nav-list">
+        {% for details in datasets_flows %}
+          <li><a class="list-group-item" href="{% url 'multiplicity:dataset' info.slug details.id %}"><i class="fal fa-database fa-fw"></i> {{ details.name }}</a></li>
+        {% endfor %}
+      </ul>
+
+    </div>
+    
+   <div class="col-md-4">
+    
+      <h4>Material Stock</h4>
+
+      <ul class="nav nav-list">
+        {% for details in datasets_stocks %}
+          <li><a class="list-group-item" href="{% url 'multiplicity:dataset' info.slug details.id %}"><i class="fal fa-database fa-fw"></i> {{ details.name }}</a></li>
+        {% endfor %}
+      </ul>
+
+    </div> 
+    
+    <div class="col-md-4">
+    
+      <h4>Documents</h4>
+
+      <ul class="nav nav-list">
+        {% for details in references %}
+          <li><a class="list-group-item" href="{% url 'core:reference' details.id %}"><i class="fal fa-file fa-fw"></i> {{ details.title }}</a></li>
+        {% endfor %}
+      </ul>
+
+    </div>
+
+  </div>
+
    <div class="row" style="display:none">
    
     <div class="col-md-12" style="padding-top:20px">
@@ -254,6 +297,7 @@
 .city-header { min-height:330px;previous:298px;}
 .morris-legend-items{padding-top:20px}
 #page-content .icon-fw{margin-right:-5px;position:relative;top:10px}
+.noclick a:hover{cursor:text;text-decoration:none}
 </style>
 {% endblock %}
 
@@ -280,6 +324,10 @@
 <script type="text/javascript" src="{% static 'ie/js/raphael.js' %}"></script>
 <script type="text/javascript">
 $(function(){
+  $(".noclick a").click(function(e){
+    e.preventDefault();
+  });
+
         var chart = Morris.Area({
         element: 'largegraph',
         data: [{

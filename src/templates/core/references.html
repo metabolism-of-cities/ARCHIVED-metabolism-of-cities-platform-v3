@@ -1,22 +1,135 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
 
-{% block title %}Publications{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-body">
-        <div class="panel-heading">
-            <h3>{{ title }}</h3>
+<div class="container references">
+{% if False %}
+  <h1>Search our database</h1>
+  <section class="search mar-btm">
+    <p>
+      Please enter search terms below to start your search. You will see a list of common terms appear as you start typing.
+    </p>
+    <p>
+      To confirm each search term, please hit ENTER to add it to the list. The system will only show records that contain <strong>all</strong> of the search terms that you enter. Remove search terms to increase the number of results. When you see the results, use the filters on the left hand side to refine your results.
+    </p>
+    <p>
+      You can also <a href="publications.export.php">download the full publications database</a> including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
+    </p>
+    <form action="#" method="post">
+      <select id="searchbox" multiple="multiple" class="form-control">
+        <optgroup label="Alaskan/Hawaiian Time Zone">
+          <option value="AK">Alaska</option>
+          <option value="HI">Hawaii</option>
+        </optgroup>
+        <optgroup label="Pacific Time Zone">
+          <option value="CA">California</option>
+          <option value="NV">Nevada</option>
+          <option value="OR">Oregon</option>
+          <option value="WA">Washington</option>
+        </optgroup>
+      </select>
+      <div class="row mar-top">
+        <div class="col-lg-6">
+          <button class="btn btn-dark" type="button">Search</button>
         </div>
-        <div class="panel-body">
-          {% include 'core/references.list.html' %}
+        <div class="col-lg-6 text-right">
+          <strong>{{ list.count }}</strong> publications found | <a href="">Reset all filters</a> | <a href="">View all publications</a>
         </div>
-        </div>
-    </div>
+      </div>
+    </form>
+    {% if tag %}
+      <p>You searched for: <b>{{ tag.name }}</b></p>
+    {% endif %}
+  </section>
+
+  {% else %}
+
+  <h1>{{ title }}</h1>
+  <p>
+    <strong>{{ list.count }}</strong> record(s) found.
+  </p>
+  {% endif %}
+
+  <div class="row mar-top">
+    <section class="col-md-3 filters hide">
+      <div class="bg-gray-light pad-all">
+        <ul class="nav nav-section-menu nav-sidebar mar-btm mat-top">
+          <li class="nav-header text-bold">Filter by Year</li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2018" data-type="year">2018
+                <span class="pull-right badge badge-dark">3</span>
+              </a>
+            </li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2017" data-type="year">2017
+                <span class="pull-right badge badge-dark">24</span>
+              </a>
+            </li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2016" data-type="year">2016
+                <span class="pull-right badge badge-dark">63</span>
+              </a>
+            </li>
+            <li class="">
+              <a href="#" class="nav-link filter" data-id="2015" data-type="year">2015
+                <span class="pull-right badge badge-dark">48</span>
+              </a>
+            </li>
+        </ul>
+        <ul class="nav nav-section-menu nav-sidebar mar-btm">
+        <li class="nav-header text-bold">Filter by Type</li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="16" data-type="type">Journal Article
+              <span class="badge badge-dark pull-right">405</span>
+            </a>
+          </li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="27" data-type="type">Report
+              <span class="badge badge-dark pull-right">28</span>
+            </a>
+          </li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="29" data-type="type">Thesis
+              <span class="badge badge-dark pull-right">19</span>
+            </a>
+          </li>
+          <li class="reg">
+            <a href="#" class="nav-link filter" data-id="5" data-type="type">Book
+              <span class="badge badge-dark pull-right">13</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="col-md-9 main records resourcelist">
+      {% for details in list %}
+        <a class="single-resource bg-gray-light" href="{% url 'core:reference' details.id %}">
+          <div class="row pad-all">
+            <div class="col-lg-9">
+              <h3 class="title">{{ details.title }}</h3>
+              {% if details.authors.all %}
+                {% for author in details.authors.all %}
+                  <span class="author">{{ author.firstname }} {{ author.lastname }}</span>{% if not forloop.counter == details.authors.all|length %},{% endif %}
+                {% endfor %}
+              {% else %}
+                {{ details.authorlist }}
+              {% endif %}
+            </div>
+            <div class="col-lg-3">
+              {% if details.journal.name %}<div class="journal-name">{{ details.journal.name }}</div>{% endif %}
+              {% if details.type %}<div class="type">{{ details.type }}</div>{% endif %}
+              {% if details.year %}<div class="year">{{ details.year }}</div>{% endif %}
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </section>
+  </div>
+
 </div>
 
 {% endblock %}
@@ -31,7 +144,7 @@
 
 {% block pagehead %}
 <div id="page-head">
-    
+
     <div id="page-title">
         <h1 class="page-header text-overflow">{{ title }}</h1>
     </div>
@@ -46,5 +159,29 @@
 {% endblock %}
 
 {% block footer %}
-
+  <script type="text/javascript">
+  $(function(){
+    $(".filters .filter").click(function(e){
+      e.preventDefault();
+      var type = $(this).data("type");
+      var id = $(this).data("id");
+      var hide = ".recordbox:not(."+type+"-"+id+")";
+      var show = ".recordbox."+type+"-"+id;
+      $(show).show('fast');
+      $(hide).hide('fast');
+      $(this).closest("ul").find("li a").removeClass('active');
+      $(this).addClass("active");
+    });
+    $(".show-all").click(function(e){
+      e.preventDefault();
+      var type = $(this).data("type");
+      $(".hide-"+type).show('fast');
+      $(this).hide();
+    });
+    $("#searchbox").select2({
+      tags: true,
+      tokenSeparators: [',']
+    })
+  });
+</script>
 {% endblock %}

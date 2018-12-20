@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 {% load static %}
 
-{% block title %}Add Publication{% endblock %}
+{% block title %}{% if info %}Edit{% else %}Add{% endif %} Publication{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
@@ -11,17 +11,27 @@
     <div class="col-lg-12">
         <div class="panel panel-body">
         <div class="panel-heading">
-            <h3>Add publication</h3>
+            <h3>{% if info %}Edit{% else %}Add{% endif %} publication</h3>
         </div>
         <div class="panel-body">
-          {% if dataset %}
-          <form action="{% url 'core:newflowreference' dataset %}" method="post" class="form form-horizontal">
-          {% else %}
-          <form action="{% url 'core:newreference' %}" method="post" class="form form-horizontal">
-          {% endif %}
-              {% csrf_token %}
-              {% bootstrap_form form layout='horizontal' %}
-              {% buttons submit='Next' layout='horizontal' %}{% endbuttons %}
+          <form method="post" class="form form-horizontal" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form layout='horizontal' %}
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="processes">Processes</label>
+                <div class="col-md-9">
+                  <select class="form-control" name="process" id="processes" multiple>
+                    {% for details in processes %}
+                      <option value="{{ details.id }}" {% if details in info.processes.all %}selected{% endif %}>{{ details.code }}. {{ details.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>            
+              {% buttons %}
+              <div class="col-sm-offset-3 col-sm-9">
+                <button type="submit" class="btn btn-success">Save</button>
+              </div>
+            {% endbuttons %}
           </form>
         </div>
         </div>
@@ -46,14 +56,17 @@ textarea[name='authorlist']{height:100px}
 <div id="page-head">
     
     <div id="page-title">
-        <h1 class="page-header text-overflow">Add publication</h1>
+        <h1 class="page-header text-overflow">{% if info %}Edit{% else %}Add{% endif %} publication</h1>
     </div>
 
     <ol class="breadcrumb">
         <li><a href="./"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
         <li><a href="{% url 'core:references' %}">Publications</a></li>
-        <li class="active">Add publication</li>
+        {% if info %}
+          <li><a href="{% url 'core:reference' info.id %}">{{ info.title|truncatewords:6 }}</a></li>
+        {% endif %}
+        <li class="active">{% if info %}Edit{% else %}Add{% endif %} publication</li>
     </ol>
 
 </div>
@@ -64,6 +77,13 @@ textarea[name='authorlist']{height:100px}
   <script type="text/javascript">
   $(function(){
     $("#id_journal").select2();
+    $("#id_authors").select2();
+    $("#id_organizations").select2();
+    $("#id_tags").select2();
+    $("#id_primary_space").select2();
+    {% if SITE_ID == 2 %}
+    $("#processes").closest(".form-group").hide();
+    {% endif %}
   });
   </script>
 {% endblock %}

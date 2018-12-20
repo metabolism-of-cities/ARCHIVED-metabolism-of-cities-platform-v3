@@ -1,48 +1,119 @@
+<script type="text/javascript">
+  var timeframes1 = {{ t1|safe }};
+  var timeframes2 = {{ t2|safe }};
+  var timeframes3 = {{ t3|safe }};
+  var groups = {{ groups|safe }};
+  var subgroups = {{ subgroups|safe }};
+  var types = {{ spaces|safe }};
+  var data = {{ data|safe }};
+
+  // empty arrays we'll fill the data with and use to draw chart
+  var areaCategories = [];
+  var areaSeries = []
+
+  // add each time marker on the X axis
+  $(timeframes1).each(function() {
+    areaCategories.push(this.label);
+  });
+
+  // check if the data has multiple subgroups
+  var isMultipleSubgroups = false;
+  if (subgroups.length > 1) {
+    isMultipleSubgroups = true;
+  }
+
+  if (isMultipleSubgroups == true) {
+    $(subgroups).each(function() {
+      // filling array with subgroup names
+      var singleSubgroup = {
+        name: this.label,
+        data: []
+      };
+
+      areaSeries.push(singleSubgroup);
+
+      // filling group names with data
+      $(data).each(function() {
+        if (this.material_name == singleSubgroup.name) {
+          singleSubgroup.data.push(this.quantity);
+        };
+      });
+    });
+  } else {
+    $(types).each(function() {
+      // filling array with subgroup names
+      var singleType = {
+        name: this.toString(),
+        data: []
+      };
+
+      areaSeries.push(singleType);
+
+      // filling group names with data
+      $(data).each(function() {
+        if (this.type == singleType.name) {
+          singleType.data.push(this.quantity);
+        };
+      });
+    });
+  }
+
+  // gets the right unit to use
+  var areaUnit = data[0].unit
+
+</script>
+
 <div id="areaChart" style="width:100%; height: 600px;"></div>
 
-  <script>
-    Highcharts.chart('areaChart', {
+<script>
+  Highcharts.chart('areaChart', {
       chart: {
-          type: 'areaspline'
+        type: 'areaspline',
+        animation: false
       },
       title: {
-          text: 'Wastewater effluent'
+        text: '{{ dataset.name }}'
       },
       subtitle: {
-          text: 'Cape Town'
+        text: '{{ info.name }}'
       },
+      colors: colorScheme,
       xAxis: {
-        type: 'datetime',
-        tickmarkPlacement: 'on',
+        categories: areaCategories,
         crosshair: true,
-      },
-      legend: {
-        verticalAlign: 'top',
+        title: {
+          text: '',
+          style: {
+            fontWeight: 'bold'
+          },
+        },
       },
       yAxis: {
         title: {
-          text: 'ml'
-        }
+          text: areaUnit,
+          style: {
+            fontWeight: 'bold'
+          },
+        },
+        min: 0
       },
       tooltip: {
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ml<br/>',
-          shared: true
+        shared: true,
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ' + areaUnit + '<br/>',
       },
-      colors: colorScheme,
       plotOptions: {
-          areaspline: {
-              stacking: 'normal',
-              lineColor: '#ffffff',
-              lineWidth: 1,
-              marker: {
-                  lineWidth: 1,
-                  lineColor: '#ffffff'
-              }
-          }
+        areaspline: {
+          stacking: 'normal',
+          lineColor: '#fff',
+          lineWidth: 0.3,
+          marker: {
+            enabled: false
+          },
+        },
       },
-      series: timeSeries
-    });
+      series: areaSeries,
+  });
 
-    // lines for chart burger menu thinner
-    $(".highcharts-button-symbol").attr("stroke-width", 1);
-  </script>
+  // lines for chart burger menu thinner
+  $(".highcharts-button-symbol").attr("stroke-width", 1);
+</script>

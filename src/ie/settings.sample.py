@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', 'web']
 
 # MoC = 1, MoI = 2
-SITE_ID = 2
+SITE_ID = 1
 
 # Application definition
 INSTALLED_APPS = [
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'tinymce',
     'django_cron',
+    'stdimage',
 ]
 
 MIDDLEWARE = [
@@ -166,7 +167,7 @@ LOGGING = {
 
 TINYMCE_DEFAULT_CONFIG = {
     'height': 360,
-    'width': 1120,
+    'width': 980,
     'cleanup_on_startup': True,
     'custom_undo_redo_levels': 20,
     'selector': 'textarea',

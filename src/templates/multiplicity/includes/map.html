@@ -1,0 +1,97 @@
+{% load static %}
+<div class="panel padding10">
+  <div class="panel-content">
+    <div id="map"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+<script src="{% static 'ie/js/leaflet.fullscreen.js' %}"></script>
+
+<script type="text/javascript">
+
+    var leafletMap = L.map('map', {fullscreenControl: true,fullscreenControlOptions: {position: 'topleft'}}).setView([{{ info.location.lat }}, {{ info.location.lng }}], {{ info.location.default_zoom|default_if_none:12 }});
+
+    var bluemarker = L.divIcon({className: 'bluemarker'});
+    var redmarker = L.divIcon({className: 'redmarker'});
+    var greenmarker = L.divIcon({className: 'greenmarker'});
+    var darkbluemarker = L.divIcon({className: 'darkbluemarker'});
+    var purplemarker = L.divIcon({className: 'purplemarker'});
+    var yellowmarker = L.divIcon({className: 'yellowmarker'});
+    var orangemarker = L.divIcon({className: 'orangemarker'});
+    var blackmarker = L.divIcon({className: 'blackmarker'});
+    var greymarker = L.divIcon({className: 'greymarker'});
+    var pinkmarker = L.divIcon({className: 'pinkmarker'});
+    var brightgreenmarker = L.divIcon({className: 'brightgreenmarker'});
+    var whitemarker = L.divIcon({className: 'whitemarker'});
+
+    var basemap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {
+      maxZoom: 19,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      id: 'mapbox.streets'
+    }).addTo(leafletMap);
+
+    leafletMap.scrollWheelZoom.disable();
+
+    {% for type in types %}
+      {% for space in spaces_list|get_item:type.id %}
+        {% if space.location.lat %}
+          var space_{{ space.id }} = L.marker([{{ space.location.lat }}, {{ space.location.lng }}], {icon:{{ type.marker_color }}marker})
+         .bindPopup("<b>{{ space.name }}</b><br>{{ space.type.name }}<br />{% if space.image %}<a href='{% url 'multiplicity:space' info.slug space.type.topic.slug space.type.slug space.slug %}'><img src='{{ space.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug space.type.topic.slug space.type.slug space.slug %}'>View details</a>. ", {minWidth:200}) ;
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
+
+    var all_markers = new L.featureGroup([{% for type in types %}{% for space in spaces_list|get_item:type.id %}{% if space.location.lat %}space_{{ space.id }},{% endif %}{% endfor %}{% endfor %}]);
+     leafletMap.fitBounds(all_markers.getBounds());
+    // these variable names are used in the showOneLayer function below
+    {% for type in types %}
+        var type_{{ type.id }} = L.featureGroup([{% for space in spaces_list|get_item:type.id %}{% if space.location.lat %} space_{{ space.id }}, {% endif %}{% endfor %}]).addTo(leafletMap);
+    {% endfor %}
+
+    // this group exists in order to show or hide all layers on the map
+    allFeatureGroups = [{% for details in types %} type_{{ details.id }},{% endfor %}];
+
+    var boundaryStyle = {
+        "color": "#ff7800",
+        "weight": 5,
+        "opacity": 0.35
+    };
+
+    var geojson = {{ info.location.geojson|safe }}
+    var geojsonlayer = L.geoJSON(geojson, {style: boundaryStyle, interactive: false}).addTo(leafletMap);
+
+    // this group exists to show the checkboxes on the map. The format is "label": variable. It can contain html, as shown in the current example
+    allLayers = {
+      {% for type in types %}
+        {% if spaces_list|get_item:type.id %}
+          "<img src='/static/multiplicity/img/markers/marker.{{ type.marker_color }}.svg'/> {{ type.name }}": type_{{ type.id }},
+        {% endif %}
+      {% endfor %}
+      "{{ info.name }} boundaries": geojsonlayer,
+    }
+
+    L.control.layers(null, allLayers, {collapsed: false}).addTo(leafletMap);
+
+
+    // remove and add layers
+    function showAllLayers(){
+      $(allFeatureGroups).each(function() {
+        leafletMap.addLayer(this);
+      })
+    };
+
+    function removeAllLayers() {
+      $(allFeatureGroups).each(function() {
+        leafletMap.removeLayer(this);
+      })
+    };
+
+    function showOneLayer(group) {
+      removeAllLayers();
+      leafletMap.addLayer(group);
+    }
+</script>

@@ -7,87 +7,111 @@
   var types = {{ spaces|safe }};
   var data = {{ data|safe }};
 
-  var lineSeries = [];
+  // empty arrays we'll fill the data with and use to draw chart
+  var lineCategories = [];
+  var lineSeries = []
 
-  $(types).each(function() {
-    var type = {
-      name: '' + this + '',
-      data: []
-    };
-    lineSeries.push(type);
-
-    $(data).each(function() {
-      if (this.type == type.name) {
-        var timePoint = new Date(this.date_formatted).getTime();
-        var dataPoint = [timePoint ,this.quantity];
-        type.data.push(dataPoint);
-      }
-    });
+  // add each time marker on the X axis
+  $(timeframes1).each(function() {
+    lineCategories.push(this.label);
   });
+
+  // check if the data has multiple subgroups
+  var isMultipleSubgroups = false;
+  if (subgroups.length > 1) {
+    isMultipleSubgroups = true;
+  }
+
+  if (isMultipleSubgroups == true) {
+    $(subgroups).each(function() {
+      // filling array with subgroup names
+      var singleSubgroup = {
+        name: this.label,
+        data: []
+      };
+
+      lineSeries.push(singleSubgroup);
+
+      // filling group names with data
+      $(data).each(function() {
+        if (this.material_name == singleSubgroup.name) {
+          singleSubgroup.data.push(this.quantity);
+        };
+      });
+    });
+  } else {
+    $(types).each(function() {
+      // filling array with subgroup names
+      var singleType = {
+        name: this.toString(),
+        data: []
+      };
+
+      lineSeries.push(singleType);
+
+      // filling group names with data
+      $(data).each(function() {
+        if (this.type == singleType.name) {
+          singleType.data.push(this.quantity);
+        };
+      });
+    });
+  }
+
+  // gets the right unit to use
+  var lineUnit = data[0].unit
+
 </script>
 
 <div id="lineChart" style="width:100%; height: 600px;"></div>
 
-	<script>
-	  Highcharts.chart('lineChart', {
-	      chart: {
-          type: 'spline',
-          animation: false
-	      },
-	      title: {
-          text: 'Wastewater effluent'
-	      },
-	      subtitle: {
-          text: 'Cape Town'
-	      },
-
-        colors: colorScheme,
-
-	      xAxis: {
-          type: 'datetime',
-          title: {
-            text: 'Date',
-            style: {
-              fontWeight: 'bold'
-            },
+<script>
+  Highcharts.chart('lineChart', {
+      chart: {
+        type: 'spline',
+        animation: false
+      },
+      title: {
+        text: '{{ dataset.name }}'
+      },
+      subtitle: {
+        text: '{{ info.name }}'
+      },
+      colors: colorScheme,
+      xAxis: {
+        categories: lineCategories,
+        crosshair: true,
+        title: {
+          text: '',
+          style: {
+            fontWeight: 'bold'
           },
-		      crosshair: true,
-          dateTimeLabelFormats: {
-              month: '%B %Y',
-              year: '%B %Y'
+        },
+      },
+      yAxis: {
+        title: {
+          text: lineUnit,
+          style: {
+            fontWeight: 'bold'
           },
-	      },
-	      yAxis: {
-	          title: {
-	              text: 'ml',
-	              style: {
-	                  fontWeight: 'bold'
-	              },
-	          },
-	          min: 0
-	      },
-	      tooltip: {
-            shared: true,
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ml<br/>',
-	          // The date can be shown in multiple ways, see:
-	          // https://api.highcharts.com/highcharts/tooltip.dateTimeLabelFormats
-	      },
+        },
+        min: 0
+      },
+      tooltip: {
+        shared: true,
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ' + lineUnit + '<br/>',
+      },
+      plotOptions: {
+        spline: {
+          marker: {
+            enabled: false
+          }
+        }
+      },
 
-	      plotOptions: {
-	          spline: {
-	              marker: {
-	                  enabled: false
-	              }
-	          }
-	      },
+      series: lineSeries,
+  });
 
-	      // Define the data points. All series have a dummy year
-	      // of 1970/71 in order to be compared on the same x axis. Note
-	      // that in JavaScript, months start at 0 for January, 1 for February etc.
-	      series: lineSeries,
-	  });
-
-    // lines for chart burger menu thinner
-    $(".highcharts-button-symbol").attr("stroke-width", 1);
-	</script>
-
+  // lines for chart burger menu thinner
+  $(".highcharts-button-symbol").attr("stroke-width", 1);
+</script>

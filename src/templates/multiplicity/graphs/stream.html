@@ -1,62 +1,119 @@
-<div id="streamGraph" style="width:100%; height: 600px;"></div>
+<script type="text/javascript">
+  var timeframes1 = {{ t1|safe }};
+  var timeframes2 = {{ t2|safe }};
+  var timeframes3 = {{ t3|safe }};
+  var groups = {{ groups|safe }};
+  var subgroups = {{ subgroups|safe }};
+  var types = {{ spaces|safe }};
+  var data = {{ data|safe }};
 
-	<script>
-	  Highcharts.chart('streamGraph', {
+  // empty arrays we'll fill the data with and use to draw chart
+  var streamCategories = [];
+  var streamSeries = []
 
+  // add each time marker on the X axis
+  $(timeframes1).each(function() {
+    streamCategories.push(this.label);
+  });
+
+  // check if the data has multiple subgroups
+  var isMultipleSubgroups = false;
+  if (subgroups.length > 1) {
+    isMultipleSubgroups = true;
+  }
+
+  if (isMultipleSubgroups == true) {
+    $(subgroups).each(function() {
+      // filling array with subgroup names
+      var singleSubgroup = {
+        name: this.label,
+        data: []
+      };
+
+      streamSeries.push(singleSubgroup);
+
+      // filling group names with data
+      $(data).each(function() {
+        if (this.material_name == singleSubgroup.name) {
+          singleSubgroup.data.push(this.quantity);
+        };
+      });
+    });
+  } else {
+    $(types).each(function() {
+      // filling array with subgroup names
+      var singleType = {
+        name: this.toString(),
+        data: []
+      };
+
+      streamSeries.push(singleType);
+
+      // filling group names with data
+      $(data).each(function() {
+        if (this.type == singleType.name) {
+          singleType.data.push(this.quantity);
+        };
+      });
+    });
+  }
+
+  // gets the right unit to use
+  var streamUnit = data[0].unit
+</script>
+
+<div id="streamChart" style="width:100%; height: 600px;"></div>
+
+<script>
+  Highcharts.chart('streamChart', {
       chart: {
         type: 'streamgraph',
-        marginBottom: 50,
-        marginTop: 50,
+        marginBottom: 30,
         zoomType: 'x'
       },
+      colors: colorScheme,
       title: {
-        text: 'Wastewater effluent'
+        text: '{{ dataset.name }}'
       },
       subtitle: {
-        text: 'Cape Town'
+        text: '{{ info.name }}'
       },
-      colors: colorScheme,
       xAxis: {
-        type: 'datetime',
-        title: {
-          text: 'Date',
-          style: {
-            fontWeight: 'bold'
-          },
-        },
+        maxPadding: 0,
+        type: 'category',
         crosshair: true,
+        categories: streamCategories,
+        labels: {
+          align: 'left',
+          reserveSpace: false,
+          rotation: 270
+        },
+        lineWidth: 0,
+        margin: 20,
+        tickWidth: 0
       },
       yAxis: {
         visible: false,
         startOnTick: false,
-        endOnTick: false,
+        endOnTick: false
       },
       legend: {
-        enabled: true,
-        verticalAlign: 'top',
+        enabled: false,
       },
       plotOptions: {
         series: {
           label: {
-            enabled: false,
+            minFontSize: 5,
+            maxFontSize: 15,
+            style: {
+              color: 'rgba(255,255,255,0.75)'
+            }
           }
         }
       },
+      series: streamSeries,
+  });
 
-      tooltip: {
-          shared: true,
-          pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} millions)<br/>',
-          // The date can be shown in multiple ways, see:
-          // https://api.highcharts.com/highcharts/tooltip.dateTimeLabelFormats
-      },
-      series: timeSeries,
-      exporting: {
-          sourceWidth: 800,
-          sourceHeight: 600
-      }
-
-	  });
-
-    // lines for chart burger menu thinner
-    $(".highcharts-button-symbol").attr("stroke-width", 1);
-	</script>
+  // lines for chart burger menu thinner
+  $(".highcharts-button-symbol").attr("stroke-width", 1);
+</script>

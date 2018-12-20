@@ -6,7 +6,8 @@ app_name = 'staf'
 urlpatterns = [
     path('', views.index, name='index'),
     path('search', views.search, name='search'),
-    path('catalogs', views.catalogs, name='catalogs'),
+    path('processgroups', views.processgroups, name='processgroups'),
+    path('processgroups/<int:id>', views.processgroup, name='processgroup'),
 
     path('materials', views.materiallist, name='materials'),
     path('materials/<int:id>', views.materiallist, name='materiallist'),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('materials/ajax', views.materiallistajax, name='materialajax'),
 
     path('processes', views.processlist, name='processes'),
+    path('processes/table', views.processtable, name='processtable'),
     path('processes/<int:id>', views.processlist, name='processlist'),
     path('processes/<int:id>/edit', views.processform, name='process_edit'),
     path('processes/<int:id>/child', views.processchild, name='process_child'),

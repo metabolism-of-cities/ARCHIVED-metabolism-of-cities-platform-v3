@@ -3,10 +3,10 @@
 <html lang="en">
 <head>
 <title>{% block title %}{%endblock %} | {{ SITE_NAME }}</title>
-{% include 'multiplicity/includes/head.html' %}
 {% if select2 %}
   <link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
 {% endif %}
+{% include 'multiplicity/includes/head.html' %}
 {% block head %}{% endblock %}
 {% if navbar == "backend" or navbar == "team" %}
 <style type="text/css">
@@ -16,15 +16,17 @@
 </style>
 {% endif %}
 <style type="text/css">
-#footerwarning{position:fixed;bottom:0;z-index:100000;display:none}
+#footerwarning{;z-index:100000;margin-bottom:0;text-align:center}
 </style>
 </head>
 
 <body>
 
-<div class="alert alert-warning" id="footerwarning">
-You are viewing a prototype site
+{% if SITE_ID == 2 %}
+<div class="alert alert-danger" id="footerwarning" style="font-size:19px">
+  This website is under active development. Official launch will take place March 2019.
 </div>
+{% endif %}
 
 <div id="container" class="effect boxed-layout aside-float slide {% if mainnav %}{{ mainnav }}{% elif section == 'cities' or sidenav %}mainnav-lg{% else %}mainnav-out{% endif %} {% block container %}{% endblock %}">
 <!--<div id="container" class="effect aside-left aside-bright aside-in boxed-layout mainnav-lg">-->
@@ -370,7 +372,7 @@ You are viewing a prototype site
 
 {% if request.user.is_authenticated and request.user.is_staff %}
 
-  <a href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
+  <a title="Go to back-end homepage" href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
 
   {% if section == "cities" and info.slug %}
 
@@ -379,19 +381,19 @@ You are viewing a prototype site
   {% endif %}
 
   {% if editlink %}
-    <a href="{{ editlink }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+    <a title="Edit this record" href="{{ editlink }}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
   {% endif %}
 
   {% if deletelink %}
-    <a href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
+    <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
   {% endif %}
 
   {% if page.id %}
-    <a href="{% url 'core:admin_article' page.id %}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+    <a title="Edit" href="{% url 'core:admin_article' page.id %}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
   {% endif %}
 
   {% if addlink %}
-    <a href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
+    <a title="Add new record" href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
   {% endif %}
 
 {% endif %}
@@ -410,7 +412,7 @@ You are viewing a prototype site
           <a class="btn btn-lg btn-default" href="{% url 'core:about' 'join-us' %}">Read more</a>
         </p>
       </div>
-      <div class="col-lg-3">
+      <div class="col-lg-{% if EVENT %}3{% else %}6{% endif %}">
         {% if SITE_ID == 1 %}
           <h3>Share your data</h3>
           <p>
@@ -428,9 +430,26 @@ You are viewing a prototype site
           </p>
         {% endif %}
       </div>
-      <div class="col-lg-3">
-        <h3>Upcoming event</h3>
-      </div>
+      {% if EVENT %}
+        <div class="col-lg-3">
+          <h3>Upcoming event</h3>
+            <p>
+              <a style="color:#337ab7" href="{% url 'core:event' EVENT.article.id %}">{{ EVENT.article.title }}</a>
+              <br>
+              <strong>
+              {{ EVENT.location }}
+              </strong>
+              <br>
+              <em>
+                {{ EVENT.start|date:"M d, Y" }}-
+                {{ EVENT.end|date:"M d, Y" }}
+              </em>
+            </p>
+            <p>
+              <a class="btn btn-lg btn-default" href="{% url 'core:event' EVENT.article.id %}">View event</a>
+            </p>
+          </div>
+        {% endif %}
     </div>
   </div>
 
@@ -453,8 +472,8 @@ You are viewing a prototype site
           <br>
           Our source code is available on
           <br>
-          <a href="https://github.com/paulhoekman/mfa-tools">
-          <i class="fab fa-github"></i> Github
+          <a href="https://gitlab.com/metabolism-of-cities/metabolism-of-cities-platform">
+          <i class="fab fa-gitlab"></i> Gitlab
           </a>
         </p>
       </div>

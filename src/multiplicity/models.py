@@ -5,6 +5,10 @@ from django.contrib.auth import get_user_model
 from tinymce import HTMLField
 from django.forms import ModelForm
 
+# Used for image resizing
+from stdimage.models import StdImageField
+import re
+
 User = get_user_model()
 
 class TimestampedModel(models.Model):
@@ -31,6 +35,7 @@ class Topic(models.Model):
     position = models.PositiveSmallIntegerField()
     description = models.TextField(null=True, blank=True)
     materials = models.ManyToManyField('staf.Material', blank=True)
+    deleted = models.BooleanField(default=False, db_index=True)
     def __str__(self):
         return self.name
     class Meta:
@@ -40,24 +45,40 @@ class ReferenceSpaceType(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
+    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
     SPACE_TYPE = (
         ('SOC', 'Socio-economic System'),
         ('NAT', 'Natural Environment'),
     )
     type = models.CharField(max_length=3, choices=SPACE_TYPE)
     COLORS = (
-        ('green', 'Green'),
         ('blue', 'Blue'),
-        ('darkblue', 'Dark Blue'),
-        ('black', 'Black'),
-        ('purple', 'Purple'),
         ('red', 'Red'),
+        ('green', 'Green'),
+        ('darkblue', 'Dark Blue'),
+        ('purple', 'Purple'),
         ('yellow', 'yellow'),
         ('orange', 'Orange'),
+        ('black', 'Black'),
+        ('grey', 'Grey'),
+        ('pink', 'Pink'),
+        ('brightgreen', 'Bright green'),
         ('white', 'White'),
     )
     marker_color = models.CharField(max_length=10, choices=COLORS, null=True, blank=True, default='blue')
     user_accessible = models.BooleanField()
+    def __str__(self):
+        return self.name
+
+    def features(self):
+        return Feature.objects.filter(type=self.id, show_in_table=True)
+
+class DatasetTypeStructure(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(db_index=True, max_length=255)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    icon = models.CharField(max_length=255, null=True, blank=True)
+
     def __str__(self):
         return self.name
 
@@ -82,12 +103,24 @@ class DatasetType(models.Model):
     )
     type = models.CharField(max_length=6, choices=TYPES, default='flows')
     image = models.ImageField(null=True, blank=True, upload_to='datasettype')
+    category = models.ForeignKey(DatasetTypeStructure, on_delete=models.CASCADE, null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True)
+    active = models.BooleanField()
 
     def __str__(self):
-        return self.name
+        if self.category:
+            return '%s (%s)' % (self.name, self.category.name)
+        else:
+            return self.name
 
     class Meta:
         ordering = ["name"]
+
+class DatasetTypeForm(ModelForm):
+    class Meta:
+        model = DatasetType
+        fields = ['name', 'description', 'flows', 'type', 'category', 'topic', 'slug', 'active']
+
 
 class ReferenceSpace(models.Model):
     name = models.CharField(max_length=255, db_index=True)
@@ -100,6 +133,7 @@ class ReferenceSpace(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='referencespace')
     location = models.ForeignKey('multiplicity.ReferenceSpaceLocation', on_delete=models.SET_NULL, null=True, blank=True)
     csv = models.ForeignKey('multiplicity.ReferenceSpaceCSV', on_delete=models.CASCADE, null=True, blank=True)
+    tag = models.ForeignKey('core.Tag', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -128,7 +162,7 @@ class ReferenceSpaceLocation(models.Model):
     source = models.CharField(max_length=255, null=True, blank=True)
     geojson = models.TextField(null=True, blank=True)
     def __str__(self):
-        return self.name
+        return self.name or 'Location for ' + self.space.name
     class Meta:
         ordering = ["name"]
 
@@ -186,21 +220,99 @@ class DQIRating(models.Model):
     class Meta:
         ordering = ["score"]
 
+class ProcessGroup(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.CharField(max_length=255, null=True, blank=True)
+    slug = models.SlugField(db_index=True, max_length=255, unique=True)
+    description = models.TextField(null=True, blank=True)
+    processes = models.ManyToManyField('staf.Process', blank=True)
+
+    def __str__(self):
+        return self.name
+
+class License(models.Model):
+    name = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
+
+class Photo(TimestampedModel):
+    image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780), 'medium': (640, 480)})
+    author = models.CharField(max_length=255)
+    source_url = models.CharField(max_length=255, null=True, blank=True)
+    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
+    description = models.TextField(null=True, blank=True)
+    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    deleted = models.BooleanField(default=False, db_index=True)
+    license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        if self.description:
+          cleanr = re.compile('<.*?>')
+          description = re.sub(cleanr, '', self.description)
+          description = description[:30] + " - " + self.author + " - #" + str(self.id)
+        else:
+          description = "Photo by " + self.author + " - #" + str(self.id)
+        return description
+
+class PhotoForm(ModelForm):
+    class Meta:
+        model = Photo
+        exclude = ['id', 'uploaded_by', 'primary_space', 'process']
+        labels = {
+            'deleted': 'Do not show in the gallery'
+        }
+
+class ReferencePhoto(models.Model):
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)
+    space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    def __str__(self):
+        description = "Photo for " + self.type + " in " + self.space
+
+class ReferencePhotoForm(ModelForm):
+    class Meta:
+        model = ReferencePhoto
+        exclude = ['id']
+
 class Information(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = HTMLField('Content')
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
-    references = models.ManyToManyField('core.Reference', blank=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE, null=True, blank=True)
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE, null=True, blank=True)
+    position = models.IntegerField(null=True, blank=True)
+    references = models.ManyToManyField("core.Reference", blank=True)
+    dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
+    process = models.ForeignKey("staf.Process", on_delete=models.CASCADE, blank=True, null=True, limit_choices_to={'slug__isnull': False})
     def __str__(self):
         return self.title
+
+class InformationForm(ModelForm):
+    class Meta:
+        model = Information
+        fields = ['title', 'content', 'photo', 'position']
 
 class GraphType(models.Model):
     title = models.CharField(max_length=255)
     slug = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True, blank=True)
     notes = HTMLField('Content', null=True, blank=True)
+    TIMEFRAMES = (
+        ('single', 'Single timeframe'),
+        ('multiple', 'Multiple timeframes'),
+        ('both', 'Does not matter'),
+    )
+    timeframes = models.CharField(max_length=25, choices=TIMEFRAMES, default='both')
+    MATERIALS = (
+        ('single', 'Single material'),
+        ('multiple', 'Multiple materials'),
+        ('both', 'Does not matter'),
+    )
+    materials = models.CharField(max_length=25, choices=MATERIALS, default='both')
+
     def __str__(self):
         return self.title
+

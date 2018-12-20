@@ -13,20 +13,34 @@
   </div>
   <div class="panel-body">
 
+    <ol class="breadcrumb">
+        {% if home %}
+            <li class="active">Processes</li>
+        {% else %}
+            <li><a href="{% url 'staf:processes' %}">Processes</a></li>
+            {% for details in ancestors %}
+                <li><a href="{% url 'staf:processlisting' details.id %}">{{ details.name}}</a></li>
+            {% endfor %}
+            <li class="active">{{ info.name }}</li>
+        {% endif %}
+
+    </ol>
+
+
   <table class="table table-striped">
     <tr>
+      <th>Code</th>
       <th>Process</th>
-      <th>Type</th>
     </tr>
     {% for details in processes %}
       <tr>
+        <td>{{ details.code }}</td>
         <td><a href="{% url 'staf:processlisting' details.id %}">{{ details.name }}</a></td>
-        <td>{{ details.type.name }}</td>
       </tr>
     {% endfor %}
   </table>
 
-  <p><a href="processes/tree" class="btn btn-info">View process tree</a></p>
+  <p><a href="{% url 'staf:processes' %}" class="btn btn-info">View process tree</a></p>
 
   </div>
 </div>
@@ -52,16 +66,7 @@
     <ol class="breadcrumb">
         <li><a href="./"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'staf:index' %}">Data</a></li>
-        {% if home %}
-            <li class="active">Processes</li>
-        {% else %}
-            <li><a href="{% url 'staf:processes' %}">Processes</a></li>
-            {% for details in ancestors %}
-                <li><a href="{% url 'staf:processlisting' details.id %}">{{ details.name}}</a></li>
-            {% endfor %}
-            <li class="active">{{ info.name }}</li>
-        {% endif %}
-
+        <li class="active">Processes</li>
     </ol>
 
 </div>

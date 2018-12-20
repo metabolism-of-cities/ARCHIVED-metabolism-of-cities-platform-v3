@@ -39,7 +39,8 @@ class ReferenceType(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True, blank=True)
-    location = models.ForeignKey(ReferenceSpace, on_delete=models.SET_NULL, null=True, blank=True)
+    processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
+    reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True)
     description = models.TextField(null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     ORG_TYPE = (
@@ -60,6 +61,11 @@ class Organization(models.Model):
         return self.name
     class Meta:
         ordering = ["name"]
+
+class OrganizationForm(ModelForm):
+    class Meta:
+        model = Organization
+        exclude = ['id', 'processes']
 
 class Publisher(models.Model):
     name = models.CharField(max_length=255)
@@ -188,6 +194,8 @@ class Event(models.Model):
     type = models.CharField(max_length=20, choices=EVENT_TYPE)
     location = models.CharField(max_length=255, null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
+    def __str__(self):
+        return self.article.title
 
 class EventForm(ModelForm):
     class Meta:
@@ -217,7 +225,11 @@ class VideoForm(ModelForm):
 class Tag(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    gps = models.CharField(max_length=255)
+    parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
+        limit_choices_to={'hidden': False},
+    )
+    hidden = models.BooleanField(db_index=True, default=False)
+    gps = models.CharField(max_length=255, null=True, blank=True)
     PARENTS = (
  	(1,	'Publication Types'),
  	(2,	'Metabolism Studies'),
@@ -229,12 +241,22 @@ class Tag(models.Model):
  	(9,	'Methodologies'),
  	(10,	'Other'),
     )
-    parent = models.CharField(max_length=2, choices=PARENTS)
-    parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.CharField(max_length=2, choices=PARENTS, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+
+class TagForm(ModelForm):
+    class Meta:
+        model = Tag
+        exclude = ['id', 'gps', 'parent', 'hidden']
 
 class Reference(models.Model):
     title = models.CharField(max_length=255)
-    title_original_language = models.CharField(max_length=255)
+    title_original_language = models.CharField(max_length=255, blank=True, null=True)
     authorlist = models.TextField()
     type = models.ForeignKey(ReferenceType, on_delete=models.CASCADE)
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
@@ -242,13 +264,15 @@ class Reference(models.Model):
     year = models.PositiveSmallIntegerField()
     abstract = models.TextField(null=True, blank=True)
     abstract_original_language = models.TextField(null=True, blank=True)
-    date_added = models.DateTimeField(null=True, blank=True)
+    date_added = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    file = models.FileField(null=True, blank=True, upload_to='references')
     LANGUAGES = (
         ('EN', 'English'),
         ('ES', 'Spanish'),
         ('CH', 'Chinese'),
         ('FR', 'French'),
         ('GE', 'German'),
+        ('NL', 'Dutch'),
         ('OT', 'Other'),
     )
     language = models.CharField(max_length=2, choices=LANGUAGES)
@@ -261,9 +285,11 @@ class Reference(models.Model):
         ('deleted', 'Deleted'),
     )
     status = models.CharField(max_length=8, choices=STATUS, db_index=True)
-    authors = models.ManyToManyField(People)
+    authors = models.ManyToManyField(People, blank=True)
     organizations = models.ManyToManyField(Organization, through='ReferenceOrganization')
-    tags = models.ManyToManyField(Tag, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, limit_choices_to={'hidden': False})
+    processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
+    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -281,6 +307,16 @@ class ReferenceForm(ModelForm):
     class Meta:
         model = Reference
         fields = ['title', 'authorlist', 'type', 'journal', 'year', 'abstract', 'language', 'open_access', 'doi', 'url']
+        labels = {
+            'authorlist': 'Author(s)',
+            'doi': 'DOI',
+            'url': 'URL',
+        }
+
+class ReferenceFormAdmin(ModelForm):
+    class Meta:
+        model = Reference
+        exclude = ['id', 'organizations', 'processes', 'date_added', 'event', 'authors']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',

@@ -1,0 +1,74 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Urban metabolism data: Processes{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+
+<div class="panel">
+  <div class="panel-heading">
+      <h3 class="panel-title">Processes</h3>
+  </div>
+  <div class="panel-body">
+
+    <ol class="breadcrumb">
+        <li class="active">Processes</li>
+    </ol>
+
+
+  <table class="table table-striped datatable">
+    <thead>
+    <tr>
+      <th colspan="2">Code</th>
+      <th>Process</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for details in processes %}
+      <tr>
+        <td><a href="{% url 'staf:process_edit' details.id %}"><i class="fas fa-pencil"></i></a></td>
+        <td>{{ details.code }}</td>
+        <td><a href="{% url 'staf:processlisting' details.id %}">{{ details.name }}</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <p><a href="{% url 'staf:processes' %}" class="btn btn-info">View process tree</a></p>
+
+  </div>
+</div>
+    
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Urban metabolism data</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'staf:index' %}">Data</a></li>
+        <li class="active">Processes</li>
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

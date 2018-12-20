@@ -6,152 +6,162 @@
 
 {% block content %}
 
-  <div class="row">
-        <div class="col-lg-6">
-          <div class="panel widget">
-              <div class="widget-header bg-purple city-header" style="min-height:266px">
-                
-                  {% if SITE_ID == 1 %}
-                  <img class="widget-bg img-responsive" src="/media/referencespace/capetown.jpg" alt="">
-                  {% else %}
-                    <a href="/cities/antigua-barbuda">
-                    <img class="widget-bg img-responsive" src="https://prototype.metabolismofislands.org/media/referencespace/Trinket.jpg" alt="">
-                    </a>
-                  {% endif %}
-                
-              </div>
-              <div class="widget-body text-center">
-                
-                {% if SITE_ID == 1 %}
-                  <img alt="" class="widget-img img-circle img-border-light" src="https://static.metabolismofcities.org/multiplicity/img/cities/map-cape-town.jpg">
-                
-                  <h4 class="mar-no text-main">Cape Town</h4>
-                  <p class="text-muted mar-no">South Africa</p>
-                {% else %}
-                  <img alt="" class="widget-img img-circle img-border-light" src="https://prototype.metabolismofislands.org/static/multiplicity/img/cities/map-antigua-barbuda.jpg">
-                
-                  <h4 class="mar-no text-main">Antigua &amp; Barbuda</h4>
-                  <p class="text-muted mar-no">Caribbean</p>
-                {% endif %}
-              </div>
+<div class="homepage {% if SITE_ID == 1 %}moc{% else %}moi{% endif %}">
+
+  <section class="top-banner">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="welcome-text pad-all">
+          <div>
+            Metabolism of Islands is dedicated to improving the understanding of <span class="highlight">sustainability of islands</span> through research into <span class="highlight">material stocks and flows</span>
           </div>
         </div>
-
-        <div class="col-lg-6">
-
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="panel panel-dark panel-colorful">
-                <div class="pad-all text-center">
-                  <a href="/about/team">
-                    <span class="text-3x text-thin">5</span>
-                    <p>Islands</p>
-                  </a>
-                </div>
-              </div>
-            </div>            <div class="col-lg-4">
-              <div class="panel panel-dark panel-colorful">
-                <div class="pad-all text-center">
-                  <a href="/resources/publications">
-                    <span class="text-3x text-thin">477</span>
-                    <p>Resources</p>
-                  </a>
-                </div>
-              </div>
-            </div><div class="col-lg-4">
-              <div class="panel panel-dark panel-colorful">
-                <div class="pad-all text-center">
-                  <a href="/resources/videos">
-                    <span class="text-3x text-thin">23</span>
-                    <p>Research Projects</p>
-                  </a>
-                </div>
-              </div>
+        <div class="welcome-nav text-center">
+          <a class="btn btn-lg btn-default btn-warning" href="/about/who-we-are">About</a>
+          <a class="btn btn-lg btn-default btn-warning" href="/research/projects">Research</a>
+          <a class="btn btn-lg btn-default btn-warning" href="/resources/publications">Resources</a>
+          <a class="btn btn-lg btn-default btn-warning" href="">Data</a>
+          <a class="btn btn-lg btn-default btn-warning" href="news_events">News & Events</a>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="panel widget">
+          <div class="widget-header bg-purple city-header slideshow photos">
+            <img class="widget-bg img-responsive" src="https://prototype.metabolismofislands.org/media/referencespace/English_Barbour_Antigua_resized_800_p.jpg" />
+            <img class="widget-bg img-responsive" src="https://prototype.metabolismofislands.org/media/referencespace/Trinket.jpg" alt="">
+          </div>
+          <div class="widget-body text-center">
+            <div class="slideshow maps">
+              <img alt="" class="widget-img img-circle img-border-light" src="https://prototype.metabolismofislands.org/static/multiplicity/img/cities/map-antigua-barbuda.jpg">
+              <img alt="" class="widget-img img-circle img-border-light" src="https://prototype.metabolismofislands.org/static/multiplicity/img/cities/map-antwerp.jpg">
             </div>
+            <h4 class="mar-no text-main island-name">Samothraki</h4>
+            <p class="text-muted mar-no island-area">Europe</p>
           </div>
-
         </div>
-  </div>
-
-
-<div class="row">
-  <div class="col-sm-6 col-lg-4">
-      <div class="panel panel-trans">
-          <div class="panel-heading">
-              <h3 class="panel-title">Latest news</h3>
-          </div>
-          <div class="pad-ver">
-              <ul class="list-group bg-trans list-todo mar-no">
-                {% for details in news %}
-                  <li class="list-group-item">
-                    <a href="{% url 'core:news' details.id %}">{{ details.title }}</a><br>
-                    <span >{{ details.created_at|date:"M d, Y" }}</span>
-                  </li>
-                {% endfor %}
-              </ul>
-          </div>
       </div>
-  </div>
-  <div class="col-sm-6 col-lg-4">
-      <div class="panel panel-trans">
-          <div class="panel-heading">
-              <h3 class="panel-title">Latest resources</h3>
-          </div>
-          <div class="pad-ver">
-              <ul class="list-group bg-trans list-todo mar-no">
-                {% for details in publications %}
-                  <li class="list-group-item">
-                    <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
-                    <span class="label label-success">{{ details.type.name }}</span>
-                    <br>
-                  </li>
-                {% endfor %}
-              </ul>
-          </div>
-      </div>
-  </div>
-  <div class="col-sm-6 col-lg-4">
-      <div class="panel panel-trans">
-          <div class="panel-heading">
-              <h3 class="panel-title">Latest research</h3>
-          </div>
-          <div class="pad-ver">
-              <ul class="list-group bg-trans list-todo mar-no">
-                {% for details in projects %}
-                  <li class="list-group-item">
-                    <a href="{% url 'core:project' details.id %}">{{ details.name }}</a><br>
-                  </li>
-                {% endfor %}
-              </ul>
-          </div>
-      </div>
-  </div>
-</div>
-
-{% endblock %}
-
-{% block head %}
-{% endblock %}
-
-{% block sidebar %}
-{% include 'multiplicity/sidebar.default.html' %}
-
-{% endblock %}
-
-{% block pagehead %}
-<div id="page-head">
-    
-    <div id="page-title">
-        <h1 class="page-header text-overflow">Metabolism of Islands</h1>
-        <ol class="breadcrumb">
-            <li><a href="./"><i class="pli-home"></i></a></li>
-            <li class="active">Homepage</li>
-          </ol>
     </div>
+  </section>
 
+  <section class="site-overview">
+    <div class="row">
+      <div class="col-lg-4">
+        <a href="/cities/antigua-barbuda" class="panel media middle pad-all highlight-link">
+          <div class="media-left pad-all">
+            <i class="far fa-globe-americas"></i>
+          </div>
+          <div class="media-body pad-lft">
+            <p class="text-2x mar-no text-main"><strong>5</strong><br>islands</p>
+          </div>
+        </a>
+        <div class="panel panel-dark listing-panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">Islands</h3>
+          </div>
+          <ul class="list-group bg-trans list-todo mar-no">
+              <li class="list-group-item"><a href="/cities/antigua-barbuda">Antigua &amp; Barbuda</a></li>
+              <li class="list-group-item"><a href="/cities/grenada">Grenada</a></li>
+              <li class="list-group-item"><a href="/cities/jamaica">Jamaica</a></li>
+              <li class="list-group-item"><a href="/cities/samothraki-island">Samothraki Island</a></li>
+              <li class="list-group-item"><a href="/cities/trinket-island">Trinket Island</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <a href="/resources/publications" class="panel media middle pad-all highlight-link">
+          <div class="media-left pad-all">
+            <i class="far fa-books"></i>
+          </div>
+          <div class="media-body pad-lft">
+            <p class="text-2x mar-no text-main"><strong>12</strong><br>resources</p>
+          </div>
+        </a>
+        <div class="panel panel-dark listing-panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">Latest resources</h3>
+          </div>
+            <ul class="list-group bg-trans list-todo mar-no">
+            {% for details in publications %}
+              <li class="list-group-item">
+                <a href="{% url 'core:reference' details.id %}">{{ details.title }}</a>
+                <span class="label label-dark">{{ details.type.name }}</span>
+                <br>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <a href="/resources/projects" class="panel media middle pad-all highlight-link">
+          <div class="media-left pad-all">
+            <i class="far fa-edit"></i>
+          </div>
+          <div class="media-body pad-lft">
+            <p class="text-2x mar-no text-main"><strong>2</strong><br>research projects</p>
+          </div>
+        </a>
+        <div class="panel panel-dark listing-panel">
+          <div class="panel-heading">
+            <h3 class="panel-title">Latest research</h3>
+          </div>
+            <ul class="list-group bg-trans list-todo mar-no">
+              {% for details in projects %}
+                <li class="list-group-item">
+                  <a href="{% url 'core:project' details.id %}">{{ details.name }}</a><br>
+                </li>
+              {% endfor %}
+            </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
-{% endblock %}
 
-{% block footer %}
+  {% endblock %}
 
-{% endblock %}
+  {% block head %}
+  {% endblock %}
+
+  {% block sidebar %}
+  {% include 'multiplicity/sidebar.default.html' %}
+
+  {% endblock %}
+  {% block pagehead %}
+  <div id="page-head">
+    <div id="page-title">
+      <h1 class="page-header text-overflow">Metabolism of Islands</h1>
+      <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li class="active">Homepage</li>
+      </ol>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block footer %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var islandNames = ["Antigua & Barbuda", "Samothraki"];
+      var islandAreas = ["Caribbean", "Europe"];
+      var count = 2;
+      setInterval(function() {
+        count = ($(".slideshow :nth-child("+count+")").fadeOut().next().length == 0) ? 1 : count+1;
+        $(".slideshow :nth-child("+count+")").fadeIn();
+
+        console.log(count);
+
+        $(".island-name").fadeOut(function() {
+          $(this).text(islandNames[count - 1])
+        }).fadeIn();
+
+        $(".island-area").fadeOut(function() {
+          $(this).text(islandAreas[count - 1])
+        }).fadeIn();
+
+      }, 10000);
+
+    });
+  </script>
+
+  {% endblock %}

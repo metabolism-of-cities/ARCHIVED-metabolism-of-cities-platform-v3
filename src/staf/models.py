@@ -18,12 +18,20 @@ class ProcessType(models.Model):
 
 class Process(models.Model):
     name = models.CharField(max_length=255, db_index=True)
+    code = models.CharField(max_length=255, null=True, blank=True, db_index=True)
     description = models.TextField(null=True, blank=True)
+    slug = models.SlugField(db_index=True, max_length=255, null=True, blank=True)
     type = models.ForeignKey(ProcessType, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     is_separator = models.BooleanField()
     def __str__(self):
-        return self.name
+        if self.code:
+            return self.code + " - " + self.name
+        else:
+            return self.name
+
+    class Meta:
+        ordering = ["id"]
 
 class ProcessForm(ModelForm):
     class Meta:
@@ -67,7 +75,7 @@ class MaterialTree(models.Model):
         managed = False
 
 class Unit(models.Model):
-    symbol = models.CharField(max_length=10)
+    symbol = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     notes = models.TextField(null=True, blank=True)
     def __str__(self):
@@ -95,10 +103,19 @@ class Dataset(models.Model):
     replication = models.TextField(blank=True, null=True)
     type = models.ForeignKey('multiplicity.DatasetType', on_delete=models.CASCADE, null=True, blank=True)
     graph = models.ForeignKey('multiplicity.GraphType', on_delete=models.CASCADE, null=True, blank=True)
-    topics = models.ManyToManyField(Topic)
+    topics = models.ManyToManyField(Topic, blank=True)
+    process = models.ForeignKey(Process, on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
     deleted = models.BooleanField(default=False, db_index=True)
     def __str__(self):
         return self.name
+
+    def timeframe(self):
+        from django.db.models import Max
+        from django.db.models import Min
+        return Data.objects.filter(dataset=self.id).aggregate(start=Min('timeframe__start'), end=Max('timeframe__end'))
+    
+    def materials(self):
+        return Data.objects.filter(dataset=self.id).values('material_name').order_by('material_name').distinct()
 
 class DatasetForm(ModelForm):
     class Meta:

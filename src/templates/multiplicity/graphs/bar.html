@@ -7,71 +7,197 @@
 	var types = {{ spaces|safe }};
 	var data = {{ data|safe }};
 
-  var barSeries = [{
-  	data: []
-  }];
+	// check if the data is a timeseries
+	var isTimeSeries = false;
+	if (timeframes1.length > 1) {
+		isTimeSeries = true;
+	}
 
-  var barDrillDown = {
-  	series: []
-  }
+	// check if the data has multiple materials / locations
+	var isMultipleTypes = false;
+	if (types.length > 1) {
+		isMultipleTypes = true;
+	}
 
-	$(groups).each(function() {
-	  var groupSeries = {
-	    name: this.label,
-	    drilldown: this.label,
-	    y: 0,
-	  };
-	  barSeries[0].data.push(groupSeries);
+	if (isTimeSeries == true) {
+	  // empty arrays we'll fill the data with and use to draw chart
+		var barCategories = [];
+		var barSeries = [];
 
-	  var groupDrilldown = {
-	    name: this.label,
-	    id: this.label,
-	    data: [],
-	  };
-	  barDrillDown.series.push(groupDrilldown);
+		// adds each time marker on the X axis
+		$(timeframes1).each(function() {
+		  barCategories.push(this.label);
+		});
 
-	  $(data).each(function() {
-	    if (this.material_group == groupSeries.name) {
-	    	groupSeries.y = groupSeries.y + this.quantity;
-	    	var dataPoint = [this.material_name, this.quantity];
-			  groupDrilldown.data.push(dataPoint);
-	    };
-	  });
-	});
+		if (isMultipleTypes == true) {
+			$(types).each(function() {
+			  // filling arrays with subgroup names
+			  var singleType = {
+			    name: this,
+			    data: []
+			  };
+
+			  barSeries.push(singleType);
+
+		    // filling group names with data
+			  $(data).each(function() {
+			    if (this.type == singleType.name) {
+					  singleType.data.push(this.quantity);
+			    };
+			  });
+			});
+		} else {
+			$(subgroups).each(function() {
+			  // filling arrays with subgroup names
+			  var singleSubgroup = {
+			    name: this.label,
+			    data: []
+			  };
+
+			  barSeries.push(singleSubgroup);
+
+		    // filling group names with data
+			  $(data).each(function() {
+			    if (this.material_name == singleSubgroup.name) {
+					  singleSubgroup.data.push(this.quantity);
+			    };
+			  });
+			});
+		}
+	} else {
+	  // empty arrays we'll fill the data with and use to draw chart
+	  var barSeries = [{
+	  	colorByPoint: true,
+	  	data: []
+	  }];
+
+	  var barDrillDown = {
+	  	series: []
+	  }
+
+	  // filling arrays with group names
+		$(groups).each(function() {
+		  var groupSeries = {
+		    name: this.label,
+		    drilldown: this.label,
+		    y: 0,
+		  };
+		  barSeries[0].data.push(groupSeries);
+
+		  var groupDrilldown = {
+		    name: this.label,
+		    id: this.label,
+		    data: [],
+		  };
+		  barDrillDown.series.push(groupDrilldown);
+
+	    // filling group names with data
+		  $(data).each(function() {
+		    if (this.material_group == groupSeries.name) {
+		    	groupSeries.y = groupSeries.y + this.quantity;
+		    	var dataPoint = [this.material_name, this.quantity];
+				  groupDrilldown.data.push(dataPoint);
+		    };
+		  });
+		});
+
+		// getting all groups from the subgroups
+		var allGroups = []
+
+		$(subgroups).each(function() {
+		  allGroups.push(this.group);
+		});
+
+		// checks which elements in allGroups only appears once - https://stackoverflow.com/a/8700035
+		for(var index = 0, noDrillGroups = []; index < allGroups.length; index++ ) {
+		  if( allGroups.indexOf( allGroups[index], allGroups.indexOf( allGroups[index] ) + 1 ) == -1 ) noDrillGroups.push( allGroups[index] );
+		};
+
+		// removes the drilldown key from the groups in barSeries that don't have subgroups
+		$(noDrillGroups).each(function() {
+		  var groupToRemove = this;
+		  $(barSeries[0].data).each(function() {
+		    if (this.name == groupToRemove) {
+		      delete this.drilldown;
+		    }
+		  });
+		});
+	}
+
+  // gets the right unit to use
+  var barUnit = data[0].unit
 
 </script>
 
 <div id="barChart" style="width:100%; height: 600px;"></div>
 
-	<script>
+<script>
+	if (isTimeSeries == true) {
+		Highcharts.chart('barChart', {
+		  chart: {
+		    type: 'bar',
+		  },
+		  title: {
+		    text: '{{ dataset.name }}'
+		  },
+		  subtitle: {
+		    text: '{{ info.name }}'
+		  },
+		  xAxis: {
+	      categories: barCategories
+		  },
+		  yAxis: {
+	      min: 0,
+	      title: {
+          text: 'Quantity ({{ unit }})'
+	      }
+		  },
+		  legend: {
+	      reversed: true
+		  },
+		  tooltip: {
+		    pointFormat: '<b>{point.y} ' + barUnit + '</b>'
+		  },
+		  plotOptions: {
+	      series: {
+          stacking: 'normal'
+	      }
+		  },
+		  series: barSeries,
+		});
+	} else {
 	  Highcharts.chart('barChart', {
 	    chart: {
-	      type: 'bar'
+	      type: 'bar',
 	    },
 	    title: {
-	      text: 'Title'
+		    text: '{{ dataset.name }}'
 	    },
 	    subtitle: {
-	      text: 'Subtitle'
+	      text: '{{ info.name }}'
 	    },
-      colors: colorScheme,
-      xAxis: {
-        type: 'category'
+	    xAxis: {
+	      type: 'category'
 	    },
 	    yAxis: {
 	      min: 0,
 	      title: {
-	        text: 'Y axis text',
+	        text: 'Quantity ({{ unit }})',
 	        style: {
 	          fontWeight: 'bold'
 	        },
 	      }
 	    },
+	    legend: false,
+	    colors: colorScheme,
+	    tooltip: {
+	      pointFormat: '<b>{point.y} ' + barUnit + '</b>'
+	    },
 	    series: barSeries,
 	    drilldown: barDrillDown,
 	  });
-
-	  // lines for chart burger menu thinner
-	  $(".highcharts-button-symbol").attr("stroke-width", 1);
+	}
+  // lines for chart burger menu thinner
+  $(".highcharts-button-symbol").attr("stroke-width", 1);
 
 </script>

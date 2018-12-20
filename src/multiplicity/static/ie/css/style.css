@@ -1,5 +1,301 @@
 @import url('https://fonts.googleapis.com/css?family=Volkhov');
 
+/* This is the right file! */
+.main-content-block a:not(.btn){color:#0391d1}
+.main-content-block a.not(.btn):hover{text-decoration:underline}
+.main-content-block .panel-colorful:not(.panel-default) a:not(.btn){color:#fff}
+.main-content-block .chat-me a{
+  color: #fff;
+  font-weight: bold;
+  text-decoration: underline;
+}
+#navbar .brand-title {
+    padding:0;
+    text-align:center;
+}
+.chat-body .chat-me .media-body {
+    text-align:left;
+}
+.chat-body .chat-me .media-left {
+    float:left;
+    padding: 0 10px 0 0;
+}
+.chat-user-list > a.clicked {
+    background:#ECF0F5;
+}
+#container.boxed-layout {
+  background:#fff;
+}
+#page-content{background:#fff}
+#page-content a:not(.btn):not(.list-group-item):hover{text-decoration:underline}
+#page-content .nav-tabs.nav-tabs-inverted a:hover,#page-content .leaflet-container a:hover,#page-content .nav a:hover{text-decoration:none}
+
+.leaflet-marker-icon {
+  border: 1px solid #000;
+  border-radius: 50%;
+}
+
+.bluemarker {
+  background-color: #52accd;
+}
+.redmarker {
+  background-color: #d40000;
+}
+.greenmarker {
+  background-color: #447b2d;
+}
+.darkbluemarker {
+  background-color: #365b6f;
+}
+.purplemarker {
+  background-color: #7b2d76;
+}
+.yellowmarker {
+  background-color: #e4d555;
+}
+.orangemarker {
+  background-color: #fc9d00;
+}
+.blackmarker {
+  background-color: #000;
+}
+.greymarker {
+  background-color: #979797;
+}
+.pinkmarker {
+  background-color: #ff5599;
+}
+.brightgreenmarker {
+  background-color: #29fc7e;
+}
+.whitemarker {
+  background-color: #fff;
+}
+
+.showpointer {
+  cursor: pointer;
+}
+.top-page-tabs.nav-tabs li{background:#ecf0f5;opacity:0.67;margin-right:2px}
+.top-page-tabs.nav-tabs li.active{opacity:1}
+body{font-size:15px;line-height:1.5}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
+/*.main-content-block .references a span{display:block;color:#333}*/
+.main-content-block .alert-info a:not(.btn){color:#fff;text-decoration:underline}
+.fa-plus-square.fa-lg{margin-right:6px}
+.label-text {
+  margin-top:7px;
+}
+.leaflet-popup-content img{padding:4px;border:1px solid #ccc;margin-bottom:10px;max-width:100%}
+.leaflet-popup-content{text-align:center}
+.legend img{position:relative;top:6px}
+
+#editpagebutton,#controlpanelbutton, #addpagebutton, #datasetbutton, #deletepagebutton, #editextrabutton {
+    display: inline-block;
+    background-color: #3a444e;
+    border-radius: 7px 0 0 7px !important;
+    color: #fff;
+    border: 0;
+    position: fixed;
+    top: 250px;
+    right:0;
+    margin-left: -1%;
+    border-radius: 2px 0 0 2px;
+    box-shadow: none;
+    z-index: 1;
+    transition: all .3s;
+}
+#editpagebutton {
+  top:200px;
+}
+#addpagebutton {
+  top:300px;
+}
+#editextrabutton {
+  top:400px;
+}
+#datasetbutton {
+  top:350px;
+}
+#deletepagebutton {
+  top:auto;
+  bottom:20px;
+  opacity:0.4;
+}
+#deletepagebutton:hover {
+  opacity:1;
+  background-color:red;
+}
+#editpagebutton i,#controlpanelbutton i,#addpagebutton i, #datasetbutton i, #deletepagebutton i, #editextrabutton i{
+    font-size: 25px;
+    display: block;
+    margin: 5px 0;
+    height: 1em;
+    animation-iteration-count: infinite !important;
+    animation-duration: 1.5s !important;
+    animation-play-state: running;
+}
+.panel-default.panel-colorful {
+    background:#fff;
+}
+.panel .well, .panel pre,.boxit .well, .boxit pre {
+    background:#fff;
+}
+#container.aside-bright #aside #topiclist a.underline {
+    color:#000;
+    text-decoration:underline;
+}
+#container.aside-bright #aside #topiclist a.underline:hover {
+    text-decoration:none;
+}
+#navbar h4 i.psi-lock{font-size:22px;margin-right:5px}
+
+.nav-tabs.nav-tabs-inverted > li.active > a, .nav-tabs.nav-tabs-inverted > li.active > a:focus, .nav-tabs.nav-tabs-inverted > li.active > a:hover
+{
+  background-color: #ecf0f5;
+  border: 2px solid rgba(0,0,0,0.07);
+  border-bottom-color: transparent;
+}
+.panel.padding10{padding:10px}
+
+
+/* This is the reverse floating style for some pages */
+
+.floating-style .nav-tabs > li.active > a, .floating-style .nav-tabs > li.active > a:focus, .floating-style .nav-tabs > li.active > a:hover
+{
+  background-color: #ecf0f5;
+  border-bottom-color: transparent;
+  font-weight:bold;
+}
+.floating-style .nav-tabs {
+  border:none;
+}
+.floating-style .top-page-tabs.nav-tabs li {
+  background:none;
+}
+
+.floating-style #content-container {
+  background:#fff;
+}
+.floating-style .panel:not(.panel-colorful) {
+  background-color: #ecf0f5;
+}
+
+.floating-style .top-page-tabs a:not(.btn) {
+  color: #232424;
+}
+.boxit {
+  background:#ecf0f5;
+}
+
+/* Making floating style the default */
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover
+{
+  background-color: #ecf0f5;
+  border-bottom-color: transparent;
+  font-weight:bold;
+}
+.nav-tabs {
+  border:none;
+}
+.top-page-tabs.nav-tabs li {
+  background:none;
+}
+
+#content-container {
+  background:#fff;
+}
+.panel:not(.panel-colorful) {
+  background-color: #ecf0f5;
+}
+
+.top-page-tabs a:not(.btn) {
+  color: #232424;
+}
+
+/* Play around with fonts */
+ @import url('https://fonts.googleapis.com/css?family=Lato|Roboto');
+
+
+body, .leaflet-container {
+    font-family: 'Lato', sans-serif;
+}
+h1,h2,h3,h4,h5,h6,.brand-text{
+    font-family: 'Roboto', sans-serif;
+}
+.brand-text{
+    font-weight:400;
+}
+#container .table th,body, #content-container {
+    color:#000;
+}
+#container .badge {
+font-weight:400;
+}
+footer#footer, footer#actions {
+  position:static;
+  background:#000;
+  color:#fff;
+  opacity:0.85;
+  padding-top:4vh;
+  padding-bottom:4vh;
+  height:auto;
+}
+
+footer#footer img {
+  width:120px;
+  margin: 0 auto;
+  display:block;
+}
+#footer h4 {
+  color:#ccc;
+}
+#footer .nav > li > a {
+  padding:3px;
+}
+#footer .nav > li > a:focus, #footer .nav > li > a:hover {
+  background:none;
+  text-decoration:underline;
+  color:#fff;
+}
+
+footer#actions{
+  background:#ECF0F5;
+  color:#333;
+  font-size:2rem;
+}
+
+@media (max-width:992px){
+  .brand-title{width:0}
+}
+
+@media (max-width:750px){
+  #topstrip .rightbox {left:130px}
+  #topstrip .leftbox{width:120px}
+}
+
+@media (max-width:520px){
+  .navbar-top-links i{display:none}
+  #topstrip .leftbox{width:1px;overflow:hidden}
+  #topstrip .rightbox{left:0}
+}
+@media (max-width:420px){
+  li[data-id="services"]{display:none}
+}
+.navbar-content {
+  text-align:left;
+}
+
+/* Temporary increasing size for video
+body{font-size:18px;line-height:1.5}
+#container.boxed-layout .boxed, #container.boxed-layout #footer{max-width:1500px;width:1600px}
+#topstrip .leftbox{position:relative;right:186px}
+.btn,.navbar-content li.dropdown > a{font-size:18px}
+h5{font-size:18px}
+.blog h2{font-size:20px}
+#topstrip .leftbox{right:125px}
+*/
+
 h1, h2, h3, h4, h5, .brand-text {
   font-family: "Volkhov", serif;
 }
@@ -165,11 +461,10 @@ a.label-default:hover {
 }
 
 table.dataTable {
-  display: block;
   overflow-x: auto;
   white-space: nowrap;
   width:100% !important;
-  margin: 0;
+  margin-bottom: 20px;
 }
 
 table.dataTable thead th, table.dataTable thead td {
@@ -208,3 +503,341 @@ table.table-striped .even {
   font-weight: 700;
   color: #333;
 }
+
+#graph .highcharts-drillup-button {
+  cursor: pointer;
+}
+
+.city-overview .table {
+  margin-bottom: 0;
+}
+
+.city-overview .table .expand:hover {
+  cursor: pointer;
+  color: #FE6D33;
+}
+
+.city-overview .table .extra-info {
+  display: none;
+}
+
+.city-overview .table .extra-info td {
+  border-top: none !important;
+  padding-top: 0;
+}
+
+.city-overview .table .progress {
+  margin-bottom: 0;
+  height: 20px;
+}
+
+.city-overview .table .progress .progress-bar {
+  line-height: 20px;
+}
+
+.city-overview .table .data-available {
+  width: 100%;
+  height: 20px;
+}
+
+.city-overview .table tr.expanded td {
+  border-bottom-width: 0px;
+}
+
+.city-overview .table .label.label-unavailable {
+  background-color: rgba(0,0,0,0.1);
+  color: #666;
+}
+
+.city-overview .table .data-available .data-box {
+  background-color: rgba(0,0,0,0.1);
+  height: 20px;
+  border-right: 1px solid #ecf0f5;
+  display: inline-block;
+}
+
+.city-overview .table .data-available .data-box:first-of-type {
+  border-radius: 2px 0 0 2px;
+}
+
+.city-overview .table .data-available .data-box:last-of-type {
+  border-radius: 0 2px 2px 0;
+}
+
+.city-overview .table .data-available .data-box.available {
+  background-color: #8bc34a;
+}
+
+#gallery img {
+  border: 1px solid #ccc;
+  padding: 2px;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+#gallery img:hover {
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
+}
+
+#gallery figcaption{display:none}
+
+.resourcelist .single-resource {
+  margin-bottom: 10px;
+  display: block;
+  color: #333 !important;
+}
+
+.resourcelist .single-resource:hover {
+  background-color: #eee;
+}
+
+.resourcelist .single-resource:first-of-type {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.resourcelist .single-resource:last-of-type {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.resourcelist .single-resource .title {
+  margin: 0 0 10px 0;
+  font-family: unset;
+  font-size: 18px;
+}
+
+.resourcelist .single-resource .journal-name, .resourcelist .single-resource .type {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 3px;
+}
+
+.resourcelist .single-resource .journal-name {
+  padding-bottom: 3px;
+}
+
+.resourcelist .single-resource .year {
+  opacity:0.6;
+}
+
+article.home section {
+  padding: 30px 0;
+}
+
+article.home section:first-of-type {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+article.home section:last-of-type {
+  padding-bottom: 0;
+}
+
+article.home .panel-heading {
+  padding-top: 10px;
+  height: unset;
+}
+
+article.home h3.panel-title {
+  font-size: 1.5em;
+}
+
+article.home .panel-heading i {
+  font-size: 1.5em;
+  line-height: 1.7em;
+}
+
+article.home section {
+  padding: 30px 0;
+}
+
+article.home section.what-is img {
+  width: 100%;
+}
+
+article.home section.what-is .images {
+  margin-top: 30px;
+}
+
+article.home section.do-what .panel hr, article.home section.feeds hr {
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+
+article.home ol {
+  padding-left: 30px;
+}
+
+article.home li {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+article.home section.for-whom hr {
+  margin: 10px 0;
+}
+
+article.home section.for-whom h3 {
+  text-align: center;
+}
+
+article.home section.feeds .list-group-item {
+  background-color: #fff;
+  border: none;
+}
+
+article.home section.feeds .single-feed {
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.07);
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 10px;
+}
+
+article.home section.feeds .single-feed:last-of-type {
+  margin-bottom: 0;
+}
+
+.references section.search {
+  background-color: #f5f5f5;
+  padding: 15px;
+}
+
+.references section.search .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  color: #333;
+}
+
+.references section.search .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+  color: #000;
+}
+
+.references section.filters a {
+  color: #333;
+}
+
+.references section.filters a:hover {
+  text-decoration: none !important;
+  color: #333;
+}
+
+article.sector section:not(:last-of-type) {
+  margin-bottom: 60px;
+}
+
+article.sector section#info .single-subsector-content, .back-subsectors {
+  display: none;
+}
+
+article.sector section#info .subsector-panels .single-subsector-panel .panel img {
+  width: 100%;
+}
+
+article.sector section#info .single-subsector-content .photos {
+  border-radius: 2px;
+}
+
+article.sector section#info .single-subsector-content .photos .single-photo, #gallery figure.single-photo {
+  margin: 7.5px 0;
+}
+
+article.sector section#info .single-subsector-content .photos img, #gallery figure.single-photo img {
+  height: 100px;
+  width: 100%;
+  object-fit: cover;
+}
+
+article.sector section#infrastructure #map {
+  border-radius: 2px;
+  height: 600px;
+}
+
+article.sector section#infrastructure #map .leaflet-control-zoom a {
+  color: unset;
+  text-decoration: unset;
+}
+
+article.sector section .section-menu {
+  margin-top: 20px;
+  line-height: 26.4px;
+  vertical-align: middle;
+  color: #999;
+}
+
+article.sector section#info .panel .img-responsive {
+  border-radius: 2px 2px 0 0;
+}
+
+article.sector section#infrastructure img.marker {
+  height: 20px;
+  margin-top: -5px;
+}
+
+article.sector section#infrastructure .panel .img-responsive {
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px 0 0 2px;
+}
+
+article.sector section#infrastructure #infrastructure-list .single-infrastructure .name {
+  margin-top: 5px;
+}
+
+article.sector section#infrastructure .data .single-dataset {
+  display: none;
+}
+
+article.sector section .section-menu a:hover {
+  cursor: pointer;
+}
+
+.back-subsectors-wrap {
+  margin-top: 20px;
+}
+
+#map .leaflet-control-layers-scrollbar {
+  overflow-y: hidden;
+}
+
+#map .leaflet-control-layers-selector {
+  top: 5px;
+}
+
+#map .leaflet-control-layers-overlays img {
+  height: 14px;
+}
+
+@media screen and (min-width: 1200px) {
+  .flex {
+    display: flex;
+  }
+
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+
+  .flex-none {
+    flex: none;
+  }
+
+  .height-100 {
+    height: 100%;
+  }
+
+  .panel.height-100 {
+    height: calc(100% - 20px);
+  }
+}
+
+/* Sector pages */
+.source_box {
+  border-left: 5px solid #333;
+  padding: 5px 20px;
+}
+.main-content-block .source_box a {
+  color:#333;
+  text-decoration:underline;
+}
+#page-content.main-content-block .source_box a:hover {
+  text-decoration:none;
+}
+

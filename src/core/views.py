@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag
+from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
-from staf.models import Data
+from staf.models import Data, Process
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -13,7 +13,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 
 # Create your views here.
 def videos(request):
@@ -37,7 +37,15 @@ def search(request):
     context = { 'section': 'resources', 'page': ''  }
     return render(request, 'core/search.html', context)
 
+def home(request):
+    context = { 'section': 'home', 'page': ''  }
+    return render(request, 'core/home.html', context)
+
 def index(request):
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219
     publications = False
     events = False
     projects = False
@@ -46,7 +54,8 @@ def index(request):
         events = Article.objects.filter(parent=59).order_by('-created_at')[:5]
     else:
         news = Article.objects.filter(parent=142).order_by('-created_at')[:5]
-        publications = Reference.objects.exclude(type=10).order_by('-id')[:5]
+        #publications = Reference.objects.exclude(type=10).order_by('-id')[:5]
+        publications = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-id').exclude(type=10)
         projects = Project.on_site.order_by('-id')[:5]
     context = { 'news': news, 'events': events, 'publications': publications, 'projects': projects }
     if request.site.id == 1:
@@ -130,6 +139,20 @@ def articles(request, parent):
     context = { 'section': section, 'page': page, 'list': list, 'addlink': addlink}
     return render(request, 'core/news.html', context)
 
+def news_and_events(request):
+    match = { 1: 59, 2: 143 }
+    events = match[request.site.id]
+    match = { 1: 61, 2: 142 }
+    news = match[request.site.id]
+    news_list = Article.objects.filter(active=True, parent__id=news, site=request.site).order_by('-created_at')
+    events_list = Event.objects.filter(article__active=True, article__site=request.site).order_by('start')
+    page = Article.objects.get(pk=news)
+    section = page.section
+    add_news_link = reverse('core:admin_article_parent', args=[news])
+    add_events_link = reverse('core:admin_article_parent', args=[events])
+    context = { 'section': section, 'page': page, 'news_list': news_list, 'events_list': events_list, 'add_news_link': add_news_link, 'add_events_link': add_events_link }
+    return render(request, 'core/news.events.html', context)
+
 def people(request):
     list = People.objects.all()
     page = get_object_or_404(Article, pk=49)
@@ -168,7 +191,7 @@ def organizations(request, type):
     context = { 'section': 'community', 'page': 'organizations', 'list': list, 'page': page}
     return render(request, 'core/organizations.html', context)
 
-def organization(request, id, type):
+def organization(request, id):
     info = get_object_or_404(Organization, pk=id)
     list = Reference.objects.filter(Q(organizations__id=id) | Q(organizations__parent__id=id)).order_by('-year')
     divisions = Organization.objects.filter(parent=info)
@@ -200,10 +223,14 @@ def publisher(request, id):
 
 def reference(request, id):
     info = get_object_or_404(Reference, pk=id)
-    related = Reference.objects.all()[:5]
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219
+    related = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-id')[:5]
     authors = info.authors.all()
     data = Data.objects.filter(dataset__references=info)
-    editlink = '/publications/'+str(id)+'/edit'
+    editlink = reverse('core:admin_reference', args=[info.id])
     context = { 'section': 'literature', 'page': 'publications', 'info': info, 'related': related, 'authors': authors, 'editlink': editlink, 'data': data, 'datatables': True }
     return render(request, 'core/reference.html', context)
 
@@ -216,37 +243,76 @@ def export_reference(request,id, export_method):
 
 @login_required
 def referenceform(request, id=False, dataset=False):
-    if request.method == 'POST':
-        post = ReferenceForm(request.POST)
-        info = post.save()
-
-        create_record = get_object_or_404(UserAction, pk=1)
-        log = UserLog(user=request.user, action=create_record, reference=info, points=5)
-
-        if (dataset):
-            return redirect('staf:createflowmeta', dataset=dataset, reference=info.id)
-        else:
-            return redirect('core:reference', id=info.id)
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    new_record = False
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
     else:
-        if id:
-            info = get_object_or_404(Reference, pk=id)
-            form = ReferenceForm(instance=info)
+        main_filter = 219
+
+    if id:
+        info = get_object_or_404(Reference, pk=id)
+        if request.user.is_staff:
+            form = ReferenceFormAdmin(instance=info)
         else:
-            info = False
-            form = ReferenceForm(initial={'type': 16, 'language': 'EN'})
-    context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset}
+            form = ReferenceForm(instance=info)
+    else:
+        info = False
+        if request.user.is_staff:
+            form = ReferenceFormAdmin(initial={'language': 'EN', 'status': 'active', 'tags': main_filter})
+        else:
+            form = ReferenceForm()
+    if request.method == 'POST':
+        if not id:
+            new_record = True
+            if request.user.is_staff:
+                form = ReferenceFormAdmin(request.POST, request.FILES)
+            else:
+                form = ReferenceForm(request.POST)
+        else:
+            if request.user.is_staff:
+                form = ReferenceFormAdmin(request.POST, request.FILES, instance=info)
+            else:
+                form = ReferenceForm(request.POST, instance=info)
+        if form.is_valid():
+            info = form.save()
+            if new_record:
+                create_record = get_object_or_404(UserAction, pk=1)
+                log = UserLog(user=request.user, action=create_record, reference=info, points=5)
+            else:
+                info.processes.clear()
+
+            selected = request.POST.getlist('process')
+            for process in selected:
+                info.processes.add(Process.objects.get(pk=process))
+
+            messages.success(request, 'Information was saved.')
+            return redirect('core:reference', id=info.id)
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+
+    context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset, 'processes': processes }
     return render(request, 'core/reference.form.html', context)
 
-def references(request, type=False):
+def references(request, type=False, tag=False):
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219
     if type:
         type = get_object_or_404(ReferenceType, pk=type)
-        list = Reference.objects.filter(status='active', type=type).order_by('-year')
+        list = Reference.objects.filter(status='active', type=type, tags__id=main_filter).order_by('-year')
         title = type.name + "s"
     else:
-        list = Reference.objects.filter(status='active').order_by('-year')
-        title = "Publications"
+        if tag:
+            list = Reference.objects.filter(status='active', tags__id=main_filter).filter(tags__id=tag).order_by('-year')
+            tag = get_object_or_404(Tag, pk=tag, hidden=False)
+            title = tag.name + " | Publications"
+        else:
+            list = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-year')
+            title = "Publications"
     addlink = reverse('core:newreference')
-    context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title}
+    context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title, 'select2': True, 'tag': tag}
     return render(request, 'core/references.html', context)
 
 
@@ -450,8 +516,11 @@ def project_view(request, type, status, id):
     context = { 'section': 'community', 'list': list, 'info': info, 'editlink': editlink}
     return render(request, 'core/project.view.html', context)
 
-def reference_search_ajax(request):
-    references = Reference.objects.filter(title__icontains=request.GET['term'],status='active').order_by('title')
+def reference_search_ajax(request, active_only=False):
+    if active_only:
+        references = Reference.objects.filter(title__icontains=request.GET['term'],status='active').order_by('title')
+    else:
+        references = Reference.objects.filter(title__icontains=request.GET['term']).order_by('title')
     list = []
     for details in references:
         d = {}
@@ -482,6 +551,20 @@ def register(request):
             messages.success(request, 'Welcome ' + request.POST['first_name'] + '! You are now a registered user.')
             return redirect('/')
     return render(request, 'registration/register.html')
+
+def tag_ajax(request):
+    if request.GET.get('parent'):
+        tags = Tag.objects.filter(parent_tag=request.GET['parent']).order_by('name')
+    else:
+        tags = Tag.objects.filter(parent_tag__isnull=True).order_by('name')
+    list = []
+    for details in tags:
+        d = {}
+        d['title'] = details.name
+        d['lazy'] = True
+        d['key'] = details.id
+        list.append(d)
+    return JsonResponse(list, safe=False)
 
 # Admin section
 
@@ -545,10 +628,39 @@ def admin_project(request, id=False):
 
 
 @staff_member_required
-def admin_keyword_list(request):
-    list = Tag.objects.all()
+def admin_tag_list(request):
+    list = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     context = { 'navbar': 'backend', 'list': list, 'datatables': True }
     return render(request, 'core/admin/tag.list.html', context)
+
+@staff_member_required
+def admin_tag(request, id=False, parent=False):
+    if id:
+        info = get_object_or_404(Tag, pk=id)
+        form = TagForm(instance=info)
+    else:
+        info = False
+        if parent:
+            form = TagForm(initial={'parent_tag': parent})
+        else:
+            form = TagForm()
+
+    if request.method == 'POST':
+        if not id:
+            form = TagForm(request.POST, request.FILES)
+        else:
+            form = TagForm(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            info = form.save(commit=False)
+            if not id:
+                info.site = request.site
+            info.save()
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('core:admin_tag_list'))
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+    context = { 'navbar': 'backend', 'form': form, 'info': info, 'select2': True }
+    return render(request, 'core/admin/tag.html', context)
 
 
 @staff_member_required
@@ -584,6 +696,46 @@ def admin_video(request, id=False):
 
 
 @staff_member_required
+def admin_organization_list(request):
+    list = Organization.on_site.all()
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'core/admin/organizations.list.html', context)
+
+@staff_member_required
+def admin_organization(request, id=False, slug=False):
+    space = False
+    if slug:
+        space = get_object_or_404(ReferenceSpace, slug=slug)
+    if id:
+        info = get_object_or_404(Organization, pk=id)
+        form = OrganizationForm(instance=info)
+    else:
+        info = False
+        form = OrganizationForm()
+    if request.method == 'POST':
+        if not id:
+            form = OrganizationForm(request.POST, request.FILES)
+        else:
+            form = OrganizationForm(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            info = form.save()
+            if id:
+                info.processes.clear()
+
+            selected = request.POST.getlist('process')
+            for process in selected:
+                info.processes.add(Process.objects.get(pk=process))
+
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('core:admin_organization', args=[info.id]))
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    context = { 'navbar': 'backend', 'form': form, 'info': info, 'select2': True, 'space': space, 'processes': processes }
+    return render(request, 'core/admin/organization.html', context)
+
+
+@staff_member_required
 def admin_article(request, id=False, type=False, parent=False):
     eventform = False
     if parent:
@@ -611,7 +763,7 @@ def admin_article(request, id=False, type=False, parent=False):
             form = SimpleArticleForm(request.POST, instance=info)
             if type == 'event':
                 eventform = EventForm(request.POST, instance=info.event)
-        if form.is_valid() and eventform.is_valid():
+        if (form.is_valid() and eventform and eventform.is_valid()) or (form.is_valid() and not eventform):
             info = form.save(commit=False)
             if parent:
                 info.parent = parent
@@ -625,12 +777,32 @@ def admin_article(request, id=False, type=False, parent=False):
 
             saved = True
             messages.success(request, 'Information was saved.')
-            if type == 'event':
-                return redirect(reverse('core:event', args=[info.id]))
-            else:
-                return redirect(reverse('core:news', args=[info.id]))
+            redirect = request.POST.get('redirect', '/')
+            return HttpResponseRedirect(redirect)
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
     context = { 'navbar': 'backend', 'form': form, 'info': info, 'eventform': eventform, 'parent': parent, 'tinymce': True}
     return render(request, 'core/admin/article.html', context)
+
+@staff_member_required
+def admin_referencetags(request, id):
+    info = get_object_or_404(Reference, pk=id)
+    if request.method == 'POST':
+        info.tags.clear()
+        selected = request.POST.getlist('tags')
+        for tag in selected:
+            info.tags.add(Tag.objects.get(pk=tag))
+        messages.success(request, 'Information was saved.')
+        return redirect('core:reference', id=info.id)
+    tags = Tag.objects.filter(hidden=False, parent_tag__isnull=False)
+    parent_tags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
+    context = { 'navbar': 'backend', 'tags': tags, 'info': info, 'parent_tags': parent_tags, 'select2': True }
+    return render(request, 'core/admin/reference.tags.html', context)
+
+@staff_member_required
+def admin_references(request):
+    list = Reference.objects.all()
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'core/admin/references.list.html', context)
+

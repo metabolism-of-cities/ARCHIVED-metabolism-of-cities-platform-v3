@@ -17,21 +17,45 @@ urlpatterns = [
 
     path('admin/<slug:city>/overview', views.admin_data_overview, name='admin_data_overview'),
 
+    path('admin/datasettype', views.admin_datasettypes, name='admin_datasettypes'),
+    path('admin/datasettype/<int:id>', views.admin_datasettype, name='admin_datasettype'),
+    path('admin/datasettype/create', views.admin_datasettype, name='admin_datasettype'),
+
+    path('admin/referencephotos', views.admin_referencephoto, name='admin_referencephotos'),
+    path('admin/referencephotos/<int:id>', views.admin_referencephoto, name='admin_referencephoto'),
+    path('admin/referencephotos/create', views.admin_referencephoto, name='admin_referencephoto'),
 
     # General
-
     path('table/datasets/<int:dataset>', views.datatable, name='datatable_dataset'),
 
     path('', views.index, name='index'),
     path('<slug:city>/research', views.research, name='research'),
 
+    #path('<slug:city>/material-stocks/<slug:type>', views.flow, name='stock'),
+
+    path('<slug:city>/material-flows/<slug:topic>', views.datasets_overview, name='flows'),
+    path('<slug:city>/material-stocks/<slug:topic>', views.datasets_overview, {'type': 'stocks' }, name='stocks'),
+    path('<slug:city>/energy-flows/<slug:topic>', views.datasets_overview, {'type': 'energy'}, name='energy_flows'),
+
+    #path('<slug:city>/material-flows/<slug:slug>', views.overview, name='overview_flows'),
+    #path('<slug:city>/material-flows/<slug:slug>/<slug:type>', views.flow, name='flow'),
+    #path('<slug:city>/material-stocks', views.overview, {'slug': 'material-stocks' }, name='overview_stocks'),
+
     path('<slug:city>/maps', views.map, name='map_home'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),
     path('<slug:city>/datasets', views.datasets, name='datasets'),
+    path('<slug:city>/resources/photos', views.photos, name='photos'),
+    path('<slug:city>/resources/<slug:slug>', views.resources, name='resources'),
     path('<slug:city>/datasets/<int:id>', views.dataset, name='dataset'),
     path('<slug:city>/datasets/<int:id>/delete', views.delete_dataset, name='delete_dataset'),
     path('<slug:city>/datasets/<int:dataset>/graph/<int:id>', views.graph, name='graph'),
     path('<slug:city>/datasets/<int:id>/<slug:slug>', views.dataset, name='dataset_slice'),
+    path('<slug:city>/information', views.information_form, name='information_form'),
+    path('<slug:city>/information/topic/<int:topic>', views.information_form, name='information_form_topic'),
+    path('<slug:city>/information/<int:id>', views.information_form, name='information_form'),
+    path('<slug:city>/photo', views.photo_form, name='photo_form'),
+    path('<slug:city>/photo/<int:id>', views.photo_form, name='photo_form'),
+    path('<slug:city>/sectors/<slug:sector>', views.sector, name='sector'),
 
     # Uploading data
     path('<slug:city>/upload', views.upload, name='upload'),

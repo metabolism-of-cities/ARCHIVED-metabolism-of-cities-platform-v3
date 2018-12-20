@@ -2,12 +2,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup, ReferencePhoto, ReferencePhotoForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
-from core.models import UserAction, UserLog, ReferenceForm, Reference
-from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset
+from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization
+from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset, Process
 from django.db.models import Count
 from django.contrib import messages
 
@@ -28,9 +28,11 @@ from dateutil.parser import parse
 from django.db.models import Max
 from django.db.models import Min
 
-
 # To create json objects
 import json
+
+# To search annotate
+from django.db.models import Q
 
 def index(request):
     list = ReferenceSpace.objects.filter(type__id=3)
@@ -77,23 +79,159 @@ def space(request, city, topic, type, space):
         features[details.feature.name] = details.value
     topic = type.topic
     tab = type.slug
+    editlink = '/admin/multiplicity/referencespace/'+str(space.id)+'/change/'
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu': 'infrastructure', 'page': type.topic.slug, 'info': info, 'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 'feature_list': feature_list,
+    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 'feature_list': feature_list, 'editlink': editlink,
     }
     return render(request, 'multiplicity/space.html', context)
 
 def map(request, city, type='boundaries'):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'maps', 'page': type, 'info': info, 'topics': topics }
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 'topics': topics }
     return render(request, 'multiplicity/space.map.html', context)
+
+def sector(request, city, sector):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    sector = get_object_or_404(ProcessGroup, slug=sector)
+    information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
+    references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).order_by('title')
+    organizations = Organization.objects.filter(processes__in=sector.processes.all(), reference_spaces=info).order_by('name')
+    datasets = Dataset.objects.filter(process__in=sector.processes.all(), deleted=False)
+    addlink = reverse('multiplicity:information_form', args=[info.slug])
+    photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
+    map = False
+    infrastructure = False
+    types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
+    spaces_list = {}
+    for type in types:
+        get_list = ReferenceSpace.objects.filter(city=info, type=type)
+        if get_list:
+            spaces_list[type.id] = get_list
+            # We should build in a check to see if the spaces really have coordinates available; if not map = false
+            map = True
+            infrastructure = True
+
+    features_list = ReferenceSpaceFeature.objects.filter(space__type__process__in=sector.processes.all(), feature__show_in_table=True)
+    feature = defaultdict(dict)
+    for details in features_list:
+        feature[details.space.id][details.feature.id] = details.value
+
+    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 
+    'map': map, 'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature, 
+    'infrastructure': infrastructure, 'photos': photos, 'references': references, 'organizations': organizations, 
+    }
+    return render(request, 'multiplicity/sector.html', context)
+
+def overview(request, city, slug):
+    groups = ProcessGroup.objects.order_by('name')
+    flow = get_object_or_404(DatasetTypeStructure, slug=slug)
+    list = DatasetType.objects.filter(category__parent=flow)
+    types = DatasetTypeStructure.objects.filter(parent=flow)
+    if not types:
+        types = DatasetTypeStructure.objects.filter(pk=flow.id)
+    info = get_object_or_404(ReferenceSpace, slug=city)
+
+    if flow.parent and flow.parent.name == "Material Flows":
+      menu = 'material-flows'
+    elif flow.parent and flow.parent.parent and flow.parent.parent.name == "Material Flows":
+      menu = 'material-flows'
+      slug = flow.parent.slug
+    else:
+      menu = 'material-stocks'
+
+    page = slug
+    context = { 'section': 'cities', 'menu':  menu, 'page': slug, 'info': info,
+    'list': list, 'types': types, 'flow': flow, 'slug': slug,
+    'editlink': reverse('multiplicity:admin_datasettypes'),
+    'groups': groups
+    }
+    return render(request, 'multiplicity/overview.html', context)
+
+def overview(request, city, slug):
+    groups = ProcessGroup.objects.order_by('name')
+    flow = get_object_or_404(DatasetTypeStructure, slug=slug)
+    list = DatasetType.objects.filter(category__parent=flow)
+    types = DatasetTypeStructure.objects.filter(parent=flow)
+    if not types:
+        types = DatasetTypeStructure.objects.filter(pk=flow.id)
+    info = get_object_or_404(ReferenceSpace, slug=city)
+
+    if flow.parent and flow.parent.name == "Material Flows":
+      menu = 'material-flows'
+    elif flow.parent and flow.parent.parent and flow.parent.parent.name == "Material Flows":
+      menu = 'material-flows'
+      slug = flow.parent.slug
+    else:
+      menu = 'material-stocks'
+
+    page = slug
+    context = { 'section': 'cities', 'menu':  menu, 'page': slug, 'info': info,
+    'list': list, 'types': types, 'flow': flow, 'slug': slug,
+    'editlink': reverse('multiplicity:admin_datasettypes'),
+    'groups': groups
+    }
+    return render(request, 'multiplicity/overview.html', context)
+
+def flow(request, city, type, slug=False):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    type = get_object_or_404(DatasetType, slug=type)
+    list = Dataset.objects.filter(type=type)
+    if type.category.slug == 'internal': 
+      page = 'internal'
+    else:
+      page = 'external'
+    editlink = reverse('multiplicity:admin_datasettype', args=[type.id])
+    addlink = reverse('multiplicity:information_form', args=[info.slug])
+    information = Information.objects.filter(space=info, dataset_types=type)
+    photos = Photo.objects.filter(primary_space=info, topic=type.topic, deleted__isnull=False)
+    context = { 'section': 'cities', 'menu':  'material-flows', 'page': page, 'info': info,
+        'list': list, 'flow': flow, 'slug': slug, 'type': type, 'editlink': editlink,
+        'addlink': addlink, 'information': information, 'photos': photos,
+        'gallery': True,
+    }
+    return render(request, 'multiplicity/flow.html', context)
+
+def photos(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    photos = Photo.objects.filter(primary_space=info, deleted=False)
+    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    addlink = reverse('multiplicity:photo_form', args=[info.slug])
+
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'photos', 'info': info, 'photos': photos, 'topics': topics, 'addlink': addlink, 'gallery': True }
+    return render(request, 'multiplicity/resources.photos.html', context)
+
+def resources(request, city, slug):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    if slug == "reports":
+        type = 27
+    elif slug == "journal-articles":
+        type = 16
+    elif slug == "theses":
+        type = 29
+    elif slug == "presentations":
+        type = 25
+    type = get_object_or_404(ReferenceType, pk=type)
+    references = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
+    addlink = reverse('multiplicity:photo_form', args=[info.slug])
+
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 'references': references, 'topics': topics, 'addlink': addlink, 'type': type, 'slug': slug}
+    return render(request, 'multiplicity/resources.list.html', context)
 
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    datasets = Dataset.objects.filter(primary_space=info)
+    datasets = Dataset.objects.filter(primary_space=info, deleted=False)
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'datasets': datasets, 'topics': topics }
+    return render(request, 'multiplicity/datasets.html', context)
+
+def datasets_overview(request, city, topic, type='flows'):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    topic = Topic.objects.get(slug=topic)
+    datasets = Dataset.objects.filter(primary_space=info, deleted=False, topics=topic, type__type=type)
+    context = { 'section': 'cities', 'menu':  type, 'page': topic.slug, 'info': info, 'datasets': datasets, 'topic': topic}
     return render(request, 'multiplicity/datasets.html', context)
 
 def dataset(request, city, id, slug=False):
@@ -105,8 +243,9 @@ def dataset(request, city, id, slug=False):
     editlink = '/admin/staf/dataset/' + str(id) + '/change/'
     topic = None
     unit = get_object_or_404(Unit, pk=1)
-    graphs = GraphType.objects.all()
+    graphs = GraphType.objects.exclude(pk__in=[7,8,10])
     materials = Data.objects.filter(dataset=dataset).values('material_name').order_by('material_name').distinct()
+    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset).distinct('timeframe__start').order_by('timeframe__start').count()
     all_materials = materials.count()
     materials_hidden = False
     if all_materials > 5:
@@ -117,7 +256,7 @@ def dataset(request, city, id, slug=False):
     #for datapoint in dataset.data_set.all():
     #datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
     deletelink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/delete'
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'topics': topics, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden}
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'topics': topics, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden, 'timeframes': timeframes, }
     return render(request, 'multiplicity/dataset.html', context)
 
 def datatable(request, dataset=False, material=False):
@@ -133,6 +272,7 @@ def graph(request, city, dataset, id):
     data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
     data_groups = Data.objects.select_related('material').filter(dataset=dataset).distinct('material__name').order_by('material__name')
     data_subgroups = Data.objects.filter(dataset=dataset).distinct('material_name').order_by('material_name')
+    unit = False
 
     space = dataset.primary_space
 
@@ -191,6 +331,9 @@ def graph(request, city, dataset, id):
     'subgroups': subgroups,
     'data': datapoints,
     'spaces': spaces,
+    'info': info,
+    'dataset': dataset,
+    'unit': unit,
     }
     return render(request, 'multiplicity/graphs/' + graph.slug + '.html', context)
 
@@ -198,7 +341,7 @@ def topicmap(request, city, theme, topic):
     info = get_object_or_404(ReferenceSpace, slug=city)
     topic = get_object_or_404(Topic, slug=topic)
     spaces = ReferenceSpace.objects.filter(city=info, type__topic=topic)
-    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace'))
+    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace', filter=Q(city=info)))
     # TODO Surely we can do better than this? A single db query should be possible.
     count = {}
     for details in spaces:
@@ -212,10 +355,12 @@ def topicmap(request, city, theme, topic):
 @login_required
 def upload_flow(request, city, type='flows'):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    types = False
+    if type == 'flows':
+        types = DatasetTypeStructure.objects.filter(pk__in=[8,9,10,11,6])
     list = DatasetType.objects.filter(type=type)
     addlink = '/admin/multiplicity/datasettype/add/'
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'topics': topics, 'addlink': addlink, 'type': type}
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'types': types, 'addlink': addlink, 'type': type}
     return render(request, 'multiplicity/upload/index.flow.html', context)
 
 @login_required
@@ -233,13 +378,22 @@ def upload_infrastructure_file(request, city, type):
     features = Feature.objects.filter(type=type.id)
     previous = ReferenceSpaceCSV.objects.filter(user=request.user, type=type, space=info)
     if request.method == 'POST':
-        file = request.FILES['file']
-        filename = str(uuid.uuid4())
-        path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
+        if 'data' in request.POST:
+            input = request.POST['data']
+            filename = str(uuid.uuid4())
+            file = 'Data entry on ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
+            in_txt = csv.reader(input.split('\n'), delimiter = '\t')
+            out_csv = csv.writer(open(path, 'w', newline=''))
+            out_csv.writerows(in_txt)
+        else:
+            file = request.FILES['file']
+            filename = str(uuid.uuid4())
+            path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
 
-        with open(path, 'wb+') as destination:
-            for chunk in file.chunks():
-                destination.write(chunk)
+            with open(path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
 
         csv_file = ReferenceSpaceCSV(name=filename, original_name=file, imported=False, user=request.user, type=type, space=info)
         csv_file.save()
@@ -900,15 +1054,12 @@ def detail(request, slug):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     topic = Topic.objects.get(pk=2)
     info = get_object_or_404(ReferenceSpace, slug=slug)
-    types = ReferenceSpaceType.objects.filter(topic__id=2).annotate(total=Count('referencespace'))
-    spaces = ReferenceSpace.objects.filter(city=info, type__topic__id=2)
-    # TODO Surely we can do better than this? A single db query should be possible.
-    count = {}
-    for details in spaces:
-        if details.type.id in count:
-            count[details.type.id] += 1
-        else:
-            count[details.type.id] = 1
+    types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1).exclude(pk=8)
+    references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]
+    datasets_stocks = Dataset.objects.filter(primary_space=info, type__type='stocks').order_by('-id')[:5]
+    datasets_flows = Dataset.objects.filter(primary_space=info, type__type='flows').order_by('-id')[:5]
+
+    editlink = reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id])
 
     context = {
         'section': 'cities', 
@@ -916,8 +1067,11 @@ def detail(request, slug):
         'menu' : 'dashboard',
         'topics': topics,
         'types': types, 
-        'count': count,
         'topic': topic,
+        'editlink': editlink,
+        'references': references,
+        'datasets_flows': datasets_flows,
+        'datasets_stocks': datasets_stocks,
     }
     return render(request, 'multiplicity/city.html', context)
 
@@ -968,8 +1122,95 @@ def materials(request):
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True}
     return render(request, 'multiplicity/materials.html', context)
 
+@login_required
+def information_form(request, city, id=False, topic=False):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    references = Reference.objects.filter(status='active')
+    if id:
+        information = get_object_or_404(Information, pk=id)
+        form = InformationForm(instance=information)
+    else:
+        information = False
+        form = InformationForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = InformationForm(request.POST, request.FILES)
+        else:
+            form = InformationForm(request.POST, request.FILES, instance=information)
+        if form.is_valid():
+            if request.POST['process']:
+                process = Process.objects.get(pk=request.POST['process'])
+            else:
+                process = None
+            if id:
+                information = form.save()
+                information.process = process
+                information.save()
+            else:
+                information = form.save(commit=False)
+                information.process = process
+                information.space = info
+                information.user = request.user
+                information.save()
+                form.save_m2m()
+
+            information.references.clear()
+
+            selected = request.POST.getlist('references')
+            for reference in selected:
+                information.references.add(Reference.objects.get(pk=reference))
+
+            saved = True
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('multiplicity:information_form', args=[info.slug, information.id]))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,
+    'references': references, 'select2': True
+    }
+    return render(request, 'multiplicity/form.information.html', context)
+
+@login_required
+def photo_form(request, city, id=False):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    if id:
+        photo = get_object_or_404(Photo, pk=id)
+        form = PhotoForm(instance=photo)
+    else:
+        photo = False
+        form = PhotoForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = PhotoForm(request.POST, request.FILES)
+        else:
+            form = PhotoForm(request.POST, request.FILES, instance=photo)
+        if form.is_valid():
+            if request.POST['process']:
+                process = Process.objects.get(pk=request.POST['process'])
+            else:
+                process = None
+            photo = form.save(commit=False)
+            photo.primary_space = info
+            photo.uploaded_by = request.user
+            photo.process = process
+            photo.save()
+            saved = True
+            messages.success(request, 'Photo was saved.')
+            return redirect(reverse('multiplicity:photos', args=[info.slug]))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'processes': processes, 'photo': photo }
+    return render(request, 'multiplicity/form.photo.html', context)
+
 
 # Admin
+
 
 @staff_member_required
 def admin_referencespaces(request, type):
@@ -1055,7 +1296,11 @@ def admin_data_overview(request, city):
     datasets = Dataset.objects.filter(primary_space=info, deleted=False)
     csv = CSV.objects.filter(space=info)
     space_csv = ReferenceSpaceCSV.objects.filter(space=info)
-    context = { 'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 'space_csv': space_csv, 'datatables': True }
+    spaces = ReferenceSpace.objects.filter(city=info)
+    photos = Photo.objects.filter(primary_space=info)
+    information = Information.objects.filter(space=info)
+    context = { 'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 'space_csv': space_csv, 'datatables': True, 
+    'information': information, 'spaces': spaces, 'photos': photos }
     return render(request, 'multiplicity/admin/overview.data.html', context)
 
 @staff_member_required
@@ -1066,4 +1311,61 @@ def delete_dataset(request, city, id):
     dataset.save()
     messages.success(request, 'Dataset was deleted')
     return redirect('multiplicity:admin_data_overview', city=city)
+
+@staff_member_required
+def admin_datasettypes(request):
+    list = DatasetType.objects.filter(active=True)
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'multiplicity/admin/datasettypes.html', context)
+
+@staff_member_required
+def admin_datasettype(request, id=False):
+    if id:
+        info = get_object_or_404(DatasetType, pk=id)
+        form = DatasetTypeForm(instance=info)
+    else:
+        info = False
+        form = DatasetTypeForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = DatasetTypeForm(request.POST, request.FILES)
+        else:
+            form = DatasetTypeForm(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            info = form.save()
+            saved = True
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('multiplicity:admin_datasettypes'))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'navbar': 'backend', 'info': info, 'form': form, 'type': type }
+    return render(request, 'multiplicity/admin/datasettype.html', context)
+
+@staff_member_required
+def admin_referencephoto(request, id=False):
+    if id:
+        info = get_object_or_404(ReferencePhoto, pk=id)
+        form = ReferencePhotoForm(instance=info)
+    else:
+        info = False
+        form = ReferencePhotoForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = ReferencePhotoForm(request.POST)
+        else:
+            form = ReferencePhotoForm(request.POST, instance=info)
+        if form.is_valid():
+            info = form.save()
+            saved = True
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('multiplicity:admin_datasettypes'))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 'navbar': 'backend', 'info': info, 'form': form }
+    return render(request, 'multiplicity/admin/referencephoto.html', context)
+
 

@@ -6,3 +6,4 @@ django-tinymce4-lite
 Pillow
 django_cron
 python-dateutil
+django-stdimage

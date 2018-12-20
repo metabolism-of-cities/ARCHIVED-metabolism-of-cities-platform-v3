@@ -1,0 +1,23 @@
+<div class="resourcelist">
+  {% for details in references %}
+    <a class="single-resource bg-gray-light" href="{% url 'core:reference' details.id %}">
+      <div class="row pad-all">
+        <div class="col-lg-9">
+          <h3 class="title">{{ details.title }}</h3>
+          {% if details.authors.all %}
+            {% for author in details.authors.all %}
+              <span class="author">{{ author.firstname }} {{ author.lastname }}</span>{% if not forloop.counter == details.authors.all|length %},{% endif %}
+            {% endfor %}
+          {% else %}
+            {{ details.authorlist }}
+          {% endif %}
+        </div>
+        <div class="col-lg-3">
+          {% if details.journal.name %}<div class="journal-name">{{ details.journal.name }}</div>{% endif %}
+          {% if details.type %}<div class="type">{{ details.type }}</div>{% endif %}
+          {% if details.year %}<div class="year">{{ details.year }}</div>{% endif %}
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>
