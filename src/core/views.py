@@ -619,6 +619,11 @@ def admin_project(request, id=False):
     context = { 'navbar': 'backend', 'form': form, 'info': info, 'tinymce': True }
     return render(request, 'core/admin/project.html', context)
 
+@staff_member_required
+def admin_project_list(request):
+    list = Project.on_site.all()
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'core/admin/project.list.html', context)
 
 @staff_member_required
 def admin_tag_list(request):

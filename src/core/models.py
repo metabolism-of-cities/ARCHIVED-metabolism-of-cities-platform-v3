@@ -374,8 +374,9 @@ class Project(models.Model):
     active = models.BooleanField(default=True)
     pending_review = models.BooleanField(default=True)
     TYPE = (
-        ('research', 'Individual research project'),
-        ('regular', 'Regular project'),
+        ('research', 'Thesis project'),
+        ('regular', 'Research project'),
+        ('applied', 'Applied project'),
     )
     type = models.CharField(max_length=20, choices=TYPE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
