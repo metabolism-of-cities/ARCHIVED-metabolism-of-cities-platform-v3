@@ -14,6 +14,12 @@
 
   <h3>Projects</h3>
 
+          <ul class="nav nav-tabs">
+            <li {% if tab == 'published' %} class="active"{% endif %}><a href="{% url 'core:admin_project_list' 'published' %}">Published</a></li>
+            <li {% if tab == 'pending' %} class="active"{% endif %}><a href="{% url 'core:admin_project_list' 'pending' %}">Pending review</a></li>
+            <li {% if tab == 'deleted' %} class="active"{% endif %}><a href="{% url 'core:admin_project_list' 'deleted' %}">Deleted</a></li>
+          </ul>
+
   <div class="row">
     <div class="col-lg-12">
         <div class="boxit pad-all">

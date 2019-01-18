@@ -91,6 +91,7 @@ urlpatterns = [
     path('admin/project/create', views.admin_project, name='admin_project_create'),
     path('admin/project/<int:id>', views.admin_project, name='admin_project'),
     path('admin/projects', views.admin_project_list, name='admin_project_list'),
+    path('admin/projects/<slug:status>', views.admin_project_list, name='admin_project_list'),
     path('admin/tags', views.admin_tag_list, name='admin_tag_list'),
     path('admin/tags/create', views.admin_tag, name='admin_tag'),
     path('admin/tags/<int:id>', views.admin_tag, name='admin_tag'),

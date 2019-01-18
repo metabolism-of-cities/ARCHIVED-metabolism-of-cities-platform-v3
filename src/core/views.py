@@ -620,9 +620,15 @@ def admin_project(request, id=False):
     return render(request, 'core/admin/project.html', context)
 
 @staff_member_required
-def admin_project_list(request):
-    list = Project.on_site.all()
-    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+def admin_project_list(request, status='published'):
+    if status == 'published':
+        list = Project.on_site.filter(active=True, pending_review=False)
+    elif status == 'deleted':
+        list = Project.on_site.filter(active=False, pending_review=False)
+    elif status == 'pending':
+        list = Project.on_site.filter(pending_review=True)
+
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True, 'tab': status }
     return render(request, 'core/admin/project.list.html', context)
 
 @staff_member_required
