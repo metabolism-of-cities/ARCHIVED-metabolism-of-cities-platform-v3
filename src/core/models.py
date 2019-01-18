@@ -376,7 +376,7 @@ class Project(models.Model):
     TYPE = (
         ('research', 'Thesis project'),
         ('regular', 'Research project'),
-        ('applied', 'Applied project'),
+        ('applied', 'Applied research'),
     )
     type = models.CharField(max_length=20, choices=TYPE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
