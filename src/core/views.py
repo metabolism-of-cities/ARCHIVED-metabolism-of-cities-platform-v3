@@ -506,7 +506,8 @@ def projects(request, type, page, status=False):
 def project_view(request, type, status, id):
     info = get_object_or_404(Project, pk=id)
     editlink = reverse('core:admin_project', args=[info.id])
-    context = { 'section': 'community', 'list': list, 'info': info, 'editlink': editlink}
+    references = info.references.all()
+    context = { 'section': 'community', 'list': list, 'info': info, 'editlink': editlink, 'references': references}
     return render(request, 'core/project.view.html', context)
 
 def reference_search_ajax(request, active_only=False):
@@ -612,11 +613,17 @@ def admin_project(request, id=False):
             info = form.save(commit=False)
             info.site = request.site
             info.save()
+
+            info.references.clear()
+            selected = request.POST.getlist('references')
+            for reference in selected:
+                info.references.add(Reference.objects.get(pk=reference))
+
             messages.success(request, 'Information was saved.')
             return redirect(reverse('core:project', args=[info.id]))
         else:
             messages.error(request, 'We could not save your form, please correct the errors')
-    context = { 'navbar': 'backend', 'form': form, 'info': info, 'tinymce': True }
+    context = { 'navbar': 'backend', 'form': form, 'info': info, 'tinymce': True, 'select2': True }
     return render(request, 'core/admin/project.html', context)
 
 @staff_member_required

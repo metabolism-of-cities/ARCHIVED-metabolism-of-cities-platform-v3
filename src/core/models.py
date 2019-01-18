@@ -383,6 +383,7 @@ class Project(models.Model):
     objects = models.Manager()
     on_site = CurrentSiteManager()
     url = models.CharField(max_length=255, null=True, blank=True)
+    references = models.ManyToManyField(Reference, blank=True, limit_choices_to={'status': 'active'})
 
     def __str__(self):
         return self.name
@@ -393,7 +394,7 @@ class Project(models.Model):
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        exclude = ['id', 'site']
+        exclude = ['id', 'site',  'references']
 
 class Timeline(models.Model):
     title = models.CharField(max_length=255)

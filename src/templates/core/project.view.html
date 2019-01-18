@@ -20,6 +20,12 @@
         <p>{{ info.description|safe }}</p>
       </div>
     </div>
+
+    {% if references %}
+        <h4 style="margin-top:50px">Related publications</h4>
+        {% include 'core/includes/references.list.html' %}
+    {% endif %}
+
   </div>
   <div class="col-lg-6">
     <div class="panel panel-body panel-colorful panel-default">
