@@ -28,7 +28,7 @@
       {% for space in spaces_list|get_item:type.id %}
         {% if space.location.lat %}
           var space_{{ space.id }} = L.marker([{{ space.location.lat }}, {{ space.location.lng }}], {icon:{{ type.marker_color }}marker})
-         .bindPopup("<b>{{ space.name }}</b><br>{{ space.type.name }}<br />{% if space.image %}<a href='{% url 'multiplicity:space' info.slug space.type.topic.slug space.type.slug space.slug %}'><img src='{{ space.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug space.type.topic.slug space.type.slug space.slug %}'>View details</a>. ", {minWidth:200}) ;
+         .bindPopup("<b>{{ space.name }}</b><br>{{ space.type.name }}<br />{% if space.image %}<a href='{% url 'multiplicity:space' info.slug space.type.slug space.slug %}'><img src='{{ space.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug space.type.slug space.slug %}'>View details</a>. ", {minWidth:200}) ;
         {% endif %}
       {% endfor %}
     {% endfor %}

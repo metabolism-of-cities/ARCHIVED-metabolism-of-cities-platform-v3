@@ -186,7 +186,7 @@
                   <tbody>
                   {% for details in spaces_list|get_item:type.id %}
                     <tr>
-                      <td><a href="{% url 'multiplicity:space' info.slug type.topic.slug type.slug details.slug %} ">{{ details.name }}</a></td>
+                      <td><a href="{% url 'multiplicity:space' info.slug type.slug details.slug %} ">{{ details.name }}</a></td>
                         {% for featuredetails in type.features %}
                           <td>{% nested_get feature details.id featuredetails.id %}</td>
                         {% endfor %}
@@ -242,7 +242,8 @@
         </div>
       </div>
 
-      {% include 'multiplicity/includes/photos.html' %}
+      {% include 'multiplicity/includes/multimedia.html' %}
+
     </section>
   {% endif %}
 

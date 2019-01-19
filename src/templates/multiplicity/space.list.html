@@ -51,7 +51,7 @@
         <tbody>
       {% for details in list %}
         <tr>
-          <td><a href="{% url 'multiplicity:space' info.slug type.topic.slug type.slug details.slug %} ">{{ details.name }}</a></td>
+          <td><a href="{% url 'multiplicity:space' info.slug type.slug details.slug %} ">{{ details.name }}</a></td>
             {% for featuredetails in features %}
               <td>{% nested_get feature details.id featuredetails.id %}</td>
             {% endfor %}
@@ -91,7 +91,7 @@
         <li><a href="./"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
         <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
-        <li><a href="{% url 'multiplicity:infrastructure_list' info.slug type.topic.slug %}">{{ type.topic.name }}</a></li>
+        <li><a href="{% url 'multiplicity:infrastructure_list' info.slug %}">Infrastructure</a></li>
         <li class="active">{{ type.name }}</li>
     </ol>
 
@@ -203,7 +203,7 @@
       {% for details in list %}
         {% if details.location.lat %}
                 L.marker([{{ details.location.lat }}, {{details.location.lng }}], {icon:{{ type.marker_color }}marker}).addTo(mymap)
-          .bindPopup("<b>{{ details.name }}</b><br /><a href='{% url 'multiplicity:space' info.slug type.topic.slug type.slug details.slug %}'>{% if details.image %}<img src='{{ details.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug type.topic.slug type.slug details.slug %}'>View details</a>. ", {minWidth:200});
+          .bindPopup("<b>{{ details.name }}</b><br /><a href='{% url 'multiplicity:space' info.slug type.slug details.slug %}'>{% if details.image %}<img src='{{ details.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug type.slug details.slug %}'>View details</a>. ", {minWidth:200});
         {% endif %}
       {% endfor %}
       mymap.scrollWheelZoom.disable();

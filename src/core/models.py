@@ -1,5 +1,5 @@
 from django.db import models
-from multiplicity.models import ReferenceSpace
+from multiplicity.models import ReferenceSpace, License
 from django.forms import ModelForm
 from django.template.defaultfilters import slugify
 from tinymce import HTMLField
@@ -232,6 +232,7 @@ class Video(models.Model):
     primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
     collection = models.ForeignKey(VideoCollection, on_delete=models.CASCADE, null=True, blank=True)
     thumbnail = models.ImageField(null=True, blank=True, upload_to='video_thumbnails')
+    license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.title

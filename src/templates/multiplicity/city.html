@@ -149,19 +149,19 @@
         <div class="col-md-4">
           <div class="panel">
               <div class="blog-header">
-                <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">
+                <a href="{% url 'multiplicity:space_list' info.slug details.slug %}">
                   <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
                 </a>
               </div>
               <div class="blog-content">
                   <div class="blog-title media-block">
-                      <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}" class="btn-link">
+                      <a href="{% url 'multiplicity:space_list' info.slug details.slug %}" class="btn-link">
                           <h2>{{ details.name }}</h2>
                       </a>
                   </div>
               </div>
               <div class="blog-footer">
-                  <div class="media-left"><a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">{{ details.total }} records</a> found</div>
+                  <div class="media-left"><a href="{% url 'multiplicity:space_list' info.slug details.slug %}">{{ details.total }} records</a> found</div>
                   <div class="media-body text-right">
                       <img src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
                   </div>

@@ -4,45 +4,46 @@
 {% block title %}{{ info.title }} | Videos{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
-{% block topstrip %}
+{% block content %}
 
     {% if info.website == "youtube" %}
       <iframe width="100%" height="480" src="https://www.youtube.com/embed/{{ info.url }}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
     {% elif info.website == "vimeo" %}
-      <iframe src="https://player.vimeo.com/video/{{ info.url }}" width="100%" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      <iframe src="https://player.vimeo.com/video/{{ info.url }}" width="100%" height="480" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
     {% else %}
-      <video src="{{ info.url }}" controls poster="{{ info.thumbnail }}" width="100%" height="360">
+      <video src="{{ info.url }}" controls poster="{{ info.thumbnail.url }}" width="100%" height="480">
         <a href="{{ info.url }}">Download song</a>
       </video>
     {% endif %}
-    {% endblock %}
-
-{% block content %}
 
 <div class="row">
     <div class="col-lg-12">
         <div class="panel">
           <div class="panel-body">
+
             <h3>{{ info.title }}</h3>
             {% if info.author %}
             <p><span class="tag">{{ info.author }}</span></p>
             {% endif %}
             {{ info.description|safe }}
 
-            <p class="pad-top"><a href="{% url 'core:videos' %}" class="btn btn-success">Back to video list</a></p>
+            <p class="pad-top">
+              {% if info.primary_space %}
+                <a href="{% url 'multiplicity:space' info.primary_space.city.slug info.primary_space.type.slug info.primary_space.slug %}" class="btn btn-info">Related: {{ info.primary_space.name }}</a>
+              {% endif %}
+              <a href="{% url 'core:videos' %}" class="btn btn-success">Back to video list</a>
+            </p>
           </div>
         </div>
     </div>
 </div>
 
-{% endblock %}
-
+    {% endblock %}
 {% block head %}
 <style type="text/css">
 #navbar{background:#fff}
 .panel-heading{height:480px}
 #page-content{padding:0}
-#container.boxed-layout{background:#ecf0f5}
 #container.boxed-layout.reveal #content-container, #container.boxed-layout #content-container{min-height:20vh}
 </style>
 {% endblock %}

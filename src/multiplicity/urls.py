@@ -74,9 +74,10 @@ urlpatterns = [
     path('<slug:city>/upload/stock', views.upload_flow, {'type': 'stocks'}, name='upload_stock'),
 
     path('<slug:city>/<slug:topic>', views.topic, name='topic'),
-    path('<slug:city>/infrastructure/<slug:topic>/<slug:type>/<slug:space>', views.space, name='space'),
-    path('<slug:city>/infrastructure/<slug:topic>/<slug:type>', views.space_list, name='space_list'),
+    path('<slug:city>/infrastructure/<slug:type>/<slug:space>', views.space, name='space'),
+    path('<slug:city>/infrastructure/<slug:type>', views.space_list, name='space_list'),
     path('<slug:city>/infrastructure/<slug:topic>', views.infrastructure_list, name='infrastructure_list'),
+    path('<slug:city>/infrastructure', views.infrastructure_list, name='infrastructure_list'),
     path('<slug:city>/<slug:main>/<slug:topic>', views.topic, name='subtopic'),
     path('<slug:city>/<slug:main>/<slug:topic>/input', views.topic, {'tab': 'input'}, name='subtopic_input'),
     path('<slug:city>/<slug:main>/<slug:topic>/use', views.topic, {'tab': 'use' }, name='subtopic_use'),

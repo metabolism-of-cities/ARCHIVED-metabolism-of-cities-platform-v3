@@ -6,7 +6,7 @@ from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feat
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
-from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization
+from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization, Video
 from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset, Process
 from django.db.models import Count
 from django.contrib import messages
@@ -39,7 +39,7 @@ def index(request):
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
     return render(request, 'multiplicity/index.html', context)
 
-def space_list(request, city, topic, type):
+def space_list(request, city, type):
     info = get_object_or_404(ReferenceSpace, slug=city)
     type = get_object_or_404(ReferenceSpaceType, slug=type)
     list = ReferenceSpace.objects.filter(city=info, type=type)
@@ -66,7 +66,7 @@ def space_list(request, city, topic, type):
     'feature': feature, 'data_in': data_in, 'data_out': data_out, 'charts': True, 'single': single, 'topics': topics}
     return render(request, 'multiplicity/space.list.html', context)
 
-def space(request, city, topic, type, space):
+def space(request, city, type, space):
     info = get_object_or_404(ReferenceSpace, slug=city)
     type = get_object_or_404(ReferenceSpaceType, slug=type)
     space = get_object_or_404(ReferenceSpace, city=info, type=type, slug=space)
@@ -75,6 +75,7 @@ def space(request, city, topic, type, space):
     data_out = Data.objects.filter(origin_space=space)
     feature_list = ReferenceSpaceFeature.objects.filter(space=space)
     photos = Photo.objects.filter(secondary_space=space, deleted=False)
+    videos = Video.objects.filter(primary_space=space)
     gallery = False
     if photos:
         gallery = True
@@ -89,7 +90,7 @@ def space(request, city, topic, type, space):
     'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
     'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 
     'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
-    'gallery': gallery
+    'gallery': gallery, 'videos': videos
     }
     return render(request, 'multiplicity/space.html', context)
 
