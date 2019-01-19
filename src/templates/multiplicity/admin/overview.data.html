@@ -175,7 +175,7 @@
             <tbody>
             {% for details in spaces %}
                 <tr>
-                    <td><a href="{% url 'multiplicity:space' info.slug details.type.topic.slug details.type.slug details.slug %}">{{ details.name }}</a></td>
+                    <td><a href="{% url 'multiplicity:space' info.slug details.type.slug details.slug %}">{{ details.name }}</a></td>
                     <td>{{ details.type.name }}</td>
                 </tr>
             {% endfor %}

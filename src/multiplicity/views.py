@@ -74,7 +74,7 @@ def space(request, city, type, space):
     data_in = Data.objects.filter(destination_space=space)
     data_out = Data.objects.filter(origin_space=space)
     feature_list = ReferenceSpaceFeature.objects.filter(space=space)
-    photos = Photo.objects.filter(secondary_space=space, deleted=False)
+    photos = space.photos.filter(deleted=False)
     videos = Video.objects.filter(primary_space=space)
     gallery = False
     if photos:
@@ -91,7 +91,7 @@ def space(request, city, type, space):
     'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
     'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 
     'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
-    'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink
+    'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
     }
     return render(request, 'multiplicity/space.html', context)
 

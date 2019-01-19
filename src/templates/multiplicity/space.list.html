@@ -8,8 +8,6 @@
 
 {% block content %}
 
-{% include 'multiplicity/includes/top.navbar.html' %}
-
 {% if list %}
 <div class="panel padding10">
   <div class="panel-content">
@@ -203,7 +201,7 @@
       {% for details in list %}
         {% if details.location.lat %}
                 L.marker([{{ details.location.lat }}, {{details.location.lng }}], {icon:{{ type.marker_color }}marker}).addTo(mymap)
-          .bindPopup("<b>{{ details.name }}</b><br /><a href='{% url 'multiplicity:space' info.slug type.slug details.slug %}'>{% if details.image %}<img src='{{ details.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug type.slug details.slug %}'>View details</a>. ", {minWidth:200});
+          .bindPopup("<b>{{ details.name }}</b><br /><a href='{% url 'multiplicity:space' info.slug type.slug details.slug %}'>{% if details.photos.count %}<img src='{{ details.photos.first.image.thumbnail.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug type.slug details.slug %}'>View details</a>. ", {minWidth:200});
         {% endif %}
       {% endfor %}
       mymap.scrollWheelZoom.disable();

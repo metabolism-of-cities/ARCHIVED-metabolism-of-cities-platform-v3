@@ -130,7 +130,6 @@ class ReferenceSpace(models.Model):
     description = models.TextField(null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
     slug = models.SlugField(db_index=True, max_length=255, null=True)
-    image = models.ImageField(null=True, blank=True, upload_to='referencespace')
     location = models.ForeignKey('multiplicity.ReferenceSpaceLocation', on_delete=models.SET_NULL, null=True, blank=True)
     csv = models.ForeignKey('multiplicity.ReferenceSpaceCSV', on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ForeignKey('core.Tag', on_delete=models.CASCADE, null=True, blank=True)
@@ -149,7 +148,7 @@ class ReferenceSpace(models.Model):
 class ReferenceSpaceForm(ModelForm):
     class Meta:
         model = ReferenceSpace
-        fields = ['name', 'type', 'country', 'image']
+        fields = ['name', 'type', 'country']
 
 class ReferenceSpaceLocation(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
