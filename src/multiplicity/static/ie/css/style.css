@@ -89,7 +89,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
 .leaflet-popup-content{text-align:center}
 .legend img{position:relative;top:6px}
 
-#editpagebutton,#controlpanelbutton, #addpagebutton, #datasetbutton, #deletepagebutton, #editextrabutton {
+#editpagebutton,#controlpanelbutton, #addpagebutton, #datasetbutton, #deletepagebutton, #editextrabutton, #photouploadlink {
     display: inline-block;
     background-color: #3a444e;
     border-radius: 7px 0 0 7px !important;
@@ -116,6 +116,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
 #datasetbutton {
   top:350px;
 }
+#photouploadlink {
+  top:450px;
+}
 #deletepagebutton {
   top:auto;
   bottom:20px;
@@ -125,7 +128,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
   opacity:1;
   background-color:red;
 }
-#editpagebutton i,#controlpanelbutton i,#addpagebutton i, #datasetbutton i, #deletepagebutton i, #editextrabutton i{
+#editpagebutton i,#controlpanelbutton i,#addpagebutton i, #datasetbutton i, #deletepagebutton i, #editextrabutton i, #photouploadlink i{
     font-size: 25px;
     display: block;
     margin: 5px 0;

@@ -64,6 +64,11 @@
 <script type="text/javascript">
 $(function(){
   $("#id_secondary_space").select2();
+  {% if request.GET.space %}
+    $("#id_secondary_space").val('{{ request.GET.space }}');
+    $("#id_secondary_space").trigger('change');
+  {% endif %}
+
 });
 </script>
 {% endblock %}
