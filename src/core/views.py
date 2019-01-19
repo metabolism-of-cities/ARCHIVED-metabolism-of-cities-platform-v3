@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Video, Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process
@@ -704,6 +704,38 @@ def admin_video(request, id=False):
             messages.error(request, 'We could not save your form, please correct the errors')
     context = { 'navbar': 'backend', 'form': form, 'info': info, 'select2': True }
     return render(request, 'core/admin/video.html', context)
+
+
+@staff_member_required
+def admin_videocollections(request):
+    list = VideoCollection.on_site.all()
+    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
+    return render(request, 'core/admin/videocollections.html', context)
+
+@staff_member_required
+def admin_videocollection(request, id=False):
+    if id:
+        info = get_object_or_404(VideoCollection, pk=id)
+        form = VideoCollectionForm(instance=info)
+    else:
+        info = False
+        form = VideoCollectionForm()
+    if request.method == 'POST':
+        if not id:
+            form = VideoCollectionForm(request.POST)
+        else:
+            form = VideoCollectionForm(request.POST, instance=info)
+        if form.is_valid():
+            info = form.save(commit=False)
+            if not id:
+                info.site = request.site
+            info.save()
+            messages.success(request, 'Information was saved.')
+            return redirect(reverse('core:admin_videocollections'))
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+    context = { 'navbar': 'backend', 'form': form, 'info': info }
+    return render(request, 'core/admin/videocollection.html', context)
 
 
 @staff_member_required

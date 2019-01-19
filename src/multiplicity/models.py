@@ -243,7 +243,8 @@ class Photo(TimestampedModel):
     source_url = models.CharField(max_length=255, null=True, blank=True)
     process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
     description = models.TextField(null=True, blank=True)
-    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, related_name='photo_gallery') # This is the main system this photo belongs to
+    secondary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, related_name='photos', null=True, blank=True) # A specific space (e.g. Airport or Factory) this photo belongs to
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False, db_index=True)
     license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
@@ -262,7 +263,8 @@ class PhotoForm(ModelForm):
         model = Photo
         exclude = ['id', 'uploaded_by', 'primary_space', 'process']
         labels = {
-            'deleted': 'Do not show in the gallery'
+            'deleted': 'Do not show in the gallery',
+            'secondary_space': 'Reference space (optional)'
         }
 
 class ReferencePhoto(models.Model):

@@ -8,8 +8,12 @@
 
     {% if info.website == "youtube" %}
       <iframe width="100%" height="480" src="https://www.youtube.com/embed/{{ info.url }}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-    {% else %}
+    {% elif info.website == "vimeo" %}
       <iframe src="https://player.vimeo.com/video/{{ info.url }}" width="100%" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    {% else %}
+      <video src="{{ info.url }}" controls poster="{{ info.thumbnail }}" width="100%" height="360">
+        <a href="{{ info.url }}">Download song</a>
+      </video>
     {% endif %}
     {% endblock %}
 

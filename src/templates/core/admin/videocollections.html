@@ -1,0 +1,55 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Video Collections{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+        <li class="active">Video Collections</li>
+    </ol>
+
+  <h3>Video Collections</h3>
+
+  <div class="row">
+    <div class="col-lg-12">
+        <div class="boxit pad-all">
+          <table class="table table-striped datatable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for details in list %}
+              <tr>
+                <td>{{ details.title }}</td>
+                <td><a class="btn btn-info" href="{% url 'core:admin_videocollection' details.id %}"><i class="fa fa-pencil"></i> Edit</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
+  <p class="pad-top"><a href="{% url 'core:admin_videocollection_create' %}" class="btn btn-success"><i class="fas fa-plus fa-fw"></i> Add new video collection</a></p>
+</div>
+
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

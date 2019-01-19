@@ -202,6 +202,22 @@ class EventForm(ModelForm):
         model = Event
         exclude = ['article']
 
+class VideoCollection(models.Model):
+    title = models.CharField(max_length=255)
+    description = HTMLField('description', null=True, blank=True)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
+
+    def __str__(self):
+        return self.title
+
+class VideoCollectionForm(ModelForm):
+    class Meta:
+        model = VideoCollection
+        exclude = ['id', 'site']
+
+
 class Video(models.Model):
     title = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
@@ -213,9 +229,16 @@ class Video(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     objects = models.Manager()
     on_site = CurrentSiteManager()
+    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
+    collection = models.ForeignKey(VideoCollection, on_delete=models.CASCADE, null=True, blank=True)
+    thumbnail = models.ImageField(null=True, blank=True, upload_to='video_thumbnails')
 
     def __str__(self):
         return self.title
+
+        labels = {
+            'primary_space': 'Reference space (optional)'
+        }
 
 class VideoForm(ModelForm):
     class Meta:

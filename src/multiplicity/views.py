@@ -74,6 +74,10 @@ def space(request, city, topic, type, space):
     data_in = Data.objects.filter(destination_space=space)
     data_out = Data.objects.filter(origin_space=space)
     feature_list = ReferenceSpaceFeature.objects.filter(space=space)
+    photos = Photo.objects.filter(secondary_space=space, deleted=False)
+    gallery = False
+    if photos:
+        gallery = True
     features = {}
     for details in feature_list:
         features[details.feature.name] = details.value
@@ -81,8 +85,11 @@ def space(request, city, topic, type, space):
     tab = type.slug
     editlink = '/admin/multiplicity/referencespace/'+str(space.id)+'/change/'
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'infrastructure', 'page': type.topic.slug, 'info': info, 'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 'feature_list': feature_list, 'editlink': editlink,
+    context = { 'section': 'cities', 'menu': 'infrastructure', 'page': type.topic.slug, 'info': info, 
+    'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
+    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 
+    'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
+    'gallery': gallery
     }
     return render(request, 'multiplicity/space.html', context)
 
@@ -1205,7 +1212,7 @@ def photo_form(request, city, id=False):
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'processes': processes, 'photo': photo }
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'processes': processes, 'photo': photo, 'select2': True }
     return render(request, 'multiplicity/form.photo.html', context)
 
 
