@@ -280,11 +280,8 @@ dl.featureslist dd{margin-bottom:20px}
     <script type="text/javascript">
 
       var mymap = L.map('map').setView([{{ space.location.lat }}, {{ space.location.lng }}], 11);
-      var bluemarker = L.divIcon({className: 'bluemarker', iconSize: [25,25]});
-      var darkbluemarker = L.divIcon({className: 'darkbluemarker', iconSize: [25,25]});
-      var greenmarker = L.divIcon({className: 'greenmarker', iconSize: [25,25]});
-      var yellowmarker = L.divIcon({className: 'yellowmarker', iconSize: [25,25]});
-      var redmarker = L.divIcon({className: 'redmarker', iconSize: [25,25]});
+
+      {% include 'multiplicity/includes/markers.html' %}
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
