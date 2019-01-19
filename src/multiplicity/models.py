@@ -135,7 +135,7 @@ class ReferenceSpace(models.Model):
     tag = models.ForeignKey('core.Tag', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.name + " (" + self.type.name + ")"
     def save(self, *args, **kwargs):
         if not self.id:
             # Newly created object, so set slug
