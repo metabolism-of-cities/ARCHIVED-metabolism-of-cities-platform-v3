@@ -175,6 +175,7 @@ class Feature(models.Model):
     description = models.TextField(null=True, blank=True)
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)
     unit = models.ForeignKey('staf.Unit', on_delete=models.CASCADE, null=True, blank=True)
+    exclusively_for = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
     show_in_table = models.BooleanField(default=False)
     def __str__(self):
         return self.name

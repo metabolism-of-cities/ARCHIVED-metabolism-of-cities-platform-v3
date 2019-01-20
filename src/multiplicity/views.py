@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup, ReferencePhoto, ReferencePhotoForm
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
@@ -43,7 +44,7 @@ def space_list(request, city, type):
     info = get_object_or_404(ReferenceSpace, slug=city)
     type = get_object_or_404(ReferenceSpaceType, slug=type)
     list = ReferenceSpace.objects.filter(city=info, type=type)
-    features = Feature.objects.filter(type=type, show_in_table=True)
+    features = Feature.objects.filter(type=type.id, show_in_table=True).filter(Q(exclusively_for__isnull=True) | Q(exclusively_for=info))
     features_list = ReferenceSpaceFeature.objects.filter(space__type=type, feature__show_in_table=True)
     feature = defaultdict(dict)
     for details in features_list:
@@ -384,7 +385,7 @@ def upload_infrastructure(request, city):
 def upload_infrastructure_file(request, city, type):
     info = get_object_or_404(ReferenceSpace, slug=city)
     type = get_object_or_404(ReferenceSpaceType, slug=type)
-    features = Feature.objects.filter(type=type.id)
+    features = Feature.objects.filter(type=type.id).filter(Q(exclusively_for__isnull=True) | Q(exclusively_for=info))
     previous = ReferenceSpaceCSV.objects.filter(user=request.user, type=type, space=info)
     if request.method == 'POST':
         if 'data' in request.POST:
@@ -462,7 +463,7 @@ def upload_infrastructure_review(request, city, type, id):
     feature_list = {}
 
     path = settings.MEDIA_ROOT + '/csv-referencespace/' + csv_file.name
-    features = Feature.objects.filter(type=type)
+    features = Feature.objects.filter(type=type.id).filter(Q(exclusively_for__isnull=True) | Q(exclusively_for=info))
     # By default there are 5 rows, so we start the count at 4 for additional rows
     start = 4
     column_count = start+1
@@ -698,7 +699,7 @@ def upload_infrastructure_meta(request, city, type, id):
     type = get_object_or_404(ReferenceSpaceType, slug=type)
     csv_file = ReferenceSpaceCSV.objects.get(pk=id)
     #csv_file = ReferenceSpaceCSV.objects.get(pk=id, user=request.user)
-    features = Feature.objects.filter(type=type)
+    features = Feature.objects.filter(type=type.id).filter(Q(exclusively_for__isnull=True) | Q(exclusively_for=info))
 
     # By default there are 5 rows, so we start the count at 4 for additional rows
     start = 4
