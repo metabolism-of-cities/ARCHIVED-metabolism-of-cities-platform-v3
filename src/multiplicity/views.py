@@ -376,9 +376,8 @@ def upload_flow(request, city, type='flows'):
 @login_required
 def upload_infrastructure(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    list = ReferenceSpaceType.objects.filter(user_accessible=True)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'topics': topics}
+    list = ReferenceSpaceType.objects.filter(user_accessible=True).order_by('name')
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'datatables': True }
     return render(request, 'multiplicity/upload/index.infrastructure.html', context)
 
 @login_required
@@ -754,7 +753,7 @@ def upload_infrastructure_meta(request, city, type, id):
         csv_file.source = request.POST['source']
         csv_file.save()
 
-        return redirect('multiplicity:space_list', type=type.slug, city=info.slug, topic=type.topic.slug)
+        return redirect('multiplicity:space_list', type=type.slug, city=info.slug)
 
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu': 'upload', 'file': csv_file, 'info': info, 'type': type, 'topics': topics }
