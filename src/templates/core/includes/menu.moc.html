@@ -49,8 +49,6 @@
         <ul class="list-unstyled">
           <li><a href="{% url 'core:organizations' 'universities' %}">Universities</a></li>
           <li><a href="{% url 'core:community' 'people' %}">People</a></li>
-          <li><a href="{% url 'core:research_projects' %}">Current Research</a></li>
-          <li><a href="{% url 'core:past_research_projects' %}">Past Research</a></li>
         </ul>
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-hotel icon-fw"></i>Non-academic</p>
         <ul class="list-unstyled">
@@ -59,11 +57,11 @@
         </ul>
       </div>
       <div class="col-md-6">
-        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-open-book icon-fw"></i>Projects</p>
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-open-book icon-fw"></i>Research</p>
         <ul class="list-unstyled">
-          <li><a href="{% url 'core:projects' %}">Current Projects</a></li>
-          <li><a href="{% url 'core:past_projects' %}">Past Projects</a></li>
-          <li><a href="{% url 'core:community' 'createprojects' %}"><span class="pull-right label label-success">Contribute</span>Add Projects</a></li>
+          <li><a href="{% url 'core:projects' %}">Research Projects</a></li>
+          <li><a href="{% url 'core:research_projects' %}">Theses</a></li>
+          <li><a href="{% url 'core:community' 'createprojects' %}"><span class="pull-right label label-success">Contribute</span>Add Research</a></li>
         </ul>
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-bulleted-list icon-fw"></i>Updates</p>
         <ul class="list-unstyled">

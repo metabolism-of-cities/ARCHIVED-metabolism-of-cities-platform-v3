@@ -30,6 +30,7 @@ urlpatterns = [
     path('community/people', views.people, name='people'),
     path('community/people/<int:id>', views.peopledetails, name='peopledetails'),
     path('community/user/<int:id>', views.peopledetails, name='userdetails'),
+
     path('community/research', views.projects, {'type': 'research', 'status': 'ongoing', 'page': 50}, name='research_projects'),
     path('community/research/<int:id>', views.project_view, {'type': 'research', 'status': 'ongoing'}, name='research_project'),
     path('community/research/past', views.projects, {'type': 'research', 'status': 'finished', 'page': 51}, name='past_research_projects'),
@@ -43,8 +44,8 @@ urlpatterns = [
     path('community/organizations/<int:id>', views.organization, name='organization'),
     path('community/organizations/<slug:type>', views.organizations, name='organizations'),
 
-    path('research/projects', views.projects, {'type': 'regular', 'page': 149}, name='regular_research_projects'),
-    path('research/theses', views.projects, {'type': 'research', 'page': 148}, name='theses_research_projects'),
+    path('research/projects', views.projects, {'type': 'projects', 'page': 149}, name='regular_research_projects'),
+    path('research/theses', views.projects, {'type': 'theses', 'page': 148}, name='theses_research_projects'),
 
     path('resources', views.journals, name='resources_home'),
     path('community', views.empty, name='community_home'),

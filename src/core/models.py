@@ -398,11 +398,17 @@ class Project(models.Model):
     active = models.BooleanField(default=True)
     pending_review = models.BooleanField(default=True)
     TYPE = (
-        ('research', 'Thesis project'),
-        ('regular', 'Research project'),
+        ('theses', 'Thesis project'),
+        ('projects', 'Research project'),
         ('applied', 'Applied research'),
     )
     type = models.CharField(max_length=20, choices=TYPE)
+    THESISTYPE = (
+        ('bachelor', 'Bachelor'),
+        ('masters', 'Masters'),
+        ('phd', 'PhD'),
+    )
+    thesistype = models.CharField(max_length=20, choices=THESISTYPE, null=True, blank=True)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     objects = models.Manager()
     on_site = CurrentSiteManager()
