@@ -34,7 +34,7 @@
             {% endif %}
             <div class="pad-all">
               <h3>{{ details.title }}</h3>
-              <p>{{ details.content|truncatechars:200 }}</p>
+              <p>{{ details.content|striptags|truncatechars:200 }}</p>
               <a class="btn btn-dark" onclick="showSubSector('{{ details.title }}')">Show more</a>
             </div>
           </div>
