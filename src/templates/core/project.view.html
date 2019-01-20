@@ -87,13 +87,10 @@
 </div>
 
 <p>
-{% if info.status == 'ongoing' %}
-  <a href="{% url 'core:research_projects' %}" class="btn btn-info">
-{% else %}
-  <a href="{% url 'core:past_research_projects' %}" class="btn btn-info">
-{% endif %}
-
-Back to list</a></p>
+  <a href="{% url 'core:projects' info.type %}" class="btn btn-info">
+    Back to list
+  </a>
+</p>
 
 {% endblock %}
 
@@ -113,19 +110,7 @@ Back to list</a></p>
     
   <div id="page-title">
     <h1 class="page-header text-overflow">
-    {% if SITE_ID == 1 %}
-      {% if info.status == 'ongoing' %}
-        Current Research
-      {% else %}
-        Past Research
-      {% endif %}
-    {% else %}
-      {% if info.type == 'regular' %}
-        Projects
-      {% else %}
-        Theses
-      {% endif %}
-    {% endif %}
+      {{ info.get_type_display }}
     </h1>
   </div>
 
@@ -133,19 +118,10 @@ Back to list</a></p>
     <li><a href="./"><i class="pli-home"></i></a></li>
     {% if SITE_ID == 1 %}
       <li><a href="{% url 'core:community_home' %}">Community</a></li>
-      {% if info.status == 'ongoing' %}
-        <li><a href="{% url 'core:research_projects' %}">Current Research</a></li>
-      {% else %}
-        <li><a href="{% url 'core:past_research_projects' %}">Past Research</a></li>
-      {% endif %}
     {% else %}
       <li><a href="{% url 'core:section_home' 'research' %}">Research</a></li>
-      {% if info.type == 'regular' %}
-        <li><a href="{% url 'core:regular_research_projects' %}">Projects</a></li>
-      {% else %}
-        <li><a href="{% url 'core:theses_research_projects' %}">Theses</a></li>
-      {% endif %}
     {% endif %}
+      <li><a href="{% url 'core:projects' info.type %}">{{ info.get_type_display }}</a></li>
     <li class="active">{{ info.name|truncatechars:40 }}</li>
   </ol>
 

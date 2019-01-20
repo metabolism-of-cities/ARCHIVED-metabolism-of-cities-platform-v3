@@ -59,9 +59,9 @@
       <div class="col-md-6">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-open-book icon-fw"></i>Research</p>
         <ul class="list-unstyled">
-          <li><a href="{% url 'core:projects' %}">Research Projects</a></li>
-          <li><a href="{% url 'core:research_projects' %}">Theses</a></li>
-          <li><a href="{% url 'core:community' 'createprojects' %}"><span class="pull-right label label-success">Contribute</span>Add Research</a></li>
+          <li><a href="{% url 'core:projects' 'projects' %}">Research Projects</a></li>
+          <li><a href="{% url 'core:projects' 'theses' %}">Theses</a></li>
+          <li><a href="{% url 'core:project_form' %}"><span class="pull-right label label-success">Contribute</span>Add Research</a></li>
         </ul>
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-bulleted-list icon-fw"></i>Updates</p>
         <ul class="list-unstyled">

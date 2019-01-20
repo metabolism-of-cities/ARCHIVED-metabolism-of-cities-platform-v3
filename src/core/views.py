@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process
@@ -493,22 +493,74 @@ def updateorgs(request):
     context = { 'section': 'literature', 'page': 'journals', 'list': list}
     return render(request, 'core/empty.html', context)
 
-def projects(request, type, page, status=False):
+def projects(request, type, status=False):
     if status:
         list = Project.on_site.filter(type=type, status=status)
     else:
         list = Project.on_site.filter(type=type)
+    if request.site.id == 1:
+        if type == 'projects':
+            page = 50
+        elif type == 'theses':
+            page = 57
+    elif request.site.id == 2:
+        if type == 'projects':
+            page = 149
+        elif type == 'theses':
+            page = 148
     page = get_object_or_404(Article, pk=page)
     addlink = reverse('core:admin_project_create')
     context = { 'section': 'community', 'list': list, 'page': page, 'addlink': addlink }
     return render(request, 'core/projects.html', context)
 
-def project_view(request, type, status, id):
+def project(request, type, id):
     info = get_object_or_404(Project, pk=id)
     editlink = reverse('core:admin_project', args=[info.id])
     references = info.references.all()
     context = { 'section': 'community', 'list': list, 'info': info, 'editlink': editlink, 'references': references}
     return render(request, 'core/project.view.html', context)
+
+def project_form(request, id=False):
+    if request.site.id == 1:
+        page = 50
+    else:
+        page = 50
+
+    if id:
+        info = get_object_or_404(Project, pk=id)
+        form = ProjectUserForm(instance=info)
+    else:
+        info = False
+        form = ProjectUserForm()
+    if request.method == 'POST':
+        if not id:
+            new_record = True
+            form = ProjectUserForm(request.POST)
+        else:
+            form = ProjectUserForm(request.POST, instance=info)
+        if form.is_valid():
+            info = form.save(commit=False)
+            info.site = request.site
+            info.save()
+
+            if new_record:
+                create_record = get_object_or_404(UserAction, pk=1)
+                log = UserLog(user=request.user, action=create_record, model='Research', points=5, description=info.name)
+                info.pending_review = True
+                info.save()
+                # Must send mail to admins!
+            else:
+                edit_record = get_object_or_404(UserAction, pk=2)
+                log = UserLog(user=request.user, action=edit_record, model='Research', points=1, description=info.name)
+
+            messages.success(request, 'We have received your submitted. We will review your project and activate it shortly if it is relevant to the website. Thanks!')
+            return redirect('core:project', id=info.id, type=info.type)
+        else:
+            messages.error(request, 'We could not save your form, please correct the errors')
+
+    context = { 'section': 'community', 'page': 'research', 'info': info, 'form': form }
+    return render(request, 'core/project.form.html', context)
+
 
 def reference_search_ajax(request, active_only=False):
     if active_only:

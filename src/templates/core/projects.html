@@ -32,7 +32,7 @@
   <tbody>
   {% for details in list %}
     <tr>
-      <td><a href="{% url 'core:research_project' details.id %}">{{ details.name }}</a></td>
+      <td><a href="{% url 'core:project' details.type details.id %}">{{ details.name }}</a></td>
       <td>{{ details.researcher }}</td>
       <td>{{ details.institution }}</td>
     </tr>

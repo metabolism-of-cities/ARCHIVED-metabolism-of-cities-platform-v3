@@ -369,6 +369,8 @@ class UserLog(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     action = models.ForeignKey(UserAction, on_delete=models.CASCADE)
     points = models.PositiveSmallIntegerField()
+    model = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     class Meta:
         ordering = ["date"]
 
@@ -398,8 +400,8 @@ class Project(models.Model):
     active = models.BooleanField(default=True)
     pending_review = models.BooleanField(default=True)
     TYPE = (
-        ('theses', 'Thesis project'),
-        ('projects', 'Research project'),
+        ('theses', 'Theses projects'),
+        ('projects', 'Research projects'),
         ('applied', 'Applied research'),
     )
     type = models.CharField(max_length=20, choices=TYPE)
@@ -425,6 +427,15 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         exclude = ['id', 'site',  'references']
+
+class ProjectUserForm(ModelForm):
+    class Meta:
+        model = Project
+        fields = ['name', 'researcher', 'type', 'thesistype', 'institution', 'supervisor', 'email', 'description', 'target_finish_date', 'start_date', 'end_date', 'status', 'url']
+        labels = {
+            'name': 'Project title',
+            'thesistype': 'Thesis type',
+        }
 
 class Timeline(models.Model):
     title = models.CharField(max_length=255)
