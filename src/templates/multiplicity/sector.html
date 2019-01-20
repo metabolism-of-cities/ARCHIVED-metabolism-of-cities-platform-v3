@@ -34,7 +34,7 @@
             {% endif %}
             <div class="pad-all">
               <h3>{{ details.title }}</h3>
-              <p>{{ details.content|striptags|truncatechars:200 }}</p>
+              <p>{{ details.content|truncatechars_html:200|safe }}</p>
               <a class="btn btn-dark" onclick="showSubSector('{{ details.title }}')">Show more</a>
             </div>
           </div>
@@ -147,7 +147,9 @@
                 <div class="row flex flex-wrap">
                   <div class="col-lg-4">
                     <a onclick="showInfrastructureData('{{ details.slug }}')">
+                        
                       <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
+
                     </a>
                   </div>
                   <div class="col-lg-8 pad-all">
@@ -156,7 +158,7 @@
                       <a onclick="showInfrastructureData('{{ details.slug }}')">{{ details.total }} records</a> found
                       <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.svg" alt="" />
                     </p>
-                    <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.slug }}')">Show more</a>
+                    <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.slug }}')">View list</a>
                   </div>
                 </div>
               </div>
@@ -170,7 +172,7 @@
         {% for type in types %}
           {% if type.total %}
             <div class="single-dataset" infrastructure="{{ type.slug }}">
-              <a class="btn btn-dark" onclick="backInfrastructure()"><i class="fas fa-arrow-left fa-fw"></i> Back to list</a>
+              <a class="btn btn-dark" onclick="backInfrastructure()"><i class="fas fa-arrow-left fa-fw"></i> Back to overview</a>
               <a class="btn btn-mint" onclick="showInfrastructureMap(type_{{ type.id }})"><i class="fas fa-map fa-fw"></i> Show on map</a>
               <h3>{{ type.name }}</h3>
               <div class="table-responsive">
