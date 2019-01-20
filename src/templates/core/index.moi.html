@@ -107,7 +107,7 @@
             <ul class="list-group bg-trans list-todo mar-no">
               {% for details in projects %}
                 <li class="list-group-item">
-                  <a href="{% url 'core:project' details.id %}">{{ details.name }}</a><br>
+                  <a href="{% url 'core:project' details.type details.id %}">{{ details.name }}</a><br>
                 </li>
               {% endfor %}
             </ul>
