@@ -1,61 +1,38 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
-{% load humanize %}
 
 {% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
-{% block container %}stretch-bg-head floating-style{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
-{% include 'multiplicity/includes/top.navbar.html' %}
 
-<div class="panel padding10">
-  <div class="panel-content">
-    <div id="map"></div>
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>{{ topic.name }}</h3>
+        {% if information %}
+        {{ information.content|safe }}
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="row blog">
-  {% for details in types %}
-    {% if details.id in count %}
-      {% if forloop.counter|divisibleby:4 %}</div><div class="row blog">{% endif %}
-      <div class="col-md-4">
-        <div class="panel">
-            <div class="blog-header">
-              <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">
-                <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
-              </a>
-            </div>
-            <div class="blog-content">
-                <div class="blog-title media-block">
-                    <a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}" class="btn-link">
-                        <h2>{{ details.name }}</h2>
-                    </a>
-                </div>
-            </div>
-            <div class="blog-footer">
-                <div class="media-left"><a href="{% url 'multiplicity:space_list' info.slug topic.slug details.slug %}">{{ details.total }} records</a> found</div>
-                <div class="media-body text-right">
-                    <img src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.png" alt="" />
-                </div>
-            </div>
-        </div>
+<div class="row">
+  <div class="col">
+    <div class="panel panel-colorful panel-success">
+      <div class="panel-body">
+        <h3>Admin panel</h3>
+        <p><a href="{% url 'multiplicity:information_form_topic' info.slug topic.id %}">{% if information %}Edit{% else %}Add{% endif %} information</a></p>
       </div>
-    {% endif %}
-  {% endfor %}
+    </div>
+  </div>
 </div>
-
 
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
-<link rel="stylesheet" href="{% static 'ie/css/datatables.css' %}" />
-<style type="text/css">
-#map{height:700px}
-.leaflet-popup-content img{padding:4px;border:1px solid #ccc;margin-bottom:10px;max-width:100%}
-.leaflet-popup-content{text-align:center}
-.legend img{position:relative;top:6px}
-</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -65,8 +42,10 @@
 
 {% block pagehead %}
 <div id="page-head">
-
-    <h3>{{ info.name }} | <span class="text-thin">{{ topic.name }}</span></h3>
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
 
     <ol class="breadcrumb">
         <li><a href="./"><i class="pli-home"></i></a></li>
@@ -79,30 +58,5 @@
 {% endblock %}
 
 {% block footer %}
-  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
-  <script type="text/javascript" src="{% static 'ie/js/datatables.js' %}"></script>
-  <script type="text/javascript">
 
-    var mymap = L.map('map').setView([{{ info.location.lat }}, {{ info.location.lng }}], {{ info.location.default_zoom|default_if_none:12 }});
-
-    {% include 'multiplicity/includes/markers.html' %}
-
-		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY29tbXVuaXRyZWUiLCJhIjoiY2lzdHZuanl1MDAwODJvcHR1dzU5NHZrbiJ9.0ETJ3fXYJ_biD7R7FiwAEg', {
-			maxZoom: 19,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-			id: 'mapbox.streets'
-		}).addTo(mymap);
-
-    mymap.scrollWheelZoom.disable();
-
-    {% for details in spaces %}
-      {% if details.location.lat %}
-              L.marker([{{ details.location.lat }}, {{details.location.lng }}], {icon:{{ details.type.marker_color}}marker}).addTo(mymap)
-        .bindPopup("<b>{{ details.name }}</b><br>{{ details.type.name }}<br />{% if details.image %}<a href='{% url 'multiplicity:space' info.slug details.type.topic.slug details.type.slug details.slug %}'><img src='{{ details.image.url }}' /></a>{% endif %}<br /><a class='button is-info' href='{% url 'multiplicity:space' info.slug details.type.topic.slug details.type.slug details.slug %}'>View details</a>. ", {minWidth:200});
-      {% endif %}
-    {% endfor %}
-
-       </script>
 {% endblock %}

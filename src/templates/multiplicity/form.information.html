@@ -12,11 +12,16 @@
       <div class="panel panel-body">
         <div class="panel-heading">
           <h3>Information</h3>
+          {% if topic %}
+            <p>{{ topic }}</p>
+          {% endif %}
         </div>
           <div class="panel-body" style="margin-top:30px">
             <form method="post" class="form form-horizontal" enctype="multipart/form-data">
               {% bootstrap_form form layout='horizontal' %}
               {% buttons %}
+
+              {% if not topic %}
               <div class="form-group">
                 <label class="col-md-3 control-label" for="processes">Processes</label>
                 <div class="col-md-9">
@@ -28,6 +33,8 @@
                   </select>
                 </div>
               </div>
+              {% endif %}
+
               <div class="form-group">
                 <label class="col-md-3 control-label" for="references">References</label>
                 <div class="col-md-9">
@@ -70,5 +77,14 @@
 {% endblock %}
 
 {% block footer %}
-
+  {% if topic %}
+    <script type="text/javascript">
+    $(function(){
+      $("#id_position").closest(".form-group").hide();
+      $("#id_title").closest(".form-group").hide();
+      $("#id_photo").closest(".form-group").hide();
+      $("#id_title").val("{{ topic.name }}");
+    });
+    </script>
+  {% endif %}
 {% endblock %}

@@ -1111,6 +1111,8 @@ def topic(request, city, topic, main=False, tab=False):
     #datasets = Dataset.objects.filter(data__material__in=topic.materials.all())
     info = get_object_or_404(ReferenceSpace, slug=city)
     information = Information.objects.filter(topic=topic, space=info)
+    if information:
+        information = information[0]
     datasets = Dataset.objects.filter(topics=topic, primary_space=info)
     spaces = ReferenceSpace.objects.filter(city=info, type__topic=topic)
     subs = Topic.objects.filter(parent=topic)
@@ -1124,7 +1126,7 @@ def topic(request, city, topic, main=False, tab=False):
             count[details.type.id] = 1
 
     context = { 'section': 'cities', 'menu': 'materials', 'info': info, 'page': 'topic', 'tab': 'inputs', 'topics': topics, 'topic': topic, 'tab': tab, 'datasets': datasets, 'information': information, 'count': count, 'types': types, 'subs': subs }
-    return render(request, 'multiplicity/material.html', context)
+    return render(request, 'multiplicity/topic.html', context)
 
 def materials(request):
     list = Material.objects.filter(catalog_id=4).exclude(id=970921).order_by('id')
@@ -1136,20 +1138,27 @@ def information_form(request, city, id=False, topic=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     processes = Process.objects.filter(slug__isnull=False).order_by('id')
     references = Reference.objects.filter(status='active')
+
+    if topic:
+        topic = Topic.objects.get(pk=topic)
+
     if id:
         information = get_object_or_404(Information, pk=id)
         form = InformationForm(instance=information)
+        if information.topic:
+            topic = information.topic
     else:
         information = False
         form = InformationForm()
     saved = False
+
     if request.method == 'POST':
         if not id:
             form = InformationForm(request.POST, request.FILES)
         else:
             form = InformationForm(request.POST, request.FILES, instance=information)
         if form.is_valid():
-            if request.POST['process']:
+            if not topic and request.POST['process']:
                 process = Process.objects.get(pk=request.POST['process'])
             else:
                 process = None
@@ -1162,7 +1171,10 @@ def information_form(request, city, id=False, topic=False):
                 information.process = process
                 information.space = info
                 information.user = request.user
+                if topic:
+                    information.topic = topic
                 information.save()
+
                 form.save_m2m()
 
             information.references.clear()
@@ -1178,7 +1190,7 @@ def information_form(request, city, id=False, topic=False):
             messages.warning(request, 'We could not save your form, please correct the errors')
 
     context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,
-    'references': references, 'select2': True
+    'references': references, 'select2': True, 'topic': topic
     }
     return render(request, 'multiplicity/form.information.html', context)
 

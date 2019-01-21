@@ -289,6 +289,8 @@ class Information(TimestampedModel):
     references = models.ManyToManyField("core.Reference", blank=True)
     dataset_types = models.ManyToManyField(DatasetType, blank=True, limit_choices_to={'active': True})
     process = models.ForeignKey("staf.Process", on_delete=models.CASCADE, blank=True, null=True, limit_choices_to={'slug__isnull': False})
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
+
     def __str__(self):
         return self.title
 
