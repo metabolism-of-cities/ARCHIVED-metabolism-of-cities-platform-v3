@@ -1,0 +1,27 @@
+
+<script type="text/javascript">
+    // show a preview of the dataset's chart, id = dataset id, type = chart type id
+    function previewChart(id, type){
+      $("#graph").html("<div class='loading text-center text-2x pad-all mar-top'><span class='mar-top pad-all'>Loading graph</span><i class='fas fa-cog fa-spin mar-top'></i></div>");
+      url = '/cities/{{ info.slug }}/datasets/' + id + '/graph/' + type;
+      $("#graph").load(url);
+    };
+
+    function scrollToDiv(id){
+      $('html,body').animate({
+       scrollTop: $("#" + id).offset().top - 20
+      }, 'slow');
+    }
+
+    // make clicked button active, scroll to top of chart
+    $("#datasets .table a.btn").on("click", function() {
+      $("#datasets .table a.btn").removeClass("active");
+      $(this).addClass("active");
+      scrollToDiv("datasets");
+    });
+
+      // We want the first dataset to start loading so we check the ID and type and load this
+      first_dataset = $("#datasets table tr:first-child a.btn-mint");
+      first_dataset.addClass("active");
+      previewChart(first_dataset.data("id"), first_dataset.data("graph"));
+</script>

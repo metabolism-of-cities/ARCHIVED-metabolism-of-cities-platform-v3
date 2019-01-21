@@ -1,0 +1,19 @@
+{% load static %}
+<script src="{% static 'ie/js/highcharts.js' %}"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/streamgraph.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/treemap.js"></script>
+<script src="https://code.highcharts.com/modules/sankey.js"></script>
+
+{% include 'multiplicity/graphs/options.html' %}
+{% include 'multiplicity/graphs/series.time.html' %}
+{% include 'multiplicity/graphs/series.column.html' %}
+{% include 'multiplicity/graphs/series.drill.html' %}
+
+<style type="text/css">
+#graph{height:600px}
+</style>

@@ -368,7 +368,7 @@ def upload_flow(request, city, type='flows'):
     types = False
     if type == 'flows':
         types = DatasetTypeStructure.objects.filter(pk__in=[8,9,10,11,6])
-    list = DatasetType.objects.filter(type=type)
+    list = DatasetType.objects.filter(type=type, active=True)
     addlink = '/admin/multiplicity/datasettype/add/'
     context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'types': types, 'addlink': addlink, 'type': type}
     return render(request, 'multiplicity/upload/index.flow.html', context)
@@ -534,6 +534,9 @@ def upload_flow_review(request, city, type, id):
         column_origin = False
         column_destination = 5
         show_location = True
+        if dataset.name == "Population":
+            column_count = 4
+            column_destination = 2
     elif dataset.flows == 'origin_and_destination':
         column_count = 10
         column_origin = 7
@@ -562,7 +565,13 @@ def upload_flow_review(request, city, type, id):
             elif not error:
                 if row[0].strip() != "Timeframe" and row[0] and row[0].strip() != "Timeframe name" and row[0].strip() != "Date" :
 
-                    if dataset.type == "stocks":
+                    if dataset.name == "Population":
+                        material = "People"
+                        material_code = "MF1.5.1"
+                        date = row[0]
+                        qty = row[1]
+                        unit = "unit"
+                    elif dataset.type == "stocks":
                         material = row[1].strip()
                         material_code = row[2].strip()
                         date = row[0]
@@ -774,6 +783,9 @@ def upload_flow_meta(request, city, type, id):
         column_origin = False
         column_destination = 5
         show_location = True
+        if dataset.name == "Population":
+            column_count = 4
+            column_destination = 2
     elif dataset.flows == 'origin_and_destination':
         column_count = 10
         column_origin = 7
@@ -845,6 +857,11 @@ def upload_flow_meta(request, city, type, id):
             csv_file.save()
 
             newdataset.references.add(reference)
+            
+            if dataset.name == "Population":
+                # Population figures must be linked directly to population topic
+                topic = Topic.objects.get(pk=17)
+                newdataset.topics.add(topic)
 
             messages.success(request, 'Information was saved.')
 
@@ -860,8 +877,14 @@ def upload_flow_meta(request, city, type, id):
                 for row in reader:
                     if row[0].strip() != "Timeframe" and row[0] and row[0].strip() != "Timeframe name" and row[0].strip() != "Date":
 
-
-                        if dataset.type == "stocks":
+                        if dataset.name == "Population":
+                            material = "People"
+                            material_code = "MF1.5.1"
+                            date = row[0]
+                            timeframe = row[0]
+                            qty = row[1]
+                            unit = "unit"
+                        elif dataset.type == "stocks":
                             material = row[1].strip()
                             material_code = row[2].strip()
                             date = row[0]
@@ -1114,18 +1137,8 @@ def topic(request, city, topic, main=False, tab=False):
     if information:
         information = information[0]
     datasets = Dataset.objects.filter(topics=topic, primary_space=info)
-    spaces = ReferenceSpace.objects.filter(city=info, type__topic=topic)
-    subs = Topic.objects.filter(parent=topic)
-    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace'))
-    # TODO Surely we can do better than this? A single db query should be possible.
-    count = {}
-    for details in spaces:
-        if details.type.id in count:
-            count[details.type.id] += 1
-        else:
-            count[details.type.id] = 1
 
-    context = { 'section': 'cities', 'menu': 'materials', 'info': info, 'page': 'topic', 'tab': 'inputs', 'topics': topics, 'topic': topic, 'tab': tab, 'datasets': datasets, 'information': information, 'count': count, 'types': types, 'subs': subs }
+    context = { 'section': 'cities', 'menu': 'profile', 'info': info, 'page': topic.slug, 'topic': topic, 'datasets': datasets, 'information': information }
     return render(request, 'multiplicity/topic.html', context)
 
 def materials(request):
@@ -1135,12 +1148,16 @@ def materials(request):
 
 @login_required
 def information_form(request, city, id=False, topic=False):
+
     info = get_object_or_404(ReferenceSpace, slug=city)
     processes = Process.objects.filter(slug__isnull=False).order_by('id')
     references = Reference.objects.filter(status='active')
 
     if topic:
         topic = Topic.objects.get(pk=topic)
+        information = Information.objects.filter(topic=topic, space=info)
+        if information:
+            id = information[0].id
 
     if id:
         information = get_object_or_404(Information, pk=id)

@@ -6,33 +6,32 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col">
-    <div class="panel">
-      <div class="panel-body">
-        <h3>{{ topic.name }}</h3>
-        {% if information %}
-        {{ information.content|safe }}
-        {% endif %}
-      </div>
+  <div class="panel">
+    <div class="panel-body">
+      <h3>{{ topic.name }}</h3>
+      {% if information %}
+      {{ information.content|safe }}
+      {% endif %}
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col">
+  {% if datasets %}
+    {% include 'multiplicity/includes/datasetlist.html' %}
+  {% endif %}
+
     <div class="panel panel-colorful panel-success">
       <div class="panel-body">
         <h3>Admin panel</h3>
         <p><a href="{% url 'multiplicity:information_form_topic' info.slug topic.id %}">{% if information %}Edit{% else %}Add{% endif %} information</a></p>
       </div>
     </div>
-  </div>
-</div>
 
 {% endblock %}
 
 {% block head %}
+  {% if datasets %}
+    {% include 'multiplicity/includes/charts.head.html' %}
+  {% endif %}
 {% endblock %}
 
 {% block sidebar %}
@@ -58,5 +57,7 @@
 {% endblock %}
 
 {% block footer %}
-
+  {% if datasets %}
+    {% include 'multiplicity/includes/charts.footer.html' %}
+  {% endif %}
 {% endblock %}

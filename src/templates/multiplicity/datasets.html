@@ -7,38 +7,7 @@
 {% block content %}
 
   {% if datasets %}
-  <section id="datasets">
-    <div class="row">
-      <h3>Datasets</h3>
-    </div>
-
-    {{ topic }}
-
-    <div id="graph">
-      <div class="loading text-center text-2x pad-all mar-top">
-        <span class="mar-top pad-all">Loading graph</span>
-        <i class="fas fa-cog fa-spin mar-top"></i>
-      </div>
-    </div>
-
-    <table class="table">
-      <thead>
-        <tr>
-          <th width="300">Dataset</th>
-          <th>Coverage</th>
-          <th>Preview</th>
-        </tr>
-      </thead>
-      {% for details in datasets %}
-        <tr>
-          <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
-          <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
-          <td><a class="btn btn-sm btn-mint" data-id="{{ details.id }}" data-graph="{{ details.graph.id|default:4 }}" onclick="previewChart({{ details.id }}, {{ details.graph.id|default:4 }})"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a></td>
-        </tr>
-      {% endfor %}
-    </table>
-  </section>
-
+    {% include 'multiplicity/includes/datasetlist.html' %}
   {% else %}
     <div class="alert alert-danger">No datasets available yet.</div>
   {% endif %}
@@ -46,25 +15,7 @@
 {% endblock %}
 
 {% block head %}
-<script src="{% static 'ie/js/highcharts.js' %}"></script>
-<script src="https://code.highcharts.com/modules/series-label.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-<script src="https://code.highcharts.com/modules/streamgraph.js"></script>
-<script src="https://code.highcharts.com/highcharts-more.js"></script>
-<script src="https://code.highcharts.com/modules/treemap.js"></script>
-<script src="https://code.highcharts.com/modules/sankey.js"></script>
-
-{% include 'multiplicity/graphs/options.html' %}
-{% include 'multiplicity/graphs/series.time.html' %}
-{% include 'multiplicity/graphs/series.column.html' %}
-{% include 'multiplicity/graphs/series.drill.html' %}
-
-<style type="text/css">
-#graph{height:600px}
-</style>
-
+  {% include 'multiplicity/includes/charts.head.html' %}
 {% endblock %}
 
 {% block sidebar %}
@@ -90,35 +41,7 @@
 {% endblock %}
 
 {% block footer %}
-<script type="text/javascript">
-
-    {% if datasets %}
-    // show a preview of the dataset's chart, id = dataset id, type = chart type id
-    function previewChart(id, type){
-      $("#graph").html("<div class='loading text-center text-2x pad-all mar-top'><span class='mar-top pad-all'>Loading graph</span><i class='fas fa-cog fa-spin mar-top'></i></div>");
-      url = '/cities/{{ info.slug }}/datasets/' + id + '/graph/' + type;
-      $("#graph").load(url);
-    };
-
-    function scrollToDiv(id){
-      $('html,body').animate({
-       scrollTop: $("#" + id).offset().top - 20
-      }, 'slow');
-    }
-
-    // make clicked button active, scroll to top of chart
-    $("#datasets .table a.btn").on("click", function() {
-      $("#datasets .table a.btn").removeClass("active");
-      $(this).addClass("active");
-      scrollToDiv("datasets");
-    });
-
-      // We want the first dataset to start loading so we check the ID and type and load this
-      first_dataset = $("#datasets table tr:first-child a.btn-mint");
-      first_dataset.addClass("active");
-      previewChart(first_dataset.data("id"), first_dataset.data("graph"));
-    {% endif %}
-
-</script>
-
+  {% if datasets %}
+    {% include 'multiplicity/includes/charts.footer.html' %}
+  {% endif %}
 {% endblock %}

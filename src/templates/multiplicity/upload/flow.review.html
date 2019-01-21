@@ -59,8 +59,10 @@
         <thead>
           <tr>
             <th>{% if type == "stocks" %}Date{% else %}Timeframe{% endif %}</th>
-            <th>Material</th>
-            <th>Material classification</th>
+            {% if dataset.name != "Population" %}
+              <th>Material</th>
+              <th>Material classification</th>
+            {% endif %}
             <th>Quantity</th>
             {% if show_location %}
                 <th>Location</th>
@@ -85,9 +87,13 @@
                   <span class="date" title="From {{ details.from|date:"M d, Y" }} to {{ details.to|date:"M d, Y" }}">{{ details.timeframe }}</span>
                 {% endif %}
                 </td>
-                <td>{{ details.material }}</td>
-                <td class="shorten" title="{{ details.material_info.name }}">{{ details.material_info.code }}: {{ details.material_info.name }}</td>
-                <td>{{ details.quantity|intcomma }} {{ details.unit }}</td>
+                {% if dataset.name != "Population" %}
+                  <td>{{ details.material }}</td>
+                  <td class="shorten" title="{{ details.material_info.name }}">{{ details.material_info.code }}: {{ details.material_info.name }}</td>
+                  <td>{{ details.quantity|intcomma }} {{ details.unit }}</td>
+                {% else %}
+                  <td>{{ details.quantity|intcomma }}</td>
+                {% endif %}
                 {% if show_origin %}
                     <td>
                         {% if details.origin_info %}

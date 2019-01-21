@@ -47,7 +47,11 @@
       should appear in this file (in the same order). 
     </p>
 
-    <pre>{% if type == "stocks" %}Date{% else %}Timeframe name | From (date) | To (date){% endif %} | Material name | Material code | Quantity | Unit | {% if dataset.flows == 'destination_only' or dataset.flows == 'origin_only' %}Location{% else %}Origin | Destination{% endif %} | Comments</pre>
+    {% if dataset.name == "Population" %}
+      <pre>Date | Population (number of people) | Location | Comments</pre>
+    {% else %}
+      <pre>{% if type == "stocks" %}Date{% else %}Timeframe name | From (date) | To (date){% endif %} | Material name | Material code | Quantity | Unit | {% if dataset.flows == 'destination_only' or dataset.flows == 'origin_only' %}Location{% else %}Origin | Destination{% endif %} | Comments</pre>
+    {% endif %}
 
   </div>
 </div>

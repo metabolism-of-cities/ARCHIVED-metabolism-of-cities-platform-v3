@@ -1,0 +1,30 @@
+  <section id="datasets">
+    <div class="row">
+      <h3>Datasets</h3>
+    </div>
+
+    <div id="graph">
+      <div class="loading text-center text-2x pad-all mar-top">
+        <span class="mar-top pad-all">Loading graph</span>
+        <i class="fas fa-cog fa-spin mar-top"></i>
+      </div>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="300">Dataset</th>
+          <th>Coverage</th>
+          <th>Preview</th>
+        </tr>
+      </thead>
+      {% for details in datasets %}
+        <tr>
+          <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
+          <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
+          <td><a class="btn btn-sm btn-mint" data-id="{{ details.id }}" data-graph="{{ details.graph.id|default:4 }}" onclick="previewChart({{ details.id }}, {{ details.graph.id|default:4 }})"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  </section>
+
