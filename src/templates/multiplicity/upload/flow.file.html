@@ -48,7 +48,7 @@
     </p>
 
     {% if dataset.name == "Population" %}
-      <pre>Date | Population (number of people) | Location | Comments</pre>
+      <pre>Date | Group (if any, e.g. 'Female' or 'Children') | Population (number of people)| Location | Comments</pre>
     {% else %}
       <pre>{% if type == "stocks" %}Date{% else %}Timeframe name | From (date) | To (date){% endif %} | Material name | Material code | Quantity | Unit | {% if dataset.flows == 'destination_only' or dataset.flows == 'origin_only' %}Location{% else %}Origin | Destination{% endif %} | Comments</pre>
     {% endif %}

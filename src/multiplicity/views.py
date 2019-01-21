@@ -535,8 +535,8 @@ def upload_flow_review(request, city, type, id):
         column_destination = 5
         show_location = True
         if dataset.name == "Population":
-            column_count = 4
-            column_destination = 2
+            column_count = 5
+            column_destination = 3
     elif dataset.flows == 'origin_and_destination':
         column_count = 10
         column_origin = 7
@@ -567,9 +567,11 @@ def upload_flow_review(request, city, type, id):
 
                     if dataset.name == "Population":
                         material = "People"
+                        if row[1].strip():
+                            material = row[1]
                         material_code = "MF1.5.1"
                         date = row[0]
-                        qty = row[1]
+                        qty = row[2]
                         unit = "unit"
                     elif dataset.type == "stocks":
                         material = row[1].strip()
@@ -784,8 +786,8 @@ def upload_flow_meta(request, city, type, id):
         column_destination = 5
         show_location = True
         if dataset.name == "Population":
-            column_count = 4
-            column_destination = 2
+            column_count = 5
+            column_destination = 3
     elif dataset.flows == 'origin_and_destination':
         column_count = 10
         column_origin = 7
@@ -879,10 +881,12 @@ def upload_flow_meta(request, city, type, id):
 
                         if dataset.name == "Population":
                             material = "People"
+                            if row[1].strip():
+                                material = row[1]
                             material_code = "MF1.5.1"
                             date = row[0]
                             timeframe = row[0]
-                            qty = row[1]
+                            qty = row[2]
                             unit = "unit"
                         elif dataset.type == "stocks":
                             material = row[1].strip()

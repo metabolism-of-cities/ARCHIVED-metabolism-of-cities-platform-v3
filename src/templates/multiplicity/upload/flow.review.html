@@ -92,7 +92,7 @@
                   <td class="shorten" title="{{ details.material_info.name }}">{{ details.material_info.code }}: {{ details.material_info.name }}</td>
                   <td>{{ details.quantity|intcomma }} {{ details.unit }}</td>
                 {% else %}
-                  <td>{{ details.quantity|intcomma }}</td>
+                  <td>{{ details.quantity|intcomma }} ({{ details.material }})</td>
                 {% endif %}
                 {% if show_origin %}
                     <td>
