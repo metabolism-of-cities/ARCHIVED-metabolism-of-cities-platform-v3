@@ -50,89 +50,125 @@
 
 {% if request.user.is_staff %}
 
-  <h2>Information</h2>
+  <section class="information">
 
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="panel panel-success panel-colorful" style="opacity:0.7">
-        <div class="panel-body text-center">
-          <i class="fa fa-image icon-5x"></i>
-        </div>
-        <div class="pad-all text-center">
-          <p class="text-2x mar-no">Photos</p>
-          <p class="text-overflow pad-top">
-            <a class="btn btn-default" href="{% url 'multiplicity:photo_form' info.slug %}">Upload now</a>
-          </p>
-        </div>
-      </div>
-    </div><div class="col-sm-4">
-      <div class="panel panel-warning panel-colorful" style="opacity:0.7">
-        <div class="panel-body text-center">
-          <i class="fa fa-align-left icon-5x"></i>
-        </div>
-        <div class="pad-all text-center">
-          <p class="text-2x mar-no">Sector descriptions</p>
-          <p class="text-overflow pad-top">
-            <a class="btn btn-default" href="{% url 'multiplicity:information_form' info.slug %}">Upload now</a>
-          </p>
-        </div>
-      </div>
-    </div><div class="col-sm-4">
-      <div class="panel panel-pink panel-colorful" style="opacity:0.7">
-        <div class="panel-body text-center">
-          <i class="fa fa-book icon-5x"></i>
-        </div>
-        <div class="pad-all text-center">
-          <p class="text-2x mar-no">Publications</p>
-          <p class="text-overflow pad-top">
-            <a class="btn btn-default" href="{% url 'core:newreference' %}">Upload now</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+    <h2>Information</h2>
 
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="panel panel-success panel-colorful" style="opacity:0.7">
-        <div class="panel-body text-center">
-          <i class="fa fa-building icon-5x"></i>
+    <div class="row">
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-image icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'multiplicity:photo_form' info.slug %}">Photo</a>
+            </p>
+          </div>
         </div>
-        <div class="pad-all text-center">
-          <p class="text-2x mar-no">Organizations</p>
-          <p class="text-overflow pad-top">
-            <a class="btn btn-default" href="{% url 'core:admin_organization_referencespace' info.slug %}">Upload now</a>
-          </p>
+      </div><div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-align-left icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'multiplicity:information_form' info.slug %}">Sector info</a>
+            </p>
+          </div>
+        </div>
+      </div><div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-book icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Publication</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-building icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:admin_organization_referencespace' info.slug %}">Organization</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-users icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+            <a href="{% url 'multiplicity:upload_flow_file' info.slug 70 %}">Population</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="far fa-file icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Profile</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-sm-4">
-      <div class="panel panel-warning panel-colorful" style="opacity:0.7">
-        <div class="panel-body text-center">
-          <i class="fa fa-users icon-5x"></i>
+
+    <h2>Geo-spatial</h2>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="panel panel-primary panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fal fa-globe-africa icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">System Boundaries</a>
+            </p>
+          </div>
         </div>
-        <div class="pad-all text-center">
-          <p class="text-2x mar-no">Population</p>
-          <p class="text-overflow pad-top">
-          <a class="btn btn-default" href="{% url 'multiplicity:upload_flow_file' info.slug 70 %}">Upload now</a>
-          </p>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-primary panel-colorful">
+          <div class="panel-body text-center">
+            <i class="far fa-globe-africa icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Micro-territorial units</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-primary panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-globe-africa icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Maps</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-sm-4">
-      <div class="panel panel-pink panel-colorful" style="opacity:0.7">
-        <div class="panel-body text-center">
-          <i class="far fa-file icon-5x"></i>
-        </div>
-        <div class="pad-all text-center">
-          <p class="text-2x mar-no">Profile</p>
-          <p class="text-overflow pad-top">
-            <a class="btn btn-default" href="{% url 'core:newreference' %}">Upload now</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+
+  </section>
 
 {% endif %}
 
@@ -141,6 +177,15 @@
 {% block head %}
 <style type="text/css">
 textarea.form-control{height:200px}
+.information .panel {
+  opacity:0.7;
+  cursor:pointer;
+}
+.information .panel:hover {
+  opacity:1;
+  transition: all 0.8s;
+}
+
 </style>
 {% endblock %}
 
@@ -167,5 +212,13 @@ textarea.form-control{height:200px}
 {% endblock %}
 
 {% block footer %}
-
+<script type="text/javascript">
+$(function(){
+  $(".information .panel").click(function() {
+    link = $(this).find("a");
+    href = link.attr("href");
+    window.location = href;
+  });
+});
+</script>
 {% endblock %}
