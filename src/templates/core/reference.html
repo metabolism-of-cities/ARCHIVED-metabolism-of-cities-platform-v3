@@ -1,10 +1,14 @@
 {% extends 'multiplicity/base.html' %}
+
 {% load static %}
 
 {% block title %}{{ info.title }} | Publications | {% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
+
+{% include 'core/bibtext.html' %}
+{% include 'core/ris.html' %}
 
 {% if request.user.is_staff %}
   <a title="Edit tags" href="{% url 'core:admin_referencetags' info.id %}" id="editextrabutton" class="btn"><i class="psi-tag"></i></a>
@@ -56,7 +60,7 @@
               {% for details in info.organizations.all %}
                 <dt>Organization</dt>
                 <dd>
-                  <a href="{% url 'core:organization' details.id %}">{{ details.name }}</a>{% if details.parent %}, 
+                  <a href="{% url 'core:organization' details.id %}">{{ details.name }}</a>{% if details.parent %},
                   <a href="{% url 'core:organization' details.parent.id %}">{{ details.parent.name }}</a>{% endif %}
                 </dd>
               {% endfor %}
@@ -136,9 +140,9 @@
         <h2 class="panel-title">Download reference</h2>
       </div>
       <div class="panel-body">
-        <a class="btn btn-info" href="http://">Bibtex</a>
-        <a class="btn btn-info" href="http://">EndNote</a>
-        <a class="btn btn-info" href="http://">Zotero</a>
+        <a class="btn btn-info" data-toggle="modal" href="#bibtext-modal">Bibtex</a>
+        <a class="btn btn-info" data-toggle="modal" href="#ris-modal">RIS</a>
+        <a class="btn btn-info" data-toggle="modal" href="#ris-modal">RefWorks</a>
       </div>
     </div>
     <div class="panel panel-dark">
