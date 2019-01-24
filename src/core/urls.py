@@ -87,7 +87,6 @@ urlpatterns = [
     path('resources/publication/<int:id>', views.reference),
     path('resources/publications/<int:id>', views.reference, name='reference'),
     path('resources/publications/<int:id>/edit', views.referenceform, name='editreference'),
-    path('resources/publications/<int:id>/<str:export_method>', views.export_reference, name = 'export_reference'),
     path('resources/publications/add', views.referenceform, name='newreference'),
     path('resources/publications/create/<int:dataset>', views.referenceform, name='newflowreference'),
     path('resources/publications/tags/<int:tag>', views.references, name='tag_search'),

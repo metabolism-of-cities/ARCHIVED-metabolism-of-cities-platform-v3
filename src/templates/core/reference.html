@@ -139,6 +139,7 @@
       <div class="panel-heading">
         <h2 class="panel-title">Download reference</h2>
       </div>
+
       <div class="panel-body">
         <a class="btn btn-info" data-toggle="modal" href="#bibtex-modal">Bibtex</a>
         <a class="btn btn-info" data-toggle="modal" href="#ris-modal">RIS</a>
@@ -223,7 +224,6 @@ $(function(){
         document.body.appendChild(target);
     }
     target.textContent = elem.textContent;
-    console.log(elem.textContent);
     // select the content
     var currentFocus = document.activeElement;
     target.focus();
@@ -246,6 +246,9 @@ $(function(){
     return succeed;
   }
 
+  // Need to turn off modal's behavior of enforcing focus for copy to clipboard to work
+  // https://github.com/zenorocha/clipboard.js/issues/388
+  $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
   $("button.copy").click(function() {
     var target = $(this).data("target");
@@ -253,7 +256,10 @@ $(function(){
     copyToClipboard(document.getElementById(target));
     success = $("#"+success);
     success.text("Text was copied to clipboard");
-    
+  });
+
+  $("[data-toggle=modal]").click(function(){
+    $(".success").text("");
   });
 
 });

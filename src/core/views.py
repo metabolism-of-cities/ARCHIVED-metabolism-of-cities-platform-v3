@@ -234,13 +234,6 @@ def reference(request, id):
     context = { 'section': 'literature', 'page': 'publications', 'info': info, 'related': related, 'authors': authors, 'editlink': editlink, 'data': data, 'datatables': True }
     return render(request, 'core/reference.html', context)
 
-#GW: Export reference funcion 10/12
-def export_reference(request,id, export_method):
-    info = get_object_or_404(Reference, pk=id)
-    data = Data.objects.filter(dataset__references=info)
-    context = {'info': info}
-    return render(request, 'core/'+export_method+'.html', context)
-
 @login_required
 def referenceform(request, id=False, dataset=False):
     processes = Process.objects.filter(slug__isnull=False).order_by('id')
