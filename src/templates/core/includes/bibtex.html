@@ -1,0 +1,27 @@
+ <div class="modal fade" id="bibtex-modal" tabindex="-1" role="dialog" aria-labelledby="Bibtex" aria-hidden="true">
+  <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+         <h4 class="modal-title">Bibtex</h4>
+       </div>
+       <div id="form-modal-body" class="modal-body">
+
+<pre>@article{reference_tag,
+  author = "{{info.authorlist}}",
+  title = "{{info.title}}",{% if info.journal %}
+  journal = "{{info.journal}}",{% endif %}
+  year = {{info.year}},{% if info.url %}url = "{{info.url}}",{% endif %}{% if info.doi %}
+  doi = "{{info.doi}}",{% endif %}
+}</pre>
+
+       </div>
+      <div class="modal-footer">
+         <span id="bibtex-success">
+         </span>
+        <button type="button" class="btn btn-success copy" data-target="bibtex-ref" data-success="bibtex-success">Copy</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+     </div>
+   </div>
+ </div>

@@ -1,0 +1,27 @@
+<div class="modal fade" id="ris-modal" tabindex="-1" role="dialog" aria-labelledby="RIS" aria-hidden="true">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">RIS</h4>
+      </div>
+      <div id="form-modal-body" class="modal-body">
+<pre id="ris-ref">TY  - JOUR
+T1 - {{info.title}}
+AU - {{info.authorlist}}
+Y1 - {{info.year}}{% if info.url %}
+UR - {{info.url}}{% endif %}{% if info.doi %}
+DO - {{info.doi}}{% endif %}
+N2 - {{info.abstract}}
+ER - </pre>
+      </div>
+      <div class="modal-footer">
+         <span id="ris-success">
+         </span>
+        <button type="button" class="btn btn-success copy" data-target="ris-ref" data-success="ris-success">Copy</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
