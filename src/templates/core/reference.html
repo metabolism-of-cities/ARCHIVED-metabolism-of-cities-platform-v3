@@ -7,8 +7,8 @@
 
 {% block content %}
 
-{% include 'core/bibtext.html' %}
-{% include 'core/ris.html' %}
+{% include 'core/includes/bibtex.html' %}
+{% include 'core/includes/ris.html' %}
 
 {% if request.user.is_staff %}
   <a title="Edit tags" href="{% url 'core:admin_referencetags' info.id %}" id="editextrabutton" class="btn"><i class="psi-tag"></i></a>
@@ -140,7 +140,7 @@
         <h2 class="panel-title">Download reference</h2>
       </div>
       <div class="panel-body">
-        <a class="btn btn-info" data-toggle="modal" href="#bibtext-modal">Bibtex</a>
+        <a class="btn btn-info" data-toggle="modal" href="#bibtex-modal">Bibtex</a>
         <a class="btn btn-info" data-toggle="modal" href="#ris-modal">RIS</a>
         <a class="btn btn-info" data-toggle="modal" href="#ris-modal">RefWorks</a>
       </div>
@@ -207,5 +207,56 @@
 {% endblock %}
 
 {% block footer %}
+<script type="text/javascript">
+$(function(){
+
+  function copyToClipboard(elem) {
+    var targetId = "_hiddenCopyText_";
+    var origSelectionStart, origSelectionEnd;
+    target = document.getElementById(targetId);
+    if (!target) {
+        var target = document.createElement("textarea");
+        target.style.position = "absolute";
+        target.style.left = "-9999px";
+        target.style.bottom = "0";
+        target.id = targetId;
+        document.body.appendChild(target);
+    }
+    target.textContent = elem.textContent;
+    console.log(elem.textContent);
+    // select the content
+    var currentFocus = document.activeElement;
+    target.focus();
+    target.setSelectionRange(0, target.value.length);
+    
+    // copy the selection
+    var succeed;
+    try {
+    	  succeed = document.execCommand("copy");
+    } catch(e) {
+        succeed = false;
+        alert("Sorry, we could not copy the text");
+    }
+    // restore original focus
+    if (currentFocus && typeof currentFocus.focus === "function") {
+        currentFocus.focus();
+    }
+    
+    target.textContent = "";
+    return succeed;
+  }
+
+
+  $("button.copy").click(function() {
+    var target = $(this).data("target");
+    var success = $(this).data("success");
+    copyToClipboard(document.getElementById(target));
+    success = $("#"+success);
+    success.text("Text was copied to clipboard");
+    
+  });
+
+});
+</script>
 
 {% endblock %}
