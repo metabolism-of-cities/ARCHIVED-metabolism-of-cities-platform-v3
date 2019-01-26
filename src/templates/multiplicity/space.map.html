@@ -5,23 +5,53 @@
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
-{% if info.location.lat %}
-<div class="panel padding10">
+    <ul class="nav nav-tabs nav-justified ">
+        <li{% if tab == 'boundaries' %} class="active"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Boundaries</a></li>
+        <li><a href="http://">Infrastructure</a></li>
+        <li><a href="http://">Other maps</a></li>
+      </ul>
+
+<div class="panel">
 
   <div class="panel-content">
-    <div class="row">
-      <div class="col-lg-12">
-        <div id="map"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel-title">
-    <p>Map of <strong>{{ info.name }}</strong>.</p>
+      <div id="map"></div>
   </div>
 
 </div>
-{% endif %}
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>{{ boundary.name }}</h3>
+        {{ boundary.description }}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel panel-colorful panel-pink">
+      <div class="panel-body">
+        <h3>Download</h3>
+        <p>
+          You can download the coordinates as GeoJSON file below.
+        </p>
+        <p>
+          <a href="{% url 'multiplicity:download_location' info.slug boundary.id %}" class="btn btn-default"><i class="fa fa-download"></i> Download</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel">
+
+  <div class="panel-title">
+    <p>{{ boundary.description }}</p>
+  </div>
+
+</div>
 
 {% endblock %}
 
@@ -48,7 +78,7 @@
         <li><a href="./"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
         <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
-        <li><a href="{% url 'multiplicity:map_home' info.slug %}">Maps</a></li>
+        <li><a href="{% url 'multiplicity:map' info.slug %}">Maps</a></li>
         <li class="active">{{ page|title }}</li>
     </ol>
 
@@ -56,13 +86,17 @@
 {% endblock %}
 
 {% block footer %}
-  {% if info.location %}
+  {% if boundary %}
     <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
     <script type="text/javascript">
 
-      var map = L.map('map').setView([{{ info.location.lat }}, {{ info.location.lng }}], {{ info.location.zoom }});
+      {% if boundary %}
+        var map = L.map('map');
+      {% else %}
+        var map = L.map('map').setView([{{ info.location.lat }}, {{ info.location.lng }}], {{ boundary.default_zoom }});
+      {% endif %}
 
-      var geojson = {{ info.location.geojson|safe }}
+      var geojson = {{ boundary.geojson|safe }}
       var geojsonlayer = L.geoJSON(geojson).addTo(map);
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {

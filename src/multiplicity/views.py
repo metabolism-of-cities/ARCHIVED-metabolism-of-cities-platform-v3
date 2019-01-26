@@ -35,6 +35,9 @@ import json
 # To search annotate
 from django.db.models import Q
 
+# To use factory forms
+from django.forms import modelform_factory
+
 def index(request):
     list = ReferenceSpace.objects.filter(type__id=3)
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
@@ -96,10 +99,17 @@ def space(request, city, type, space):
     }
     return render(request, 'multiplicity/space.html', context)
 
-def map(request, city, type='boundaries'):
+def map(request, city, type='boundaries', id=False):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 'topics': topics }
+    if id:
+        boundary = get_object_or_404(ReferenceSpaceLocation, pk=id)
+    else:
+        boundary = info.location
+
+    if type == 'boundaries':
+        tab = 'boundaries'
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 'topics': topics, 'boundary': boundary, 'tab': tab }
     return render(request, 'multiplicity/space.map.html', context)
 
 def sector(request, city, sector):
@@ -361,6 +371,15 @@ def topicmap(request, city, theme, topic):
             count[details.type.id] = 1
     context = { 'section': 'cities', 'menu': topic.theme.slug, 'page': topic.slug, 'info': info, 'topic': topic, 'spaces': spaces, 'types': types, 'count': count, 'tab': 'overview'}
     return render(request, 'multiplicity/topic.html', context)
+
+# Download options
+
+def download_location(request, city, id):
+    info = get_object_or_404(ReferenceSpaceLocation, pk=id)
+    response = HttpResponse(info.geojson, content_type="application/json")
+    response['Content-Disposition'] = 'attachment; filename="' + info.name + '.json"'
+    return response
+
 
 @login_required
 def upload_flow(request, city, type='flows'):
@@ -1069,6 +1088,45 @@ def upload_flow_meta(request, city, type, id):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu': 'upload', 'file': csv_file, 'info': info, 'type': dataset.type, 'dataset': dataset, 'datasetform': datasetform, 'referenceform': referenceform, 'dqi': dqi, 'topics': topics }
     return render(request, 'multiplicity/upload/flow.meta.html', context)
+
+
+@login_required
+def upload_systemboundaries(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    locations = ReferenceSpaceLocation.objects.filter(space=info).order_by('name')
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'locations': locations }
+    return render(request, 'multiplicity/upload/systemboundaries.html', context)
+
+
+@login_required
+def upload_systemboundary(request, city, location=False):
+    if location:
+            location = ReferenceSpaceLocation.objects.get(pk=location)
+
+    info = get_object_or_404(ReferenceSpace, slug=city)
+
+    Form = modelform_factory(ReferenceSpaceLocation, 
+        fields=('name', 'source', 'timeframe', 'description', 'geojson'),
+        labels={"lat": "Latitude", "lng": "Longitude"}
+    )
+    if request.method == 'POST':
+        form = Form(request.POST, request.FILES, instance=location)
+        if form.is_valid():
+            boundary = form.save(commit=False)
+            boundary.space = info
+            boundary.save()
+            messages.success(request, 'The boundaries have been saved.')
+            return redirect(reverse('multiplicity:map', args=[info.slug, boundary.id]))
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    else:
+        form = Form(instance=location)
+
+    locations = ReferenceSpaceLocation.objects.filter(space=info).order_by('name')
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'locations': locations, 'form': form }
+    return render(request, 'multiplicity/upload/systemboundary.html', context)
+
 
 def infrastructure_list(request, topic, city):
     info = get_object_or_404(ReferenceSpace, slug=city)

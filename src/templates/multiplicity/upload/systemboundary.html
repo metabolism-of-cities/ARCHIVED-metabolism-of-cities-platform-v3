@@ -1,0 +1,61 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<h2>System Boundary</h2>
+
+<form method="post" class="form form-horizontal boxit pad-all" enctype="multipart/form-data">
+  {% bootstrap_form form layout='horizontal' %}
+  {% buttons %}
+    <div class="col-md-offset-3 col-md-9">
+      <button type="submit" class="btn btn-success">Save</button>
+    </div>
+  {% endbuttons %}
+  {% csrf_token %}
+</form>
+
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Upload</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
+        <li class="active">System boundaries</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+  $(".information .panel").click(function() {
+    link = $(this).find("a");
+    href = link.attr("href");
+    window.location = href;
+  });
+});
+</script>
+{% endblock %}

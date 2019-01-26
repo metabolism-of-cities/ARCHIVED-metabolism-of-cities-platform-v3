@@ -528,5 +528,13 @@
 {% block footer %}
 {% endblock %}
 
+{% if DEBUG %}
+  <script type="text/javascript">
+  $(function(){
+    $("form").attr("autocomplete", "off");
+  });
+  </script>
+{% endif %}
+
 </body>
 </html>

@@ -44,8 +44,10 @@ urlpatterns = [
     path('<slug:city>/profile/<slug:topic>', views.topic, name='topic'),
     #path('<slug:city>/<slug:topic>', views.topic, name='topic'),
 
-    path('<slug:city>/maps', views.map, name='map_home'),
+    path('<slug:city>/maps', views.map, name='map'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),
+    path('<slug:city>/maps/boundaries/<int:id>', views.map, name='map'),
+    path('<slug:city>/maps/boundaries/<int:id>/download', views.download_location, name='download_location'),
     path('<slug:city>/datasets', views.datasets, name='datasets'),
     path('<slug:city>/resources/photos', views.photos, name='photos'),
     path('<slug:city>/resources/<slug:slug>', views.resources, name='resources'),
@@ -75,6 +77,11 @@ urlpatterns = [
     path('<slug:city>/upload/flow/<int:type>/<int:id>', views.upload_flow_review, name='upload_flow_review'),
     path('<slug:city>/upload/flow/<int:type>/<int:id>/meta', views.upload_flow_meta, name='upload_flow_meta'),
     path('<slug:city>/upload/stock', views.upload_flow, {'type': 'stocks'}, name='upload_stock'),
+
+    # Uploading geospatial data
+    path('<slug:city>/upload/systemboundaries', views.upload_systemboundaries, name='upload_systemboundaries'),
+    path('<slug:city>/upload/systemboundaries/create', views.upload_systemboundary, name='upload_systemboundary'),
+    path('<slug:city>/upload/systemboundaries/<int:location>', views.upload_systemboundary, name='upload_systemboundary'),
 
     path('<slug:city>/infrastructure/<slug:type>/<slug:space>', views.space, name='space'),
     path('<slug:city>/infrastructure/<slug:type>', views.space_list, name='space_list'),
