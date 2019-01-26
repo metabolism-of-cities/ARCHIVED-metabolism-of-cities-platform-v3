@@ -733,6 +733,8 @@ article.sector section#info .single-subsector-content, .back-subsectors {
 
 article.sector section#info .subsector-panels .single-subsector-panel .panel img {
   width: 100%;
+  height: 190px;
+  object-fit: cover;
 }
 
 article.sector section#info .single-subsector-content .photos {

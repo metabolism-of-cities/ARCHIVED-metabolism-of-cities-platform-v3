@@ -30,7 +30,7 @@
         <div class="col-lg-4 col-sm-6 flex-none single-subsector-panel">
           <div class="panel height-100">
             {% if details.photo %}
-              <img class="img-responsive showpointer" onclick="showSubSector('{{ details.title }}')" src="{{ details.photo.image.medium.url }}" alt="">
+              <img class="img-responsive showpointer" onclick="showSubSector('{{ details.title }}')" src="https://prototype.metabolismofcities.org{{ details.photo.image.medium.url }}" alt="">
             {% endif %}
             <div class="pad-all">
               <h3>{{ details.title }}</h3>
