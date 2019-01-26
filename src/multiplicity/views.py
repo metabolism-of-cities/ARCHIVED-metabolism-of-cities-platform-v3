@@ -107,10 +107,15 @@ def map(request, city, type='boundaries', id=False):
     else:
         boundary = info.location
     list = ReferenceSpaceLocation.objects.filter(space=info)
-
+    editlink = reverse('multiplicity:upload_systemboundary', args=[info.slug, boundary.id])
+    addlink = reverse('multiplicity:upload_systemboundary', args=[info.slug])
     if type == 'boundaries':
         tab = 'boundaries'
-    context = { 'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 'topics': topics, 'boundary': boundary, 'tab': tab, 'list': list }
+    context = { 
+        'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 
+        'topics': topics, 'boundary': boundary, 'tab': tab, 'list': list,
+        'editlink': editlink, 'addlink': addlink
+    }
     return render(request, 'multiplicity/space.map.html', context)
 
 def sector(request, city, sector):
@@ -1111,7 +1116,10 @@ def upload_systemboundary(request, city, location=False):
         labels={"lat": "Latitude", "lng": "Longitude"}
     )
     if request.method == 'POST':
-        form = Form(request.POST, request.FILES, instance=location)
+        if location:
+            form = Form(request.POST, request.FILES, instance=location)
+        else:
+            form = Form(request.POST, request.FILES)
         if form.is_valid():
             boundary = form.save(commit=False)
             boundary.space = info
@@ -1122,7 +1130,10 @@ def upload_systemboundary(request, city, location=False):
             messages.warning(request, 'We could not save your form, please correct the errors')
 
     else:
-        form = Form(instance=location)
+        if location:
+            form = Form(instance=location)
+        else:
+            form = Form()
 
     locations = ReferenceSpaceLocation.objects.filter(space=info).order_by('name')
     context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'locations': locations, 'form': form }
@@ -1468,5 +1479,10 @@ def admin_referencephoto(request, id=False):
 
     context = { 'navbar': 'backend', 'info': info, 'form': form }
     return render(request, 'multiplicity/admin/referencephoto.html', context)
+
+def temp_slide(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    context = { 'section': 'cites', 'menu': 'dashboard', 'info': info }
+    return render(request, 'multiplicity/slide.html', context)
 
 

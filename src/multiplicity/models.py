@@ -163,7 +163,7 @@ class ReferenceSpaceLocation(models.Model):
     def __str__(self):
         return self.name or 'Location for ' + self.space.name
     class Meta:
-        ordering = ["name"]
+        ordering = ["-timeframe"]
 
 class ReferenceSpaceLocationForm(ModelForm):
     class Meta:

@@ -1,0 +1,52 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Overview</h3>
+        <ol>
+          <li>What are system boundaries?</li>
+          <li>How to upload system boundaries</li>
+          <li>Preparing data</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.panel-body h3{font-size:220%;margin-bottom:44px}
+.panel-body li{font-size:170%}
+.panel-body li li {font-size:90%}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Data Contributor Instruction Videos</h1>
+        <p style="color:#fff">System Boundaries</p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

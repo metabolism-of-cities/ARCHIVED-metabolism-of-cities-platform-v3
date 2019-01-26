@@ -93,6 +93,9 @@ urlpatterns = [
     path('<slug:city>/<slug:main>/<slug:topic>/output', views.topic, {'tab': 'output'}, name='subtopic_output'),
     #path('<slug:city>/<slug:theme>/<slug:topic>/<slug:type>', views.space_list, name='space_list'),
 
+    # This view is used to show the content of a slide, when recording a video
+    path('<slug:city>/slide', views.temp_slide, name='temp_slide'),
+
     path('materials', views.materials, name='materials'),
     path('<slug:slug>', views.detail, name='city'),
     path('profile', views.detail, name='profile'),
