@@ -106,10 +106,11 @@ def map(request, city, type='boundaries', id=False):
         boundary = get_object_or_404(ReferenceSpaceLocation, pk=id)
     else:
         boundary = info.location
+    list = ReferenceSpaceLocation.objects.filter(space=info)
 
     if type == 'boundaries':
         tab = 'boundaries'
-    context = { 'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 'topics': topics, 'boundary': boundary, 'tab': tab }
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 'topics': topics, 'boundary': boundary, 'tab': tab, 'list': list }
     return render(request, 'multiplicity/space.map.html', context)
 
 def sector(request, city, sector):

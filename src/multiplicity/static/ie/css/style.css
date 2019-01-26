@@ -80,6 +80,20 @@
 body{font-size:15px;line-height:1.5}
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
 .panel-colorful h1, .panel-colorful h2, .panel-colorful h3, .panel-colorful h4, .panel-colorful h5, .panel-colorful h6{color:#fff}
+h2 {font-size:24px}
+h3 {font-size:22px}
+h4 {font-size:21px}
+.panel > .panel-body > h2 {
+  margin-top:8px;
+}
+ul.nolist {
+  padding:0;
+}
+ul.nolist li {
+  list-style:none;
+  margin-bottom:10px;
+}
+
 /*.main-content-block .references a span{display:block;color:#333}*/
 .main-content-block .alert-info a:not(.btn){color:#fff;text-decoration:underline}
 .fa-plus-square.fa-lg{margin-right:6px}

@@ -129,6 +129,8 @@ class TaskForceMember(models.Model):
     end = models.DateField(null=True, blank=True)
     notify_of_new_topics = models.BooleanField()
     objects = TaskForceQuerySet.as_manager()
+    def __str__(self):
+        return '%s (%s)' % (self.user.name, self.taskforce.name)
 
 class TaskForceMemberForm(ModelForm):
     class Meta:
