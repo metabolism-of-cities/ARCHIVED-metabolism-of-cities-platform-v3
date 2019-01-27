@@ -21,19 +21,19 @@
 </div>
 
 <div class="row blog">
-{% for details in collection.video_set.all %}
+{% for details in list %}
   <div class="col-lg-4">
     <div class="panel pad-all">
         <div class="blog-header">
-          <a href="videos/{{ details.id }}">
-          {% if details.site == "youtube" %}
+          <a href="{% url 'core:video' details.id %}">
+          {% if details.website == "youtube" %}
             <img class="img-responsive" src="https://img.youtube.com/vi/{{ details.url }}/0.jpg" alt="">
           {% endif %}
           </a>
         </div>
         <div class="blog-content">
             <div class="blog-title media-block">
-                <a href="videos/{{ details.id }}" class="btn-link">
+                <a href="{% url 'core:video' details.id %}" class="btn-link">
                     <h2>{{ details.title }}</h2>
                 </a>
             </div>

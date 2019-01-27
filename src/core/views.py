@@ -29,9 +29,10 @@ def videos(request, collection=False):
         id = 150
     page = Article.objects.get(pk=id)
     collections = VideoCollection.on_site.all()
+    list = Video.on_site.filter(collection=collection)
     addlink = '/admin/videos/create'
     context = { 'section': 'resources', 'page': 'videos', 'collection': collection, 'page': page, 'addlink': addlink,
-    'collections': collections }
+    'collections': collections, 'list': list }
     return render(request, 'core/videos.html', context)
 
 def video(request, id):
