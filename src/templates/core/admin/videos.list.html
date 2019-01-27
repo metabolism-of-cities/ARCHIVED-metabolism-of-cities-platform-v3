@@ -21,8 +21,7 @@
             <thead>
               <tr>
                 <th>Title</th>
-                <th>Date</th>
-                <th>Author</th>
+                <th>Collection</th>
                 <th>Options</th>
               </tr>
             </thead>
@@ -30,8 +29,7 @@
             {% for details in list %}
               <tr>
                 <td>{{ details.title }}</td>
-                <td>{{ details.date }}</td>
-                <td>{{ details.author }}</td>
+                <td>{{ details.collection }}</td>
                 <td><a class="btn btn-info" href="{% url 'core:admin_video' details.id %}"><i class="fa fa-pencil"></i> Edit</a></td>
               </tr>
             {% endfor %}
@@ -41,6 +39,7 @@
         </div>
     </div>
   <p class="pad-top"><a href="{% url 'core:admin_video_create' %}" class="btn btn-success"><i class="fas fa-plus fa-fw"></i> Add new video</a></p>
+
 </div>
 
 

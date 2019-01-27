@@ -16,14 +16,22 @@ from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponseRedirect
 
 # Create your views here.
-def videos(request):
-    list = Video.on_site.all().order_by('title')
+def videos(request, collection=False):
+    if not collection:
+        if request.site.id == 1:
+            collection = 4
+        else:
+            collection = 6
+
+    collection = get_object_or_404(VideoCollection, pk=collection)
     id = 87
     if request.site.id == 2:
         id = 150
     page = Article.objects.get(pk=id)
+    collections = VideoCollection.on_site.all()
     addlink = '/admin/videos/create'
-    context = { 'section': 'resources', 'page': 'videos', 'list': list, 'page': page, 'addlink': addlink }
+    context = { 'section': 'resources', 'page': 'videos', 'collection': collection, 'page': page, 'addlink': addlink,
+    'collections': collections }
     return render(request, 'core/videos.html', context)
 
 def video(request, id):

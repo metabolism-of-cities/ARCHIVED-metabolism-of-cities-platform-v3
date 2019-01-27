@@ -10,9 +10,10 @@
     <div class="col-lg-12">
         <div class="panel panel-body">
           <div class="panel-heading">
-              <h3>Videos</h3>
+            <h3>Videos</h3>
           </div>
           <div class="panel-body">
+            <p><strong>Collection: {{ collection }}</strong></p>
             {{ page.content|safe }}
           </div>
         </div>
@@ -20,20 +21,20 @@
 </div>
 
 <div class="row blog">
-{% for info in list %}
+{% for details in collection.video_set.all %}
   <div class="col-lg-4">
     <div class="panel pad-all">
         <div class="blog-header">
-          <a href="videos/{{ info.id }}">
-          {% if info.site == "youtube" %}
-            <img class="img-responsive" src="https://img.youtube.com/vi/{{ info.url }}/0.jpg" alt="Image">
+          <a href="videos/{{ details.id }}">
+          {% if details.site == "youtube" %}
+            <img class="img-responsive" src="https://img.youtube.com/vi/{{ details.url }}/0.jpg" alt="">
           {% endif %}
           </a>
         </div>
         <div class="blog-content">
             <div class="blog-title media-block">
-                <a href="videos/{{ info.id }}" class="btn-link">
-                    <h2>{{ info.title }}</h2>
+                <a href="videos/{{ details.id }}" class="btn-link">
+                    <h2>{{ details.title }}</h2>
                 </a>
             </div>
         </div>
@@ -47,6 +48,18 @@
 
 {% endfor %}
 </div>
+
+{% if collections.count > 1 %}
+
+  <h2>Our video collections</h2>
+
+  <ul>
+    {% for details in collections %}
+      <li><a href="{% url 'core:videocollection' details.id %}">{{ details.title }}</a></li>
+    {% endfor %}
+  </ul>
+
+{% endif %}
 
 {% endblock %}
 
