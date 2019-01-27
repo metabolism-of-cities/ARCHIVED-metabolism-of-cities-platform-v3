@@ -13,12 +13,44 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-6">
-    <div class="panel panel-body">
-      <div class="panel-body text-justify">
+
+  <div class="col-lg-8">
+      <div class="text-justify">
         <h4>Summary</h4>
         <p>{{ info.description|safe }}</p>
+    </div>
+
+    <div class="panel panel-default panel-body statusdetails">
+
+      <div class="row">
+        {% if info.start_date %}
+          <div class="col-md-4">
+            <p>Start date</p>
+            <p>{{ info.start_date|date:"M d, Y" }}</p>
+          </div>
+        {% endif %}
+
+        {% if info.start_date %}
+          <div class="col-md-4">
+            <p>End date</p>
+            <p>{{ info.end_date|date:"M d, Y" }}</p>
+          </div>
+        {% endif %}
+
+          <div class="col-md-4">
+            <p>Status</p>
+            <p>{{ info.get_status_display }}</p>
+          </div>
+
+        {% if info.status != 'finished' and info.target_finish_date %}
+          <div class="col-md-4">
+            <p>Targete completion date</p>
+            <p>{{ info.target_finish_date }}</p>
+          </div>
+        {% endif %}
+
       </div>
+
     </div>
 
     {% if references %}
@@ -26,10 +58,19 @@
         {% include 'core/includes/references.list.html' %}
     {% endif %}
 
+    <p>
+      <a href="{% url 'core:projects' info.type %}" class="btn btn-info">
+        Back to list
+      </a>
+    </p>
+
+
   </div>
-  <div class="col-lg-6">
-    <div class="panel panel-body panel-colorful panel-default">
-      <div class="panel-body panel-colorful panel-default">
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-body panel-colorful panel-success">
+
+        <h2><i class="fa fa-users"></i> Details</h2>
 
         <dl class="dl">
           {% if info.type == 'regular' %}
@@ -54,24 +95,6 @@
             <dd>{{ info.institution }}</dd>
           {% endif %}
 
-          {% if info.start_date %}
-            <dt>Start date</dt>
-            <dd>{{ info.start_date|date:"M d, Y" }}</dd>
-          {% endif %}
-
-          {% if info.end_date %}
-            <dt>End date</dt>
-            <dd>{{ info.end_date|date:"M d, Y" }}</dd>
-          {% endif %}
-
-            <dt>Status</dt>
-            <dd>{{ info.get_status_display }}</dd>
-
-          {% if info.status != 'finished' and info.target_finish_date %}
-            <dt>Target completion date</dt>
-            <dd>{{ info.target_finish_date }}</dd>
-          {% endif %}
-
           {% if info.url %}
             <dt>Website</dt>
             <dd>
@@ -80,23 +103,35 @@
           {% endif %}
 
         </dl>
-
       </div>
     </div>
+
+    <div class="panel panel-colorful panel-warning">
+      <div class="panel-body">
+        <h3>Contribute</h3>
+        <p>
+          Do you see any errors or do you know of any missing information?
+        </p>
+        <ul class="nolist">
+          <li><a href="{% url 'core:contact' %}" class="btn btn-default"><i class="fa fa-envelope"></i> Contact us</a></li>
+          <li><a href="{% url 'core:project_form' %}" class="btn btn-default"><i class="fa fa-plus"></i> Add your own project</a></li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<p>
-  <a href="{% url 'core:projects' info.type %}" class="btn btn-info">
-    Back to list
-  </a>
-</p>
 
 {% endblock %}
 
 {% block head %}
 <style type="text/css">
 .dl dt{margin-top:30px}
+.statusdetails .col-md-4 p:first-child {
+  font-weight:bold;
+}
+
 </style>
 {% endblock %}
 

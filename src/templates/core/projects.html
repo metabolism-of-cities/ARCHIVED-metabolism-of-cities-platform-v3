@@ -17,24 +17,34 @@
   </div>
 </div>
 
-<table class="table table-striped">
+<table class="table table-striped datatable">
   <thead>
     <tr>
-      <th>Title</th>
+      <th>Title and institution</th>
       {% if page.title == "Projects" %}
         <th>Project leader</th>
       {% else %}
         <th>Researcher</th>
       {% endif %}
-      <th>Institution</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody>
   {% for details in list %}
     <tr>
-      <td><a href="{% url 'core:project' details.type details.id %}">{{ details.name }}</a></td>
+      <td><a href="{% url 'core:project' details.type details.id %}">{{ details.name }}</a><br>
+        <em>{{ details.institution }}</em>
+      </td>
       <td>{{ details.researcher }}</td>
-      <td>{{ details.institution }}</td>
+      <td data-sort="{{ details.start_date|date:"Ymd" }}">{{ details.status }}<br>
+
+      {% if details.start_date and not details.end_date %}
+        Start: {{ details.start_date|date:"Y" }}
+      {% elif details.start_date and details.end_date %}
+        {{ details.start_date|date:"Y" }}-{{ details.start_date|date:"Y" }}
+      {% endif %}
+      
+      </td>
     </tr>
   {% endfor %}
   </tbody>
@@ -43,6 +53,14 @@
 {% endblock %}
 
 {% block head %}
+<style type="text/css">
+td {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+</style>
 {% endblock %}
 
 {% block sidebar %}

@@ -510,7 +510,7 @@ def projects(request, type, status=False):
             page = 148
     page = get_object_or_404(Article, pk=page)
     addlink = reverse('core:admin_project_create')
-    context = { 'section': 'community', 'list': list, 'page': page, 'addlink': addlink }
+    context = { 'section': 'community', 'list': list, 'page': page, 'addlink': addlink, 'datatables': True }
     return render(request, 'core/projects.html', context)
 
 def project(request, type, id):
