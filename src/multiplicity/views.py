@@ -1139,6 +1139,32 @@ def upload_systemboundary(request, city, location=False):
     context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'locations': locations, 'form': form }
     return render(request, 'multiplicity/upload/systemboundary.html', context)
 
+@login_required
+def upload_mtu(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info }
+    return render(request, 'multiplicity/upload/mtu.html', context)
+
+def upload_mtu_review(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    file = request.FILES['file']
+    filename = str(uuid.uuid4())
+    path = settings.MEDIA_ROOT + '/json/' + filename
+
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+    with open(path) as json_data:
+        data = json.load(json_data)
+
+    for record in data['features']:
+        properties = record['properties']
+        geometry = record['geometry']
+
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'properties': properties, 'geometry': geometry }
+    return render(request, 'multiplicity/upload/mtu.review.html', context)
+
 
 def infrastructure_list(request, topic, city):
     info = get_object_or_404(ReferenceSpace, slug=city)

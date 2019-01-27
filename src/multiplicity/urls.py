@@ -83,6 +83,9 @@ urlpatterns = [
     path('<slug:city>/upload/systemboundaries/create', views.upload_systemboundary, name='upload_systemboundary'),
     path('<slug:city>/upload/systemboundaries/<int:location>', views.upload_systemboundary, name='upload_systemboundary'),
 
+    path('<slug:city>/upload/mtu', views.upload_mtu, name='upload_mtu'),
+    path('<slug:city>/upload/mtu/review', views.upload_mtu_review, name='upload_mtu_review'),
+
     path('<slug:city>/infrastructure/<slug:type>/<slug:space>', views.space, name='space'),
     path('<slug:city>/infrastructure/<slug:type>', views.space_list, name='space_list'),
     path('<slug:city>/infrastructure/<slug:topic>', views.infrastructure_list, name='infrastructure_list'),

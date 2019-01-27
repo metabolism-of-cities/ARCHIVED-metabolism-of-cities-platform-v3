@@ -1,0 +1,69 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<h2>Micro-territorial units</h2>
+
+<div class="panel">
+  <div class="panel-body">
+
+    {{ properties }}
+
+    <h2>Geo</h2>
+
+    {{ geometry }}
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+#textbox{display:none}
+textarea.form-control{height:250px;display:block;margin-bottom:10px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Upload</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
+        <li class="active">Micro-territorial units</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+$(function(){
+  $(".selectform a").click(function(e){
+    e.preventDefault();
+    $(".selectform li").removeClass("active");
+    $(this).closest("li").addClass("active");
+    var id = $(this).data("id");
+    $(".forms form").hide();
+    $(".forms form#" + id).show();
+  });
+});
+</script>
+{% endblock %}

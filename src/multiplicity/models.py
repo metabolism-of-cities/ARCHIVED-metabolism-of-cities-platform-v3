@@ -155,6 +155,7 @@ class ReferenceSpaceLocation(models.Model):
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
     lat = models.CharField(max_length=20, null=True, blank=True)
     lng = models.CharField(max_length=20, null=True, blank=True)
+    area = models.FloatField(null=True, blank=True)
     default_zoom = models.PositiveSmallIntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     timeframe = models.CharField(max_length=255, null=True, blank=True)
