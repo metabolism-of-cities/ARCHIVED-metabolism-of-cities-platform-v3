@@ -36,12 +36,12 @@
         <em>{{ details.institution }}</em>
       </td>
       <td>{{ details.researcher }}</td>
-      <td data-sort="{{ details.start_date|date:"Ymd" }}">{{ details.status }}<br>
+      <td data-sort="{% if details.start_date %}{{ details.start_date|date:"Ymd" }}{% else %}{{ details.status }}{% endif %}">{{ details.status }}<br>
 
       {% if details.start_date and not details.end_date %}
-        Start: {{ details.start_date|date:"Y" }}
+        <em>Start: {{ details.start_date|date:"Y" }}</em>
       {% elif details.start_date and details.end_date %}
-        {{ details.start_date|date:"Y" }}-{{ details.start_date|date:"Y" }}
+        <em>{{ details.start_date|date:"Y" }}-{{ details.end_date|date:"Y" }}</em>
       {% endif %}
       
       </td>

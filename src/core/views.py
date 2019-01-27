@@ -495,9 +495,9 @@ def updateorgs(request):
 
 def projects(request, type, status=False):
     if status:
-        list = Project.on_site.filter(type=type, status=status)
+        list = Project.on_site.filter(type=type, status=status, active=True, pending_review=False)
     else:
-        list = Project.on_site.filter(type=type)
+        list = Project.on_site.filter(type=type, active=True, pending_review=False)
     if request.site.id == 1:
         if type == 'projects':
             page = 50
