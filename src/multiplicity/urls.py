@@ -45,7 +45,10 @@ urlpatterns = [
     #path('<slug:city>/<slug:topic>', views.topic, name='topic'),
 
     path('<slug:city>/maps', views.map, name='map'),
+    path('<slug:city>/maps/mtu', views.mtu_map, name='map_mtu'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),
+    path('<slug:city>/mtu/<slug:type>/<slug:space>', views.space, name='mtu_space'),
+    path('<slug:city>/maps/mtu/<slug:type>', views.mtu_map, name='map_mtu'),
     path('<slug:city>/maps/boundaries/<int:id>', views.map, name='map'),
     path('<slug:city>/maps/boundaries/<int:id>/download', views.download_location, name='download_location'),
     path('<slug:city>/datasets', views.datasets, name='datasets'),
@@ -84,7 +87,7 @@ urlpatterns = [
     path('<slug:city>/upload/systemboundaries/<int:location>', views.upload_systemboundary, name='upload_systemboundary'),
 
     path('<slug:city>/upload/mtu', views.upload_mtu, name='upload_mtu'),
-    path('<slug:city>/upload/mtu/review', views.upload_mtu_review, name='upload_mtu_review'),
+    path('<slug:city>/upload/mtu/<slug:filename>', views.upload_mtu_review, name='upload_mtu_review'),
 
     path('<slug:city>/infrastructure/<slug:type>/<slug:space>', views.space, name='space'),
     path('<slug:city>/infrastructure/<slug:type>', views.space_list, name='space_list'),

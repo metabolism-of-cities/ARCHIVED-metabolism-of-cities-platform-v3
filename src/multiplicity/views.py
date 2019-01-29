@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup, ReferencePhoto, ReferencePhotoForm
+from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feature, ReferenceSpaceCSV, ReferenceSpaceLocation, ReferenceSpaceFeature, ReferenceSpaceForm, ReferenceSpaceLocationForm, DQI, DQIRating, Information, GraphType, DatasetType, DatasetTypeForm, DatasetTypeStructure, InformationForm, PhotoForm, Photo, ProcessGroup, ReferencePhoto, ReferencePhotoForm, MTU
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -91,7 +91,7 @@ def space(request, city, type, space):
     photouploadlink = '/cities/'+info.slug+'/photo?space='+str(space.id)
     editlink = '/admin/multiplicity/referencespace/'+str(space.id)+'/change/'
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'infrastructure', 'page': type.topic.slug, 'info': info, 
+    context = { 'section': 'cities', 'menu': 'infrastructure', 'info': info, 
     'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
     'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 
     'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
@@ -112,11 +112,28 @@ def map(request, city, type='boundaries', id=False):
     if type == 'boundaries':
         tab = 'boundaries'
     context = { 
-        'section': 'cities', 'menu':  'resources', 'page': type, 'info': info, 
+        'section': 'cities', 'menu':  'resources', 'page': 'maps', 'info': info, 
         'topics': topics, 'boundary': boundary, 'tab': tab, 'list': list,
         'editlink': editlink, 'addlink': addlink
     }
     return render(request, 'multiplicity/space.map.html', context)
+
+def mtu_map(request, city, type=False):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    mtu_list = MTU.objects.filter(space=info)
+    
+    if type:
+        type = get_object_or_404(ReferenceSpaceType, slug=type)
+    else:
+        type = mtu_list[0].type
+    list = ReferenceSpace.objects.filter(city=info, type=type)
+    tab = 'mtu'
+    context = { 
+        'section': 'cities', 'menu':  'resources', 'info': info, 
+        'tab': tab, 'list': list, 'page': 'maps', 'datatables': True, 
+        'mtu_list': mtu_list, 'type': type, 
+    }
+    return render(request, 'multiplicity/mtu.map.html', context)
 
 def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -1142,27 +1159,86 @@ def upload_systemboundary(request, city, location=False):
 @login_required
 def upload_mtu(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
+    if 'file' in request.FILES:
+        file = request.FILES['file']
+        filename = str(uuid.uuid4())
+        path = settings.MEDIA_ROOT + '/json/' + filename
+
+        with open(path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+
+        return redirect(reverse('multiplicity:upload_mtu_review', args=[info.slug, filename]))
+
     context = { 'section': 'cities', 'menu': 'upload', 'info': info }
     return render(request, 'multiplicity/upload/mtu.html', context)
 
-def upload_mtu_review(request, city):
+def upload_mtu_review(request, city, filename):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    file = request.FILES['file']
-    filename = str(uuid.uuid4())
+
     path = settings.MEDIA_ROOT + '/json/' + filename
 
-    with open(path, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
+    try:
+        with open(path) as json_data:
+            data = json.load(json_data)
+    except:
+        import os
+        try:
+            os.remove(path)
+            error = "Your geojson file is invalid. Please verify that this is a correct geojson file. You can try validating it on <a href='http://http://geojson.io/'>geojson.io</a>"
+        except:
+            error = "Invalid link; use the form below to load your geojson file."
+        messages.error(request, error)
+        return redirect(reverse("multiplicity:upload_mtu", args=[info.slug]))
 
-    with open(path) as json_data:
-        data = json.load(json_data)
+    if data:
+        error = False
 
-    for record in data['features']:
-        properties = record['properties']
-        geometry = record['geometry']
+        if request.method == 'POST':
+            create_record = get_object_or_404(UserAction, pk=1)
+            import_data = get_object_or_404(UserAction, pk=5)
 
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'properties': properties, 'geometry': geometry }
+            log = UserLog.objects.create(user=request.user, action=import_data, space=info, points=10, model="MTU geojson", description="File: " + filename)
+
+            type = ReferenceSpaceType.objects.filter(name=request.POST['mtu_name'])
+            if type:
+                type = type[0]
+            else:
+                type = ReferenceSpaceType.objects.create(name=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
+
+            MTU.objects.create(type=type, space=info, timeframe=request.POST['timeframe'], source=request.POST['source'], file=filename, description=request.POST['details'])
+
+        for record in data['features']:
+            properties = record['properties']
+            geometry = record['geometry']
+
+            if request.method == 'POST':
+                name = properties[request.POST['name']]
+                area = None
+                if 'area' in request.POST:
+                    area = float(properties[request.POST['area']])/float(request.POST['unit'])
+
+                space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, slug=slugify(name))
+                location = ReferenceSpaceLocation.objects.create(space=space, area=area, timeframe=request.POST['timeframe'], source=request.POST['source'], geojson=geometry)
+                space.location = location
+                space.save()
+
+                log = UserLog.objects.create(user=request.user, action=create_record, space=space, points=0)
+
+        if request.method == 'POST':
+            return redirect(reverse('multiplicity:map_mtu', args=[info.slug, type.slug]))
+
+
+        if 'crs' in data and 'properties' in data['crs'] and 'name' in data['crs']['properties']:
+            projection = data['crs']['properties']['name']
+        else:
+            # If the projection is not set we must alert the user
+            projection = "unknown"
+
+    context = { 
+        'section': 'cities', 'menu': 'upload', 'info': info, 'properties': properties, 'geometry': geometry,
+        'filename': filename, 'map': True, 'projection': projection, 'error': error
+    }
     return render(request, 'multiplicity/upload/mtu.review.html', context)
 
 

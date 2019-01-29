@@ -9,30 +9,11 @@
 
 <h2>Micro-territorial units</h2>
 
-<ul class="nav nav-tabs selectform">
-  <li class="active"><a href="#filebox" data-id="filebox">File upload</a></li>
-  <li><a href="#textbox" data-id="textbox">Direct input</a></li>
-</ul>
-
 <div class="panel">
   <div class="panel-body forms">
 
-    <form action="{% url 'multiplicity:upload_mtu_review' info.slug %}" method="post" class="form form-horizontal" id="textbox">
-      {% csrf_token %}
-      <textarea class="form-control" name="data" placeholder="Copy the data from a spreadsheet in the format shown above"></textarea>
-      <p><button type="submit" class="btn btn-success">Next</button></p>
-    </form>
-
-
-    <form action="{% url 'multiplicity:upload_mtu_review' info.slug %}" method="post" class="form form-horizontal" enctype="multipart/form-data" id="filebox">
+    <form method="post" class="form form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <div class="form-group">
-          <label class="col-sm-2 control-label">Name</label>
-          <div class="col-sm-10 label-text">
-            <input class="form-control" type="text" name="name" required placeholder="Name of the MTU, e.g. 'Suburb', 'Zip code', 'Municipality'" />
-          </div>
-        </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label">GeoJSON file</label>
@@ -46,6 +27,15 @@
             <button type="submit" class="btn btn-success">Next</button>
           </div>
         </div>
+
+        <h3>Instructions</h3>
+        <ul>
+          <li>Convert your file to a <a href="https://en.wikipedia.org/wiki/GeoJSON">geojson format</a></li>
+          <li>Be sure to use the <a href="https://en.wikipedia.org/wiki/World_Geodetic_System"><strong>WGS 84</strong> coordinate reference system</a> for your 
+          file, using <strong>degrees (GPS coordinates)</strong> as your units of choice.
+          If you use <a href="https://epsg.io/4326"><strong>EPSG:4326</strong></a> you should
+          be fine.</li>
+        </ul>
     </form>
 
   </div>
@@ -54,10 +44,6 @@
 {% endblock %}
 
 {% block head %}
-<style type="text/css">
-#textbox{display:none}
-textarea.form-control{height:250px;display:block;margin-bottom:10px}
-</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -84,16 +70,4 @@ textarea.form-control{height:250px;display:block;margin-bottom:10px}
 {% endblock %}
 
 {% block footer %}
-<script type="text/javascript">
-$(function(){
-  $(".selectform a").click(function(e){
-    e.preventDefault();
-    $(".selectform li").removeClass("active");
-    $(this).closest("li").addClass("active");
-    var id = $(this).data("id");
-    $(".forms form").hide();
-    $(".forms form#" + id).show();
-  });
-});
-</script>
 {% endblock %}

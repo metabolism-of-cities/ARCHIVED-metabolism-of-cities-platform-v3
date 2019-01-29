@@ -9,17 +9,153 @@
 
 <h2>Micro-territorial units</h2>
 
-<div class="panel">
-  <div class="panel-body">
+<form method="post" class="form form-horizontal">
 
-    {{ properties }}
+  <div class="panel">
+    <div class="panel-body">
 
-    <h2>Geo</h2>
+      <h2>Coordinate reference system (CRS)</h2>
 
-    {{ geometry }}
+      <div class="alert alert-{% if projection == "EPSG:4326" %}success{% else %}warning{% endif %}">
+        CRS used: <strong>{{ projection }}</strong>
+        {% if projection != "EPSG:4326" %}
+        <br>
+        We expected: <strong>EPSG:4326</strong> (WGS84)<br>
+        If your map doesn't load properly, please look into changing the coordinate reference system.
+        It is important you use GPS coordinates (degrees), and not metres or other units in your dataset.
+        {% endif %}
+      </div>
+
+      <h2>Review sample</h2>
+
+      <p>The map below shows one of the MTUs. If this does not seem to be correct, please review your geojson file.</p>
+
+      <div id="map"></div>
+
+
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs boxnav">
+    <li class="active"><a href="#namebox" data-target="namebox">Name</a></li>
+    <li><a href="#areabox" data-target="areabox">Area sizes</a></li>
+  </ul>
+
+  <div class="panel">
+    <div class="panel-body properties">
+
+      <div id="namebox">
+
+        <p>
+        We need to know which of the properties contains the <strong>name</strong> of the micro-territorial unit. 
+        Please select the property below. 
+        If the right property does not appear, please review your data source.
+        </p>
+
+        <table class="table table-striped">
+          <tr>
+            <th></th>
+            <th>Property</th>
+            <th>Sample value</th>
+          </tr>
+        {% for key, value in properties.items %}
+          <tr>
+            <td><input type="radio" name="name" required value="{{ key }}" id="key-{{ key|slugify }}" /></td>
+            <td><label for="key-{{ key|slugify }}">{{ key }}</label></td>
+            <td><label for="key-{{ key|slugify }}">{{ value }}</label></td>
+          </tr>
+        {% endfor %}
+        </table>
+
+      </div>
+
+      <div id="areabox">
+
+        <p>
+          An optional - but very useful - feature of each MTU is the total <strong>area size</strong>.
+          Does your geojson file have a field that contains the area size? If so, please select it below:
+        </p>
+
+        <table class="table table-striped">
+          <tr>
+            <th></th>
+            <th>Property</th>
+            <th>Sample value</th>
+          </tr>
+        {% for key, value in properties.items %}
+          <tr>
+            <td><input type="radio" name="area" value="{{ key }}" id="areakey-{{ key|slugify }}" /></td>
+            <td><label for="areakey-{{ key|slugify }}">{{ key }}</label></td>
+            <td><label for="areakey-{{ key|slugify }}">{{ value }}</label> 
+            <span class="placeholder"></span>
+            </td>
+          </tr>
+        {% endfor %}
+        </table>
+
+        <select name="unit" id="unit">
+          <option value=""></option>
+          <option value="1">km&sup2;</option>
+          <option value="1000000">m&sup2;</option>
+          <option value="0.386102">square mile</option>
+          <option value="100">hectare</option>
+          <option value="247.105">acre</option>
+        </select>
+
+      </div>
+
+    </div>
 
   </div>
-</div>
+
+  <h2>Meta data</h2>
+
+  <div class="panel">
+
+    <div class="panel-body">
+    
+      <div class="form-group">
+        <label class="col-sm-2 control-label">MTU name</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" required name="mtu_name" placeholder="E.g. Suburbs, Zipcodes, Municipalities. Use the original name, in plural (do not translate)." />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Timeframe</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" required name="timeframe" placeholder="Since when are these boundaries in place? E.g. 2008-present." />
+        </div>
+      </div> 
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Source</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" required name="source" placeholder="What is the source of this file?" />
+        </div>
+      </div> 
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Details</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" name="details" placeholder="Any additional details about these MTUs"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" name="save" value="true" class="btn btn-success btn-lg">Save</button>
+          {% csrf_token %} 
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
+
+    <p><a href="{% url 'multiplicity:upload_mtu' info.slug %}" class="btn btn-info">Back</a></p>
 
 {% endblock %}
 
@@ -27,6 +163,11 @@
 <style type="text/css">
 #textbox{display:none}
 textarea.form-control{height:250px;display:block;margin-bottom:10px}
+#map{height:400px;margin:10px}
+table label{cursor:pointer}
+tr.active label{font-weight:bold}
+tr.inactive{opacity:0.4}
+#unit,#areabox{display:none}
 </style>
 {% endblock %}
 
@@ -47,23 +188,55 @@ textarea.form-control{height:250px;display:block;margin-bottom:10px}
         <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
         <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
         <li><a href="{% url 'multiplicity:upload' info.slug %}">Upload</a></li>
-        <li class="active">Micro-territorial units</li>
+        <li><a href="{% url 'multiplicity:upload_mtu' info.slug %}">Micro-territorial units</a></li>
+        <li class="active">Review</li>
     </ol>
 
 </div>
 {% endblock %}
 
 {% block footer %}
-<script type="text/javascript">
-$(function(){
-  $(".selectform a").click(function(e){
-    e.preventDefault();
-    $(".selectform li").removeClass("active");
-    $(this).closest("li").addClass("active");
-    var id = $(this).data("id");
-    $(".forms form").hide();
-    $(".forms form#" + id).show();
-  });
-});
-</script>
+  <script type="text/javascript">
+    $(function(){
+      $(".properties input").change(function(e){
+        parent_table = $(this).closest("table");
+        parent_table.find("tr").removeClass("active");
+        parent_table.find("tr").removeClass("inactive");
+        $(this).closest("tr").addClass('active');
+        parent_table.find("tr:not(.active)").addClass("inactive");
+        var name = $(this).attr("name");
+        if (name == "area") {
+          $("#unit").hide();
+          $("#unit").attr("required", "required");
+          placeholder = $(this).closest("tr").find(".placeholder");
+          $("#unit").detach().appendTo(placeholder);
+          $("#unit").show('fast');
+        }
+      });
+    });
+
+    $(".boxnav a").click(function(e){
+      e.preventDefault();
+      $(".boxnav li").removeClass("active");
+      $(this).closest("li").addClass("active");
+      var target = $(this).data("target");
+      $(".properties > div").hide();
+      $("#" + target).show();
+    });
+
+    var map = L.map('map');
+    var geojson = {{ geometry|safe }};
+    var geojsonlayer = L.geoJSON(geojson).addTo(map);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'mapbox.streets'
+    }).addTo(map);
+
+      map.scrollWheelZoom.disable();
+      map.fitBounds(geojsonlayer.getBounds());
+  </script>
+
 {% endblock %}

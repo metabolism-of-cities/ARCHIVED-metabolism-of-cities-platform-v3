@@ -17,3 +17,5 @@ UPDATE staf_material SET parent_id = 970921 WHERE id = 971057;
 SELECT setval('core_organization_id_seq', (SELECT MAX(id) FROM core_organization)+1);
 SELECT setval('multiplicity_datasettypestructure_id_seq', (SELECT MAX(id) FROM multiplicity_datasettypestructure)+1);
 SELECT setval('multiplicity_datasettype_id_seq', (SELECT MAX(id) FROM multiplicity_datasettype)+1);
+
+INSERT INTO "core_useraction" ("id", "name") VALUES ('5', 'Data imported');

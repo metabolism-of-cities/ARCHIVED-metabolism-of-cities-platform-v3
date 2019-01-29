@@ -195,6 +195,14 @@ class ReferenceSpaceTypeDescription(models.Model):
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
     description = models.TextField()
 
+class MTU(models.Model):
+    type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)
+    space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    timeframe = models.CharField(max_length=255)
+    source = models.CharField(max_length=255)
+    file = models.CharField(max_length=255)
+    description = models.TextField()
+
 class ReferenceSpaceCSV(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)

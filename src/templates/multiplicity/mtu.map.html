@@ -1,0 +1,175 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+    <ul class="nav nav-tabs nav-justified ">
+        <li{% if tab == 'boundaries' %} class="active"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Boundaries</a></li>
+        <li{% if tab == 'boundaries' %} class="active"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Infrastructure</a></li>
+        <li{% if tab == 'mtu' %} class="active"{% endif %}><a href="{% url 'multiplicity:map_mtu' info.slug %}">MTUs</a></li>
+        <li><a href="http://">Other maps</a></li>
+      </ul>
+
+<div class="panel">
+
+  <div class="panel-content">
+      <div id="map"></div>
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+
+      <div class="panel-title">
+        <h2 class="other">{{ type.name }}</h2>
+      </div>
+      <div class="panel-body">
+
+        <table class="table table-striped datatable">
+          <thead>
+            <tr>
+              <th>MTU</th>
+              <th>Area</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for details in list %}
+            <tr>
+              <td><a href="{% url 'multiplicity:mtu_space' info.slug details.type.slug details.slug %}">{{ details.name }}</a></td>
+              <td>{% if details.location.area %}{{ details.location.area|floatformat:2|intcomma }} km &sup2;{% endif %}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="alert alert-warning hide hidden">
+          <p>
+          Do you know of additional boundaries (e.g. historical boundaries) that could be useful?
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-title">
+        <h2 class="other">Micro-territorial units in {{ info.name }}</h2>
+      </div>
+
+      {% if mtu_list %}
+        <div class="list-group bord-no">
+          {% for details in mtu_list %}
+            <a class="list-group-item{% if details.type == type %} active{% endif %}" href="{% url 'multiplicity:map_mtu' info.slug details.type.slug %}">{{ details.type.name }} ({{ details.timeframe }})</a></li>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="alert alert-warning hide hidden">
+        <p>
+        Do you know of additional boundaries (e.g. historical boundaries) that could be useful?
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-lg-4">
+    <div class="panel panel-colorful panel-pink">
+      <div class="panel-body">
+        <h3>Download</h3>
+        <p>
+          You can download the coordinates as GeoJSON file below.
+        </p>
+        <p>
+          <a href="" class="btn btn-default"><i class="fa fa-download"></i> Download</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="panel panel-colorful panel-warning">
+      <div class="panel-body">
+        <h3>Contribute</h3>
+        <p>
+          Do you see any errors or do you know of any missing information?
+        </p>
+        <ul class="nolist">
+          <li><a href="{% url 'core:contact' %}" class="btn btn-default"><i class="fa fa-envelope"></i> Contact us</a></li>
+          <li><a href="{% url 'core:about' 'join-us' %}" class="btn btn-default"><i class="fa fa-envelope"></i> Become a data contributor</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
+<style type="text/css">
+#map{height:65vh;border:1px solid #ccc}
+h2.other{font-size:20px}
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus{border:none;color:#fff}
+.main-content-block a.active:not(.btn){color:#fff}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:map' info.slug %}">Maps</a></li>
+        <li class="active">{{ page|title }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+  <script type="text/javascript">
+
+    var map = L.map('map');
+    var geojsonlayer = L.geoJSON().addTo(map);
+
+    {% for details in list %}
+      {% if details.location.geojson %}
+        var geojson_{{ details.id }} = {{ details.location.geojson|safe }};
+        geojsonlayer.addData(geojson_{{ details.id }});
+      {% endif %}
+    {% endfor %}
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      {% if page == "satellite" %}
+        id: 'mapbox.satellite'
+      {% else %}
+        id: 'mapbox.streets'
+      {% endif %}
+    }).addTo(map);
+
+    map.scrollWheelZoom.disable();
+    map.fitBounds(geojsonlayer.getBounds());
+
+  </script>
+{% endblock %}

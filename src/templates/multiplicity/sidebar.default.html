@@ -135,7 +135,7 @@
 
       <ul class="collapse {% if menu == "resources" %}in{%endif %}">
           <li {% if page == "datasets" %} class="active" {% endif %}><a href="{% url 'multiplicity:datasets' info.slug %}">Datasets</a></li>
-          <li {% if page == "boundaries" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Maps</a></li>
+          <li {% if page == "maps" %} class="active-link"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Maps</a></li>
           <li {% if menu == "resources" and type.id == 16 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'journal-articles' %}">Journal articles</a></li>
           <li {% if menu == "resources" and type.id == 27 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'reports' %}">Reports</a></li>
           <li {% if menu == "resources" and type.id == 29 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'theses' %}">Theses</a></li>
