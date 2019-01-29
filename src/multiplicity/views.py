@@ -263,6 +263,15 @@ def photos(request, city, type='photo'):
     'topics': topics, 'addlink': addlink, 'gallery': True, 'tab': tab, 'title': title }
     return render(request, 'multiplicity/resources.photos.html', context)
 
+def videos(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    list = Video.objects.filter(primary_space=info)
+    addlink = reverse('multiplicity:photo_form', args=[info.slug])
+
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'videos', 'info': info, 'list': list,
+    'addlink': addlink, }
+    return render(request, 'multiplicity/resources.videos.html', context)
+
 def resources(request, city, slug):
     info = get_object_or_404(ReferenceSpace, slug=city)
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)

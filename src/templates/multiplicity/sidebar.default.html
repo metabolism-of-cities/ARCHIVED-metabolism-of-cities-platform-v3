@@ -48,8 +48,8 @@
 
       <ul class="collapse {% if menu == "profile" %}in{% endif %}">
           <li{% if page == "population" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'population' %}">Demographics</a></li>
-          <li{% if page == "economy" %} class="active"{% endif %}><a href="/">Economy</a></li>
-          <li{% if page == "environment" %} class="active"{% endif %}><a href="/">Environment</a></li>
+          <li{% if page == "economy" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'economy' %}">Economy</a></li>
+          <li{% if page == "environment" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'environment' %}""">Environment</a></li>
       </ul>
   </li>
 
@@ -164,8 +164,8 @@
           <li {% if menu == "resources" and type.id == 27 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'reports' %}">Reports</a></li>
           <li {% if page == "videos" %} class="active" {% endif %}><a href="{% url 'multiplicity:photos' info.slug %}">Videos</a></li>
           <li {% if page == "photos" %} class="active" {% endif %}><a href="{% url 'multiplicity:photos' info.slug %}">Photos</a></li>
-          <li {% if menu == "resources" and type.id == 16 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'podcasts' %}">Podcasts</a></li>
-          <li {% if menu == "resources" and type.id == 16 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'presentations' %}">Presentations</a></li>
+          <li {% if menu == "resources" and type.id == 24 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'podcasts' %}">Podcasts</a></li>
+          <li {% if menu == "resources" and type.id == 25 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'presentations' %}">Presentations</a></li>
       </ul>
   </li>
 
