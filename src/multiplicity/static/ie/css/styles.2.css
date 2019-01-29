@@ -121,7 +121,7 @@ section.top-banner .slideshow.photos {
 }
 
 #mainnav-menu > .active-sub > a, #mainnav-menu > .active-sub > a:hover {
-  background-color:#d1ac84;
+  background-color:#aaa;
 }
 
 #mainnav-menu .active:not(.active-sub) > a {

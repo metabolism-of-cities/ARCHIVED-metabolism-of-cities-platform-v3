@@ -150,7 +150,7 @@ def sector(request, city, sector):
     information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
     references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).order_by('title')
     organizations = Organization.objects.filter(processes__in=sector.processes.all(), reference_spaces=info).order_by('name')
-    datasets = Dataset.objects.filter(process__in=sector.processes.all(), deleted=False)
+    datasets = Dataset.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
     addlink = reverse('multiplicity:information_form', args=[info.slug])
     photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
     map = False
@@ -274,6 +274,8 @@ def resources(request, city, slug):
         type = 29
     elif slug == "presentations":
         type = 25
+    elif slug == "podcasts":
+        type = 24
     type = get_object_or_404(ReferenceType, pk=type)
     references = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
