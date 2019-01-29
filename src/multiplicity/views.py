@@ -1233,7 +1233,11 @@ def upload_mtu_review(request, city, filename):
             if type:
                 type = type[0]
             else:
-                type = ReferenceSpaceType.objects.create(name=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
+                type = ReferenceSpaceType.objects.filter(slug=slugify(request.POST['mtu_name']))
+                if type:
+                    type = type[0]
+                else:
+                    type = ReferenceSpaceType.objects.create(name=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
 
             MTU.objects.create(type=type, space=info, timeframe=request.POST['timeframe'], source=request.POST['source'], file=filename, description=request.POST['details'])
 
