@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 {% load static %}
 
-{% block title %}Photo{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
@@ -11,14 +11,13 @@
     <div class="col-lg-12">
       <div class="panel panel-body">
         <div class="panel-heading">
-          <h3>Upload photo</h3>
+          <h3>Upload {{ title }}</h3>
         </div>
-          <div class="panel-body" style="margin-top:30px">
+          <div class="panel-body">
             <div class="alert alert-info">
-              Important note: 
-              only use photos that have a permissive license (creative commons, public domain, etc.). 
-              Do not use photos without a clearly defined permissive license unless you have
-              permission from the creator.
+              Only use {{ title|slugify }}s that have a permissive license (creative commons, public domain, etc.). 
+              Do not use {{ title|slugify }}s without a clearly defined permissive license unless you have
+              permission from the creator or if it can be classified as fair use.
             </div>
             <form method="post" class="form form-horizontal" enctype="multipart/form-data">
               {% bootstrap_form form layout='horizontal' %}
@@ -63,10 +62,15 @@
 {% block footer %}
 <script type="text/javascript">
 $(function(){
-  $("#id_secondary_space").select2();
   {% if request.GET.space %}
     $("#id_secondary_space").val('{{ request.GET.space }}');
     $("#id_secondary_space").trigger('change');
+  {% endif %}
+  {% if map %}
+    $("#id_secondary_space").closest(".form-group").hide();
+    $("#id_deleted").closest(".form-group").hide();
+  {% else %}
+    $("#id_secondary_space").select2();
   {% endif %}
 
 });

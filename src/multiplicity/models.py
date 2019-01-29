@@ -246,6 +246,9 @@ class License(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["name"]
+
 class Photo(TimestampedModel):
     image = StdImageField(upload_to='photos', variations={'thumbnail': (200, 150), 'large': (1024, 780), 'medium': (640, 480)})
     author = models.CharField(max_length=255)
@@ -257,6 +260,11 @@ class Photo(TimestampedModel):
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False, db_index=True)
     license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
+    TYPES = (
+        ('photo', 'Photo'),
+        ('map', 'Map'),
+    )
+    type = models.CharField(max_length=6, choices=TYPES, default='photo')
 
     def __str__(self):
         if self.description:
@@ -270,7 +278,7 @@ class Photo(TimestampedModel):
 class PhotoForm(ModelForm):
     class Meta:
         model = Photo
-        exclude = ['id', 'uploaded_by', 'primary_space', 'process']
+        exclude = ['id', 'uploaded_by', 'primary_space', 'process', 'type']
         labels = {
             'deleted': 'Do not show in the gallery',
             'secondary_space': 'Reference space (optional)'

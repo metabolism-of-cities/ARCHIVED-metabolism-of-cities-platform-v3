@@ -46,6 +46,7 @@ urlpatterns = [
 
     path('<slug:city>/maps', views.map, name='map'),
     path('<slug:city>/maps/mtu', views.mtu_map, name='map_mtu'),
+    path('<slug:city>/maps/other', views.photos, {'type': 'map'}, name='map_other'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),
     path('<slug:city>/mtu/<slug:type>/<slug:space>', views.space, name='mtu_space'),
     path('<slug:city>/maps/mtu/<slug:type>', views.mtu_map, name='map_mtu'),
@@ -63,6 +64,7 @@ urlpatterns = [
     path('<slug:city>/information/<int:id>', views.information_form, name='information_form'),
     path('<slug:city>/photo', views.photo_form, name='photo_form'),
     path('<slug:city>/photo/<int:id>', views.photo_form, name='photo_form'),
+    path('<slug:city>/map', views.photo_form, {'map': True}, name='map_form'),
     path('<slug:city>/sectors/<slug:sector>', views.sector, name='sector'),
 
     # Uploading data

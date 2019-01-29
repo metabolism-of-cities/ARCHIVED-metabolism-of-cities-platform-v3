@@ -124,14 +124,23 @@ def mtu_map(request, city, type=False):
     
     if type:
         type = get_object_or_404(ReferenceSpaceType, slug=type)
-    else:
+    elif mtu_list:
         type = mtu_list[0].type
+    else:
+        type = False
+
+    if mtu_list:
+        datatables = True
+        map = True
+    else:
+        datatables = False
+        map = False
     list = ReferenceSpace.objects.filter(city=info, type=type)
     tab = 'mtu'
     context = { 
         'section': 'cities', 'menu':  'resources', 'info': info, 
-        'tab': tab, 'list': list, 'page': 'maps', 'datatables': True, 
-        'mtu_list': mtu_list, 'type': type, 
+        'tab': tab, 'list': list, 'page': 'maps', 'datatables': datatables, 
+        'mtu_list': mtu_list, 'type': type, 'map': map, 
     }
     return render(request, 'multiplicity/mtu.map.html', context)
 
@@ -236,13 +245,22 @@ def flow(request, city, type, slug=False):
     }
     return render(request, 'multiplicity/flow.html', context)
 
-def photos(request, city):
+def photos(request, city, type='photo'):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    photos = Photo.objects.filter(primary_space=info, deleted=False)
+    photos = Photo.objects.filter(primary_space=info, deleted=False, type=type)
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
+    if type == 'photo':
+        page = 'photos'
+        tab = False
+        title = 'Photos'
+    else:
+        page = 'maps'
+        tab = 'other'
+        title = 'Other maps'
 
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'photos', 'info': info, 'photos': photos, 'topics': topics, 'addlink': addlink, 'gallery': True }
+    context = { 'section': 'cities', 'menu':  'resources', 'page': page, 'info': info, 'photos': photos, 
+    'topics': topics, 'addlink': addlink, 'gallery': True, 'tab': tab, 'title': title }
     return render(request, 'multiplicity/resources.photos.html', context)
 
 def resources(request, city, slug):
@@ -1388,7 +1406,7 @@ def information_form(request, city, id=False, topic=False):
     return render(request, 'multiplicity/form.information.html', context)
 
 @login_required
-def photo_form(request, city, id=False):
+def photo_form(request, city, id=False, map=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     processes = Process.objects.filter(slug__isnull=False).order_by('id')
     if id:
@@ -1412,14 +1430,27 @@ def photo_form(request, city, id=False):
             photo.primary_space = info
             photo.uploaded_by = request.user
             photo.process = process
+            if map:
+                photo.type = 'map'
+            else:
+                photo.type = 'photo'
             photo.save()
             saved = True
-            messages.success(request, 'Photo was saved.')
-            return redirect(reverse('multiplicity:photos', args=[info.slug]))
+            messages.success(request, 'Image was saved.')
+            if map:
+                return redirect(reverse('multiplicity:map_other', args=[info.slug]))
+            else:
+                return redirect(reverse('multiplicity:photos', args=[info.slug]))
         else:
             messages.warning(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'processes': processes, 'photo': photo, 'select2': True }
+    if map:
+        title = 'Map'
+    else:
+        title = 'Photo'
+
+    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'processes': processes, 'photo': photo, 'select2': True,
+    'map': map, 'menu': 'upload', 'title': title }
     return render(request, 'multiplicity/form.photo.html', context)
 
 

@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs nav-justified ">
+  <li{% if tab == 'boundaries' %} class="active"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Boundaries</a></li>
+  <li{% if tab == 'infrastructuremap' %} class="active"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Infrastructure</a></li>
+  <li{% if tab == 'mtu' %} class="active"{% endif %}><a href="{% url 'multiplicity:map_mtu' info.slug %}">MTUs</a></li>
+  <li{% if tab == 'other' %} class="active"{% endif %}><a href="{% url 'multiplicity:map_other' info.slug %}">Other maps</a></li>
+</ul>

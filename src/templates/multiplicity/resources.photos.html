@@ -1,17 +1,21 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
 
-{% block title %}Photos | {{ info.name }} | {{ info.country }}{% endblock %}
+{% block title %}{{ title }} | {{ info.name }} | {{ info.country }}{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
+
+{% if page == 'maps' %}
+  {% include 'multiplicity/includes/navbar.maps.html' %}
+{% endif %}
 
 <div class="row">
   <div class="col-lg-12">
     <div class="panel">
       <div class="panel-body">
-        <h3>Photos</h3>
-        <p>We have the following photos available for <strong>{{ info.name }}</strong>:</p>
+        <h3>{{ title }}</h3>
+        <p>We have the following {{ page }} available for <strong>{{ info.name }}</strong>:</p>
 
           {% include 'multiplicity/includes/multimedia.html' %}
 
@@ -41,7 +45,7 @@
         <li><a href="./"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
         <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
-        <li class="active">Photos</li>
+        <li class="active">{{ title }}</li>
     </ol>
 
 </div>

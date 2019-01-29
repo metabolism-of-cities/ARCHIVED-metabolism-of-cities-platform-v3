@@ -5,11 +5,8 @@
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
-    <ul class="nav nav-tabs nav-justified ">
-        <li{% if tab == 'boundaries' %} class="active"{% endif %}><a href="{% url 'multiplicity:map' info.slug %}">Boundaries</a></li>
-        <li><a href="http://">Infrastructure</a></li>
-        <li><a href="http://">Other maps</a></li>
-      </ul>
+
+{% include 'multiplicity/includes/navbar.maps.html' %}
 
 <div class="panel">
 
