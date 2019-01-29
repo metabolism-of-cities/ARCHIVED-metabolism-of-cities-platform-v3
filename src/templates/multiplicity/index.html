@@ -1,0 +1,344 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country.name }}{% endblock %}
+{% block container %}stretch-bg-head floating-style{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-6">
+          <div class="panel widget">
+              <div class="widget-header bg-purple city-header">
+                {% if info.image %}
+                  <img class="widget-bg img-responsive" src="{{ info.image.url }}" alt="">
+                {% endif %}
+              </div>
+              <div class="widget-body text-center">
+                {% with "multiplicity/img/cities/map-"|add:info.slug|add:".jpg" as picture %}
+                  <img alt="" class="widget-img img-circle img-border-light" src="{% static picture %}">
+                {% endwith %}
+                  <h4 class="mar-no text-main">{{ info.name }}</h4>
+                  <p class="text-muted mar-no">{{ info.country.name|default_if_none:"" }}</p>
+              </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 ">
+
+          <div class="panel panel-success panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-apple icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:sector' info.slug 'agriculture' %}">Agriculture</a></p>
+                      <span>4 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Crops, wood, fish, meat...
+              </div>
+          </div>
+          
+          <div class="panel panel-info panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-thunder icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'energy' %}">Energy</a></p>
+                      <span>4 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Fossil fuels, electricity...
+              </div>
+          </div>
+
+        </div>
+        
+        <div class="col-lg-3 noclick">
+
+          <div class="panel panel-warning panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-wheelbarrow icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'metals' %}">Metals</a></p>
+                      <span>7 sections </span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Iron, copper, nickel, zinc...
+              </div>
+          </div>
+          
+          <div class="panel panel-purple panel-colorful">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-mine icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'minerals' %}">Minerals</a></p>
+                      <span>5 sections</span>
+                  </div>
+              </div>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Stone, clay, sand, gravel...
+              </div>
+          </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="pli-drop icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Water</a></p>
+              <div class="progress progress-xs progress-success mar-no">
+                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
+              </div>
+              <div class="pad-all text-sm">
+                Drinking water, waste water effluent, ...
+              </div>
+
+                  </div>
+              </div>
+          </div>
+
+        </div>
+  </div>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ie/css/morris.min.css' %}" />
+<style type="text/css">
+.city-header { min-height:330px;previous:298px;}
+.morris-legend-items{padding-top:20px}
+#page-content .icon-fw{margin-right:-5px;position:relative;top:10px}
+.noclick a:hover{cursor:text;text-decoration:none}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+        <h3>{{ info.name }} | <span class="text-thin">{{ info.country.name }}</span></h3>
+        {% if info.slug == "cape-town" %}
+            <p>Population <strong class="text-main">3.8 million (2016)</strong> | Area <strong class="text-main">2,446 km<sup>2</sup></strong> | Income group <strong>low-medium</strong></p>
+        {% elif info.slug == "the-hague" %}
+            <p>Population <strong class="text-main">527,748 (2018)</strong> | Area <strong class="text-main">98.12 km<sup>2</sup></strong> | Density <strong>6,445 people/km<sup>2</sup></strong></p>
+        {% elif info.slug == "montreal" %}
+            <p>Population <strong class="text-main">1.7 million (2016)</strong> | Area <strong class="text-main">431.50 km<sup>2</sup></strong> | Density <strong>3,955 people/km<sup>2</sup></strong></p>
+        {% endif %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static 'ie/js/morris.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ie/js/raphael.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+  $(".noclick a").click(function(e){
+    e.preventDefault();
+  });
+
+        var chart = Morris.Area({
+        element: 'largegraph',
+        data: [{
+            period: 'January 16',
+            dl: 77,
+            up: 25
+            }, {
+            period: 'February 16',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 16',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 16',
+            dl: 120,
+            up: 100
+            }, {
+            period: 'May 16',
+            dl: 96,
+            up: 75
+            }, {
+            period: 'June 16',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 16',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 16',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 16',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 16',
+            dl: 201,
+            up: 160
+            }, {
+            period: 'November 16',
+            dl: 180,
+            up: 133
+            }, {
+            period: 'December 16',
+            dl: 133,
+            up: 100
+            }, {
+            period: 'January 17',
+            dl: 101,
+            up: 90
+            }, {
+            period: 'February 17',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 17',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 17',
+            dl: 99,
+            up: 57
+            }, {
+            period: 'May 17',
+            dl: 120,
+            up: 75
+            }, {
+            period: 'June 17',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 17',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 17',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 17',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 17',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'November 17',
+            dl: 110,
+            up: 102
+            }, {
+            period: 'December 17',
+            dl: 65,
+            up: 30
+            }, {
+            period: 'January 18',
+            dl: 120,
+            up: 90
+            }, {
+            period: 'February 18',
+            dl: 127,
+            up: 58
+            }, {
+            period: 'March 18',
+            dl: 115,
+            up: 46
+            }, {
+            period: 'April 18',
+            dl: 71,
+            up: 57
+            }, {
+            period: 'May 18',
+            dl: 95,
+            up: 75
+            }, {
+            period: 'June 18',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'July 18',
+            dl: 105,
+            up: 70
+            }, {
+            period: 'August 18',
+            dl: 115,
+            up: 106
+            }, {
+            period: 'September 18',
+            dl: 239,
+            up: 187
+            }, {
+            period: 'October 18',
+            dl: 97,
+            up: 57
+            }, {
+            period: 'November 18',
+            dl: 90,
+            up: 70
+            }, {
+            period: 'December 18',
+            dl: 65,
+            up: 30
+            }, {
+            period: 'January 19',
+            dl: 77,
+            up: 45
+            }],
+        gridEnabled: true,
+        gridLineColor: 'rgba(0,0,0,.1)',
+        behaveLikeLine: true,
+        smooth: false,
+        axes:true,
+        xkey: 'period',
+        ykeys: ['dl', 'up'],
+        labels: ['Water consumption', 'Waste water'],
+        lineColors: ['#03A9F4', '#9BE0FF'],
+        pointSize: 0,
+        pointStrokeColors : ['#045d97'],
+        lineWidth: 0,
+        resize:true,
+        hideHover: 'auto',
+        fillOpacity: 0.9,
+        parseTime:false
+    });
+
+    chart.options.labels.forEach(function(label, i){
+        var legendItem = $('<div class=\'morris-legend-items\'></div>').text(label);
+        $('<span></span>').css('background-color', chart.options.lineColors[i]).prependTo(legendItem);
+        $('#demo-morris-area-legend-full').append(legendItem)
+    })
+});
+</script>
+{% endblock %}

@@ -41,7 +41,7 @@ from django.forms import modelform_factory
 def index(request):
     list = ReferenceSpace.objects.filter(type__id=3)
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
-    return render(request, 'multiplicity/index.html', context)
+    return render(request, 'multiplicity/city.html', context)
 
 def space_list(request, city, type):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -1225,7 +1225,7 @@ def upload_mtu_review(request, city, filename):
 
         if request.method == 'POST':
             create_record = get_object_or_404(UserAction, pk=1)
-            import_data = get_object_or_404(UserAction, pk=5)
+            import_data = get_object_or_404(UserAction, pk=6)
 
             log = UserLog.objects.create(user=request.user, action=import_data, space=info, points=10, model="MTU geojson", description="File: " + filename)
 
@@ -1310,7 +1310,7 @@ def detail(request, slug):
         'datasets_flows': datasets_flows,
         'datasets_stocks': datasets_stocks,
     }
-    return render(request, 'multiplicity/city.html', context)
+    return render(request, 'multiplicity/index.html', context)
 
 def research(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
