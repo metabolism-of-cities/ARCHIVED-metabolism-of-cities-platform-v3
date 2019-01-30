@@ -133,6 +133,7 @@ class ReferenceSpace(models.Model):
     location = models.ForeignKey('multiplicity.ReferenceSpaceLocation', on_delete=models.SET_NULL, null=True, blank=True)
     csv = models.ForeignKey('multiplicity.ReferenceSpaceCSV', on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ForeignKey('core.Tag', on_delete=models.CASCADE, null=True, blank=True)
+    mtu = models.ForeignKey('multiplicity.MTU', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name + " (" + self.type.name + ")"
@@ -197,7 +198,7 @@ class ReferenceSpaceTypeDescription(models.Model):
 
 class MTU(models.Model):
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)
-    space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE)
+    space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, related_name='mtu_list')
     timeframe = models.CharField(max_length=255)
     source = models.CharField(max_length=255)
     file = models.CharField(max_length=255)

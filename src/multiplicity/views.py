@@ -91,7 +91,13 @@ def space(request, city, type, space):
     photouploadlink = '/cities/'+info.slug+'/photo?space='+str(space.id)
     editlink = '/admin/multiplicity/referencespace/'+str(space.id)+'/change/'
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'infrastructure', 'info': info, 
+    if space.mtu:
+        menu = 'resources'
+        page = 'maps'
+    else:
+        menu = 'infrastructure'
+        page = 'unsure'
+    context = { 'section': 'cities', 'menu': menu, 'page': page, 'info': info, 
     'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
     'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 
     'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
@@ -1239,7 +1245,7 @@ def upload_mtu_review(request, city, filename):
                 else:
                     type = ReferenceSpaceType.objects.create(name=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
 
-            MTU.objects.create(type=type, space=info, timeframe=request.POST['timeframe'], source=request.POST['source'], file=filename, description=request.POST['details'])
+            mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST['timeframe'], source=request.POST['source'], file=filename, description=request.POST['details'])
 
         for record in data['features']:
             properties = record['properties']
@@ -1251,7 +1257,7 @@ def upload_mtu_review(request, city, filename):
                 if 'area' in request.POST:
                     area = float(properties[request.POST['area']])/float(request.POST['unit'])
 
-                space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, slug=slugify(name))
+                space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, slug=slugify(name), mtu=mtu)
                 location = ReferenceSpaceLocation.objects.create(space=space, area=area, timeframe=request.POST['timeframe'], source=request.POST['source'], geojson=geometry)
                 space.location = location
                 space.save()
