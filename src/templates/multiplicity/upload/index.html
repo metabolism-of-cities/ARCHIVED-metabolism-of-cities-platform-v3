@@ -50,11 +50,74 @@
 
 {% if request.user.is_staff %}
 
-  <section class="information">
+  <section class="resources jslinks">
 
-    <h2>Information</h2>
+    <h2>Resources</h2>
 
     <div class="row">
+    {% if SITE_ID == 1 %}
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-file icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Journal article</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-pen icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Thesis</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-file icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Academic publication</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-book icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Report</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-video icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'multiplicity:photo_form' info.slug %}">Video</a>
+            </p>
+          </div>
+        </div>
+      </div>
       <div class="col-sm-2">
         <div class="panel panel-info panel-colorful">
           <div class="panel-body text-center">
@@ -66,7 +129,43 @@
             </p>
           </div>
         </div>
-      </div><div class="col-sm-2">
+      </div>
+      {% if SITE_ID == 2 %}
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-podcast icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Podcast</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="fa fa-presentation icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Presentation</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="information jslinks">
+
+    <h2>Information</h2>
+
+    <div class="row">
+      <div class="col-sm-2">
         <div class="panel panel-info panel-colorful">
           <div class="panel-body text-center">
             <i class="fa fa-align-left icon-3x"></i>
@@ -74,17 +173,6 @@
           <div class="pad-all text-center">
             <p class="mar-no">
               <a href="{% url 'multiplicity:information_form' info.slug %}">Sector info</a>
-            </p>
-          </div>
-        </div>
-      </div><div class="col-sm-2">
-        <div class="panel panel-info panel-colorful">
-          <div class="panel-body text-center">
-            <i class="fa fa-book icon-3x"></i>
-          </div>
-          <div class="pad-all text-center">
-            <p class="mar-no">
-              <a href="{% url 'core:newreference' %}">Publication</a>
             </p>
           </div>
         </div>
@@ -125,7 +213,35 @@
           </div>
         </div>
       </div>
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="far fa-gavel icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Legislation</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="panel panel-info panel-colorful">
+          <div class="panel-body text-center">
+            <i class="far fa-info-circle icon-3x"></i>
+          </div>
+          <div class="pad-all text-center">
+            <p class="mar-no">
+              <a href="{% url 'core:newreference' %}">Summary</a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
+
+  </section>
+
+  <section class="geo jslinks">
 
     <h2>Geo-spatial</h2>
 
@@ -177,13 +293,19 @@
 {% block head %}
 <style type="text/css">
 textarea.form-control{height:200px}
-.information .panel {
+.geo .panel, .resources .panel, .information .panel {
   opacity:0.7;
   cursor:pointer;
 }
-.information .panel:hover {
+.information .panel:hover,
+.geo .panel:hover,
+.resources .panel:hover
+{
   opacity:1;
   transition: all 0.8s;
+}
+.information .panel {
+  background-color:#7ab4ce;
 }
 
 </style>
@@ -214,7 +336,7 @@ textarea.form-control{height:200px}
 {% block footer %}
 <script type="text/javascript">
 $(function(){
-  $(".information .panel").click(function() {
+  $(".jslinks .panel").click(function() {
     link = $(this).find("a");
     href = link.attr("href");
     window.location = href;

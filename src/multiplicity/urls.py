@@ -84,6 +84,9 @@ urlpatterns = [
     path('<slug:city>/upload/flow/<int:type>/<int:id>/meta', views.upload_flow_meta, name='upload_flow_meta'),
     path('<slug:city>/upload/stock', views.upload_flow, {'type': 'stocks'}, name='upload_stock'),
 
+    # Uploading reference
+    path('<slug:city>/upload/resources/<int:type>', views.reference_form, name='reference_form'),
+
     # Uploading geospatial data
     path('<slug:city>/upload/systemboundaries', views.upload_systemboundaries, name='upload_systemboundaries'),
     path('<slug:city>/upload/systemboundaries/create', views.upload_systemboundary, name='upload_systemboundary'),

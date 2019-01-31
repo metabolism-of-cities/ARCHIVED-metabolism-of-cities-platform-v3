@@ -1208,6 +1208,7 @@ def upload_mtu(request, city):
     context = { 'section': 'cities', 'menu': 'upload', 'info': info }
     return render(request, 'multiplicity/upload/mtu.html', context)
 
+@login_required
 def upload_mtu_review(request, city, filename):
     info = get_object_or_404(ReferenceSpace, slug=city)
 
@@ -1280,6 +1281,23 @@ def upload_mtu_review(request, city, filename):
     }
     return render(request, 'multiplicity/upload/mtu.review.html', context)
 
+
+@login_required
+def reference_form(request, city, type):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    if 'file' in request.FILES:
+        file = request.FILES['file']
+        filename = str(uuid.uuid4())
+        path = settings.MEDIA_ROOT + '/json/' + filename
+
+        with open(path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+
+        return redirect(reverse('multiplicity:upload_mtu_review', args=[info.slug, filename]))
+
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info }
+    return render(request, 'multiplicity/upload/mtu.html', context)
 
 def infrastructure_list(request, topic, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
