@@ -1476,6 +1476,14 @@ def photo_form(request, city, id=False, map=False):
             photo.save()
             saved = True
             messages.success(request, 'Image was saved.')
+            if not id:
+                record_type = get_object_or_404(UserAction, pk=1)
+                points = 3
+            else:
+                record_type = get_object_or_404(UserAction, pk=2)
+                points = 0
+            log = UserLog.objects.create(user=request.user, action=record_type, space=photo.primary_space, points=points, model="Photo", model_id=photo.id)
+
             if map:
                 return redirect(reverse('multiplicity:map_other', args=[info.slug]))
             else:

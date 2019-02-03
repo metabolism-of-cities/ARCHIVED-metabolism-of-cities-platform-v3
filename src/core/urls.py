@@ -42,7 +42,7 @@ urlpatterns = [
 
     path('community/people', views.people, name='people'),
     path('community/people/<int:id>', views.peopledetails, name='peopledetails'),
-    path('community/user/<int:id>', views.peopledetails, name='userdetails'),
+    path('community/user/<int:id>', views.userdetails, name='userdetails'),
 
     #path('community/research', views.projects, {'type': 'research', 'status': 'ongoing', 'page': 50}, name='research_projects'),
     #path('community/research/<int:id>', views.project_view, {'type': 'research', 'status': 'ongoing'}, name='research_project'),

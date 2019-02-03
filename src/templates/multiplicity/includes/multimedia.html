@@ -11,12 +11,26 @@
       <figcaption>
         <p><strong>{{ photo.description|linebreaksbr }}</strong></p>
         <p>
+          
+          Photo by
           {% if photo.source_url %}<a href="{{ photo.source_url }}">{% endif %}
-          Photo by {{ photo.author }}
-          {% if photo.source_url %}</a>{% endif %}.
+          {{ photo.author }}{% if photo.source_url %}</a>{% endif %}.
 
-          License: {{ photo.license }}
+          {% if photo.license.name == "Copyright" %}
+            Copyright {{ photo.author }}.
+          {% else %}
+            License: {{ photo.license }}
+          {% endif %}
         </p>
+        {% if photo.secondary_space %}
+          Related: <a href="{% url 'multiplicity:space' photo.secondary_space.city.slug photo.secondary_space.type.slug photo.secondary_space.slug %}">{{ photo.secondary_space.name }}</a>
+        </p>
+        {% endif %}
+
+        {% if request.user.is_staff %}
+          <a class="btn btn-info" href="{% url 'multiplicity:photo_form' info.slug photo.id %}"><i class="fa fa-pencil"></i></a>
+        {% endif %}
+            
       </figcaption>
     </figure>
   {% endfor %}
@@ -26,7 +40,7 @@
     <figure class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
       <a href="{% url 'core:video' video.id %}">
         <img
-           src="{{ video.thumbnail.url }}"
+           src="{% if video.thumbnail %}{{ video.thumbnail.url }}{% else %}http://i3.ytimg.com/vi/{{ video.url }}/hqdefault.jpg{% endif %}"
            alt="{{ video.title }}"
         >
       </a>

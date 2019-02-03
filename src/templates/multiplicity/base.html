@@ -3,9 +3,6 @@
 <html lang="en">
 <head>
 <title>{% block title %}{%endblock %} | {{ SITE_NAME }}</title>
-{% if select2 %}
-  <link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
-{% endif %}
 {% include 'multiplicity/includes/head.html' %}
 {% block head %}{% endblock %}
 {% if navbar == "backend" or navbar == "team" %}
@@ -236,7 +233,7 @@
           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
             <ul class="head-list">
               <li>
-                <a href="{% url 'multiplicity:profile' %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
+                <a href="{% url 'core:userdetails' request.user.id %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
               </li>
               <li>
                 <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>

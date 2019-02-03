@@ -1,118 +1,168 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
+{% load humanize %}
 
-{% block title %}{{ info.firstname }} {{ info.lastname }}{% endblock %}
+{% block title %}{{ info }}{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
 
 <div class="row">
 
-    <div class="col-lg-8">
-        <div class="panel panel-body">
+  <div class="col-lg-8">
+
+    <div class="panel panel-body">
+      <div class="panel-heading">
+        <h3>{{ info }}</h3>
+      </div>
+      <div class="panel-body">
+        <p>{{ info.profile }}</p>
+
+      </div>
+    </div>
+
+    {% if references %}
+      <h4>Publications</h4>
+      {% include 'core/includes/references.list.html' %}
+    {% endif %}
+
+
+    {% if videos %}
+      <h2>Videos</h2>
+      {% include 'multiplicity/includes/multimedia.html' %}
+    {% endif %}
+
+    {% if log %}
+
+      <div class="panel panel-body">
         <div class="panel-heading">
-            <h3>{{ info.firstname }} {{ info.lastname }}</h3>
+          <h2>Score</h2>
+          <p>Most recent activity</p>
         </div>
         <div class="panel-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Reference</th>
+                <th>Points</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for details in log %}
+              <tr>
+                <td>{{ details.date|naturalday }}</td>
+                <td>{{ details.action }}</td>
+                <td>
+                {% if details.space.city %}
+                  <a href="{% url 'multiplicity:space' details.space.city.slug details.space.type.slug details.space.slug %}">{{ details.space }}</a>
+                {% else %}
+                  <a href="{% url 'multiplicity:city' details.space.slug %}">{{ details.space.name }}</a>
+                {% endif %}
 
-          <p>{{ info.profile }}</p>
-
-          <h4>Publications</h4>
-          {% include 'core/references.list.html' %}
-
+                {% if details.model %}
+                  <br>{{ details.model }}
+                {% endif %}
+                </td>
+                <td>{{ details.points }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
         </div>
-        </div>
+      </div>
 
-{% if info.video_set.count %}
-<div class="row blog">
-{% for video in info.video_set.all %}
-  <div class="col-lg-4">
-    <div class="panel pad-all">
-        <div class="blog-header">
-          <a href="{% url 'core:video' video.id %}">
-          {% if video.site == "youtube" %}
-            <img class="img-responsive" src="https://img.youtube.com/vi/{{ video.url }}/0.jpg" alt="Image">
-          {% endif %}
-          </a>
-        </div>
-        <div class="blog-content">
-            <div class="blog-title media-block">
-                <a href="videos/{{ video.id }}" class="btn-link">
-                    <h2>{{ video.title }}</h2>
-                </a>
-            </div>
-        </div>
-    </div>
-  </div>
-
-  {% if forloop.counter|divisibleby:"3" %}
-    </div>
-    <div class="row blog">
-  {% endif %}
-
-{% endfor %}
-</div>
-
-{% endif %}
-
+    {% endif %}
 
     </div>
 
     {% if info.city %}
-    <div class="col-lg-4">
-      <div class="panel widget">
-        {% if info.city.image %}
-          <div class="widget-header bg-purple">
-              <img class="widget-bg img-responsive" src="{{ info.city.image.url }}" alt="">
-          </div>
-          {% endif %}
-          <div class="widget-body text-center">
-          {% if info.image %}
-              <img alt="Profile picture: {{ info.firstname }} {{ info.lastname }}" class="widget-img img-circle img-border-light" src="{{ info.image.url }}">
-          {% endif %}
-              <h4 class="mar-no text-main">{{ info.firstname }} {{ info.lastname }}</h4>
-              <p class="text-muted">{{ info.city.name }}, {{ info.city.country.name }}</p>
+      <div class="col-lg-4">
+        <div class="panel widget">
+          {% if info.city.system_photo %}
+            <div class="coverpic bg-purple">
+              <img class="img-responsive" src="{{ info.city.system_photo.image.url }}" alt="">
+            </div>
+            {% endif %}
 
-              <div class="btn-group btn-group-justified pad-top">
-                {% if info.website %}
-                  <a href="{{ info.website }}" class="btn btn-icon bord-no icon-lg add-tooltip fa fa-link" data-original-title="Website" data-container="body"></a>
-                {% endif %}
-                {% if info.twitter %}
-                  <a href="{{ info.twitter }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-twitter" data-original-title="Twitter" data-container="body"></a>
-                {% endif %}
-                {% if info.orcid %}
-                  <a href="https://orcid.org/{{ info.orcid }}" class="btn btn-icon bord-no icon-lg add-tooltip fas fa-id-card-alt" data-original-title="ORCID" data-container="body"></a>
-                {% endif %}
-                {% if info.researchgate %}
-                  <a href="{{ info.researchgate }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-researchgate" data-original-title="Research Gate" data-container="body"></a>
-                {% endif %}
-                {% if info.linkedin %}
-                  <a href="{{ info.linkedin }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-linkedin" data-original-title="LinkedIn" data-container="body"></a>
-                {% endif %}
-              </div>
-          </div>
-      </div>
+            <div class="widget-body text-center">
+            {% if info.image %}
+              <img alt="Profile picture: {{ info }}" class="widget-img img-circle img-border-light" src="{{ info.image.url }}">
+            {% endif %}
 
-    {% if info.member_since %}
-    <div class="panel">
-        <div class="panel-body text-center bg-success infobox">
-          <img src="{% static 'ie/img/logo.white.svg' %}" alt="" />
-          <p class="pad-top"><strong>{{ info.firstname }} is a member of Metabolism of Cities</strong></p>
-          <p>Member since {{ info.member_since }}</p>
+            <h4 class="mar-no text-main">{{ info }}</h4>
+            <p class="text-muted">{{ info.city.name }}, {{ info.city.country.name }}</p>
+
+            <div class="btn-group btn-group-justified pad-top">
+              {% if info.website %}
+                <a href="{{ info.website }}" class="btn btn-icon bord-no icon-lg add-tooltip fa fa-link" data-original-title="Website" data-container="body"></a>
+              {% endif %}
+              {% if info.twitter %}
+                <a href="{{ info.twitter }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-twitter" data-original-title="Twitter" data-container="body"></a>
+              {% endif %}
+              {% if info.orcid %}
+                <a href="https://orcid.org/{{ info.orcid }}" class="btn btn-icon bord-no icon-lg add-tooltip fas fa-id-card-alt" data-original-title="ORCID" data-container="body"></a>
+              {% endif %}
+              {% if info.researchgate %}
+                <a href="{{ info.researchgate }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-researchgate" data-original-title="Research Gate" data-container="body"></a>
+              {% endif %}
+              {% if info.linkedin %}
+                <a href="{{ info.linkedin }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-linkedin" data-original-title="LinkedIn" data-container="body"></a>
+              {% endif %}
+            </div>
+
+          </div>
         </div>
+
+        {% if info.member_since %}
+          <div class="panel">
+            <div class="panel-body text-center bg-success infobox">
+              <img src="{% static 'ie/img/logo.white.svg' %}" alt="" />
+              <p class="pad-top"><strong>{{ info.firstname }} is a member of Metabolism of Cities</strong></p>
+              <p>Member since {{ info.member_since }}</p>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if info.user.log.all %}
+          <div class="panel points">
+            <div class="panel-body text-center bg-info infobox">
+              <h4 class="pad-top">MultipliCity Contributions</h4>
+              <p>
+                Score: 
+                <strong>{{ points.total }} points</strong>
+              </p>
+            </div>
+          </div>
+        {% endif %}
+
+        </div>
+
+      {% endif %}
+
     </div>
-    {% endif %}
 
   </div>
 
-  {% endif %}
-
+</div>
 
 {% endblock %}
 
 {% block head %}
 <style type="text/css">
 .infobox img{max-width:120px}
+.coverpic img{
+  width: 100%;
+  max-height: 190px;
+  object-fit: cover;
+}
+.points h4 {
+  color: #fff;
+}
+.points .bg-info a {
+  color: #333;
+}
 </style>
 {% endblock %}
 
@@ -132,7 +182,7 @@
         <li><a href="./"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'core:about' %}">Community</a></li>
         <li><a href="{% url 'core:people' %}">People</a></li>
-        <li class="active">{{ info.firstname }} {{ info.lastname }}</li>
+        <li class="active">{{ info }}</li>
     </ol>
 
 </div>

@@ -599,6 +599,9 @@ table.table-striped .even {
 
 #gallery figcaption{display:none}
 
+.fancybox-caption a, .fancybox-caption a:link, .fancybox-caption a:visited{text-decoration:underline}
+.fancybox-caption a:hover{text-decoration:none}
+
 .resourcelist .single-resource {
   margin-bottom: 10px;
   display: block;

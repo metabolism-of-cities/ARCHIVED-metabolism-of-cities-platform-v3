@@ -1,0 +1,42 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Page not found{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+  <div class="cls-content">
+    <h1 class="error-code text-info">404</h1>
+    <p class="h4 text-uppercase text-bold">Page Not Found!</p>
+    <div class="pad-btm">
+      Sorry, the requested page was not found. We recently restructured our site - please 
+      navigate our menu to find what you are looking for.
+    </div>
+    <hr class="new-section-sm bord-no">
+    <div class="pad-top"><a class="btn btn-primary" href="./">Back to the homepage</a></div>
+  </div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Page not found</h1>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

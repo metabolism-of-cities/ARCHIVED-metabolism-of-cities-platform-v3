@@ -121,7 +121,6 @@ class DatasetTypeForm(ModelForm):
         model = DatasetType
         fields = ['name', 'description', 'flows', 'type', 'category', 'topic', 'slug', 'active']
 
-
 class ReferenceSpace(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)
@@ -137,11 +136,17 @@ class ReferenceSpace(models.Model):
 
     def __str__(self):
         return self.name + " (" + self.type.name + ")"
+
     def save(self, *args, **kwargs):
         if not self.id:
             # Newly created object, so set slug
             self.slug = slugify(self.name)
         super(ReferenceSpace, self).save(*args, **kwargs)
+
+    def system_photo(self):
+        photo = Photo.objects.filter(primary_space=self, secondary_space__isnull=True, process__isnull=True, deleted=False)
+        if photo:
+            return photo[0]
 
     class Meta:
         ordering = ["name"]

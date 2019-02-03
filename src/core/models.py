@@ -318,6 +318,9 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ["-year", "title"]
+
     def source(self):
         "Return details of where this reference was published at/in"
         if self.journal:
@@ -363,16 +366,17 @@ class UserAction(models.Model):
         return self.name
 
 class UserLog(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='log')
     space = models.ForeignKey('multiplicity.ReferenceSpace', on_delete=models.CASCADE, null=True, blank=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     action = models.ForeignKey(UserAction, on_delete=models.CASCADE)
     points = models.PositiveSmallIntegerField()
     model = models.CharField(max_length=255, null=True, blank=True)
+    model_id = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     class Meta:
-        ordering = ["date"]
+        ordering = ["-date"]
 
 class Color(models.Model):
     name = models.CharField(max_length=20)

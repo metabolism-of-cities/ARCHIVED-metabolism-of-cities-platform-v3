@@ -169,10 +169,41 @@ def people(request):
     return render(request, 'core/people.html', context)
 
 def peopledetails(request, id):
+    from django.db.models import Sum
     info = get_object_or_404(People, pk=id)
     list = Reference.objects.filter(authors__id=id)
-    context = { 'section': 'community', 'page': 'people', 'info': info, 'list': list}
+    videos = info.video_set.all()
+    references = Reference.objects.filter(status='active', authors=info)
+    if info.user:
+        points = UserLog.objects.filter(user=info.user).aggregate(total=Sum('points'))
+        log = info.user.log
+        if log:
+            log = log.all()[:10]
+    else:
+        points = False
+        log = False
+    context = { 'section': 'community', 'page': 'people', 'info': info, 'list': list, 'videos': videos, 'references': references, 'points': points, 'log': log }
     return render(request, 'core/people.details.html', context)
+
+def userdetails(request, id):
+    # For each user we have one record in the people table
+    # However, this record is not created by default
+    # Here we check if it exists. If not, we'll create a new one
+    # Our final goal is to redirect to the appropriate people page
+    people = get_object_or_404(People, user=id)
+    if not people:
+        info = get_object_or_404(User, pk=id)
+        if info.is_active:
+            people = People.objects.create(
+                name = info.first_name + str(" ") + info.last_name,
+                email = user.email,
+                user = user,
+            )
+
+    if not people:
+        raise Http404("No user found")
+    else:
+        return redirect(reverse('core:peopledetails', args=[people.id]))
 
 def contact(request):
     context = { 'section': 'about', 'page': 'contact'}
