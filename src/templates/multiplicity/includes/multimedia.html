@@ -3,18 +3,24 @@
 <div id="gallery" class="row">
   {% for photo in photos %}
     <figure class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
-      <a href="{{ photo.image.large.url }}" data-fancybox="gallery">
+      <a href="{{ photo.image.large.url }}" data-fancybox="images">
         <img
            src="{{ photo.image.thumbnail.url }}"
         >
-        <figcaption>
-          <p><strong>{{ photo.description|linebreaksbr }}</strong></p>
-          <p>Photo by
-         {{ photo.author }}</p>
-        </figcaption>
       </a>
+      <figcaption>
+        <p><strong>{{ photo.description|linebreaksbr }}</strong></p>
+        <p>
+          {% if photo.source_url %}<a href="{{ photo.source_url }}">{% endif %}
+          Photo by {{ photo.author }}
+          {% if photo.source_url %}</a>{% endif %}.
+
+          License: {{ photo.license }}
+        </p>
+      </figcaption>
     </figure>
   {% endfor %}
+
 
   {% for video in videos %}
     <figure class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
