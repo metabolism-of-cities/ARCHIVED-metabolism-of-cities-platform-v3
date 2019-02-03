@@ -46,6 +46,7 @@
 .panel{background-color:transparent}
 .narrow-dropdown{width:600px}
 .text-main, a.text-main:hover, a.text-main:focus{color:#000}
+
 .nav-tabs.nav-justified.topnav > li > a{
   background:rgba(254, 109, 51, 0.2);
   color:#333;
