@@ -45,7 +45,7 @@
     <h4>Upload file</h4>
     <p class="alert alert-info">
       Please upload a CSV file with the data. The following columns 
-      should appear in this file (in the same order). <a href="http://">Download sample file.</a>
+      should appear in this file (in the same order). <a href="{% url 'multiplicity:upload_infrastructure_file_sample' info.slug type.slug %}">Download sample file.</a>
     </p>
 
     <pre>Name | Latitude | Longitude | Description | Website URL{% for details in features %} | {{ details.name }}{% if details.unit %} ({{ details.unit.symbol }}){% endif %}{% endfor %}</pre>

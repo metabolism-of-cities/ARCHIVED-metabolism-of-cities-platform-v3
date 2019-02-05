@@ -7,7 +7,7 @@ from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feat
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
-from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization, Video
+from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization, Video, VideoUploadForm
 from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset, Process
 from django.db.models import Count
 from django.contrib import messages
@@ -89,6 +89,7 @@ def space(request, city, type, space):
     topic = type.topic
     tab = type.slug
     photouploadlink = '/cities/'+info.slug+'/photo?space='+str(space.id)
+    videouploadlink = '/cities/'+info.slug+'/upload/video?space='+str(space.id)
     editlink = '/admin/multiplicity/referencespace/'+str(space.id)+'/change/'
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     if space.mtu:
@@ -102,6 +103,7 @@ def space(request, city, type, space):
     'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 
     'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
     'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
+    'videouploadlink': videouploadlink, 
     }
     return render(request, 'multiplicity/space.html', context)
 
@@ -524,6 +526,40 @@ def upload_flow_file(request, city, id):
     editlink = '/admin/multiplicity/datasettype/' + str(id) +'/change/'
     context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'type': type, 'previous': previous, 'dataset': dataset, 'editlink': editlink, 'topics': topics }
     return render(request, 'multiplicity/upload/flow.file.html', context)
+
+@login_required
+def upload_flow_file_sample(request, city, id):
+    most_recent_file = CSV.objects.filter(dataset__type__id=id).order_by('-id')
+    if most_recent_file:
+        most_recent_file = most_recent_file[0]
+    else:
+        most_recent_file = False
+
+    response = HttpResponse(contents, content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="sample.csv"'
+    return response
+
+@login_required
+def upload_infrastructure_file_sample(request, city, type):
+    from django.http import FileResponse
+    most_recent_file = ReferenceSpaceCSV.objects.filter(type__slug=type).order_by('-id')
+    if most_recent_file:
+        most_recent_file = most_recent_file[0]
+        file = settings.MEDIA_ROOT + '/csv-referencespace/' + most_recent_file.name
+        contents = open(file, 'r')
+    else:
+        type = get_object_or_404(ReferenceSpaceType, slug=type)
+        # If the file has not yet been uploaded before, then we need to create our own
+        # sample file
+        info = get_object_or_404(ReferenceSpace, slug=city)
+        features = Feature.objects.filter(type=type.id).filter(Q(exclusively_for__isnull=True) | Q(exclusively_for=info))
+        contents = "Name,Latitude,Longitude,Description,Website URL"
+        for details in features:
+            contents = contents + "," + details.name
+    response = HttpResponse(contents, content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="sample.csv"'
+    return response
+
 
 @login_required
 def upload_infrastructure_review(request, city, type, id):
@@ -1501,8 +1537,72 @@ def photo_form(request, city, id=False, map=False):
     return render(request, 'multiplicity/form.photo.html', context)
 
 
+@login_required
+def upload_video(request, city, id=False, space=False):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    if id:
+        video = get_object_or_404(Video, pk=id)
+        form = VideoUploadForm(instance=video)
+    else:
+        video = False
+        form = VideoUploadForm()
+    saved = False
+    if request.method == 'POST':
+        if not id:
+            form = VideoUploadForm(request.POST, request.FILES)
+        else:
+            form = VideoUploadForm(request.POST, request.FILES, instance=video)
+        if form.is_valid():
+            if request.POST['process']:
+                process = Process.objects.get(pk=request.POST['process'])
+            else:
+                process = None
+            video = form.save(commit=False)
+            if request.POST['primary_space']:
+                video.primary_space = get_object_or_404(ReferenceSpace, pk=request.POST['primary_space'])
+            video.process = process
+            url = video.url
+            video.url = url.rsplit('/', 1)[-1]
+            video.save()
+            saved = True
+            messages.success(request, 'Video was saved.')
+            if not id:
+                record_type = get_object_or_404(UserAction, pk=1)
+                points = 3
+            else:
+                record_type = get_object_or_404(UserAction, pk=2)
+                points = 0
+            log = UserLog.objects.create(user=request.user, action=record_type, space=video.primary_space, points=points, model="Video", model_id=video.id)
+
+            if video.primary_space:
+                return redirect_space(request, video.primary_space.id)
+            else:
+                return redirect_space(request, info.id)
+        else:
+            messages.warning(request, 'We could not save your form, please correct the errors')
+
+    context = { 
+        'section': 'cities', 'info': info, 'form': form, 
+        'type': type, 'processes': processes, 'video': video, 'select2': True,
+        'menu': 'upload' 
+    }
+    return render(request, 'multiplicity/upload/video.html', context)
+
+
 # Admin
 
+def redirect_space(request, id):
+    info = get_object_or_404(ReferenceSpace, pk=id)
+    if info.city:
+        link = reverse('multiplicity:space', kwargs={
+            'city': info.city.slug,
+            'type': info.type.slug,
+            'space': info.slug,
+            })
+    else:
+        link = reverse('multiplicity:city', kwargs={'slug': info.slug})
+    return redirect(link)
 
 @staff_member_required
 def admin_referencespaces(request, type):

@@ -165,7 +165,7 @@ class Article(models.Model):
         ('newsevents', 'News and Events'),
     )
     section = models.CharField(max_length=20, choices=SECTIONS, default='about')
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
     objects = models.Manager()
     on_site = CurrentSiteManager()
     date = models.DateField(null=True, blank=True)
@@ -217,7 +217,7 @@ class EventForm(ModelForm):
 class VideoCollection(models.Model):
     title = models.CharField(max_length=255)
     description = HTMLField('description', null=True, blank=True)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
     objects = models.Manager()
     on_site = CurrentSiteManager()
 
@@ -237,8 +237,15 @@ class Video(models.Model):
     author = models.CharField(max_length=255)
     date = models.DateField(null=True)
     people = models.ManyToManyField(People, blank=True)
-    website = models.CharField(max_length=255)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    VIDEOSITES = (
+        ('youtube', 'YouTube'),
+        ('vimeo', 'Vimeo'),
+        ('wikimedia', 'Wikimedia Commons'),
+        ('other', 'Other website'),
+    )
+
+    website = models.CharField(max_length=20, choices=VIDEOSITES)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
     objects = models.Manager()
     on_site = CurrentSiteManager()
     primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
@@ -249,14 +256,23 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
-        labels = {
-            'primary_space': 'Reference space (optional)'
-        }
 
 class VideoForm(ModelForm):
     class Meta:
         model = Video
         exclude = ['id', 'site']
+        labels = {
+            'primary_space': 'Reference space (optional)'
+        }
+
+class VideoUploadForm(ModelForm):
+    class Meta:
+        model = Video
+        fields = ['title', 'website', 'url', 'primary_space', 'description', 'author', 'date', 'thumbnail', 'license']
+        labels = {
+            'primary_space': 'Reference space',
+            'url': 'Video URL'
+        }
         
 class Tag(models.Model):
     name = models.CharField(max_length=255)
@@ -423,7 +439,7 @@ class Project(models.Model):
     type = models.CharField(max_length=20, choices=TYPE)
     THESISTYPE = (
         ('bachelor', 'Bachelor'),
-        ('masters', 'Masters'),
+        ('masters', 'Master'),
         ('phd', 'PhD'),
     )
     thesistype = models.CharField(max_length=20, choices=THESISTYPE, null=True, blank=True)

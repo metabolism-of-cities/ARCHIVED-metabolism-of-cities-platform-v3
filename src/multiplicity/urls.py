@@ -63,8 +63,6 @@ urlpatterns = [
     path('<slug:city>/information', views.information_form, name='information_form'),
     path('<slug:city>/information/topic/<int:topic>', views.information_form, name='information_form_topic'),
     path('<slug:city>/information/<int:id>', views.information_form, name='information_form'),
-    path('<slug:city>/photo', views.photo_form, name='photo_form'),
-    path('<slug:city>/photo/<int:id>', views.photo_form, name='photo_form'),
     path('<slug:city>/map', views.photo_form, {'map': True}, name='map_form'),
     path('<slug:city>/sectors/<slug:sector>', views.sector, name='sector'),
 
@@ -74,12 +72,14 @@ urlpatterns = [
     # Uploading infrastructure data
     path('<slug:city>/upload/infrastructure', views.upload_infrastructure, name='upload_infrastructure'),
     path('<slug:city>/upload/infrastructure/<slug:type>', views.upload_infrastructure_file, name='upload_infrastructure_file'),
+    path('<slug:city>/upload/infrastructure/<slug:type>/sample', views.upload_infrastructure_file_sample, name='upload_infrastructure_file_sample'),
     path('<slug:city>/upload/infrastructure/<slug:type>/<int:id>', views.upload_infrastructure_review, name='upload_infrastructure_review'),
     path('<slug:city>/upload/infrastructure/<slug:type>/<int:id>/meta', views.upload_infrastructure_meta, name='upload_infrastructure_meta'),
 
     # Uploading flows/stocks data
     path('<slug:city>/upload/flow', views.upload_flow, name='upload_flow'),
     path('<slug:city>/upload/flow/<int:id>', views.upload_flow_file, name='upload_flow_file'),
+    path('<slug:city>/upload/flow/<int:id>/sample', views.upload_flow_file_sample, name='upload_flow_file_sample'),
     path('<slug:city>/upload/flow/<int:type>/<int:id>', views.upload_flow_review, name='upload_flow_review'),
     path('<slug:city>/upload/flow/<int:type>/<int:id>/meta', views.upload_flow_meta, name='upload_flow_meta'),
     path('<slug:city>/upload/stock', views.upload_flow, {'type': 'stocks'}, name='upload_stock'),
@@ -95,10 +95,18 @@ urlpatterns = [
     path('<slug:city>/upload/mtu', views.upload_mtu, name='upload_mtu'),
     path('<slug:city>/upload/mtu/<slug:filename>', views.upload_mtu_review, name='upload_mtu_review'),
 
+    # Uploading multimedia
+    path('<slug:city>/photo', views.photo_form, name='photo_form'),
+    path('<slug:city>/photo/<int:id>', views.photo_form, name='photo_form'),
+
+    path('<slug:city>/upload/video', views.upload_video, name='upload_video'),
+    path('<slug:city>/upload/video/<int:id>', views.upload_video, name='upload_video'),
+
     path('<slug:city>/infrastructure/<slug:type>/<slug:space>', views.space, name='space'),
     path('<slug:city>/infrastructure/<slug:type>', views.space_list, name='space_list'),
     path('<slug:city>/infrastructure/<slug:topic>', views.infrastructure_list, name='infrastructure_list'),
     path('<slug:city>/infrastructure', views.infrastructure_list, name='infrastructure_list'),
+
     path('<slug:city>/<slug:main>/<slug:topic>', views.topic, name='subtopic'),
     path('<slug:city>/<slug:main>/<slug:topic>/input', views.topic, {'tab': 'input'}, name='subtopic_input'),
     path('<slug:city>/<slug:main>/<slug:topic>/use', views.topic, {'tab': 'use' }, name='subtopic_use'),
