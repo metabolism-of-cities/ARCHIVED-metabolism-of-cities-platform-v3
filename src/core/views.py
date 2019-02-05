@@ -224,8 +224,8 @@ def journals(request):
 
 def journal(request, id):
     info = get_object_or_404(Journal, pk=id)
-    list = Reference.objects.filter(journal_id=id).order_by('-year')
-    context = { 'section': 'literature', 'page': 'journals', 'info': info, 'list': list}
+    references = Reference.objects.filter(journal_id=id).order_by('-year')
+    context = { 'section': 'literature', 'page': 'journals', 'info': info, 'references': references}
     return render(request, 'core/journal.html', context)
 
 def organizations(request, type):
