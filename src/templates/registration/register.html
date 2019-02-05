@@ -9,65 +9,67 @@
 </head>
 
 <body>
-    <div id="container" class="cls-container">
-		<div id="bg-overlay"></div>
-		
-		<div class="cls-content">
-		    <div class="cls-content-lg panel">
-		        <div class="panel-body">
-		            <div class="mar-ver pad-btm">
-		                <h1 class="h3">Create a New Account</h1>
-		                <p>Register for Metabolism of Cities by filling out the form below</p>
-		            </div>
-                    {% if messages %}
-                      {% for message in messages %}
-                        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                          {{ message|safe }}
-                        </div>
-                      {% endfor %}
-                    {% endif %}
 
-                        <form method="post">
-                        {% csrf_token %}
-                       <div class="row">
-		                    <div class="col-sm-6">
-		                        <div class="form-group">
-		                            <input type="text" class="form-control" placeholder="First name" name="first_name" required>
-		                        </div>
-                            </div>
-		                    <div class="col-sm-6">
-		                        <div class="form-group">
-		                            <input type="text" class="form-control" placeholder="Last name" name="last_name" required>
-		                        </div>
-                            </div>
-                         </div>
-                         <div class="row">
-		                    <div class="col-sm-6">
-		                        <div class="form-group">
-		                            <input type="text" class="form-control" placeholder="E-mail" name="email" required>
-		                        </div>
-                            </div>
-		                    <div class="col-sm-6">
-		                        <div class="form-group">
-		                            <input type="password" class="form-control" placeholder="Password" name="password" required>
-		                        </div>
-		                    </div>
-		                </div>
-		                <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
-		            </form>
-		        </div>
-		        <div class="pad-all">
-		            Already have an account ? <a href="/accounts/login" class="btn-link mar-rgt text-bold">Sign In</a>
-		
-		        </div>
-		    </div>
-		</div>
-		
-		
+<div id="container" class="cls-container">
+
+  <div id="bg-overlay"></div>
+
+  <div class="cls-content">
+    <div class="cls-content-lg panel">
+        <div class="panel-body">
+            <div class="mar-ver pad-btm">
+                <h1 class="h3">Create a New Account</h1>
+                <p>Register for {{ SITE_NAME }} by filling out the form below</p>
+            </div>
+
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message|safe }}
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <form method="post">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="First name" name="first_name" required>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Last name" name="last_name" required>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="E-mail" name="email" required>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" name="password" required>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+            </form>
+
+        </div>
+        <div class="pad-all">
+          Already have an account ? <a href="/accounts/login" class="btn-link mar-rgt text-bold">Sign In</a>
+        </div>
     </div>
+  </div>
+
+</div>
 
 {% include 'multiplicity/includes/footer.html' %}
 

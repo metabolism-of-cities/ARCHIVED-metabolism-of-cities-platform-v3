@@ -1,0 +1,15 @@
+A new account has been created on {{ site }}. The details follow below:
+
+Name: {{ user.first_name }} {{ user.last_name }}
+E-mail: {{ user.email }}
+
+Background and motivation:
+---------------------------
+{{ profile }}
+
+What would you like to help with?
+---------------------------------
+{{ contribution }}
+
+Activate/review this profile here:
+{{ url }}

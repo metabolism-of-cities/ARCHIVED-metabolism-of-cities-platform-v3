@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process
@@ -14,6 +14,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponseRedirect
+
+# These are used so that we can send mail
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
+from django.conf import settings
 
 # Create your views here.
 def videos(request, collection=False):
@@ -105,7 +111,7 @@ def taskforce(request, slug):
     return render(request, 'core/taskforce.html', context)
 
 def page(request, slug):
-    page = get_object_or_404(Article, slug=slug)
+    page = get_object_or_404(Article, slug=slug, site=request.site)
     context = { 'section': page.section, 'page': 'news', 'page': page}
     return render(request, 'core/page.html', context)
 
@@ -615,7 +621,8 @@ def reference_search_ajax(request, active_only=False):
         list.append(d)
     return JsonResponse(list, safe=False)
 
-def register(request):
+def register(request, contributor=False):
+
     if request.method == 'POST':
         check = User.objects.filter(email=request.POST['email'])
         if check:
@@ -624,6 +631,7 @@ def register(request):
             user = User.objects.create_user(request.POST['email'], request.POST['email'], request.POST['password'])
             user.first_name = request.POST['first_name']
             user.last_name = request.POST['last_name']
+            user.is_active = False
             user.save()
             people = People.objects.create(
                 firstname = request.POST['first_name'],
@@ -631,12 +639,49 @@ def register(request):
                 email = request.POST['email'],
                 email_public = False,
                 user = user,
-                status = 'active',
+                description = request.POST['profile'],
+                status = 'pending',
             )
-            login(request, user)
-            messages.success(request, 'Welcome ' + request.POST['first_name'] + '! You are now a registered user.')
-            return redirect('/')
-    return render(request, 'registration/register.html')
+
+            PeopleNote.objects.create(
+                people = people,
+                created_by = user,
+                note = request.POST['contribution'],
+            )
+
+            current_site = Site.objects.get_current()
+            scheme = request.scheme
+            url = scheme + "://" + current_site.domain
+
+            context = {
+                'url': url + reverse('core:admin_people', args=[people.id]),
+                'profile': request.POST['profile'],
+                'contribution': request.POST['contribution'],
+                'user': user,
+                'site': current_site.name,
+            }
+
+            msg_html = render_to_string('team/mail/newaccount.html', context)
+            msg_plain = render_to_string('team/mail/newaccount.txt', context)
+
+            send_mail(
+                'New contributor signup: ' + people.firstname + ' ' + people.lastname,
+                msg_plain,
+                settings.SITE_EMAIL,
+                [settings.SITE_EMAIL],
+                html_message=msg_html,
+            )
+
+            if user.is_active:
+                login(request, user)
+                messages.success(request, 'Welcome ' + request.POST['first_name'] + '! You are now a registered user.')
+            else:
+                messages.success(request, 'Thanks ' + request.POST['first_name'] + '! We have received your registration and we will reach out to you soon to activate your account.')
+            return redirect('/about/join')
+    if contributor:
+        return render(request, 'registration/contributor.html')
+    else:
+        return render(request, 'registration/register.html')
 
 def tag_ajax(request):
     if request.GET.get('parent'):
@@ -662,7 +707,7 @@ def admin_people_list(request):
 
 @staff_member_required
 def admin_member_list(request):
-    list = People.objects.exclude(member_since__isnull=True)
+    list = People.on_site.filter(user__isnull=False)
     context = { 'navbar': 'backend', 'list': list, 'datatables': True, 'volunteers': True }
     return render(request, 'core/admin/people.list.html', context)
 

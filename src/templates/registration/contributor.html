@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sign Up - {{ SITE_NAME }}</title>
+{% include 'multiplicity/includes/head.html' %}
+<style type="text/css">
+.cls-content .cls-content-sm, .cls-content .cls-content-lg {background:#fff;padding:10px}
+textarea.form-control{height:150px}
+</style>
+</head>
+
+<body>
+
+<div id="container" class="cls-container">
+
+  <div id="bg-overlay"></div>
+
+  <div class="cls-content">
+
+    <div class="cls-content-lg panel">
+
+      <div class="panel-body">
+
+        <div class="mar-ver pad-btm">
+          <h1 class="h3">Become a contributor</h1>
+          <p>Sign up to become a contributor on {{ SITE_NAME }}! </p>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              {{ message|safe }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>First name</label>
+                <input type="text" class="form-control" name="first_name" required>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Last name</label>
+                <input type="text" class="form-control" name="last_name" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" class="form-control" name="email" required>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mar-top">
+            <div class="form-group">
+              <label>Your background and motivation</label>
+              <textarea name="profile" class="form-control" placeholder="Please provide some details on your background and why you would like to contribute" required></textarea>
+            </div>
+          </div>
+          <div class="row mar-top">
+            <div class="form-group">
+              <label>What would you like to help with?</label>
+              <textarea name="contribution" class="form-control" placeholder="In what way would you like to contribute?" required></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="pad-all">
+        Already have an account ? <a href="/accounts/login" class="btn-link mar-rgt text-bold">Sign In</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% include 'multiplicity/includes/footer.html' %}
+
+</body>
+</html>

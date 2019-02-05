@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['localhost', 'web']
 
 # MoC = 1, MoI = 2
 SITE_ID = 1
+SITE_EMAIL = 'info@metabolismofcities.org'
 
 # Application definition
 INSTALLED_APPS = [

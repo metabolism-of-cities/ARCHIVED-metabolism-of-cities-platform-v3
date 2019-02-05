@@ -22,8 +22,13 @@
               <tr>
                 <th>Name</th>
                 <th>City</th>
-                <th>E-mail</th>
+                {% if volunteers %}
+                  <th>Type</th>
+                {% else %}
+                  <th>E-mail</th>
+                {% endif %}
                 <th>Status</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody>
@@ -31,7 +36,18 @@
               <tr>
                 <td>{{ details.firstname }} {{ details.lastname }}</td>
                 <td>{{ details.city.name }}</td>
-                <td>{{ details.email }}</td>
+                {% if volunteers %}
+                  <td>
+                    {% if details.user.is_staff %}
+                      Core team
+                    {% else %}
+                      Data contributor
+                    {% endif %}
+                  </td>
+                {% else %}
+                  <td>{{ details.email }}</td>
+                {% endif %}
+                <td>{{ details.status }}</td>
                 <td><a class="btn btn-info" href="{% url 'core:admin_people' details.id %}"><i class="fa fa-pencil"></i> Edit</a></td>
               </tr>
             {% endfor %}

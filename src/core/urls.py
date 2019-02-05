@@ -66,6 +66,7 @@ urlpatterns = [
     path('resources', views.journals, name='resources_home'),
     path('community', views.empty, name='community_home'),
     path('register', views.register),
+    path('contributor', views.register, {'contributor': True}, name='contributor'),
 
     path('<slug:slug>', views.section_home, name='section_home'),
 

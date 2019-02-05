@@ -10,6 +10,7 @@ User = get_user_model()
 
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
+from django.conf import settings
 
 class TimestampedModel(models.Model):
     # A timestamp representing when this object was created.
@@ -112,8 +113,12 @@ class People(models.Model):
         ('retired', 'Retired'),
         ('deceased', 'Deceased'),
         ('inactive', 'Inactive'),
+        ('pending', 'Pending Review'),
     )
     status = models.CharField(max_length=8, choices=PEOPLE_STATUS, default='active')
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
 
     def __str__(self):
         return '%s %s' % (self.firstname, self.lastname)
@@ -123,6 +128,13 @@ class PeopleForm(ModelForm):
         model = People
         exclude = ['id']
 
+class PeopleNote(models.Model):
+    people = models.ForeignKey(People, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    note = models.TextField(null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    class Meta:
+        ordering = ["date"]
 
 class PeopleAffiliation(models.Model):
     people = models.ForeignKey(People, on_delete=models.CASCADE)
