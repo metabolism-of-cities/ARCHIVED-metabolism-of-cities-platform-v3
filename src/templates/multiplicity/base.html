@@ -3,17 +3,20 @@
 <html lang="en">
 <head>
 <title>{% block title %}{%endblock %} | {{ SITE_NAME }}</title>
+{% if select2 %}
+  <link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
+{% endif %}
 {% include 'multiplicity/includes/head.html' %}
 {% block head %}{% endblock %}
 {% if navbar == "backend" or navbar == "team" %}
 <style type="text/css">
-  #topstrip {background:#c23aaf;color:#fff;font-size:30px;text-indent:-30px}
-  #navbar-container, .stretch-bg-head #content-container::before{background:#c23aaf}
-  @media (min-width: 768px) { .navbar-header:before { background:#c23aaf} }
+#topstrip {background:#c23aaf;color:#fff;font-size:30px;text-indent:-30px}
+#navbar-container, .stretch-bg-head #content-container::before{background:#c23aaf}
+@media (min-width: 768px) { .navbar-header:before { background:#c23aaf} }
 </style>
 {% endif %}
 <style type="text/css">
-  #footerwarning{;z-index:100000;margin-bottom:0;text-align:center}
+#footerwarning{;z-index:100000;margin-bottom:0;text-align:center}
 </style>
 </head>
 
@@ -26,351 +29,376 @@
 {% endif %}
 
 <div id="container" class="effect boxed-layout aside-float slide {% if mainnav %}{{ mainnav }}{% elif section == 'cities' or sidenav %}mainnav-lg{% else %}mainnav-out{% endif %} {% block container %}{% endblock %}">
+<!--<div id="container" class="effect aside-left aside-bright aside-in boxed-layout mainnav-lg">-->
 
-<header id="navbar">
-  <div id="navbar-container" class="boxed">
-    <div class="navbar-header">
-      <a href="/" class="navbar-brand">
-        <div class="brand-title">
-          <span class="brand-text">{{ SITE_NAME }}</span>
-        </div>
-      </a>
-    </div>
-    <div class="navbar-content clearfix">
-      <ul class="nav navbar-top-links">
-
-        <li class="tgl-menu-btn">
-        </li>
-
-        {% if navbar == "backend" %}
-
-        <h4 style="margin-top:20px"><a href="/intranet/controlpanel"><i class="psi-lock"></i> Back-End</a></h4>
-
-        {% elif navbar == "team" %}
-
-        <h4 style="margin-top:20px"><a href="/intranet/"><i class="far fa-comments icon-lg icon-fw"></i>Team Discussion Board</a></h4>
-
-        {% else %}
-
-        {% if SITE_ID == 1 %}
-        {% include 'core/includes/menu.moc.html' %}
-        {% else %}
-        {% include 'core/includes/menu.moi.html' %}
-        {% endif %}
-
-        {% endif %}
-      </ul>
-      <ul class="nav navbar-top-links">
-
-        {% if navbar == "team" or navbar == "backend" %}
-
-        <li id="dropdown-profile" class="dropdown">
-          <a href="{% url 'team:memberprofile' %}" class="text-right" title="User profile">
-            <span class="ic-user pull-right">
-              <i class="fa fa-user"></i>
-            </span>
-          </a>
-        </li>
-        <li id="dropdown-profile" class="dropdown">
-          <a href="{% url 'team:search' %}" class="text-right" title="Search discussion board">
-            <span class="ic-user pull-right">
-              <i class="fa fa-search"></i>
-            </span>
-          </a>
-        </li>
-        <li id="dropdown-profile" class="dropdown">
-          <a href="/accounts/logout" class="text-right" title="Log out">
-            <span class="ic-user pull-right">
-              <i class="fas fa-sign-out-alt"></i>
-            </span>
-          </a>
-        </li>{% else %}
-
-        <li class="dropdown hide">
-          <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-            <i class="pli-bell icon-lg"></i>
-            <span class="badge badge-header badge-danger"></span>
-          </a>
-
-          <!--Notification dropdown menu-->
-          <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-            <div class="nano scrollable">
-              <div class="nano-content">
-                <ul class="head-list">
-
-                  <!-- Dropdown list-->
-                  <li>
-                    <a href="#">
-                      <div class="clearfix">
-                        <p class="pull-left">Progressbar</p>
-                        <p class="pull-right">70%</p>
-                      </div>
-                      <div class="progress progress-sm">
-                        <div style="width: 70%;" class="progress-bar">
-                          <span class="sr-only">70% Complete</span>
+        <header id="navbar">
+            <div id="navbar-container" class="boxed">
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand">
+                        <div class="brand-title">
+                            <span class="brand-text">{{ SITE_NAME }}</span>
                         </div>
-                      </div>
                     </a>
-                  </li>
+                </div>
+                <div class="navbar-content clearfix">
+                    <ul class="nav navbar-top-links">
 
-                  <!-- Dropdown list-->
-                  <li>
-                    <a href="#" class="media">
-                      <div class="media-left">
-                        <i class="pli-hd icon-2x icon-lg"></i>
-                      </div>
-                      <div class="media-body">
-                        <div class="text-nowrap">With Icon</div>
-                        <small class="text-muted">15 minutes ago</small>
-                      </div>
-                    </a>
-                  </li>
+                        <li class="tgl-menu-btn">
+                        </li>
 
-                  <!-- Dropdown list-->
-                  <li>
-                    <a href="#" class="media">
-                      <div class="media-left">
-                        <i class="pli-power-cable icon-2x icon-lg"></i>
-                      </div>
-                      <div class="media-body">
-                        <div class="text-nowrap">With Icon</div>
-                        <small class="text-muted">15 minutes ago</small>
-                      </div>
-                    </a>
-                  </li>
+                        {% if navbar == "backend" %}
 
-                  <!-- Dropdown list-->
-                  <li>
-                    <a href="#" class="media">
-                      <div class="media-left">
+                          <h4 style="margin-top:20px"><a href="/intranet/controlpanel"><i class="psi-lock"></i> Back-End</a></h4>
 
-                        <span class="icon-wrap icon-circle bg-primary">
-                          <i class="pli-disk icon-lg icon-lg"></i>
-                        </span>
-                      </div>
-                      <div class="media-body">
-                        <div class="text-nowrap">Circle Icon</div>
-                        <small class="text-muted">15 minutes ago</small>
-                      </div>
-                    </a>
-                  </li>
+                        {% elif navbar == "team" %}
 
-                  <!-- Dropdown list-->
-                  <li>
-                    <a href="#" class="media">
-                      <span class="badge badge-success pull-right">90%</span>
-                      <div class="media-left">
+                          <h4 style="margin-top:20px"><a href="/intranet/"><i class="far fa-comments icon-lg icon-fw"></i>Team Discussion Board</a></h4>
 
-                        <span class="icon-wrap icon-circle bg-danger">
-                          <i class="pli-mail-open icon-lg icon-lg"></i>
-                        </span>
-                      </div>
-                      <div class="media-body">
-                        <div class="text-nowrap">Circle icon with badge</div>
-                        <small class="text-muted">50 minutes ago</small>
-                      </div>
-                    </a>
-                  </li>
+                        {% else %}
 
-                  <!-- Dropdown list-->
-                  <li>
-                    <a href="#" class="media">
-                      <div class="media-left">
+                        {% if SITE_ID == 1 %}
+                          {% include 'core/includes/menu.moc.html' %}
+                        {% else %}
+                          {% include 'core/includes/menu.moi.html' %}
+                        {% endif %}
 
-                        <span class="icon-wrap bg-info">
-                          <i class="pli-monitor-3 icon-lg icon-lg"></i>
-                        </span>
-                      </div>
-                      <div class="media-body">
-                        <div class="text-nowrap">Square icon</div>
-                        <small class="text-muted">Last Update 8 hours ago</small>
-                      </div>
-                    </a>
-                  </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-top-links">
 
-                  <!-- Dropdown list-->
-                  <li>
-                    <a href="#" class="media">
-                      <span class="label label-danger pull-right">New</span>
-                      <div class="media-left">
+                        {% if navbar == "team" or navbar == "backend" %}
 
-                        <span class="icon-wrap bg-purple">
-                          <i class="pli-paintbrush icon-lg icon-lg"></i>
-                        </span>
-                      </div>
-                      <div class="media-body">
-                        <div class="text-nowrap">Square icon with label</div>
-                        <small class="text-muted">Last Update 8 hours ago</small>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
+                        <li id="dropdown-profile" class="dropdown">
+                            <a href="{% url 'team:memberprofile' %}" class="text-right" title="User profile">
+                                <span class="ic-user pull-right">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li id="dropdown-profile" class="dropdown">
+                            <a href="{% url 'team:search' %}" class="text-right" title="Search discussion board">
+                                <span class="ic-user pull-right">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li id="dropdown-profile" class="dropdown">
+                            <a href="/accounts/logout" class="text-right" title="Log out">
+                                <span class="ic-user pull-right">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </span>
+                            </a>
+                        </li>{% else %}
+
+                        <li class="dropdown hide">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                <i class="pli-bell icon-lg"></i>
+                                <span class="badge badge-header badge-danger"></span>
+                            </a>
+
+                            <!--Notification dropdown menu-->
+                            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                <div class="nano scrollable">
+                                    <div class="nano-content">
+                                        <ul class="head-list">
+
+                                            <!-- Dropdown list-->
+                                            <li>
+                                                <a href="#">
+                                                    <div class="clearfix">
+                                                        <p class="pull-left">Progressbar</p>
+                                                        <p class="pull-right">70%</p>
+                                                    </div>
+                                                    <div class="progress progress-sm">
+                                                        <div style="width: 70%;" class="progress-bar">
+                                                            <span class="sr-only">70% Complete</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+
+                          <!-- Dropdown list-->
+                          <li>
+                              <a href="#" class="media">
+                                  <div class="media-left">
+                                      <i class="pli-hd icon-2x icon-lg"></i>
+                                  </div>
+                                  <div class="media-body">
+                                      <div class="text-nowrap">With Icon</div>
+                                      <small class="text-muted">15 minutes ago</small>
+                                  </div>
+                              </a>
+                          </li>
+
+                          <!-- Dropdown list-->
+                          <li>
+                              <a href="#" class="media">
+                                  <div class="media-left">
+                                      <i class="pli-power-cable icon-2x icon-lg"></i>
+                                  </div>
+                                  <div class="media-body">
+                                      <div class="text-nowrap">With Icon</div>
+                                      <small class="text-muted">15 minutes ago</small>
+                                  </div>
+                              </a>
+                          </li>
+
+                          <!-- Dropdown list-->
+                          <li>
+                              <a href="#" class="media">
+                                  <div class="media-left">
+
+                  <span class="icon-wrap icon-circle bg-primary">
+                      <i class="pli-disk icon-lg icon-lg"></i>
+                  </span>
+                                  </div>
+                                  <div class="media-body">
+                                      <div class="text-nowrap">Circle Icon</div>
+                                      <small class="text-muted">15 minutes ago</small>
+                                  </div>
+                              </a>
+                          </li>
+
+                          <!-- Dropdown list-->
+                          <li>
+                              <a href="#" class="media">
+                          <span class="badge badge-success pull-right">90%</span>
+                                  <div class="media-left">
+
+                  <span class="icon-wrap icon-circle bg-danger">
+                      <i class="pli-mail-open icon-lg icon-lg"></i>
+                  </span>
+                                  </div>
+                                  <div class="media-body">
+                                      <div class="text-nowrap">Circle icon with badge</div>
+                                      <small class="text-muted">50 minutes ago</small>
+                                  </div>
+                              </a>
+                          </li>
+
+                          <!-- Dropdown list-->
+                          <li>
+                              <a href="#" class="media">
+                                  <div class="media-left">
+
+                  <span class="icon-wrap bg-info">
+                      <i class="pli-monitor-3 icon-lg icon-lg"></i>
+                  </span>
+                                  </div>
+                                  <div class="media-body">
+                                      <div class="text-nowrap">Square icon</div>
+                                      <small class="text-muted">Last Update 8 hours ago</small>
+                                  </div>
+                              </a>
+                          </li>
+
+                          <!-- Dropdown list-->
+                          <li>
+                              <a href="#" class="media">
+                          <span class="label label-danger pull-right">New</span>
+                                  <div class="media-left">
+
+                  <span class="icon-wrap bg-purple">
+                      <i class="pli-paintbrush icon-lg icon-lg"></i>
+                  </span>
+                                  </div>
+                                  <div class="media-body">
+                                      <div class="text-nowrap">Square icon with label</div>
+                                      <small class="text-muted">Last Update 8 hours ago</small>
+                                  </div>
+                              </a>
+                          </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!--Dropdown footer-->
+                                <div class="pad-all bord-top">
+                                    <a href="#" class="btn-link text-main box-block">
+                                        <i class="pci-chevron chevron-right pull-right"></i>Show All Notifications
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <!--End notifications dropdown-->
+
+
+
+                        {% if request.user.is_authenticated %}
+                          <li id="dropdown-profile" class="dropdown">
+                              <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                                  <span class="ic-user pull-right">
+                                      <i class="pli-administrator"></i>
+                                  </span>
+                              </a>
+
+
+                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+                                  <ul class="head-list">
+                                    <li>
+                                      <a href="{% url 'multiplicity:profile' %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
+                                    </li>
+                                    <li>
+                                      <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
+                                    </li>
+                                  </ul>
+                                </div>
+                          </li>
+                          {% else %}
+                              <li id="dropdown-profile">
+                                <a href="/accounts/login">
+                                    <span class="ic-user pull-right">
+                                        <i class="pli-administrator"></i>
+                                    </span>
+                                </a>
+                            </li>
+                          {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
+                <!--================================-->
+                <!--End Navbar Dropdown-->
+
+            </div>
+        </header>
+        <!--===================================================-->
+        <!--END NAVBAR-->
+
+        <div id="topstrip">
+
+          <div class="boxed">
+            <div class="container">
+              <div class="leftbox">
+                {% if navbar == "backend" or navbar == "team" %}
+                {% else %}
+                  <a href="{% url 'core:homepage' %}">
+                    {% if SITE_ID == 1 %}
+                      <img src="{% static 'ie/img/logo.white.svg' %}" alt="" />
+                    {% else %}
+                      <img src="{% static 'ie/img/logo.moi.png' %}" alt="" />
+                    {% endif %}
+                  </a>
+                {% endif %}
+              </div>
+              <div class="rightbox">
+                {% block pagehead %}
+                {% endblock %}
               </div>
             </div>
-
-            <!--Dropdown footer-->
-            <div class="pad-all bord-top">
-              <a href="#" class="btn-link text-main box-block">
-                <i class="pci-chevron chevron-right pull-right"></i>Show All Notifications
-              </a>
-            </div>
           </div>
-        </li>
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <!--End notifications dropdown-->
 
+        </div>
 
-
-        {% if request.user.is_authenticated %}
-        <li id="dropdown-profile" class="dropdown">
-          <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
-            <span class="ic-user pull-right">
-              <i class="pli-administrator"></i>
-            </span>
-          </a>
-
-
-          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
-            <ul class="head-list">
-              <li>
-                <a href="{% url 'core:userdetails' request.user.id %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
-              </li>
-              <li>
-                <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        {% else %}
-        <li id="dropdown-profile">
-          <a href="/accounts/login?next={{ CURRENT_PAGE }}">
-            <span class="ic-user pull-right">
-              <i class="pli-administrator"></i>
-            </span>
-          </a>
-        </li>
-        {% endif %}
-        {% endif %}
-      </ul>
-    </div>
-
-  </div>
-</header>
-
-
-
-<div id="topstrip">
-
-  <div class="boxed">
-    <div class="container">
-      <div class="leftbox">
-        {% if navbar == "backend" or navbar == "team" %}
-        {% else %}
-        <a href="{% url 'core:homepage' %}">
-          {% if SITE_ID == 1 %}
-          <img src="{% static 'ie/img/logo.white.svg' %}" alt="" />
-          {% else %}
-          <img src="{% static 'ie/img/logo.moi.png' %}" alt="" />
-          {% endif %}
-        </a>
-        {% endif %}
-      </div>
-      <div class="rightbox">
-        {% block pagehead %}
+        <div id="subtopstrip">
+        {% block topstrip %}
         {% endblock %}
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div id="subtopstrip">
-  {% block topstrip %}
-  {% endblock %}
-</div>
-
-<div class="boxed">
-
-  <div id="content-container">
-
-    <div id="page-content" class="main-content-block">
-
-      {% if messages %}
-      {% for message in messages %}
-      <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        {{ message|safe }}
-      </div>
-      {% endfor %}
-      {% endif %}
-
-      {% block content %}
-      {% endblock %}
-    </div>
-
-
-  </div>
-  <nav id="mainnav-container">
-    <div id="mainnav">
-      <div id="mainnav-menu-wrap">
-        <div class="nano">
-          <div class="nano-content">
-
-            {% block sidebar %}
-            {% endblock %}
-
-          </div>
         </div>
-      </div>
-    </div>
-  </nav>
 
-  <aside id="aside-container">
-    <div id="aside">
-      <div class="nano scrollable">
-        <div class="nano-content">
-          {% block aside %}
-          {% endblock %}
+        <div class="boxed">
+
+            <!--CONTENT CONTAINER-->
+            <!--===================================================-->
+            <div id="content-container">
+
+                <!--Page content-->
+                <!--===================================================-->
+                <div id="page-content" class="main-content-block">
+
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          {{ message }}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                <!--===================================================-->
+                <!--End page content-->
+
+
+            </div>
+            <!--===================================================-->
+            <!--END CONTENT CONTAINER-->
+
+
+
+            <!--MAIN NAVIGATION-->
+            <!--===================================================-->
+            <nav id="mainnav-container">
+                <div id="mainnav">
+
+
+                    <!--Menu-->
+                    <!--================================-->
+                    <div id="mainnav-menu-wrap">
+                        <div class="nano">
+                            <div class="nano-content">
+
+                                {% block sidebar %}
+                                {% endblock %}
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--================================-->
+                    <!--End menu-->
+
+                </div>
+            </nav>
+            <!--===================================================-->
+            <!--END MAIN NAVIGATION-->
+
+            <aside id="aside-container">
+                <div id="aside">
+                    <div class="nano scrollable">
+                        <div class="nano-content">
+                        {% block aside %}
+                        {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
         </div>
-      </div>
+
     </div>
-  </aside>
-
-</div>
-
-</div>
 
 {% if request.user.is_authenticated and request.user.is_staff %}
 
   <a title="Go to back-end homepage" href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
 
-{% if section == "cities" and info.slug %}
+  {% if section == "cities" and info.slug %}
 
-  <a href="{% url 'multiplicity:admin_data_overview' info.slug %}" id="datasetbutton" class="btn"><i class="psi-big-data"></i></a>
+    <a href="{% url 'multiplicity:admin_data_overview' info.slug %}" id="datasetbutton" class="btn"><i class="psi-big-data"></i></a>
 
-{% endif %}
+  {% endif %}
 
-{% if editlink %}
-  <a title="Edit this record" href="{{ editlink }}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
-{% endif %}
+  {% if editlink %}
+    <a title="Edit this record" href="{{ editlink }}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+  {% endif %}
 
-{% if deletelink %}
-  <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
-{% endif %}
+  {% if deletelink %}
+    <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
+  {% endif %}
 
-{% if page.id %}
-  <a title="Edit" href="{% url 'core:admin_article' page.id %}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
-{% endif %}
+  {% if page.id %}
+    <a title="Edit" href="{% url 'core:admin_article' page.id %}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+  {% endif %}
 
-{% if addlink %}
-  <a title="Add new record" href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
-{% endif %}
+  {% if addlink %}
+    <a title="Add new record" href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
+  {% endif %}
 
-{% if photouploadlink %}
-  <a title="Upload photo" href="{{ photouploadlink }}" id="photouploadlink" class="btn"><i class="psi-photo"></i></a>
-{% endif %}
+  {% if photouploadlink %}
+    <a title="Upload photo" href="{{ photouploadlink }}" id="photouploadlink" class="btn"><i class="psi-photo"></i></a>
+  {% endif %}
 
 {% endif %}
 
@@ -381,80 +409,83 @@
       <div class="col-lg-6">
         <h2>Join {{ SITE_NAME }}</h2>
         <p>
-        We are a global network of volunteers <br>and we
-        can use <em>your</em> help.
+          We are a global network of volunteers <br>and we
+          can use <em>your</em> help.
         </p>
         <p>
-        <a class="btn btn-lg btn-default" href="{% url 'core:about' 'join-us' %}">Read more</a>
+          <a class="btn btn-lg btn-default" href="{% url 'core:about' 'join-us' %}">Read more</a>
         </p>
       </div>
       <div class="col-lg-{% if EVENT %}3{% else %}6{% endif %}">
         {% if SITE_ID == 1 %}
-        <h3>Share your data</h3>
-        <p>
-        Do you know where to get data on resource flows for your city?
-        Have you done urban metabolism research? </p>
-        <p>
-        <a class="btn btn-lg btn-default" href="{% url 'core:about' 'join-us' %}">Share data</a>
-        </p>
+          <h3>Share your data</h3>
+          <p>
+            Do you know where to get data on resource flows for your city?
+            Have you done urban metabolism research? </p>
+          <p>
+            <a class="btn btn-lg btn-default" href="{% url 'core:about' 'join-us' %}">Share data</a>
+          </p>
         {% else %}
-        <h3>Share and analyze your data</h3>
-        <p>Do you have or know where to get data on resource flows for
-        your island? </p>
-        <p>
-        <a class="btn btn-lg btn-default" href="mailto:info@metabolismofislands.org">Contact us</a>
-        </p>
+          <h3>Share and analyze your data</h3>
+          <p>Do you have or know where to get data on resource flows for
+          your island? </p>
+          <p>
+            <a class="btn btn-lg btn-default" href="mailto:info@metabolismofislands.org">Contact us</a>
+          </p>
         {% endif %}
       </div>
       {% if EVENT %}
-      <div class="col-lg-3">
-        <h3>Upcoming event</h3>
-        <p>
-        <a style="color:#337ab7" href="{% url 'core:event' EVENT.article.id %}">{{ EVENT.article.title }}</a>
-        <br>
-        <strong>
-          {{ EVENT.location }}
-        </strong>
-        <br>
-        <em>
-          {{ EVENT.start|date:"M d, Y" }}-
-          {{ EVENT.end|date:"M d, Y" }}
-        </em>
-        </p>
-        <p>
-        <a class="btn btn-lg btn-default" href="{% url 'core:event' EVENT.article.id %}">View event</a>
-        </p>
-      </div>
-      {% endif %}
+        <div class="col-lg-3">
+          <h3>Upcoming event</h3>
+            <p>
+              <a style="color:#337ab7" href="{% url 'core:event' EVENT.article.id %}">{{ EVENT.article.title }}</a>
+              <br>
+              <strong>
+              {{ EVENT.location }}
+              </strong>
+              <br>
+              <em>
+                {{ EVENT.start|date:"M d, Y" }}-
+                {{ EVENT.end|date:"M d, Y" }}
+              </em>
+            </p>
+            <p>
+              <a class="btn btn-lg btn-default" href="{% url 'core:event' EVENT.article.id %}">View event</a>
+            </p>
+          </div>
+        {% endif %}
     </div>
   </div>
 
 </footer>
 
+
+
 <footer id="footer">
+
 
   <div class="container">
     <div class="row">
       <div class="col-lg-3">
         <h4>{{ SITE_NAME }}</h4>
         <p>
-        <a href="http://">
-          Creative Commons Attribution 4.0 International license.
-        </a>
-        <br>
-        <br>
-        Our source code is available on
-        <br>
-        <a href="https://gitlab.com/metabolism-of-cities/metabolism-of-cities-platform">
+          <a href="http://">
+            Creative Commons Attribution 4.0 International license.
+          </a>
+          <br>
+          <br>
+          Our source code is available on
+          <br>
+          <a href="https://gitlab.com/metabolism-of-cities/metabolism-of-cities-platform">
           <i class="fab fa-gitlab"></i> Gitlab
-        </a>
+          </a>
         </p>
       </div>
       <div class="col-lg-6 text-center">
         {% if SITE_ID == 1 %}
-        <img src="{% static 'ie/img/logo.white.svg' %}" alt="" />
+          <img src="{% static 'ie/img/logo.white.svg' %}" alt="" />
         {% else %}
-        <img src="{% static 'ie/img/logo.moi.png' %}" alt="" />
+          <img src="{% static 'ie/img/logo.moi.png' %}" alt="" />
         {% endif %}
       </div>
       <div class="col-lg-3">
@@ -496,14 +527,6 @@
   {% endif %}
 {% block footer %}
 {% endblock %}
-
-{% if DEBUG %}
-  <script type="text/javascript">
-  $(function(){
-    $("form").attr("autocomplete", "off");
-  });
-  </script>
-{% endif %}
 
 </body>
 </html>
