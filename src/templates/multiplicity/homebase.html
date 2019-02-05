@@ -1,0 +1,402 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title %}{%endblock %} | {{ SITE_NAME }}</title>
+  {% include 'multiplicity/includes/head.html' %}
+  {% block head %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'ie/css/onepage-scroll.css' %}" />
+  <style>
+    header#navbar {
+      position: fixed;
+      background-color: #fff;
+    }
+    img {
+      width: 100%;
+      border: 2px solid #fff;
+      border-radius: 4px;
+    }
+    .onepage-pagination li a.active::before, .onepage-pagination li a::before {
+      background: rgba(255,255,255,0.85);
+    }
+    .onepage-pagination li a.active::before {
+      border: 1px solid #fff;
+    }
+    .main.home.onepage-wrapper {
+      height: 100vh;
+    }
+    .section {
+      background-color: rgba(0,0,0,0.6);
+    }
+    .section .container > h1, .section .container > h2, .section .container > h3, .section .container > h4 {
+      color: #fff;
+    }
+    .section:after {
+      content : "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-size: cover;
+      width: 100%;
+      height: 100%;
+      opacity : 0.5;
+      z-index: -1;
+    }
+    .section:nth-of-type(1):after {
+      background-image: url(https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260);
+    }
+    .section:nth-of-type(2):after {
+      background-image: url(https://images.pexels.com/photos/373912/pexels-photo-373912.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260);
+    }
+    .section:nth-of-type(3):after {
+      background-image: url(https://images.pexels.com/photos/315191/pexels-photo-315191.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260);
+    }
+    .section:nth-of-type(4):after {
+      background-image: url(https://images.pexels.com/photos/773471/pexels-photo-773471.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260);
+    }
+    .section:nth-of-type(5):after {
+      background-image: url(https://images.pexels.com/photos/681335/pexels-photo-681335.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260);
+    }
+    .complete-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -moz-transform: translateX(-50%) translateY(-50%);
+      -webkit-transform: translateX(-50%) translateY(-50%);
+      transform: translateX(-50%) translateY(-50%);
+    }
+  </style>
+</head>
+
+<body>
+
+{% if SITE_ID == 2 %}
+<div class="alert alert-danger" id="footerwarning" style="font-size:19px">
+  This website is under active development. Official launch will take place March 2019.
+</div>
+{% endif %}
+
+<div id="container" class="effect boxed-layout aside-float slide {% if mainnav %}{{ mainnav }}{% elif section == 'cities' or sidenav %}mainnav-lg{% else %}mainnav-out{% endif %} {% block container %}{% endblock %}">
+
+<header id="navbar">
+  <div id="navbar-container" class="boxed">
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">
+        <div class="brand-title">
+          <span class="brand-text">{{ SITE_NAME }}</span>
+        </div>
+      </a>
+    </div>
+    <div class="navbar-content clearfix">
+      <ul class="nav navbar-top-links">
+
+        <li class="tgl-menu-btn">
+        </li>
+
+        {% if navbar == "backend" %}
+
+        <h4 style="margin-top:20px"><a href="/intranet/controlpanel"><i class="psi-lock"></i> Back-End</a></h4>
+
+        {% elif navbar == "team" %}
+
+        <h4 style="margin-top:20px"><a href="/intranet/"><i class="far fa-comments icon-lg icon-fw"></i>Team Discussion Board</a></h4>
+
+        {% else %}
+
+        {% if SITE_ID == 1 %}
+        {% include 'core/includes/menu.moc.html' %}
+        {% else %}
+        {% include 'core/includes/menu.moi.html' %}
+        {% endif %}
+
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-top-links">
+
+        {% if navbar == "team" or navbar == "backend" %}
+
+        <li id="dropdown-profile" class="dropdown">
+          <a href="{% url 'team:memberprofile' %}" class="text-right" title="User profile">
+            <span class="ic-user pull-right">
+              <i class="fa fa-user"></i>
+            </span>
+          </a>
+        </li>
+        <li id="dropdown-profile" class="dropdown">
+          <a href="{% url 'team:search' %}" class="text-right" title="Search discussion board">
+            <span class="ic-user pull-right">
+              <i class="fa fa-search"></i>
+            </span>
+          </a>
+        </li>
+        <li id="dropdown-profile" class="dropdown">
+          <a href="/accounts/logout" class="text-right" title="Log out">
+            <span class="ic-user pull-right">
+              <i class="fas fa-sign-out-alt"></i>
+            </span>
+          </a>
+        </li>{% else %}
+
+        <li class="dropdown hide">
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+            <i class="pli-bell icon-lg"></i>
+            <span class="badge badge-header badge-danger"></span>
+          </a>
+
+          <!--Notification dropdown menu-->
+          <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+            <div class="nano scrollable">
+              <div class="nano-content">
+                <ul class="head-list">
+
+                  <!-- Dropdown list-->
+                  <li>
+                    <a href="#">
+                      <div class="clearfix">
+                        <p class="pull-left">Progressbar</p>
+                        <p class="pull-right">70%</p>
+                      </div>
+                      <div class="progress progress-sm">
+                        <div style="width: 70%;" class="progress-bar">
+                          <span class="sr-only">70% Complete</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+
+                  <!-- Dropdown list-->
+                  <li>
+                    <a href="#" class="media">
+                      <div class="media-left">
+                        <i class="pli-hd icon-2x icon-lg"></i>
+                      </div>
+                      <div class="media-body">
+                        <div class="text-nowrap">With Icon</div>
+                        <small class="text-muted">15 minutes ago</small>
+                      </div>
+                    </a>
+                  </li>
+
+                  <!-- Dropdown list-->
+                  <li>
+                    <a href="#" class="media">
+                      <div class="media-left">
+                        <i class="pli-power-cable icon-2x icon-lg"></i>
+                      </div>
+                      <div class="media-body">
+                        <div class="text-nowrap">With Icon</div>
+                        <small class="text-muted">15 minutes ago</small>
+                      </div>
+                    </a>
+                  </li>
+
+                  <!-- Dropdown list-->
+                  <li>
+                    <a href="#" class="media">
+                      <div class="media-left">
+
+                        <span class="icon-wrap icon-circle bg-primary">
+                          <i class="pli-disk icon-lg icon-lg"></i>
+                        </span>
+                      </div>
+                      <div class="media-body">
+                        <div class="text-nowrap">Circle Icon</div>
+                        <small class="text-muted">15 minutes ago</small>
+                      </div>
+                    </a>
+                  </li>
+
+                  <!-- Dropdown list-->
+                  <li>
+                    <a href="#" class="media">
+                      <span class="badge badge-success pull-right">90%</span>
+                      <div class="media-left">
+
+                        <span class="icon-wrap icon-circle bg-danger">
+                          <i class="pli-mail-open icon-lg icon-lg"></i>
+                        </span>
+                      </div>
+                      <div class="media-body">
+                        <div class="text-nowrap">Circle icon with badge</div>
+                        <small class="text-muted">50 minutes ago</small>
+                      </div>
+                    </a>
+                  </li>
+
+                  <!-- Dropdown list-->
+                  <li>
+                    <a href="#" class="media">
+                      <div class="media-left">
+
+                        <span class="icon-wrap bg-info">
+                          <i class="pli-monitor-3 icon-lg icon-lg"></i>
+                        </span>
+                      </div>
+                      <div class="media-body">
+                        <div class="text-nowrap">Square icon</div>
+                        <small class="text-muted">Last Update 8 hours ago</small>
+                      </div>
+                    </a>
+                  </li>
+
+                  <!-- Dropdown list-->
+                  <li>
+                    <a href="#" class="media">
+                      <span class="label label-danger pull-right">New</span>
+                      <div class="media-left">
+
+                        <span class="icon-wrap bg-purple">
+                          <i class="pli-paintbrush icon-lg icon-lg"></i>
+                        </span>
+                      </div>
+                      <div class="media-body">
+                        <div class="text-nowrap">Square icon with label</div>
+                        <small class="text-muted">Last Update 8 hours ago</small>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!--Dropdown footer-->
+            <div class="pad-all bord-top">
+              <a href="#" class="btn-link text-main box-block">
+                <i class="pci-chevron chevron-right pull-right"></i>Show All Notifications
+              </a>
+            </div>
+          </div>
+        </li>
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <!--End notifications dropdown-->
+
+
+
+        {% if request.user.is_authenticated %}
+        <li id="dropdown-profile" class="dropdown">
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+            <span class="ic-user pull-right">
+              <i class="pli-administrator"></i>
+            </span>
+          </a>
+
+
+          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+            <ul class="head-list">
+              <li>
+                <a href="{% url 'core:userdetails' request.user.id %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
+              </li>
+              <li>
+                <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        {% else %}
+        <li id="dropdown-profile">
+          <a href="/accounts/login?next={{ CURRENT_PAGE }}">
+            <span class="ic-user pull-right">
+              <i class="pli-administrator"></i>
+            </span>
+          </a>
+        </li>
+        {% endif %}
+        {% endif %}
+      </ul>
+    </div>
+
+  </div>
+</header>
+
+{% block content %}
+{% endblock %}
+
+{% if request.user.is_authenticated and request.user.is_staff %}
+
+  <a title="Go to back-end homepage" href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
+
+{% if section == "cities" and info.slug %}
+
+  <a href="{% url 'multiplicity:admin_data_overview' info.slug %}" id="datasetbutton" class="btn"><i class="psi-big-data"></i></a>
+
+{% endif %}
+
+{% if editlink %}
+  <a title="Edit this record" href="{{ editlink }}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+{% endif %}
+
+{% if deletelink %}
+  <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
+{% endif %}
+
+{% if page.id %}
+  <a title="Edit" href="{% url 'core:admin_article' page.id %}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+{% endif %}
+
+{% if addlink %}
+  <a title="Add new record" href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
+{% endif %}
+
+{% if photouploadlink %}
+  <a title="Upload photo" href="{{ photouploadlink }}" id="photouploadlink" class="btn"><i class="psi-photo"></i></a>
+{% endif %}
+
+{% endif %}
+
+{% include 'multiplicity/includes/footer.html' %}
+  {% if charts %}
+    <script type="text/javascript" src="{% static 'ie/js/chart.js' %}"></script>
+  {% endif %}
+  {% if datatables %}
+    <script type="text/javascript" src="{% static 'ie/js/datatables.js' %}"></script>
+    <script type="text/javascript">
+    $(function(){
+        $(".datatable").DataTable({
+          "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        });
+    });
+    </script>
+  {% endif %}
+  {% if select2 %}
+    <script type="text/javascript" src="{% static 'ie/js/select2.min.js' %}"></script>
+    <script type="text/javascript">
+    $(function(){
+      $(".select2").select2();
+    });
+    </script>
+  {% endif %}
+{% block footer %}
+{% endblock %}
+
+{% if DEBUG %}
+  <script type="text/javascript">
+  $(function(){
+    $("form").attr("autocomplete", "off");
+  });
+  </script>
+{% endif %}
+
+<script src="{% static 'ie/js/onepage-scroll.min.js' %}"></script>
+
+<script>
+  $(".main").onepage_scroll({
+     sectionContainer: "section",     // sectionContainer accepts any kind of selector in case you don't want to use section
+     easing: "ease",                  // Easing options accepts the CSS3 easing animation such "ease", "linear", "ease-in",
+                                      // "ease-out", "ease-in-out", or even cubic bezier value such as "cubic-bezier(0.175, 0.885, 0.420, 1.310)"
+     animationTime: 1000,             // AnimationTime let you define how long each section takes to animate
+     pagination: true,                // You can either show or hide the pagination. Toggle true for show, false for hide.
+     updateURL: false,                // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
+     beforeMove: function(index) {},  // This option accepts a callback function. The function will be called before the page moves.
+     afterMove: function(index) {},   // This option accepts a callback function. The function will be called after the page moves.
+     loop: false,                     // You can have the page loop back to the top/bottom when the user navigates at up/down on the first/last page.
+     keyboard: true,                  // You can activate the keyboard controls
+     responsiveFallback: false,        // You can fallback to normal page scroll by defining the width of the browser in which
+                                      // you want the responsive fallback to be triggered. For example, set this to 600 and whenever
+                                      // the browser's width is less than 600, the fallback will kick in.
+     direction: "vertical"            // You can now define the direction of the One Page Scroll animation. Options available are "vertical" and "horizontal". The default value is "vertical".
+  });
+</script>
+
+</body>
+</html>
