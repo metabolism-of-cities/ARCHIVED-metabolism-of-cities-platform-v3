@@ -373,6 +373,43 @@
 {% if request.user.is_authenticated %}
 
   
+  {% if request.user.is_staff %}
+    <a title="Go to back-end homepage" href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
+  {% endif %}
+
+{% if section == "cities" and info.slug %}
+
+  {% if request.user.is_staff %}
+    <a href="{% url 'multiplicity:admin_data_overview' info.slug %}" id="datasetbutton" class="btn"><i class="psi-big-data"></i></a>
+  {% endif %}
+
+{% endif %}
+
+{% if editlink %}
+  <a title="Edit this record" href="{{ editlink }}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+{% endif %}
+
+  {% if request.user.is_staff %}
+    {% if deletelink %}
+      <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
+    {% endif %}
+
+    {% if page.id %}
+      <a title="Edit" href="{% url 'core:admin_article' page.id %}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
+    {% endif %}
+
+    {% if addlink %}
+      <a title="Add new record" href="{{ addlink }}" id="addpagebutton" class="btn"><i class="psi-add"></i></a>
+    {% endif %}
+
+  {% endif %}
+
+{% if photouploadlink %}
+  <a title="Upload photo" href="{{ photouploadlink }}" id="photouploadlink" class="btn"><i class="psi-photo"></i></a>
+{% endif %}
+
+{% if videouploadlink %}
+  <a title="Upload video" href="{{ videouploadlink }}" id="videouploadlink" class="btn"><i class="psi-video"></i></a>
 {% endif %}
 
 {% endif %}
