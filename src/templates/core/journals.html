@@ -23,10 +23,12 @@
               </thead>
               <tbody>
                 {% for info in list %}
-                <tr>
-                  <td><a href="{% url 'core:journal' info.id %}">{{ info.name }}</a></td>
-                  <td>{{ info.num_references }}</td>
-                </tr>
+                  {% if info.num_references > 0 %}
+                    <tr>
+                      <td><a href="{% url 'core:journal' info.id %}">{{ info.name }}</a></td>
+                      <td>{{ info.num_references }}</td>
+                    </tr>
+                  {% endif %}
                 {% endfor %}
               </tbody>
             </table>
