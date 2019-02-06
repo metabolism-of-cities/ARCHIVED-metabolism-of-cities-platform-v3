@@ -140,31 +140,34 @@
     <div id="infrastructure-anchor"></div>
     <div id="infrastructure-list" class="row col-panels mar-top">
       {% if types %}
+        <div class="row">
         {% for details in types %}
           {% if details.total %}
-            <div class="col-lg-6 single-infrastructure">
-              <div class="panel">
-                <div class="row flex flex-wrap">
-                  <div class="col-lg-4">
-                    <a onclick="showInfrastructureData('{{ details.slug }}')">
-                        
-                      <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
+            {% if forloop.counter|divisibleby:2 %}</div><div class="row">{% endif %}
+              <div class="col-lg-6 single-infrastructure">
+                <div class="panel">
+                  <div class="row flex flex-wrap">
+                    <div class="col-lg-4">
+                      <a onclick="showInfrastructureData('{{ details.slug }}')">
+                          
+                        <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
 
-                    </a>
-                  </div>
-                  <div class="col-lg-8 pad-all">
-                    <h4 class="name">{{ details.name }}</h4>
-                    <p>
-                      <a onclick="showInfrastructureData('{{ details.slug }}')">{{ details.total }} records</a> found
-                      <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.svg" alt="" />
-                    </p>
-                    <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.slug }}')">View list</a>
+                      </a>
+                    </div>
+                    <div class="col-lg-8 pad-all">
+                      <h4 class="name">{{ details.name }}</h4>
+                      <p>
+                        <a onclick="showInfrastructureData('{{ details.slug }}')">{{ details.total }} records</a> found
+                        <img class="marker" src="{% get_static_prefix %}multiplicity/img/markers/marker.{{ details.marker_color }}.svg" alt="" />
+                      </p>
+                      <a class="btn btn-dark" onclick="showInfrastructureData('{{ details.slug }}')">View list</a>
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
           {% endif %}
         {% endfor %}
+        </div>
       {% endif %}
     </div>
     {% if types %}
