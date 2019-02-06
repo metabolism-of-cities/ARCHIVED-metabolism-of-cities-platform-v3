@@ -44,7 +44,7 @@
 
     <p class="alert alert-info">
       Please enter your data or upload a CSV file with the data. The following columns 
-      should appear in this file (in the same order). 
+      should appear in this file (in the same order). <a href="{% url 'multiplicity:upload_flow_file_sample' info.slug dataset.id %}">Download sample file.</a>
     </p>
 
     {% if dataset.name == "Population" %}

@@ -237,7 +237,7 @@
                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                                   <ul class="head-list">
                                     <li>
-                                      <a href="{% url 'multiplicity:profile' %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
+                                      <a href="{% url 'core:userdetails' request.user.id %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
                                     </li>
                                     <li>
                                       <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
@@ -247,7 +247,7 @@
                           </li>
                           {% else %}
                               <li id="dropdown-profile">
-                                <a href="/accounts/login?ref={{ CURRENT_PAGE }}">
+                                <a href="/accounts/login?next={{ CURRENT_PAGE }}">
                                   <span class="ic-user pull-right">
                                     <i class="pli-administrator"></i>
                                   </span>

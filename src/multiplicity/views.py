@@ -532,8 +532,20 @@ def upload_flow_file_sample(request, city, id):
     most_recent_file = CSV.objects.filter(dataset__type__id=id).order_by('-id')
     if most_recent_file:
         most_recent_file = most_recent_file[0]
+        file = settings.MEDIA_ROOT + '/csv/' + most_recent_file.name
+        contents = open(file, 'r')
     else:
-        most_recent_file = False
+        info = get_object_or_404(DatasetType, id=id)
+        if info.type == "stocks":
+            contents = "Date"
+        else:
+            contents = "Timeframe name,From (date),To(date"
+        contents = contents + ",Material name,Material code,Quantity,Unit"
+        if info.flows == "destination_only" or info.flows == "origin_only":
+            contents = contents + ",Location"
+        else:
+            contents = contents + ",Origin,Destination"
+        contents = contents + ",Comments"
 
     response = HttpResponse(contents, content_type="text/csv")
     response['Content-Disposition'] = 'attachment; filename="sample.csv"'
