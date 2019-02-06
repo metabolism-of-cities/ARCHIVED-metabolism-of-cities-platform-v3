@@ -11,7 +11,6 @@
       <h3 class="panel-title">Material {{ type }} data</h3>
   </div>
   <div class="panel-body">
-
     <div class="row">
       {% if type == 'flows' %}
         <div class="col-sm-3">
@@ -23,22 +22,20 @@
           </ul>
         </div>
       {% endif %}
-
       <div class="col-sm-9 datasets">
-
-          <p><strong>Datasets:</strong></p>
-          <ul class="nav nav-list">
-          {% for details in list %}
-              <li class="type-{{ details.category.id }}"><a href="{% url 'multiplicity:upload_flow_file' info.slug details.id %}">{{ details.name }}</a></li>
-          {% endfor %}
-          </ul>
-           
-        </div>
-
+        <p><strong>Datasets:</strong></p>
+        <ul class="nav nav-list">
+        {% for details in list %}
+            <li class="type-{{ details.category.id }}"><a href="{% url 'multiplicity:upload_flow_file' info.slug details.id %}">{{ details.name }}</a></li>
+        {% endfor %}
+        </ul>
+      </div>
     </div>
-
   </div>
 </div>
+
+<a href="{% url 'multiplicity:materials' %}" class="btn btn-info"><i class="fa fa-clipboard-list"></i> Materials catalog</a>
+
 {% endblock %}
 
 {% block head %}

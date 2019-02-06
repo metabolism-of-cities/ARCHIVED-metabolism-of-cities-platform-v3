@@ -16,7 +16,15 @@
           <a href="https://ec.europa.eu/eurostat/cache/metadata/en/env_ac_mfa_esms.htm">Material flow accounts (env_ac_mfa)</a>.
           The <a href="https://circabc.europa.eu/d/d/workspace/SpacesStore/111cdbe6-8407-4bf8-8aff-93cdbd5f5117/MFA_data_structure.xls">data structure</a>
           used is version 14 March 2018.
+          You can download the <a href="https://ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-006">2018 handbook</a> here.
+          If your materials can not be easily classified using this catalog, please
+          look into the following alternative catalogs:
         </p>
+        <ul>
+          <li><a href="{% url 'multiplicity:materials' 'hs' %}">Harmonized system</a> - useful if you have data on specific products</li>
+          <li><a href="{% url 'multiplicity:materials' 'em' %}">Engineering materials</a> - different types of materials used in engineering; especially useful if you describe (part of) a production process</li>
+          <li><a href="{% url 'multiplicity:materials' 'elements' %}">Elements</a> - used when you are reporting on a specific element (like cobalt or silver)</li>
+        </ul>
         <table class="table table-striped datatable">
           <thead>
             <tr>
@@ -33,6 +41,10 @@
           {% endfor %}
           </tbody>
         </table>
+
+        {% if type %}
+          <p><a href="{% url 'multiplicity:materials' %}" class="btn btn-info">Back to Eurostat list</a></p>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -52,7 +64,7 @@
 <div id="page-head">
     
     <div id="page-title">
-        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+        <h1 class="page-header text-overflow">Materials: {{ title }}</h1>
     </div>
 
     <ol class="breadcrumb">

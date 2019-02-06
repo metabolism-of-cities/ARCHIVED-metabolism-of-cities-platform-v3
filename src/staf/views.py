@@ -21,7 +21,7 @@ def index(request):
 
 @login_required
 def search(request):
-    data = Data.objects.all()
+    data = Data.objects.all()[:100]
     context = { 'section': 'resources', 'menu': 'search', 'data': data, 'datatables': True }
     return render(request, 'staf/search.html', context)
 

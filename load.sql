@@ -19,3 +19,5 @@ SELECT setval('multiplicity_datasettypestructure_id_seq', (SELECT MAX(id) FROM m
 SELECT setval('multiplicity_datasettype_id_seq', (SELECT MAX(id) FROM multiplicity_datasettype)+1);
 
 INSERT INTO "core_useraction" ("id", "name") VALUES ('5', 'Data imported');
+
+UPDATE staf_material SET code = CONCAT('HS',code) WHERE catalog_id = 1 AND parent_id != 970753;

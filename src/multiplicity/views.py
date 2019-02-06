@@ -1422,9 +1422,20 @@ def topic(request, city, topic, main=False, tab=False):
     context = { 'section': 'cities', 'menu': 'profile', 'info': info, 'page': topic.slug, 'topic': topic, 'datasets': datasets, 'information': information }
     return render(request, 'multiplicity/topic.html', context)
 
-def materials(request):
-    list = Material.objects.filter(catalog_id=4).exclude(id=970921).order_by('id')
-    context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True}
+def materials(request, catalog=False):
+    if catalog == "hs":
+        list = Material.objects.filter(catalog_id=1).order_by('id')
+        title = "Harmonized system"
+    elif catalog == "elements":
+        list = Material.objects.filter(catalog_id=3).order_by('id')
+        title = "Elements"
+    elif catalog == "em":
+        list = Material.objects.filter(catalog_id=2).order_by('id')
+        title = "Engineering materials"
+    else:
+        list = Material.objects.filter(catalog_id=4).exclude(id=970921).order_by('id')
+        title = "Eurostat catalog"
+    context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'title': title, 'type': catalog }
     return render(request, 'multiplicity/materials.html', context)
 
 @login_required

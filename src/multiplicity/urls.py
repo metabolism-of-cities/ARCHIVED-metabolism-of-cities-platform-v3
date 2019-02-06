@@ -117,6 +117,7 @@ urlpatterns = [
     path('<slug:city>/slide', views.temp_slide, name='temp_slide'),
 
     path('materials', views.materials, name='materials'),
+    path('materials/<slug:catalog>', views.materials, name='materials'),
     path('<slug:slug>', views.detail, name='city'),
     path('profile', views.detail, name='profile'),
 
