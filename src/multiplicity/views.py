@@ -441,6 +441,15 @@ def download_location(request, city, id):
     return response
 
 
+def download_csv(request, city, id):
+    file = get_object_or_404(CSV, pk=id)
+    file_path = settings.MEDIA_ROOT + '/csv/' + file.name
+    contents = open(file_path, 'r')
+    date = str(file.created_at.year) + '-' + str(file.created_at.month) + '-' + str(file.created_at.day)
+    response = HttpResponse(contents, content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="'+file.dataset.name+'-'+date+'.csv"'
+    return response
+
 @login_required
 def upload_flow(request, city, type='flows'):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -685,9 +694,9 @@ def upload_flow_review(request, city, type, id):
 
             existing = False
 
-            if len(row) != column_count:
+            if len(row) != column_count and len(row) > 0:
                 error = "File format invalid. The number of columns in the files is not correct. We expect " + str(column_count) + "  columns but the file had " + str(len(row))
-            elif not error:
+            elif not error and len(row) > 0:
                 if row[0].strip() != "Timeframe" and row[0] and row[0].strip() != "Timeframe name" and row[0].strip() != "Date" :
 
                     if dataset.name == "Population":
@@ -1002,7 +1011,7 @@ def upload_flow_meta(request, city, type, id):
             with open(path) as f:
                 reader = csv.reader(f)
                 for row in reader:
-                    if row[0].strip() != "Timeframe" and row[0] and row[0].strip() != "Timeframe name" and row[0].strip() != "Date":
+                    if len(row) > 0 and row[0].strip() != "Timeframe" and row[0] and row[0].strip() != "Timeframe name" and row[0].strip() != "Date":
 
                         if dataset.name == "Population":
                             material = "People"

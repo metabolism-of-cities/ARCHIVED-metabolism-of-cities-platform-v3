@@ -81,18 +81,26 @@
           </div>
           <div class="row">
             {% for csv in csv_files %}
-            <div class="col-lg-4 is-bold">
-              Uploaded by
-            </div>
-            <div class="col-lg-8">
-              <a href="{% url 'core:peopledetails' csv.user.people.id %}">{{ csv.user.people.firstname }} {{ csv.user.people.lastname }}</a>
-            </div>
-            <div class="col-lg-4 is-bold">
-              Upload date
-            </div>
-            <div class="col-lg-8">
-              {{ csv.created_at }}
-            </div>
+              <div class="col-lg-4 is-bold">
+                Uploaded by
+              </div>
+              <div class="col-lg-8">
+                <a href="{% url 'core:peopledetails' csv.user.people.id %}">{{ csv.user.people.firstname }} {{ csv.user.people.lastname }}</a>
+              </div>
+              <div class="col-lg-4 is-bold">
+                Upload date
+              </div>
+              <div class="col-lg-8">
+                {{ csv.created_at }}
+              </div>
+              {% if request.user.is_staff %}
+                <div class="col-lg-4 is-bold">
+                  File
+                </div>
+                <div class="col-lg-8">
+                  <a href="{% url 'multiplicity:download_csv' info.slug csv.id %}">Download file</a>
+                </div>
+              {% endif %}
             {% endfor %}
           </div>
         </div>

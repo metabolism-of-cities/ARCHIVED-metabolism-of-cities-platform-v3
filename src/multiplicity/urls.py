@@ -57,6 +57,7 @@ urlpatterns = [
     path('<slug:city>/resources/videos', views.videos, name='videos'),
     path('<slug:city>/resources/<slug:slug>', views.resources, name='resources'),
     path('<slug:city>/datasets/<int:id>', views.dataset, name='dataset'),
+    path('<slug:city>/download/csv/<int:id>', views.download_csv, name='download_csv'),
     path('<slug:city>/datasets/<int:id>/delete', views.delete_dataset, name='delete_dataset'),
     path('<slug:city>/datasets/<int:dataset>/graph/<int:id>', views.graph, name='graph'),
     path('<slug:city>/datasets/<int:id>/<slug:slug>', views.dataset, name='dataset_slice'),
