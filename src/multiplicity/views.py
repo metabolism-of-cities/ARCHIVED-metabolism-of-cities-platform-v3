@@ -529,7 +529,7 @@ def upload_flow_file(request, city, id):
 
 @login_required
 def upload_flow_file_sample(request, city, id):
-    most_recent_file = CSV.objects.filter(dataset__type__id=id).order_by('-id')
+    most_recent_file = CSV.objects.filter(dataset__type__id=id, imported=True).order_by('-id')
     if most_recent_file:
         most_recent_file = most_recent_file[0]
         file = settings.MEDIA_ROOT + '/csv/' + most_recent_file.name
@@ -554,7 +554,7 @@ def upload_flow_file_sample(request, city, id):
 @login_required
 def upload_infrastructure_file_sample(request, city, type):
     from django.http import FileResponse
-    most_recent_file = ReferenceSpaceCSV.objects.filter(type__slug=type).order_by('-id')
+    most_recent_file = ReferenceSpaceCSV.objects.filter(type__slug=type, imported=True).order_by('-id')
     if most_recent_file:
         most_recent_file = most_recent_file[0]
         file = settings.MEDIA_ROOT + '/csv-referencespace/' + most_recent_file.name
