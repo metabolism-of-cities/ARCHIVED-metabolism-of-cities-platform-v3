@@ -97,7 +97,7 @@ def team(request):
     return render(request, 'core/team.html', context)
 
 def taskforces(request):
-    list = Category.objects.filter(group='community').order_by('name').exclude(id=14)
+    list = Category.objects.filter(group='community').order_by('name').exclude(id=[14,15])
     page = Article.objects.get(pk=40)
     context = { 'section': 'about', 'page': 'taskforces', 'list': list, 'page': page}
     return render(request, 'core/taskforces.html', context)
