@@ -11,10 +11,79 @@
       position: fixed;
       background-color: #fff;
     }
-    img {
+    .downArrow {
+      position: absolute;
+      bottom: 0;
       width: 100%;
-      border: 2px solid #fff;
-      border-radius: 4px;
+      text-align: center;
+    }
+    .downArrow:hover {
+      cursor: pointer;
+    }
+    .downArrow i {
+      color: #fff;
+    }
+    .social-media-bar {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: #000;
+      color: #fff;
+      padding: 15px 0;
+      text-align: center;
+    }
+    .bounce {
+      -moz-animation: bounce 3s infinite;
+      -webkit-animation: bounce 3s infinite;
+      animation: bounce 3s infinite;
+    }
+    @-moz-keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        transform: translateY(0);
+      }
+      40% {
+        -moz-transform: translateY(-30px);
+        transform: translateY(-30px);
+      }
+      60% {
+        -moz-transform: translateY(-15px);
+        transform: translateY(-15px);
+      }
+    }
+    @-webkit-keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+      }
+      40% {
+        -webkit-transform: translateY(-30px);
+        transform: translateY(-30px);
+      }
+      60% {
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+      }
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        -moz-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+      }
+      40% {
+        -moz-transform: translateY(-30px);
+        -ms-transform: translateY(-30px);
+        -webkit-transform: translateY(-30px);
+        transform: translateY(-30px);
+      }
+      60% {
+        -moz-transform: translateY(-15px);
+        -ms-transform: translateY(-15px);
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+      }
     }
     .onepage-pagination li a.active::before, .onepage-pagination li a::before {
       background: rgba(255,255,255,0.85);
@@ -27,9 +96,69 @@
     }
     .section {
       background-color: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-direction: column;
     }
-    .section .container > h1, .section .container > h2, .section .container > h3, .section .container > h4 {
+    .section .col-md-6.left-right-padding {
+      padding-left: 7.5%;
+      padding-right: 7.5%;
+    }
+    .section .white.text {
       color: #fff;
+    }
+    .section .center.text {
+      text-align: center;
+    }
+    .section .changing span {
+      border-bottom: 2px solid #fff;
+    }
+    .section .split {
+      position: absolute;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      transition: background-color .5s;
+      opacity: .8;
+    }
+    .section > .row {
+      height: 100%;
+      align-items: center;
+      display: flex;
+    }
+    .section.what-is .split {
+      background-color: #71a1a5;
+    }
+    .section.do-what .split {
+      background-color: #e0ad9c;
+    }
+    .section.for-whom .split {
+      background-color: #f3a962;
+    }
+    .section.do-what .panel, .section.for-whom .panel {
+      transition: all .25s ease;
+    }
+    .section.do-what .panel:hover, .section.for-whom .panel:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+    }
+    .section .split-text:not(.standard) {
+      display: none;
+    }
+    .section .split:after {
+      content: '\A';
+      position: absolute;
+      width: 100%;
+      height:100%;
+      top:0;
+      left:0;
+      background:rgba(0,0,0,.6);
+      opacity: 0;
+      transition: opacity .5s;
+    }
+    .section .split.darker:after {
+      opacity: 1;
     }
     .section:after {
       content : "";
@@ -65,6 +194,39 @@
       -moz-transform: translateX(-50%) translateY(-50%);
       -webkit-transform: translateX(-50%) translateY(-50%);
       transform: translateX(-50%) translateY(-50%);
+    }
+
+    @-webkit-keyframes fadeInDown {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+      }
+
+      to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+      }
+
+      to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    .fadeInDown {
+      -webkit-animation-name: fadeInDown;
+      animation-name: fadeInDown;
     }
   </style>
 </head>
@@ -378,24 +540,47 @@
 {% endif %}
 
 <script src="{% static 'ie/js/onepage-scroll.min.js' %}"></script>
+<script src="{% static 'ie/js/cycleText.js' %}"></script>
 
 <script>
   $(".main").onepage_scroll({
      sectionContainer: "section",     // sectionContainer accepts any kind of selector in case you don't want to use section
      easing: "ease",                  // Easing options accepts the CSS3 easing animation such "ease", "linear", "ease-in",
-                                      // "ease-out", "ease-in-out", or even cubic bezier value such as "cubic-bezier(0.175, 0.885, 0.420, 1.310)"
-     animationTime: 1000,             // AnimationTime let you define how long each section takes to animate
-     pagination: true,                // You can either show or hide the pagination. Toggle true for show, false for hide.
-     updateURL: false,                // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
-     beforeMove: function(index) {},  // This option accepts a callback function. The function will be called before the page moves.
-     afterMove: function(index) {},   // This option accepts a callback function. The function will be called after the page moves.
+     animationTime: 800,              // AnimationTime let you define how long each section takes to animate
      loop: false,                     // You can have the page loop back to the top/bottom when the user navigates at up/down on the first/last page.
      keyboard: true,                  // You can activate the keyboard controls
-     responsiveFallback: false,        // You can fallback to normal page scroll by defining the width of the browser in which
-                                      // you want the responsive fallback to be triggered. For example, set this to 600 and whenever
-                                      // the browser's width is less than 600, the fallback will kick in.
-     direction: "vertical"            // You can now define the direction of the One Page Scroll animation. Options available are "vertical" and "horizontal". The default value is "vertical".
   });
+
+  $(".changing.cities, .changing.success").cycleText({
+    "interval": 2500,
+    "animation": "fadeInDown"
+  });
+
+  $(".section.do-what .panel").mouseover(
+    function() {
+      var panelClass = $(this).attr("panelClass");
+      $(".section.do-what .split-text").hide()
+      $(".section.do-what .split-text." + panelClass).show();
+      $(".section.do-what .split").addClass("darker");
+      var backgroundColor = $(this).css("background-color")
+      $(".section.do-what .split").css("background-color", backgroundColor);
+    }
+  );
+
+  $(".section.for-whom .panel").mouseover(
+    function() {
+      var panelClass = $(this).attr("panelClass");
+      $(".section.for-whom .split-text").hide()
+      $(".section.for-whom .split-text." + panelClass).show();
+      $(".section.for-whom .split").addClass("darker");
+      var backgroundColor = $(this).css("background-color")
+      $(".section.for-whom .split").css("background-color", backgroundColor);
+    }
+  );
+
+  $(".downArrow").click(function() {
+    $(".main").moveDown();
+  })
 </script>
 
 </body>
