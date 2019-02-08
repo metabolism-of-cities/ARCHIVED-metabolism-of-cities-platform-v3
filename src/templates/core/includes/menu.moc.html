@@ -39,28 +39,18 @@
   <div class="dropdown-menu mega-dropdown-menu narrow-dropdown" id="dropdown-community">
     <div class="row">
       <div class="col-md-6">
-        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-university icon-fw"></i>Academic</p>
-        <ul class="list-unstyled">
-          <li><a href="{% url 'core:organizations' 'universities' %}">Universities</a></li>
-          <li><a href="{% url 'core:community' 'people' %}">People</a></li>
-        </ul>
-        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-hotel icon-fw"></i>Non-academic</p>
-        <ul class="list-unstyled">
-          <li><a href="{% url 'core:community' 'institutions' %}">Institutions</a></li>
-          <li><a href="{% url 'core:community' 'private-sector' %}">Private Sector</a></li>
-        </ul>
-      </div>
-      <div class="col-md-6">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-open-book icon-fw"></i>Research</p>
         <ul class="list-unstyled">
           <li><a href="{% url 'core:projects' 'projects' %}">Projects</a></li>
           <li><a href="{% url 'core:projects' 'theses' %}">Theses</a></li>
+          <li><a href="{% url 'core:community' 'people' %}">People</a></li>
           <li><a href="{% url 'core:project_form' %}"><span class="pull-right label label-success">Contribute</span>Add Research</a></li>
         </ul>
+      </div>
+      <div class="col-md-6">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-bulleted-list icon-fw"></i>Updates</p>
         <ul class="list-unstyled">
           <li><a href="{% url 'core:community' 'events' %}">Events</a></li>
-          <li><a href="{% url 'core:community' 'blog' %}">Blog</a></li>
           <li><a href="{% url 'core:community' 'news' %}">News</a></li>
         </ul>
       </div>
