@@ -29,12 +29,14 @@
               </thead>
               <tbody>
                 {% for info in list %}
-                  <tr>
-                    <td><a href="{% url 'core:peopledetails' info.id %}">{{ info.firstname }} {{ info.lastname }}</a></td>
-                    <td>{{ info.reference_set.count }}</td>
-                    <td>{{ info.city.name }}</td>
-                    <td>{{ info.affiliation }}</td>
-                  </tr>
+                  {% if info.reference_set.count > 0 %}
+                    <tr>
+                      <td><a href="{% url 'core:peopledetails' info.id %}">{{ info.firstname }} {{ info.lastname }}</a></td>
+                      <td>{{ info.reference_set.count }}</td>
+                      <td>{{ info.city.name }}</td>
+                      <td>{{ info.affiliation }}</td>
+                    </tr>
+                  {% endif %}
                 {% endfor %}
               </tbody>
             </table>
