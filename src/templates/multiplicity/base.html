@@ -17,6 +17,54 @@
 {% endif %}
 <style type="text/css">
 #footerwarning{;z-index:100000;margin-bottom:0;text-align:center}
+
+{% if request.GET.main %}
+.navbar-content #dropdown-active,#topstrip,.navbar-top-links > .open > a, .navbar-top-links > .open > a:focus,.navbar-top-links > li > a:hover {
+  background: #{{ request.GET.main }};
+}
+{% endif %}
+
+{% if request.GET.green %}
+.panel-success .panel-heading, .panel-success .panel-footer, .panel-success.panel-colorful {
+  background-color: #{{ request.GET.green }};
+  border-color: #{{ request.GET.green }};
+}
+{% endif %}
+
+{% if request.GET.yellow %}
+.panel-warning .panel-heading, .panel-warning .panel-footer, .panel-warning.panel-colorful {
+  background-color: #{{ request.GET.yellow }};
+  border-color: #{{ request.GET.yellow }};
+}
+{% endif %}
+
+{% if request.GET.light %}
+.panel:not(.panel-colorful) {
+  background-color: #{{ request.GET.light }};
+  border-color: #{{ request.GET.light }};
+}
+{% endif %}
+
+{% if request.GET.footer1 %}
+footer#actions {
+  background-color: #{{ request.GET.footer1 }};
+}
+{% endif %}
+
+{% if request.GET.footer2 %}
+footer#footer {
+  background-color: #{{ request.GET.footer2 }};
+}
+{% endif %}
+
+{% if request.GET.blue %}
+.btn-info, .btn-info:focus {
+  background-color: #{{ request.GET.blue }} !important;
+  border-color: #{{ request.GET.blue }} !important;
+}
+{% endif %}
+
+
 </style>
 </head>
 
