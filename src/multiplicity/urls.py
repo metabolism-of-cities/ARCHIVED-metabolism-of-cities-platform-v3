@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('admin/<slug:city>/overview', views.admin_data_overview, name='admin_data_overview'),
     path('admin/<slug:city>/sector/<slug:sector>/activate', views.admin_activate_sector, name='admin_activate_sector'),
+    path('admin/<slug:city>/sector/<slug:sector>/deactivate', views.admin_deactivate_sector, name='admin_deactivate_sector'),
 
     path('admin/datasettype', views.admin_datasettypes, name='admin_datasettypes'),
     path('admin/datasettype/<int:id>', views.admin_datasettype, name='admin_datasettype'),

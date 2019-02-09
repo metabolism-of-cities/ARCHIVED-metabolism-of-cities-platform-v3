@@ -31,7 +31,7 @@
             <td>{{ sector }}</td>
             <td>
             {% if sector.id in active_sectors %}
-              <a href="{% url 'multiplicity:admin_activate_sector' info.slug sector.slug %}">deactivate</a>
+              <a href="{% url 'multiplicity:admin_deactivate_sector' info.slug sector.slug %}">deactivate</a>
             {% else %}
               <a href="{% url 'multiplicity:admin_activate_sector' info.slug sector.slug %}">activate</a>
             {% endif %}

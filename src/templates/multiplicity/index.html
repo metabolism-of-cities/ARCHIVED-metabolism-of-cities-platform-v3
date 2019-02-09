@@ -7,7 +7,6 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-6">
-          <h2>Urban metabolism dashboard</h2>
           <div class="panel widget">
               <div class="widget-header bg-purple city-header">
                 {% if info.system_photo %}
@@ -22,98 +21,112 @@
                   <p class="text-muted mar-no">{{ info.country.name|default_if_none:"" }}</p>
               </div>
           </div>
+
+          <section class="sectors">
+            <h2>Browse by sector...</h2>
+
+            {% for details in info.sectors.all %}
+
+              <div class="panel panel-success panel-colorful pad-all">
+                  <p class="text-2x mar-no text-semibold">
+                      <a href="{% url 'multiplicity:sector' info.slug details.process_group.slug %}">
+                        <i class="{{ details.process_group.icon }} fa-fw mar-rgt"></i>
+                        {{ details.process_group.name }}
+                      </a>
+                  </p>
+              </div>
+
+            {% endfor %}
+          </section>
+
+
+
         </div>
 
-        <div class="col-lg-6 ">
+        <div class="col-lg-6">
 
-          <h2>Browse by sector...</h2>
+          <div id="map"></div>
 
-          <div class="panel panel-success panel-colorful">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="pli-apple icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:sector' info.slug 'agriculture' %}">Agriculture</a></p>
-                      <span>4 sections </span>
-                  </div>
-              </div>
-          </div>
-          
-          <div class="panel panel-info panel-colorful">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="pli-thunder icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'energy' %}">Energy</a></p>
-                      <span>4 sections </span>
-                  </div>
-              </div>
-              <div class="progress progress-xs progress-success mar-no">
-                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
-              </div>
-              <div class="pad-all text-sm">
-                Fossil fuels, electricity...
-              </div>
-          </div>
+            <h2>Resources</h2>
 
-          <div class="panel panel-warning panel-colorful">
+          <div class="panel ">
               <div class="pad-all media">
                   <div class="media-left">
-                      <i class="pli-wheelbarrow icon-3x icon-fw"></i>
+                      <i class="fal fa-chart-area icon-3x icon-fw"></i>
                   </div>
                   <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'metals' %}">Metals</a></p>
-                      <span>7 sections </span>
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Datasets</a></p>
+                      <span>Explore datasets on material flows, stocks, consumption, and more</span>
                   </div>
-              </div>
-              <div class="progress progress-xs progress-success mar-no">
-                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
-              </div>
-              <div class="pad-all text-sm">
-                Iron, copper, nickel, zinc...
-              </div>
-          </div>
-          
-          <div class="panel panel-purple panel-colorful">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="pli-mine icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a href="{% url 'multiplicity:topic' info.slug 'minerals' %}">Minerals</a></p>
-                      <span>5 sections</span>
-                  </div>
-              </div>
-              <div class="progress progress-xs progress-success mar-no">
-                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
-              </div>
-              <div class="pad-all text-sm">
-                Stone, clay, sand, gravel...
               </div>
           </div>
 
           <div class="panel ">
               <div class="pad-all media">
                   <div class="media-left">
-                      <i class="pli-drop icon-3x icon-fw"></i>
+                      <i class="fal fa-globe-africa icon-3x icon-fw"></i>
                   </div>
                   <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Water</a></p>
-              <div class="progress progress-xs progress-success mar-no">
-                  <div role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-light" style="width: 88%"></div>
-              </div>
-              <div class="pad-all text-sm">
-                Drinking water, waste water effluent, ...
-              </div>
-
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Maps</a></p>
+                      <span>View boundaries, micro-territorial units, infrastructure maps, and more</span>
                   </div>
               </div>
           </div>
 
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="fal fa-books icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Journal articles</a></p>
+                      <span>Relevant academic literature published in peer-reviewed journals</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="fal fa-file-alt icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Reports</a></p>
+                      <span>Governmental reports, institutional reports, corporate reports, and other relevant reports</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="fal fa-graduation-cap icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Theses</a></p>
+                      <span>Academic theses, dissertations, and other relevant academic work</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="panel ">
+              <div class="pad-all media">
+                  <div class="media-left">
+                      <i class="fal fa-images icon-3x icon-fw"></i>
+                  </div>
+                  <div class="media-body">
+                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Photos</a></p>
+                      <span>View photos of resource infrastructure, material flows, and more</span>
+                  </div>
+              </div>
+          </div>
+
+
         </div>
   </div>
+
+  {% include 'multiplicity/includes/multimedia.html' %}
+
 
 {% endblock %}
 
@@ -121,9 +134,25 @@
 <link rel="stylesheet" href="{% static 'ie/css/morris.min.css' %}" />
 <style type="text/css">
 .city-header { min-height:330px;previous:298px;}
-.morris-legend-items{padding-top:20px}
-#page-content .icon-fw{margin-right:-5px;position:relative;top:10px}
-.noclick a:hover{cursor:text;text-decoration:none}
+.sectors .text-2x{font-size:1.3em}
+.sectors .panel{margin-bottom:10px}
+#page-content .sectors a:not(.btn):not(.list-group-item):hover{text-decoration:none;opacity:0.7}
+
+.sectors .panel-success.panel-colorful:nth-child(2){background-color:#1C270E}
+.sectors .panel-success.panel-colorful:nth-child(3){background-color:#2A3A15}
+.sectors .panel-success.panel-colorful:nth-child(4){background-color:#384E1C}
+.sectors .panel-success.panel-colorful:nth-child(5){background-color:#476124}
+.sectors .panel-success.panel-colorful:nth-child(5){background-color:#55752B}
+.sectors .panel-success.panel-colorful:nth-child(6){background-color:#638832}
+.sectors .panel-success.panel-colorful:nth-child(7){background-color:#719C39}
+.sectors .panel-success.panel-colorful:nth-child(8){background-color:#7FAF40}
+.sectors .panel-success.panel-colorful:nth-child(9){background-color:#8EC348}
+.sectors .panel-success.panel-colorful:nth-child(10){background-color:#99C95A}
+.sectors .panel-success.panel-colorful:nth-child(11){background-color:#A4CF6C}
+.sectors .panel-success.panel-colorful:nth-child(12){background-color:#AFD57E}
+.sectors .panel-success.panel-colorful{opacity:0.9}
+
+#map{height:440px}
 </style>
 {% endblock %}
 
@@ -146,188 +175,25 @@
 {% endblock %}
 
 {% block footer %}
-<script type="text/javascript" src="{% static 'ie/js/morris.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'ie/js/raphael.js' %}"></script>
-<script type="text/javascript">
-$(function(){
-  $(".noclick a").click(function(e){
-    e.preventDefault();
-  });
 
-        var chart = Morris.Area({
-        element: 'largegraph',
-        data: [{
-            period: 'January 16',
-            dl: 77,
-            up: 25
-            }, {
-            period: 'February 16',
-            dl: 127,
-            up: 58
-            }, {
-            period: 'March 16',
-            dl: 115,
-            up: 46
-            }, {
-            period: 'April 16',
-            dl: 120,
-            up: 100
-            }, {
-            period: 'May 16',
-            dl: 96,
-            up: 75
-            }, {
-            period: 'June 16',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'July 16',
-            dl: 105,
-            up: 70
-            }, {
-            period: 'August 16',
-            dl: 115,
-            up: 106
-            }, {
-            period: 'September 16',
-            dl: 239,
-            up: 187
-            }, {
-            period: 'October 16',
-            dl: 201,
-            up: 160
-            }, {
-            period: 'November 16',
-            dl: 180,
-            up: 133
-            }, {
-            period: 'December 16',
-            dl: 133,
-            up: 100
-            }, {
-            period: 'January 17',
-            dl: 101,
-            up: 90
-            }, {
-            period: 'February 17',
-            dl: 127,
-            up: 58
-            }, {
-            period: 'March 17',
-            dl: 115,
-            up: 46
-            }, {
-            period: 'April 17',
-            dl: 99,
-            up: 57
-            }, {
-            period: 'May 17',
-            dl: 120,
-            up: 75
-            }, {
-            period: 'June 17',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'July 17',
-            dl: 105,
-            up: 70
-            }, {
-            period: 'August 17',
-            dl: 115,
-            up: 106
-            }, {
-            period: 'September 17',
-            dl: 239,
-            up: 187
-            }, {
-            period: 'October 17',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'November 17',
-            dl: 110,
-            up: 102
-            }, {
-            period: 'December 17',
-            dl: 65,
-            up: 30
-            }, {
-            period: 'January 18',
-            dl: 120,
-            up: 90
-            }, {
-            period: 'February 18',
-            dl: 127,
-            up: 58
-            }, {
-            period: 'March 18',
-            dl: 115,
-            up: 46
-            }, {
-            period: 'April 18',
-            dl: 71,
-            up: 57
-            }, {
-            period: 'May 18',
-            dl: 95,
-            up: 75
-            }, {
-            period: 'June 18',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'July 18',
-            dl: 105,
-            up: 70
-            }, {
-            period: 'August 18',
-            dl: 115,
-            up: 106
-            }, {
-            period: 'September 18',
-            dl: 239,
-            up: 187
-            }, {
-            period: 'October 18',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'November 18',
-            dl: 90,
-            up: 70
-            }, {
-            period: 'December 18',
-            dl: 65,
-            up: 30
-            }, {
-            period: 'January 19',
-            dl: 77,
-            up: 45
-            }],
-        gridEnabled: true,
-        gridLineColor: 'rgba(0,0,0,.1)',
-        behaveLikeLine: true,
-        smooth: false,
-        axes:true,
-        xkey: 'period',
-        ykeys: ['dl', 'up'],
-        labels: ['Water consumption', 'Waste water'],
-        lineColors: ['#03A9F4', '#9BE0FF'],
-        pointSize: 0,
-        pointStrokeColors : ['#045d97'],
-        lineWidth: 0,
-        resize:true,
-        hideHover: 'auto',
-        fillOpacity: 0.9,
-        parseTime:false
-    });
+  {% if info.location.geojson %}
+    <script type="text/javascript">
 
-    chart.options.labels.forEach(function(label, i){
-        var legendItem = $('<div class=\'morris-legend-items\'></div>').text(label);
-        $('<span></span>').css('background-color', chart.options.lineColors[i]).prependTo(legendItem);
-        $('#demo-morris-area-legend-full').append(legendItem)
-    })
-});
-</script>
+      var map = L.map('map');
+      var geojson = {{ info.location.geojson|safe }}
+      var geojsonlayer = L.geoJSON(geojson).addTo(map);
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+          '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+          'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          id: 'mapbox.streets'
+      }).addTo(map);
+
+        map.scrollWheelZoom.disable();
+        map.fitBounds(geojsonlayer.getBounds());
+
+    </script>
+  {% endif %}
+
 {% endblock %}

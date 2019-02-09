@@ -63,8 +63,8 @@
       </a>
 
       <ul class="collapse {% if menu == "sectors" %}in{% endif %}">
-        {% for details in PROCESSGROUPS %}
-            <li{% if menu == "sectors" and sector == details %} class="active"{% endif %}><a href="{% url 'multiplicity:sector' info.slug details.slug %}">{{ details.name }}</a></li>
+        {% for details in info.sectors.all %}
+            <li{% if menu == "sectors" and sector == details.process_group %} class="active"{% endif %}><a href="{% url 'multiplicity:sector' info.slug details.process_group.slug %}">{{ details.process_group.name }}</a></li>
         {% endfor %}
       </ul>
   </li>

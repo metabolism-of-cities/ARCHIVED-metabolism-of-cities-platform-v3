@@ -42,13 +42,12 @@ from django.forms import modelform_factory
 from django.db.models import OuterRef, Subquery
 
 def index(request, slug):
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    topic = Topic.objects.get(pk=2)
     info = get_object_or_404(ReferenceSpace, slug=slug)
     types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1).exclude(pk=8)
     references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]
     datasets_stocks = Dataset.objects.filter(primary_space=info, type__type='stocks').order_by('-id')[:5]
     datasets_flows = Dataset.objects.filter(primary_space=info, type__type='flows').order_by('-id')[:5]
+    photos = Photo.objects.filter(primary_space=info, deleted=False)[:6]
 
     editlink = reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id])
 
@@ -56,13 +55,16 @@ def index(request, slug):
         'section': 'cities', 
         'info' : info,
         'menu' : 'dashboard',
-        'topics': topics,
+        'gallery': True,
+        'photos': photos,
+        'map': True,
+
         'types': types, 
-        'topic': topic,
         'editlink': editlink,
         'references': references,
         'datasets_flows': datasets_flows,
         'datasets_stocks': datasets_stocks,
+
     }
     return render(request, 'multiplicity/index.html', context)
 
@@ -1711,11 +1713,11 @@ def admin_data_overview(request, city):
     spaces = ReferenceSpace.objects.filter(city=info)
     photos = Photo.objects.filter(primary_space=info)
     information = Information.objects.filter(space=info)
-    sectors = ProcessGroup.objects.all()
+    sectors = ProcessGroup.objects.all().order_by('name')
 
-    active_sectors = {}
+    active_sectors = []
     for sector in info.sectors.all():
-        active_sectors[sector.id] = True
+        active_sectors.append(sector.process_group.id)
 
     context = { 
         'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 
@@ -1732,6 +1734,17 @@ def admin_activate_sector(request, city, sector):
     check = ReferenceSpaceSector.objects.filter(space=info, process_group=sector)
     if not check:
         ReferenceSpaceSector.objects.create(space=info, process_group=sector)
+    messages.success(request, 'Sector activated')
+    return redirect('multiplicity:admin_data_overview', city=info.slug)
+
+@staff_member_required
+def admin_deactivate_sector(request, city, sector):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    sector = get_object_or_404(ProcessGroup, slug=sector)
+    check = ReferenceSpaceSector.objects.filter(space=info, process_group=sector)
+    if check:
+        check.delete()
+    messages.success(request, 'Sector deactivated')
     return redirect('multiplicity:admin_data_overview', city=info.slug)
 
 
