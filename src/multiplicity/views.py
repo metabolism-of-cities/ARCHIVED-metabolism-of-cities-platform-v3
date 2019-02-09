@@ -159,7 +159,7 @@ def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)
     information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
-    references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).order_by('title')
+    references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).distinct().order_by('title')
     organizations = Organization.objects.filter(processes__in=sector.processes.all(), reference_spaces=info).order_by('name')
     datasets = Dataset.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
     addlink = reverse('multiplicity:information_form', args=[info.slug])
@@ -176,7 +176,6 @@ def sector(request, city, sector):
 
 # newest = Comment.objects.filter(post=OuterRef('pk')).order_by('-created_at')
 # Post.objects.annotate(newest_commenter_email=Subquery(newest.values('email')[:1]))
-    print(types)
 
     spaces_list = {}
     for type in types:

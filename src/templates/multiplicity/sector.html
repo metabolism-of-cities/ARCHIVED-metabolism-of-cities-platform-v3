@@ -10,6 +10,7 @@
 <h2 id="sector-title">{{ sector.name }}</h2>
 
 <article class="sector">
+  {% if information %}
   <section id="info">
     <div class="row">
       <div class="col-lg-4">
@@ -17,10 +18,11 @@
       </div>
       <div class="col-lg-8 text-right">
         <div class="section-menu">
-          General information {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a>{% endif %}
-          {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a>{% endif %}
-          {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
-          {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
+          General information | 
+          {% if datasets %} <a onclick="scrollToDiv('datasets')">Datasets</a> | {% endif %} 
+          {% if infrastructure %}<a onclick="scrollToDiv('infrastructure')">Infrastructure</a> | {% endif %}
+          {% if references %} <a onclick="scrollToDiv('references')">Documents</a> | {% endif %}
+          {% if photos %}<a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
         </div>
       </div>
     </div>
@@ -82,6 +84,8 @@
     </div>
   </section>
 
+  {% endif %}
+
   {% if datasets %}
   <section id="datasets">
     <div class="row">
@@ -90,9 +94,11 @@
       </div>
       <div class="col-lg-8 text-right">
         <div class="section-menu">
-          <a onclick="scrollToDiv('info')">General information</a> | Datasets {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a> {% endif %}
-          {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
-          {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
+          {% if information %}<a onclick="scrollToDiv('info')">General information</a> | {% endif %}
+          Datasets | 
+          {% if infrastructure %}<a onclick="scrollToDiv('infrastructure')">Infrastructure</a> | {% endif %}
+          {% if references %} <a onclick="scrollToDiv('references')">Documents</a> | {% endif %}
+          {% if photos %}<a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
         </div>
       </div>
     </div>
@@ -131,9 +137,11 @@
       </div>
       <div class="col-lg-8 text-right">
         <div class="section-menu">
-          <a onclick="scrollToDiv('info')">General information</a> {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a> {% endif %} | Infrastructure
-          {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
-          {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
+          {% if information %}<a onclick="scrollToDiv('info')">General information</a> | {% endif %}
+          {% if datasets %} <a onclick="scrollToDiv('datasets')">Datasets</a> | {% endif %} 
+          Infrastructure | 
+          {% if references %} <a onclick="scrollToDiv('references')">Documents</a> | {% endif %}
+          {% if photos %}<a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
         </div>
       </div>
     </div>
@@ -217,10 +225,11 @@
         </div>
         <div class="col-lg-8 text-right">
           <div class="section-menu">
-            <a onclick="scrollToDiv('info')">General information</a> {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a> {% endif %}
-            {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a> {% endif %}
-            | Documents
-            {% if photos %} | <a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
+            {% if information %}<a onclick="scrollToDiv('info')">General information</a> | {% endif %}
+            {% if datasets %} <a onclick="scrollToDiv('datasets')">Datasets</a> | {% endif %} 
+            {% if infrastructure %}<a onclick="scrollToDiv('infrastructure')">Infrastructure</a> | {% endif %}
+            Documents | 
+            {% if photos %}<a onclick="scrollToDiv('photos')">Photos</a>{% endif %}
           </div>
         </div>
       </div>
@@ -237,10 +246,11 @@
         </div>
         <div class="col-lg-8 text-right">
           <div class="section-menu">
-            <a onclick="scrollToDiv('info')">General information</a> {% if datasets %} | <a onclick="scrollToDiv('datasets')">Datasets</a> {% endif %}
-            {% if infrastructure %} | <a onclick="scrollToDiv('infrastructure')">Infrastructure</a> {% endif %}
-            {% if references %} | <a onclick="scrollToDiv('references')">Documents</a>{% endif %}
-            | Photos
+            {% if information %}<a onclick="scrollToDiv('info')">General information</a> | {% endif %}
+            {% if datasets %} <a onclick="scrollToDiv('datasets')">Datasets</a> | {% endif %} 
+            {% if infrastructure %}<a onclick="scrollToDiv('infrastructure')">Infrastructure</a> | {% endif %}
+            {% if references %} <a onclick="scrollToDiv('references')">Documents</a> | {% endif %}
+            Photos
           </div>
         </div>
       </div>
