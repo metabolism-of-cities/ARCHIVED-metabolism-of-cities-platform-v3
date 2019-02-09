@@ -46,7 +46,7 @@
     <div class="col-lg-6">
         <h2>{{ info.name }}</h2>
         <p>
-            {{ info.category_description }}
+            {{ info.category_description|linebreaksbr }}
         </p>
         <p>
         <a href="{% url 'core:jointaskforce' info.slug %}" class="btn btn-{{ info.color.css }}">Join {{ info.name }}</a>
