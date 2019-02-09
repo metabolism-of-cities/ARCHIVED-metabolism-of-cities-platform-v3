@@ -38,6 +38,9 @@ from django.db.models import Q
 # To use factory forms
 from django.forms import modelform_factory
 
+# To get a representative image for a set of reference spaces
+from django.db.models import OuterRef, Subquery
+
 def index(request):
     list = ReferenceSpace.objects.filter(type__id=3)
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
@@ -163,7 +166,18 @@ def sector(request, city, sector):
     photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
     map = False
     infrastructure = False
+
+    last_space = ReferenceSpace.objects.filter(type=OuterRef('pk')).order_by('-id')
+    space_photo = Photo.objects.filter(secondary_space__type=OuterRef('pk')).order_by('id')
     types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
+    types = types.annotate(image=Subquery(space_photo.values('image')[:1]))
+
+    #Photo.objects.filter(primary_space=OuterRef('referencespace', secondary_space__isnull=True, process__isnull=True, deleted=False)
+
+# newest = Comment.objects.filter(post=OuterRef('pk')).order_by('-created_at')
+# Post.objects.annotate(newest_commenter_email=Subquery(newest.values('email')[:1]))
+    print(types)
+
     spaces_list = {}
     for type in types:
         get_list = ReferenceSpace.objects.filter(city=info, type=type)

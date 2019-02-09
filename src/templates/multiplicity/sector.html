@@ -149,9 +149,7 @@
                   <div class="row flex flex-wrap">
                     <div class="col-lg-4">
                       <a onclick="showInfrastructureData('{{ details.slug }}')">
-                          
-                        <img class="img-responsive" src="{% get_static_prefix %}multiplicity/img/space_types/{{ details.slug }}.jpg" alt="">
-
+                        <img class="img-responsive" src="{% get_media_prefix %}{{ details.image }}" alt="">
                       </a>
                     </div>
                     <div class="col-lg-8 pad-all">
