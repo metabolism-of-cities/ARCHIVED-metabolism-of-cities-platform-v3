@@ -39,6 +39,7 @@ urlpatterns = [
     path('about/team', views.team, name='team'),
     path('about/task-forces', views.taskforces, name='taskforces'),
     path('about/task-forces/<slug:slug>', views.taskforce, name='taskforce'),
+    path('about/task-forces/<slug:taskforce>/join', views.register, name='jointaskforce'),
 
     path('community/people', views.people, name='people'),
     path('community/people/<int:id>', views.peopledetails, name='peopledetails'),

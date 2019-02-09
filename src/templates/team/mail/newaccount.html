@@ -212,6 +212,10 @@
                             {{ profile }}
                           <br><br>
                             {{ contribution }}
+                            {% if taskforce %}
+                            <br><br>
+                            Task force: {{ taskforce.name }}
+                            {% endif %}
                         </td>
                       </tr>
                     </table>

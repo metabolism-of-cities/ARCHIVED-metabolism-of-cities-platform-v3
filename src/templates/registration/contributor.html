@@ -17,8 +17,12 @@ textarea.form-control{height:150px}
       <div class="panel-body">
 
         <div class="mar-ver pad-btm">
-          <h1 class="h3">Become a contributor</h1>
-          <p>Sign up to become a contributor on {{ SITE_NAME }}! </p>
+          <h1 class="h3">Join {% if taskforce %}{{ taskforce }}{% else %}our team{% endif %}</h1>
+          {% if taskforce %}
+            <p>Fill out the form below to become join the {{ taskforce }} taskforce!</p>
+          {% else %}
+            <p>Sign up to become a contributor on {{ SITE_NAME }}!.</p>
+          {% endif %}
         </div>
 
         {% if messages %}
@@ -49,18 +53,20 @@ textarea.form-control{height:150px}
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-{% if True %}12{% else %}6{% endif %}">
               <div class="form-group">
                 <label>E-mail</label>
                 <input type="email" class="form-control" name="email" required>
               </div>
             </div>
+            {% if False %}
             <div class="col-sm-6">
               <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control" required>
               </div>
             </div>
+            {% endif %}
           </div>
         </div>
       </div>

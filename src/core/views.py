@@ -621,14 +621,23 @@ def reference_search_ajax(request, active_only=False):
         list.append(d)
     return JsonResponse(list, safe=False)
 
-def register(request, contributor=False):
+def register(request, contributor=False, taskforce=False):
+
+    if taskforce:
+        taskforce = get_object_or_404(Category, slug=taskforce)
 
     if request.method == 'POST':
-        check = User.objects.filter(email=request.POST['email'])
-        if check:
-            messages.warning(request, 'This user already exists. Please <a href="/accounts/login">log in</a> instead.')
+        user = User.objects.filter(email=request.POST['email'])
+        if user:
+            user = user[0]
+            people = get_object_or_404(People, user=user)
         else:
-            user = User.objects.create_user(request.POST['email'], request.POST['email'], request.POST['password'])
+            if 'password' not in request.POST:
+                import uuid
+                password = str(uuid.uuid4())
+            else:
+                password = request.POST['password']
+            user = User.objects.create_user(request.POST['email'], request.POST['email'], password)
             user.first_name = request.POST['first_name']
             user.last_name = request.POST['last_name']
             user.is_active = False
@@ -643,43 +652,48 @@ def register(request, contributor=False):
                 status = 'pending',
             )
 
-            PeopleNote.objects.create(
-                people = people,
-                created_by = user,
-                note = request.POST['contribution'],
-            )
+        PeopleNote.objects.create(
+            people = people,
+            created_by = user,
+            note = request.POST['contribution'],
+        )
 
-            current_site = Site.objects.get_current()
-            scheme = request.scheme
-            url = scheme + "://" + current_site.domain
+        current_site = Site.objects.get_current()
+        scheme = request.scheme
+        url = scheme + "://" + current_site.domain
 
-            context = {
-                'url': url + reverse('core:admin_people', args=[people.id]),
-                'profile': request.POST['profile'],
-                'contribution': request.POST['contribution'],
-                'user': user,
-                'site': current_site.name,
-            }
+        context = {
+            'url': url + reverse('core:admin_people', args=[people.id]),
+            'profile': request.POST['profile'],
+            'contribution': request.POST['contribution'],
+            'user': user,
+            'site': current_site.name,
+            'taskforce': taskforce,
+        }
 
-            msg_html = render_to_string('team/mail/newaccount.html', context)
-            msg_plain = render_to_string('team/mail/newaccount.txt', context)
+        msg_html = render_to_string('team/mail/newaccount.html', context)
+        msg_plain = render_to_string('team/mail/newaccount.txt', context)
 
-            send_mail(
-                'New contributor signup: ' + people.firstname + ' ' + people.lastname,
-                msg_plain,
-                settings.SITE_EMAIL,
-                [settings.SITE_EMAIL],
-                html_message=msg_html,
-            )
+        send_mail(
+            'New contributor signup: ' + people.firstname + ' ' + people.lastname,
+            msg_plain,
+            settings.SITE_EMAIL,
+            [settings.SITE_EMAIL],
+            html_message=msg_html,
+        )
 
-            if user.is_active:
-                login(request, user)
-                messages.success(request, 'Welcome ' + request.POST['first_name'] + '! You are now a registered user.')
-            else:
-                messages.success(request, 'Thanks ' + request.POST['first_name'] + '! We have received your registration and we will reach out to you soon to activate your account.')
+        if user.is_active:
+            login(request, user)
+            messages.success(request, 'Welcome ' + request.POST['first_name'] + '! You are now a registered user.')
+        else:
+            messages.success(request, 'Thanks ' + request.POST['first_name'] + '! We have received your submission and we will reach out soon to follow up on this.')
+        if taskforce:
+            return redirect(reverse('core:taskforce', args=[taskforce.slug]))
+        else:
             return redirect('/about/join')
-    if contributor:
-        return render(request, 'registration/contributor.html')
+    context = { 'taskforce': taskforce }
+    if contributor or taskforce:
+        return render(request, 'registration/contributor.html', context)
     else:
         return render(request, 'registration/register.html')
 

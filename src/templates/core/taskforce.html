@@ -15,7 +15,7 @@
                 <i class="{{ info.icon }} icon-5x"></i>
 
                 <h4 class="text-light">{{ info.name }}: Summary</h4>
-                <p class="pad-all"><a href="" class="btn btn-dark">Join this task force</a></p>
+                <p class="pad-all"><a href="{% url 'core:jointaskforce' info.slug %}" class="btn btn-dark">Join this task force</a></p>
                 <ul class="list-unstyled text-center pad-top mar-no row">
                     <li class="col-xs-4">
                         <span class="text-lg text-semibold">{{ info.taskforcemember_set.active.count }}</span>
@@ -49,7 +49,7 @@
             {{ info.category_description }}
         </p>
         <p>
-            <a href="http://" class="btn btn-{{ info.color.css }}">Join {{ info.name }}</a>
+        <a href="{% url 'core:jointaskforce' info.slug %}" class="btn btn-{{ info.color.css }}">Join {{ info.name }}</a>
         </p>
     </div>
     
