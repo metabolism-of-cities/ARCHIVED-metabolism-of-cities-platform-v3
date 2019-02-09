@@ -33,8 +33,12 @@ class Category(models.Model):
     )
     group = models.CharField(max_length=10, choices=GROUPS, default='community')
     members = models.ManyToManyField(User, through='TaskForceMember')
+    position = models.PositiveSmallIntegerField(null=True, blank=True)
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["name"]
 
 class ProjectTaskforceForm(ModelForm):
     class Meta:
