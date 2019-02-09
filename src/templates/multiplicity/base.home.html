@@ -232,6 +232,14 @@
     h3 {
       font-size:25px;
     }
+{% if request.GET.navbar %}
+#container.mainnav-in .brand-title, #container.mainnav-sm .brand-title, #container.mainnav-out .brand-title, #container.mainnav-lg .brand-title,
+.effect .navbar-content,
+.effect #navbar {
+  background: #{{ request.GET.navbar }};
+}
+{% endif %}
+
   </style>
 </head>
 
