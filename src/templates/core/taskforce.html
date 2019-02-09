@@ -56,13 +56,14 @@
 </div>
 
 <div class="row">
-    <h2>Our task list</h2>
+    <h2>Task list</h2>
     <p>
-        Below you can find a different things that this task force is working on. 
-        This should give you an idea of the kind of activity this task force engages in.
-        If you can help with any of these activities, then we can definitely use your help!
-        If you have other ideas for this task force, then do not hesitate
-        <a href="{% url 'core:contact' %}">to contact us</a>.
+        Below you can find a different things that this task force is working
+        on.  This should give you an idea of the kind of activity this task
+        force engages in.  If you can help with any of these activities, then
+        the {{ info.name }} task force can definitely use your help!  If you
+        have other ideas for this task force, then do not hesitate
+        to <a href="{% url 'core:contact' %}">get in touch</a>.
     </p>
 
     {% if tickets.count %}
