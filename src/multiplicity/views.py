@@ -1402,6 +1402,12 @@ def datasetlist(request):
     context = { 'section': 'cities', 'menu': 'dashboard', 'list': list}
     return render(request, 'multiplicity/contribute.dataset.list.html', context)
 
+def download(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    context = { 'section': 'cities', 'menu': 'download', 'page': 'download',
+            'info': info, 'list': list }
+    return render(request, 'multiplicity/download/index.html', context)
+
 def upload(request, city):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)

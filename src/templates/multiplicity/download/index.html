@@ -1,0 +1,411 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Data{% endblock %}
+{% block container %}stretch-bg-head floating-style{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="eq-height clearfix">
+      <div class="col-md-4 eq-box-md text-center box-vmiddle-wrap bord-hor">
+
+          <!-- Simple Promotion Widget -->
+          <!--===================================================-->
+          <div class="box-vmiddle pad-all">
+              <h3 class="text-main">Filter data</h3>
+              <div class="pad-ver">
+                  <i class="pli-bag-coins icon-5x"></i>
+              </div>
+              <p class="pad-btn text-sm">
+                Select the parameters on the right to filter our database and 
+                find the data you are looking for.
+              </p>
+              <br>
+              <a class="btn btn-lg btn-primary" href="#">Learn More...</a>
+          </div>
+          <!--===================================================-->
+
+      </div>
+      <div class="col-md-8 eq-box-md eq-no-panel">
+
+          <!-- Main Form Wizard -->
+          <!--===================================================-->
+          <div id="main-wz">
+
+              <!--nav-->
+              <ul class="row wz-step wz-icon-bw wz-nav-off mar-top wz-steps">
+                  <li class="col-xs-3 active">
+                      <a data-toggle="tab" href="#main-tab1" aria-expanded="true">
+                          <span class="text-"><i class="pli-factory-2 icon-2x"></i></span>
+                          <h5 class="mar-no">Processes</h5>
+                      </a>
+                  </li>
+                  <li class="col-xs-3">
+                      <a data-toggle="tab" href="#main-tab2" aria-expanded="false">
+                          <span class="text-"><i class="pli-mine icon-2x"></i></span>
+                          <h5 class="mar-no">Materials</h5>
+                      </a>
+                  </li>
+                  <li class="col-xs-3">
+                      <a data-toggle="tab" href="#main-tab3" aria-expanded="false">
+                          <span class="text-"><i class="pli-calendar-4 icon-2x"></i></span>
+                          <h5 class="mar-no">Timeframe</h5>
+                      </a>
+                  </li>
+                  <li class="col-xs-3">
+                      <a data-toggle="tab" href="#main-tab4" aria-expanded="false">
+                          <span class="text-"><i class="pli-globe icon-2x"></i></span>
+                          <h5 class="mar-no">Location</h5>
+                      </a>
+                  </li>
+              </ul>
+
+              <!--progress bar-->
+              <div class="progress progress-xs">
+                  <div class="progress-bar progress-bar-primary" style="width: 25%; left: 75%; position: relative; transition: all 0.5s ease 0s;"></div>
+              </div>
+
+
+              <!--form-->
+              <form class="form-horizontal">
+                  <div class="panel-body">
+                      <div class="tab-content">
+
+                          <!--First tab-->
+                          <div id="main-tab1" class="tab-pane active">
+
+                            <div id="tree"></div>
+                            <div id="details"></div>
+
+                          </div>
+
+                          <!--Second tab-->
+                          <div id="main-tab2" class="tab-pane fade">
+                            <div id="materialtree"></div>
+                            <div id="detailsmaterials"></div>
+                          </div>
+
+                          <!--Third tab-->
+                          <div id="main-tab3" class="tab-pane">
+                              <div class="form-group">
+                                  <label class="col-lg-2 control-label">Start date</label>
+                                  <div class="col-lg-9">
+                                      <input placeholder="Select date" name="start" class="form-control" type="date">
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-lg-2 control-label">End date</label>
+                                  <div class="col-lg-9">
+                                      <input placeholder="Select date" name="end" class="form-control" type="date">
+                                  </div>
+                              </div>
+                          </div>
+
+                          <!--Fourth tab-->
+                          <div id="main-tab4" class="tab-pane in">
+                            <div class="form-group">
+                              <div class="col-sm-10">
+                                Location: 
+                                <strong>
+                                {{ info.name }}
+                                </strong>
+                                <br>
+                                <br>
+                                <em>
+                                  When more cities have been implemented, you will be able to search
+                                  across multiple cities.
+                                </em>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+
+
+                  <!--Footer buttons-->
+                  <div class="pull-right pad-rgt mar-btm">
+                      <button type="button" class="previous btn btn-primary">Previous</button>
+                      <button type="button" class="next btn btn-primary disabled" style="display: none;">Next</button>
+                      <button type="button" class="finish btn btn-success" style="" id="finish">Search</button>
+                      <input type="hidden" name="process" value="" />
+                      <input type="hidden" name="material" value="" />
+                  </div>
+
+              </form>
+          </div>
+          <!--===================================================-->
+          <!-- End of Main Form Wizard -->
+
+
+      </div>
+  </div>
+</div>
+
+<div class="row" id="results">
+    <div class="col-lg-12">
+        <div class="panel panel-body">
+        <div class="panel-heading">
+            <h3>Search results</h3>
+        </div>
+        <div class="panel-body">
+          <div class="alert alert-info">
+            <strong>{{ data|length }} data points found.</strong>
+          </div>
+          <table class="table table-striped datatable">
+            <thead>
+              <tr>
+                <th>Time period</th>
+                <th>Origin (process)</th>
+                <th>Destination (process)</th>
+                <th>Origin (space)</th>
+                <th>Destination (space)</th>
+                <th>Material</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for details in data %}
+                <tr>
+                  <td data-sort="{{ details.timeframe.start|date:"Y-m-d" }}">{{ details.timeframe.name }}</td>
+                  <td>{{ details.flow.origin.name }}</td>
+                  <td>{{ details.flow.destination.name }}</td>
+                  <td>{{ details.origin_space.name }}</td>
+                  <td>{{ details.destination_space.name }}</td>
+                  <td>{{ details.flow.name }}</td>
+                  <td>{{ details.quantity }} {{ details.unit.symbol }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <h2>Options</h2>
+
+          <p>
+            <a href="http://" class="btn btn-info">Download as CSV</a>
+            <a href="http://" class="btn btn-info">Download raw data</a>
+            <a href="http://" class="btn btn-info">Review sources</a>
+            <a href="http://" class="btn btn-info">View data quality indicators</a>
+          
+          </p>
+
+        </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/skin-lion/ui.fancytree.min.css" />
+<style type="text/css">
+#results{display:none}
+#materialtree{overflow:hidden}
+#details{margin-top:20px}
+table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Data</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'staf:index' %}">Resources</a></li>
+        <li><a href="{% url 'staf:index' %}">Data</a></li>
+        <li class="active">Filter data</li>
+    </ol>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+<script type="text/javascript" src="{% static 'ie/js/bootstrap.wizard.min.js' %}"></script>
+
+<script type="text/javascript">
+$(function(){
+  
+    $('#main-wz').bootstrapWizard({
+        tabClass		: 'wz-steps',
+        nextSelector	: '.next',
+        previousSelector	: '.previous',
+        onTabClick: function(tab, navigation, index) {
+            return false;
+        },
+        onInit : function(){
+            $('#main-wz').find('.finish').hide().prop('disabled', true);
+        },
+        onTabShow: function(tab, navigation, index) {
+            var $total = navigation.find('li').length;
+            var $current = index+1;
+            var $percent = ($current/$total) * 100;
+            var wdt = 100/$total;
+            var lft = wdt*index;
+
+            $('#main-wz').find('.progress-bar').css({width:wdt+'%',left:lft+"%", 'position':'relative', 'transition':'all .5s'});
+
+
+            // If it's the last tab then hide the last button and show the finish instead
+            if($current >= $total) {
+                $('#main-wz').find('.next').hide();
+                $('#main-wz').find('.finish').show();
+                $('#main-wz').find('.finish').prop('disabled', false);
+            } else {
+                $('#main-wz').find('.next').show();
+                $('#main-wz').find('.finish').hide().prop('disabled', true);
+            }
+        }
+    });
+
+
+    // FORM WIZARD WITH VALIDATION
+    // =================================================================
+    $('#bv-wz').bootstrapWizard({
+        tabClass		    : 'wz-steps',
+        nextSelector	    : '.next',
+        previousSelector	: '.previous',
+        onTabClick          : function(tab, navigation, index) {
+            return false;
+        },
+        onInit : function(){
+            $('#bv-wz').find('.finish').hide().prop('disabled', true);
+        },
+        onTabShow: function(tab, navigation, index) {
+            var $total = navigation.find('li').length;
+            var $current = index+1;
+            var $percent = ($current/$total) * 100;
+            var wdt = 100/$total;
+            var lft = wdt*index;
+
+            $('#bv-wz').find('.progress-bar').css({width:wdt+'%',left:lft+"%", 'position':'relative', 'transition':'all .5s'});
+
+            // If it's the last tab then hide the last button and show the finish instead
+            if($current >= $total) {
+                $('#bv-wz').find('.next').hide();
+                $('#bv-wz').find('.finish').show();
+                $('#bv-wz').find('.finish').prop('disabled', false);
+            } else {
+                $('#bv-wz').find('.next').show();
+                $('#bv-wz').find('.finish').hide().prop('disabled', true);
+            }
+        },
+        onNext: function(){
+            isValid = null;
+            $('#bv-wz-form').bootstrapValidator('validate');
+
+
+            if(isValid === false)return false;
+        }
+    });
+
+
+});
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/jquery.fancytree-all-deps.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    // Load tree from Ajax JSON
+    $("#tree").fancytree({
+      source: {url:"{% url 'staf:processajax' %}"},
+			lazyLoad: function(event, data){
+        var node = data.node;
+				data.result = $.ajax({
+					url: "{% url 'staf:processajax' %}",
+					dataType: "json",
+          data: {mode: "children", parent: node.key},
+				});
+			},
+      activate: function(event, data) {
+        var node = data.node;
+        var settext = 'Selected process: '+node.title;
+        $("#details").html(settext);
+        $("input[name='process']").val(node.key);
+      },
+		});
+
+    $("#materialtree").fancytree({
+      source: {url:"{% url 'staf:materialajax' %}"},
+			lazyLoad: function(event, data){
+        var node = data.node;
+				data.result = $.ajax({
+					url: "{% url 'staf:materialajax' %}",
+					dataType: "json",
+          data: {mode: "children", parent: node.key},
+				});
+			},
+      activate: function(event, data) {
+        var node = data.node;
+        var settext = 'Selected material: '+node.title;
+        $("#detailsmaterials").html(settext);
+        $("input[name='material']").val(node.key);
+      },
+		});
+
+    $("#area").hide();
+    $("select[name='scope']").change(function(){
+      if ($(this).val() == 1) {
+        $("#area").show('fast');
+      }
+    });
+
+    $("#finish").click(function(){
+
+      start = $("input[name=start]").val();
+      end = $("input[name=end]").val();
+      process = $("input[name=process]").val();
+      material = $("input[name=material]").val();
+
+      var jqxhr = $.ajax("some_unknown_page.html")
+        .done(function (response) {
+            // success logic here
+            $('#results').html(response.responseText);
+            $('#results').show('fast');
+        })
+        .fail(function (jqXHR, exception) {
+            // Our error logic here
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            $('#results').html(msg);
+            $('#results').show('fast');
+        })
+        .always(function () {
+            alert("complete");
+        });
+
+    });
+
+});
+
+</script>
+
+{% endblock %}
