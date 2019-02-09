@@ -41,7 +41,32 @@ from django.forms import modelform_factory
 # To get a representative image for a set of reference spaces
 from django.db.models import OuterRef, Subquery
 
-def index(request):
+def index(request, slug):
+    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
+    topic = Topic.objects.get(pk=2)
+    info = get_object_or_404(ReferenceSpace, slug=slug)
+    types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1).exclude(pk=8)
+    references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]
+    datasets_stocks = Dataset.objects.filter(primary_space=info, type__type='stocks').order_by('-id')[:5]
+    datasets_flows = Dataset.objects.filter(primary_space=info, type__type='flows').order_by('-id')[:5]
+
+    editlink = reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id])
+
+    context = {
+        'section': 'cities', 
+        'info' : info,
+        'menu' : 'dashboard',
+        'topics': topics,
+        'types': types, 
+        'topic': topic,
+        'editlink': editlink,
+        'references': references,
+        'datasets_flows': datasets_flows,
+        'datasets_stocks': datasets_stocks,
+    }
+    return render(request, 'multiplicity/index.html', context)
+
+def index_old_remove(request):
     list = ReferenceSpace.objects.filter(type__id=3)
     context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
     return render(request, 'multiplicity/city.html', context)
@@ -1384,31 +1409,6 @@ def infrastructure_list(request, topic, city):
             count[details.type.id] = 1
     context = { 'section': 'cities', 'menu': 'infrastructure', 'page': topic.slug, 'info': info, 'topic': topic, 'spaces': spaces, 'types': types, 'count': count, 'tab': 'overview', 'topics': topics}
     return render(request, 'multiplicity/topic.html', context)
-
-def detail(request, slug):
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    topic = Topic.objects.get(pk=2)
-    info = get_object_or_404(ReferenceSpace, slug=slug)
-    types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1).exclude(pk=8)
-    references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]
-    datasets_stocks = Dataset.objects.filter(primary_space=info, type__type='stocks').order_by('-id')[:5]
-    datasets_flows = Dataset.objects.filter(primary_space=info, type__type='flows').order_by('-id')[:5]
-
-    editlink = reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id])
-
-    context = {
-        'section': 'cities', 
-        'info' : info,
-        'menu' : 'dashboard',
-        'topics': topics,
-        'types': types, 
-        'topic': topic,
-        'editlink': editlink,
-        'references': references,
-        'datasets_flows': datasets_flows,
-        'datasets_stocks': datasets_stocks,
-    }
-    return render(request, 'multiplicity/index.html', context)
 
 def research(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)

@@ -119,7 +119,7 @@ urlpatterns = [
 
     path('materials', views.materials, name='materials'),
     path('materials/<slug:catalog>', views.materials, name='materials'),
-    path('<slug:slug>', views.detail, name='city'),
-    path('profile', views.detail, name='profile'),
+    path('<slug:slug>', views.index, name='city'),
+    #path('profile', views.detail, name='profile'),
 
 ]

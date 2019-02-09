@@ -4,11 +4,14 @@ from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Refe
 class ReferenceSpaceTypeAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
+class TopicAdmin(admin.ModelAdmin):
+    list_display = ('name', 'parent', 'position', 'deleted')
+
 class ReferenceSpaceAdmin(admin.ModelAdmin):
     list_display = ('name', 'type')
 
 admin.site.register(DatasetType)
-admin.site.register(Topic)
+admin.site.register(Topic, TopicAdmin)
 admin.site.register(DQIRating)
 admin.site.register(DQI)
 admin.site.register(ReferenceSpace, ReferenceSpaceAdmin)
