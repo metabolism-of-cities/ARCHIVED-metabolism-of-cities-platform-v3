@@ -30,6 +30,7 @@ class TimestampedModel(models.Model):
 class Topic(models.Model):
     name = models.CharField(max_length=255)
     icon = models.CharField(max_length=255, null=True, blank=True)
+    color = models.CharField(max_length=255, null=True, blank=True)
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     position = models.PositiveSmallIntegerField()
@@ -244,6 +245,10 @@ class ProcessGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+class ReferenceSpaceSector(models.Model):
+    space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, related_name='sectors')
+    process_group = models.ForeignKey(ProcessGroup, on_delete=models.CASCADE)
 
 class License(models.Model):
     name = models.CharField(max_length=255)

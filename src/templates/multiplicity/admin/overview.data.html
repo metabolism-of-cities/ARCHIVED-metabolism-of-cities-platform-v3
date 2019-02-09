@@ -14,13 +14,47 @@
   <li class="active">Data overview</li>
 </ol>
 
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <p><a href="{% url 'multiplicity:city' info.slug %}" class="btn btn-info">View {{ info.name }} online</a></p>
+        <h3>Sectors</h3>
+        <table class="table table-striped">
+          <tr>
+            <th>Sector</th>
+            <th>Action</th>
+            <th>View</th>
+          </tr>
+        {% for sector in sectors %}
+          <tr>
+            <td>{{ sector }}</td>
+            <td>
+            {% if sector.id in active_sectors %}
+              <a href="{% url 'multiplicity:admin_activate_sector' info.slug sector.slug %}">deactivate</a>
+            {% else %}
+              <a href="{% url 'multiplicity:admin_activate_sector' info.slug sector.slug %}">activate</a>
+            {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'multiplicity:sector' info.slug sector.slug %}">View</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </table>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
 {% if datasets %}
 
 <div class="row">
   <div class="col">
     <div class="panel">
       <div class="panel-body">
-        <p><a href="{% url 'multiplicity:city' info.slug %}" class="btn btn-info">View {{ info.name }} online</a></p>
         <h3>Datasets</h3>
         <table class="table table-striped datatable">
             <thead>
