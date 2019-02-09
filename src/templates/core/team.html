@@ -28,11 +28,15 @@
     <div class="col-lg-4">
       <div class="panel widget">
           <div class="widget-header bg-purple">
+            {% if details.city.system_photo %}
               <img class="widget-bg img-responsive" src="{{ details.city.system_photo.image.url }}" alt="">
+            {% endif %}
           </div>
           <div class="widget-body text-center">
                 <a href="{% url 'core:peopledetails' details.id %}">
-                  <img alt="{{ details.firstname }}" class="widget-img img-circle img-border-light" src="{{ details.image.url }}">
+                  {% if details.image %}
+                    <img alt="{{ details.firstname }}" class="widget-img img-circle img-border-light" src="{{ details.image.url }}">
+                  {% endif %}
               </a>
               <h4 class="mar-no text-main">
                 <a href="{% url 'core:peopledetails' details.id %}">
