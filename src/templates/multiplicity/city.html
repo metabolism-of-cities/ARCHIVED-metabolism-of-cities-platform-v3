@@ -9,9 +9,10 @@
         <div class="col-lg-6">
           <div class="panel widget">
               <div class="widget-header bg-purple city-header">
-                {% if info.image %}
-                  <img class="widget-bg img-responsive" src="{{ info.image.url }}" alt="">
+                {% if info.system_photo %}
+                  <img class="widget-bg img-responsive" src="{{ info.system_photo.url }}" alt="">
                 {% endif %}
+                {{ info.system_photo }}
               </div>
               <div class="widget-body text-center">
                 {% with "multiplicity/img/cities/map-"|add:info.slug|add:".jpg" as picture %}

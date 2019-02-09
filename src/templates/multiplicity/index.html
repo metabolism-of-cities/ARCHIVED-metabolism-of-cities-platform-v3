@@ -9,8 +9,8 @@
         <div class="col-lg-6">
           <div class="panel widget">
               <div class="widget-header bg-purple city-header">
-                {% if info.image %}
-                  <img class="widget-bg img-responsive" src="{{ info.image.url }}" alt="">
+                {% if info.system_photo %}
+                  <img class="widget-bg img-responsive" src="{{ info.system_photo.image.large.url }}" alt="">
                 {% endif %}
               </div>
               <div class="widget-body text-center">
@@ -23,7 +23,9 @@
           </div>
         </div>
 
-        <div class="col-lg-3 ">
+        <div class="col-lg-6 ">
+
+          <h2>Browse by sector...</h2>
 
           <div class="panel panel-success panel-colorful">
               <div class="pad-all media">
@@ -61,10 +63,6 @@
               </div>
           </div>
 
-        </div>
-        
-        <div class="col-lg-3 noclick">
-
           <div class="panel panel-warning panel-colorful">
               <div class="pad-all media">
                   <div class="media-left">
@@ -100,10 +98,6 @@
                 Stone, clay, sand, gravel...
               </div>
           </div>
-
-        </div>
-
-        <div class="col-lg-3">
 
           <div class="panel ">
               <div class="pad-all media">
