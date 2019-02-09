@@ -69,7 +69,7 @@
   </a>
   <div class="dropdown-menu mega-dropdown-menu" id="dropdown-resources">
     <div class="row">
-      <div class="col-sm-4 col-md-3">
+      <div class="col-sm-4 col-md-4">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-star icon-fw"></i>Getting Started</p>
         <ul class="list-unstyled">
           <li><a href="{% url 'core:resources' 'introduction' %}">About Urban Metabolism</a></li>
@@ -82,7 +82,7 @@
           <li><a href="{% url 'core:resources' 'videos' %}">Videos</a></li>
         </ul>
       </div>
-      <div class="col-sm-4 col-md-3">
+      <div class="col-sm-4 col-md-4">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-books icon-fw"></i>Publications</p>
         <ul class="list-unstyled">
           <li><a href="{% url 'core:references' %}">Introduction</a></li>
@@ -95,7 +95,7 @@
           <li><a href="{% url 'core:publications' 'add' %}"><span class="pull-right label label-success">Contribute</span>Add Publication</a></li>
         </ul>
       </div>
-      <div class="col-sm-4 col-md-3">
+      <div class="col-sm-4 col-md-4">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-layout-grid icon-fw"></i>Data</p>
         <ul class="list-unstyled">
           <li><a href="{% url 'core:data' 'datasets' %}">Datasets</a></li>
@@ -135,6 +135,7 @@
     </div>
 </li>
 
+{% if False %}
   <li {% if section == "services" %}id="dropdown-active"{% endif %} class="mega-dropdown" data-id="services">
     <a href="services" class="mega-dropdown-toggle" data-id="services">
       <span class="ic-user pull-right">
@@ -216,3 +217,4 @@
       </div>
     </div>
   </li>
+  {% endif %}
