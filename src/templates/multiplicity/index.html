@@ -5,128 +5,131 @@
 {% block container %}stretch-bg-head floating-style{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-lg-6">
-          <div class="panel widget">
-              <div class="widget-header bg-purple city-header">
-                {% if info.system_photo %}
-                  <img class="widget-bg img-responsive" src="{{ info.system_photo.image.large.url }}" alt="">
-                {% endif %}
+
+<div class="row">
+
+  <div class="col-lg-6">
+    <div class="panel widget">
+      <div class="widget-header bg-purple city-header">
+        {% if info.system_photo %}
+          <img class="widget-bg img-responsive" src="{{ info.system_photo.image.large.url }}" alt="">
+        {% endif %}
+      </div>
+      <div class="widget-body text-center">
+        {% with "multiplicity/img/cities/map-"|add:info.slug|add:".jpg" as picture %}
+          <img alt="" class="widget-img img-circle img-border-light" src="{% static picture %}">
+        {% endwith %}
+          <h4 class="mar-no text-main">{{ info.name }}</h4>
+          <p class="text-muted mar-no">{{ info.country.name|default_if_none:"" }}</p>
+      </div>
+    </div>
+
+    <section class="resources">
+
+      <h2>Resources</h2>
+
+      <div class="panel ">
+          <div class="pad-all media">
+              <div class="media-left">
+                  <i class="fal fa-chart-area icon-3x icon-fw"></i>
               </div>
-              <div class="widget-body text-center">
-                {% with "multiplicity/img/cities/map-"|add:info.slug|add:".jpg" as picture %}
-                  <img alt="" class="widget-img img-circle img-border-light" src="{% static picture %}">
-                {% endwith %}
-                  <h4 class="mar-no text-main">{{ info.name }}</h4>
-                  <p class="text-muted mar-no">{{ info.country.name|default_if_none:"" }}</p>
-              </div>
-          </div>
-
-          <section class="sectors">
-            <h2>Browse by sector...</h2>
-
-            {% for details in info.sectors.all %}
-
-              <div class="panel panel-success panel-colorful pad-all">
-                  <p class="text-2x mar-no text-semibold">
-                      <a href="{% url 'multiplicity:sector' info.slug details.process_group.slug %}">
-                        <i class="{{ details.process_group.icon }} fa-fw mar-rgt"></i>
-                        {{ details.process_group.name }}
-                      </a>
-                  </p>
-              </div>
-
-            {% endfor %}
-          </section>
-
-
-
-        </div>
-
-        <div class="col-lg-6">
-
-          <div id="map"></div>
-
-            <h2>Resources</h2>
-
-          <div class="panel ">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="fal fa-chart-area icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Datasets</a></p>
-                      <span>Explore datasets on material flows, stocks, consumption, and more</span>
-                  </div>
+              <div class="media-body">
+                  <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:datasets' info.slug %}">Datasets</a></p>
+                  <span>Explore datasets on material flows, stocks, consumption, and more</span>
               </div>
           </div>
+      </div>
 
-          <div class="panel ">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="fal fa-globe-africa icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Maps</a></p>
-                      <span>View boundaries, micro-territorial units, infrastructure maps, and more</span>
-                  </div>
+      <div class="panel ">
+          <div class="pad-all media">
+              <div class="media-left">
+                  <i class="fal fa-globe-africa icon-3x icon-fw"></i>
+              </div>
+              <div class="media-body">
+                  <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:map' info.slug %}">Maps</a></p>
+                  <span>View boundaries, micro-territorial units, infrastructure maps, and more</span>
               </div>
           </div>
+      </div>
 
-          <div class="panel ">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="fal fa-books icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Journal articles</a></p>
-                      <span>Relevant academic literature published in peer-reviewed journals</span>
-                  </div>
+      <div class="panel ">
+          <div class="pad-all media">
+              <div class="media-left">
+                  <i class="fal fa-books icon-3x icon-fw"></i>
+              </div>
+              <div class="media-body">
+                  <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:resources' info.slug 'journal-articles' %}">Journal articles</a></p>
+                  <span>Relevant academic literature published in peer-reviewed journals</span>
               </div>
           </div>
+      </div>
 
-          <div class="panel ">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="fal fa-file-alt icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Reports</a></p>
-                      <span>Governmental reports, institutional reports, corporate reports, and other relevant reports</span>
-                  </div>
+      <div class="panel ">
+          <div class="pad-all media">
+              <div class="media-left">
+                  <i class="fal fa-file-alt icon-3x icon-fw"></i>
+              </div>
+              <div class="media-body">
+                  <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:resources' info.slug 'reports' %}">Reports</a></p>
+                  <span>Governmental reports, institutional reports, corporate reports, and other relevant reports</span>
               </div>
           </div>
+      </div>
 
-          <div class="panel ">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="fal fa-graduation-cap icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Theses</a></p>
-                      <span>Academic theses, dissertations, and other relevant academic work</span>
-                  </div>
+      <div class="panel ">
+          <div class="pad-all media">
+              <div class="media-left">
+                  <i class="fal fa-graduation-cap icon-3x icon-fw"></i>
+              </div>
+              <div class="media-body">
+                  <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:resources' info.slug 'theses' %}">Theses</a></p>
+                  <span>Academic theses, dissertations, and other relevant academic work</span>
               </div>
           </div>
+      </div>
 
-          <div class="panel ">
-              <div class="pad-all media">
-                  <div class="media-left">
-                      <i class="fal fa-images icon-3x icon-fw"></i>
-                  </div>
-                  <div class="media-body">
-                      <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:topic' info.slug 'water' %}">Photos</a></p>
-                      <span>View photos of resource infrastructure, material flows, and more</span>
-                  </div>
+      <div class="panel ">
+          <div class="pad-all media">
+              <div class="media-left">
+                  <i class="fal fa-images icon-3x icon-fw"></i>
+              </div>
+              <div class="media-body">
+                  <p class="text-2x mar-no media-heading"><a style="color:#333" href="{% url 'multiplicity:photos' info.slug %}">Photos</a></p>
+                  <span>View photos of resource infrastructure, material flows, and more</span>
               </div>
           </div>
+      </div>
 
+    </section>
 
-        </div>
   </div>
 
-  {% include 'multiplicity/includes/multimedia.html' %}
+  <div class="col-lg-6">
 
+    <div id="map"></div>
+
+    <section class="sectors">
+      <h2>Browse by sector...</h2>
+
+      {% for details in info.sectors.all %}
+
+        <div class="panel panel-success panel-colorful pad-all">
+            <p class="text-2x mar-no text-semibold">
+                <a href="{% url 'multiplicity:sector' info.slug details.process_group.slug %}">
+                  <i class="{{ details.process_group.icon }} fa-fw mar-rgt"></i>
+                  {{ details.process_group.name }}
+                </a>
+            </p>
+        </div>
+
+      {% endfor %}
+    </section>
+
+  </div>
+
+</div>
+
+{% include 'multiplicity/includes/multimedia.html' %}
 
 {% endblock %}
 

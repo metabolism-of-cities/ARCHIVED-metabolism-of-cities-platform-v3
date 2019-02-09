@@ -106,7 +106,7 @@ def taskforce(request, slug):
     info = get_object_or_404(Category, slug=slug)
     tickets = TaskForceTicket.objects.filter(taskforce=info).exclude(status='removed').order_by('title')
     units = TaskForceUnit.objects.filter(taskforce=info).order_by('name')
-    taskforces = Category.objects.filter(group='community').order_by('name').exclude(id=14)
+    taskforces = Category.objects.filter(group='community', position__isnull=False).order_by('position')
     context = { 'section': 'about', 'page': 'taskforces', 'info': info, 'tickets': tickets, 'units': units, 'sidenav': True, 'taskforces': taskforces }
     return render(request, 'core/taskforce.html', context)
 

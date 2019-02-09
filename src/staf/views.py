@@ -158,10 +158,12 @@ def processlistajax(request, id=False):
     if request.GET.get('parent'):
         processes = Process.objects.filter(parent=request.GET['parent']).order_by('name')
     else:
-        processes = Process.objects.filter(parent__isnull=True).order_by('name')
+        processes = Process.objects.filter(parent__isnull=True).order_by('name').exclude(id=92)
     list = []
     for details in processes:
         d = {}
+        if details.id == 398480:
+            details.name = 'All activities'
         d['title'] = details.name
         d['lazy'] = True
         d['key'] = details.id

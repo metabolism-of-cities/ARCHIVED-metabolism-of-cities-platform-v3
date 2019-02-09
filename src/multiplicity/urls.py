@@ -69,6 +69,9 @@ urlpatterns = [
     path('<slug:city>/map', views.photo_form, {'map': True}, name='map_form'),
     path('<slug:city>/sectors/<slug:sector>', views.sector, name='sector'),
 
+    # Downloading data
+    path('<slug:city>/download', views.download, name='download'),
+
     # Uploading data
     path('<slug:city>/upload', views.upload, name='upload'),
 
