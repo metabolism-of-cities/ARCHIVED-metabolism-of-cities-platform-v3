@@ -6,46 +6,64 @@
 
 {% block content %}
 
+<div class="row mainbox">
+  <div class="col-lg-12">
+      <h1>{{ page.title }}</h1>
+      {{ page.content|safe }}
+    </div>
+</div>
 
 <div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-body">
-      <div class="panel-body">
-        <h1>{{ page.title }}</h1>
-        {{ page.content|safe }}
-      </div>
-    </div>
+  <div class="col-lg-2">
+    <h2>Filter by year</h2>
+    <ul class="years">
+      {% for year in years %}
+        <li><a href="#year-{{ year }}" data-year="{{ year }}">{{ year }}</a></li>
+      {% endfor %}
+    </ul>
   </div>
-</div>
-<div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-body panel-colorful panel-default">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for details in list %}
-            <tr>
-              <td><a href="{% url 'core:news' details.id %}">{{ details.title }}</a>
-              {% if page.title == "Blog" and details.authors %}
-              <br>
-                {% for author in details.authors.all %}
-                  <span>
-                    {{ author }}
-                  </span>
-                {% endfor %}
+
+  <div class="col-lg-10">
+    <div class="panel panel-body panel-colorful panel-default mainlist">
+
+      {% for details in list %}
+
+      <div class="post year-{% if details.event %}{{ details.event.start|date:"Y" }}{% else %}{{ details.date|date:"Y" }}{% endif %}">
+
+          <h2><a href="{% url 'core:news' details.id %}">{{ details.title }}</a></h2>
+
+          <div>
+            {{ details.content|striptags|truncatewords:50|safe }}
+          </div>
+
+          <p class="date">
+            <span class="tag tag-info">
+              <i class="fal fa-calendar"></i>
+              {% if details.event and details.event.start != details.event.end %}
+                {{ details.event.start }} - {{ details.event.end }}
+              {% elif details.event %}
+                {{ details.event.start }}
+              {% else %}
+                {{ details.date }}
               {% endif %}
-              </td>
-              <td>{{ details.created_at|date:"M d, Y" }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </div>
+            </span>
+          </p>
+
+          {% if page.title == "Blog" and details.authors %}
+            <br>
+            {% for author in details.authors.all %}
+              <span>
+                {{ author }}
+              </span>
+            {% endfor %}
+          {% endif %}
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
   </div>
 </div>
 
@@ -57,6 +75,26 @@
 .col-sm-4 img{max-width:100%}
 .panel-body img{max-width:200px;float:right;border:1px solid #ccc; padding:4px;margin:5px}
 td span{margin-right:10px}
+
+.post {
+  margin-bottom: 40px;
+}
+
+.post p.date {
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
+.mainbox {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px dotted #444;
+}
+
+.mainlist .post:first-child h2 {
+  margin-top: 0;
+}
+
 </style>
 {% endblock %}
 
@@ -82,5 +120,16 @@ td span{margin-right:10px}
 {% endblock %}
 
 {% block footer %}
+<script type="text/javascript">
+$(function(){
 
+  $(".years a").click(function(e){
+    e.preventDefault();
+    var year = $(this).data("year");
+    $(".post").hide();
+    $(".year-"+year).show('fast');
+  });
+  
+});
+</script>
 {% endblock %}

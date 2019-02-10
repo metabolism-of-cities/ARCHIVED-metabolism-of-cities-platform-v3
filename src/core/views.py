@@ -150,8 +150,9 @@ def articles(request, parent):
     list = Article.objects.filter(active=True, parent__id=parent, site=request.site).order_by('-created_at')
     page = Article.objects.get(pk=parent)
     section = page.section
+    years = [2019, 2018, 2017]
     addlink = reverse('core:admin_article_parent', args=[parent])
-    context = { 'section': section, 'page': page, 'list': list, 'addlink': addlink}
+    context = { 'section': section, 'page': page, 'list': list, 'addlink': addlink, 'years': years }
     return render(request, 'core/news.html', context)
 
 def news_and_events(request):
