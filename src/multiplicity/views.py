@@ -1404,8 +1404,10 @@ def datasetlist(request):
 
 def download(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu': 'download', 'page': 'download',
-            'info': info, 'list': list }
+    context = { 
+        'section': 'cities', 'menu': 'download', 'page': 'download',
+        'info': info, 'list': list, 'datatables': True
+    }
     return render(request, 'multiplicity/download/index.html', context)
 
 def upload(request, city):

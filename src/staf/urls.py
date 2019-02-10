@@ -6,6 +6,8 @@ app_name = 'staf'
 urlpatterns = [
     path('', views.index, name='index'),
     path('search', views.search, name='search'),
+    path('search/ajax', views.searchajax, name='searchajax'),
+
     path('processgroups', views.processgroups, name='processgroups'),
     path('processgroups/<int:id>', views.processgroup, name='processgroup'),
 

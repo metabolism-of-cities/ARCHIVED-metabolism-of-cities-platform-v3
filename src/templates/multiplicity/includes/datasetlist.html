@@ -21,7 +21,7 @@
       {% for details in datasets %}
         <tr>
           <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
-          <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
+          <td>{{ details.timeframe.start }}{% if details.timeframe.end %} - {{ details.timeframe.end }}{% endif %}</td>
           <td><a class="btn btn-sm btn-mint" data-id="{{ details.id }}" data-graph="{{ details.graph.id|default:4 }}" onclick="previewChart({{ details.id }}, {{ details.graph.id|default:4 }})"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a></td>
         </tr>
       {% endfor %}

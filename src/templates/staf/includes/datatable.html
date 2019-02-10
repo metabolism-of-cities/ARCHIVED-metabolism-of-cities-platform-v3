@@ -1,0 +1,61 @@
+<div class="col-lg-12">
+    <div class="panel panel-body">
+    <div class="panel-heading">
+        <h3>Search results</h3>
+    </div>
+    <div class="panel-body">
+      <div class="alert alert-info">
+        <strong>{{ total }} data points found.</strong>
+        {% if total > 200 %}
+          <br>
+          Showing 200 record in the table. Use the download button to download all data points.
+        {% endif %}
+      </div>
+      <table class="table table-striped datatable">
+        <thead>
+          <tr>
+            <th>Time period</th>
+            <th>Origin (process)</th>
+            <th>Destination (process)</th>
+            <th>Origin (space)</th>
+            <th>Destination (space)</th>
+            <th>Material</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for details in list %}
+            <tr>
+              <td data-sort="{{ details.timeframe.start|date:"Y-m-d" }}">{{ details.timeframe.name }}</td>
+              <td>{{ details.origin.name }}</td>
+              <td>{{ details.destination.name }}</td>
+              <td>{{ details.origin_space.name }}</td>
+              <td>{{ details.destination_space.name }}</td>
+              <td>{{ details.material_name }}</td>
+              <td>{{ details.quantity }} {{ details.unit.symbol }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2>Options</h2>
+
+      <p>
+        <a href="http://" class="btn btn-info">Download as CSV</a>
+        <a href="http://" class="btn btn-info">Download raw data</a>
+        <a href="http://" class="btn btn-info">Review sources</a>
+        <a href="http://" class="btn btn-info">View data quality indicators</a>
+      
+      </p>
+
+    </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+    $(".datatable").DataTable({
+      "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+    });
+});
+</script>

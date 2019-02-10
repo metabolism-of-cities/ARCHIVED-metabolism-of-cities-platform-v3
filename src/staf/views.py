@@ -82,7 +82,6 @@ def materialchild(request, id):
     context = { 'section': 'data', 'menu': menu,'form': form, 'info': info, 'page': page, 'parent': parent, 'success': success }
     return render(request, 'staf/materialform.html', context)
 
-@login_required
 def materiallistajax(request, id=False):
     if request.GET.get('parent'):
         materials = Material.objects.filter(parent=request.GET['parent']).order_by('code')
@@ -101,6 +100,29 @@ def materiallistajax(request, id=False):
             d['folder'] = True
         list.append(d)
     return JsonResponse(list, safe=False)
+
+def searchajax(request):
+    list = Data.objects.filter(dataset__primary_space=request.GET['primary_space'])
+
+    if 'start' in request.GET and request.GET['start']:
+        start = request.GET['start']
+        list = list.filter(timeframe__start__gte=start)
+
+    if 'end' in request.GET and request.GET['end']:
+        end = request.GET['end']
+        list = list.filter(timeframe__start__lte=end)
+
+    if 'process' in request.GET and request.GET['process']:
+        process = request.GET['process']
+        list = list.filter(dataset__process=process)
+
+    total = list.count()
+
+    list = list[:200]
+
+    context = { 'list': list, 'total': total }
+    return render(request, 'staf/includes/datatable.html', context)
+
 
 @login_required
 def processlist(request, id=False):
@@ -153,7 +175,6 @@ def processchild(request, id):
     context = { 'section': 'data', 'menu': menu,'form': form, 'info': info, 'page': page, 'parent': parent, 'success': success }
     return render(request, 'staf/processform.html', context)
 
-@login_required
 def processlistajax(request, id=False):
     if request.GET.get('parent'):
         processes = Process.objects.filter(parent=request.GET['parent']).order_by('name')
