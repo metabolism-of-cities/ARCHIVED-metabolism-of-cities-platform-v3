@@ -11,6 +11,13 @@
       position: fixed;
       background-color: #fff;
     }
+    img.logo {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 100px !important;
+      z-index: 1000;
+    }
     .downArrow {
       position: absolute;
       bottom: 0;
@@ -29,7 +36,7 @@
       width: 100%;
       background-color: #000;
       color: #fff;
-      padding: 15px 0;
+      padding: 5px 0;
       text-align: center;
     }
     .bounce {
@@ -197,11 +204,11 @@
       transform: translateX(-50%) translateY(-50%);
     }
 
-    @-webkit-keyframes fadeInDown {
+    @-webkit-keyframes fadeInUp {
       from {
         opacity: 0;
-        -webkit-transform: translate3d(0, -100%, 0);
-        transform: translate3d(0, -100%, 0);
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
       }
 
       to {
@@ -211,11 +218,11 @@
       }
     }
 
-    @keyframes fadeInDown {
+    @keyframes fadeInUp {
       from {
         opacity: 0;
-        -webkit-transform: translate3d(0, -100%, 0);
-        transform: translate3d(0, -100%, 0);
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
       }
 
       to {
@@ -225,9 +232,9 @@
       }
     }
 
-    .fadeInDown {
-      -webkit-animation-name: fadeInDown;
-      animation-name: fadeInDown;
+    .fadeInUp {
+      -webkit-animation-name: fadeInUp;
+      animation-name: fadeInUp;
     }
     h3 {
       font-size:25px;
@@ -565,30 +572,38 @@
 
   $(".changing.cities, .changing.success").cycleText({
     "interval": 2500,
-    "animation": "fadeInDown"
+    "animation": "fadeInUp"
   });
 
-  $(".section.do-what .panel").mouseover(
-    function() {
-      var panelClass = $(this).attr("panelClass");
-      $(".section.do-what .split-text").hide()
-      $(".section.do-what .split-text." + panelClass).show();
-      $(".section.do-what .split").addClass("darker");
-      var backgroundColor = $(this).css("background-color")
-      $(".section.do-what .split").css("background-color", backgroundColor);
-    }
-  );
+  $(".section.do-what .panel").mouseover(function() {
+    var panelClass = $(this).attr("panelClass");
+    $(".section.do-what .split-text").hide()
+    $(".section.do-what .split-text." + panelClass).show();
+    $(".section.do-what .split").addClass("darker");
+    var backgroundColor = $(this).css("background-color")
+    $(".section.do-what .split").css("background-color", backgroundColor);
+  });
 
-  $(".section.for-whom .panel").mouseover(
-    function() {
-      var panelClass = $(this).attr("panelClass");
-      $(".section.for-whom .split-text").hide()
-      $(".section.for-whom .split-text." + panelClass).show();
-      $(".section.for-whom .split").addClass("darker");
-      var backgroundColor = $(this).css("background-color")
-      $(".section.for-whom .split").css("background-color", backgroundColor);
-    }
-  );
+  $(".section.for-whom .panel").mouseover(function() {
+    var panelClass = $(this).attr("panelClass");
+    $(".section.for-whom .split-text").hide()
+    $(".section.for-whom .split-text." + panelClass).show();
+    $(".section.for-whom .split").addClass("darker");
+    var backgroundColor = $(this).css("background-color")
+    $(".section.for-whom .split").css("background-color", backgroundColor);
+  });
+
+  $(".section.do-what .row.panel-collection").mouseleave(function() {
+    $(".section.do-what .split-text:visible").fadeOut(200, function(){
+      $(".section.do-what .split-text.standard").fadeIn(200);
+    })
+  });
+
+  $(".section.for-whom .row.panel-collection").mouseleave(function() {
+    $(".section.for-whom .split-text:visible").fadeOut(200, function(){
+      $(".section.for-whom .split-text.standard").fadeIn(200);
+    })
+  });
 
   $(".downArrow").click(function() {
     $(".main").moveDown();
