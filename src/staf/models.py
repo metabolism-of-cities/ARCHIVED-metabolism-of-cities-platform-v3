@@ -66,6 +66,7 @@ class MaterialForm(ModelForm):
         model = Material
         exclude = ['id', 'parent']
 
+# See also https://schinckel.net/2016/01/23/adjacency-lists-in-django-with-postgres/
 class MaterialTree(models.Model):
     root = models.ForeignKey(Material, related_name='+', on_delete=models.CASCADE)
     node = models.OneToOneField(Material, related_name='tree_material', primary_key=True, on_delete=models.CASCADE)

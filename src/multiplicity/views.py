@@ -95,9 +95,8 @@ def space_list(request, city, type):
             single = data
 
     data_in = Data.objects.filter(destination_space__type=type)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 'section': 'cities', 'menu': 'infrastructure', 'info': info, 'type': type, 'list': list, 'datatables': True, 'tab': tab, 'page': type.topic.slug, 'topic':topic, 'features': features,
-    'feature': feature, 'data_in': data_in, 'data_out': data_out, 'charts': True, 'single': single, 'topics': topics}
+    'feature': feature, 'data_in': data_in, 'data_out': data_out, 'charts': True, 'single': single}
     return render(request, 'multiplicity/space.list.html', context)
 
 def space(request, city, type, space):
@@ -121,7 +120,6 @@ def space(request, city, type, space):
     photouploadlink = '/cities/'+info.slug+'/photo?space='+str(space.id)
     videouploadlink = '/cities/'+info.slug+'/upload/video?space='+str(space.id)
     editlink = '/admin/multiplicity/referencespace/'+str(space.id)+'/change/'
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     if space.mtu:
         menu = 'resources'
         page = 'maps'
@@ -130,7 +128,7 @@ def space(request, city, type, space):
         page = 'unsure'
     context = { 'section': 'cities', 'menu': menu, 'page': page, 'info': info, 
     'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 'topics': topics, 
+    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 
     'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
     'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
     'videouploadlink': videouploadlink, 
@@ -138,7 +136,6 @@ def space(request, city, type, space):
     return render(request, 'multiplicity/space.html', context)
 
 def map(request, city, type='boundaries', id=False):
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)
     if id:
         boundary = get_object_or_404(ReferenceSpaceLocation, pk=id)
@@ -151,10 +148,35 @@ def map(request, city, type='boundaries', id=False):
         tab = 'boundaries'
     context = { 
         'section': 'cities', 'menu':  'resources', 'page': 'maps', 'info': info, 
-        'topics': topics, 'boundary': boundary, 'tab': tab, 'list': list,
+        'boundary': boundary, 'tab': tab, 'list': list,
         'editlink': editlink, 'addlink': addlink
     }
     return render(request, 'multiplicity/space.map.html', context)
+
+def map_infrastructure(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    boundary = info.location
+    list = ReferenceSpaceLocation.objects.filter(space=info)
+    tab = 'map_infrastructure'
+
+    types = ReferenceSpaceType.objects.all().annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
+
+    spaces_list = {}
+    for type in types:
+        get_list = ReferenceSpace.objects.filter(city=info, type=type)
+        if get_list:
+            spaces_list[type.id] = get_list
+            # We should build in a check to see if the spaces really have coordinates available; if not map = false
+            map = True
+            infrastructure = True
+
+
+    context = { 
+        'section': 'cities', 'menu':  'resources', 'page': 'maps', 'info': info, 
+        'boundary': boundary, 'tab': tab, 'list': list, 'types': types,
+        'spaces_list': spaces_list, 'map': True
+    }
+    return render(request, 'multiplicity/infrastructure.map.html', context)
 
 def mtu_map(request, city, type=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -271,7 +293,6 @@ def flow(request, city, type, slug=False):
 def photos(request, city, type='photo'):
     info = get_object_or_404(ReferenceSpace, slug=city)
     photos = Photo.objects.filter(primary_space=info, deleted=False, type=type)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
     if type == 'photo':
         page = 'photos'
@@ -283,7 +304,7 @@ def photos(request, city, type='photo'):
         title = 'Other maps'
 
     context = { 'section': 'cities', 'menu':  'resources', 'page': page, 'info': info, 'photos': photos, 
-    'topics': topics, 'addlink': addlink, 'gallery': True, 'tab': tab, 'title': title }
+    'addlink': addlink, 'gallery': True, 'tab': tab, 'title': title }
     return render(request, 'multiplicity/resources.photos.html', context)
 
 def videos(request, city):
@@ -297,7 +318,6 @@ def videos(request, city):
 
 def resources(request, city, slug):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     if slug == "reports":
         type = 27
     elif slug == "journal-articles":
@@ -312,14 +332,13 @@ def resources(request, city, slug):
     references = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
 
-    context = { 'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 'references': references, 'topics': topics, 'addlink': addlink, 'type': type, 'slug': slug}
+    context = { 'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 'references': references,  'addlink': addlink, 'type': type, 'slug': slug}
     return render(request, 'multiplicity/resources.list.html', context)
 
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     datasets = Dataset.objects.filter(primary_space=info, deleted=False)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'datasets': datasets, 'topics': topics }
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'datasets': datasets }
     return render(request, 'multiplicity/datasets.html', context)
 
 def datasets_overview(request, city, topic, type='flows'):
@@ -334,7 +353,6 @@ def dataset(request, city, id, slug=False):
     dataset = get_object_or_404(Dataset, pk=id)
     csv_files = CSV.objects.filter(dataset=id)
     scoring = range(1,6)
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     editlink = '/admin/staf/dataset/' + str(id) + '/change/'
     topic = None
     unit = get_object_or_404(Unit, pk=1)
@@ -351,7 +369,7 @@ def dataset(request, city, id, slug=False):
     #for datapoint in dataset.data_set.all():
     #datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
     deletelink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/delete'
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'topics': topics, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden, 'timeframes': timeframes, }
+    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden, 'timeframes': timeframes, }
     return render(request, 'multiplicity/dataset.html', context)
 
 def datatable(request, dataset=False, material=False):

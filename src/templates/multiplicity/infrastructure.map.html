@@ -1,0 +1,49 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+{% include 'multiplicity/includes/navbar.maps.html' %}
+
+{% include 'multiplicity/includes/map.html' %}
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+#map{height:65vh;border:1px solid #ccc}
+h2.other{font-size:20px}
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus{border:none;color:#fff}
+.main-content-block a.active:not(.btn){color:#fff}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li><a href="{% url 'multiplicity:map' info.slug %}">Maps</a></li>
+        <li class="active">{{ page|title }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

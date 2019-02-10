@@ -114,7 +114,13 @@ def searchajax(request):
 
     if 'process' in request.GET and request.GET['process']:
         process = request.GET['process']
-        list = list.filter(dataset__process=process)
+        if process != 398480:
+            list = list.filter(dataset__process=process)
+            #list = list.filter(dataset__process__tree_process__ancestors__contains=[process])
+
+    if 'material' in request.GET and request.GET['material']:
+        material = request.GET['material']
+        list = list.filter(material__id=material)
 
     total = list.count()
 

@@ -48,6 +48,7 @@ urlpatterns = [
 
     path('<slug:city>/maps', views.map, name='map'),
     path('<slug:city>/maps/mtu', views.mtu_map, name='map_mtu'),
+    path('<slug:city>/maps/infrastructure', views.map_infrastructure, name='map_infrastructure'),
     path('<slug:city>/maps/other', views.photos, {'type': 'map'}, name='map_other'),
     path('<slug:city>/maps/<slug:type>', views.map, name='map'),
     path('<slug:city>/mtu/<slug:type>/<slug:space>', views.space, name='mtu_space'),
