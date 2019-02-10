@@ -1,6 +1,37 @@
+{% if show_quantity %}
+  <div class="alert alert-info">
+    {{ references.count }} record(s) found.   
+  </div>
+{% endif %}
+
+{% if types %}
+  <p class="filter">
+  <i class="pli-filter-2"></i>
+    Filter by type:
+    {% for type in types %}
+    <a href="#" data-type="{{ type.type__name|slugify }}" class="btn btn-default">
+      {{ type.type__name }}
+    </a>
+  {% endfor %}
+
+<script type="text/javascript">
+$(function(){
+  $(".filter a").click(function(e){
+    e.preventDefault();
+    $(".filter a").removeClass("btn-success");
+    $(this).addClass("btn-success");
+    var type = $(this).data("type");
+    $(".resourcelist a").hide();
+    $(".resourcelist a."+type).show('fast');
+  });
+});
+</script>
+
+{% endif %}
+
 <div class="resourcelist">
   {% for details in references %}
-    <a class="single-resource bg-gray-light" href="{% url 'core:reference' details.id %}">
+    <a class="single-resource bg-gray-light {{ details.type.name|slugify }}" href="{% url 'core:reference' details.id %}">
       <div class="row pad-all">
         <div class="col-lg-9">
           <h3 class="title">{{ details.title }}</h3>

@@ -96,7 +96,9 @@ urlpatterns = [
     path('resources/publications/<slug:slug>', views.page, name='publications'),
     path('resources/<slug:slug>', views.page, name='resources'),
     path('resources/publications/search/ajax', views.reference_search_ajax, name='reference_search_ajax'),
+    path('resources/publications/list/ajax', views.reference_list_ajax, name='reference_list_ajax'),
     path('tags/ajax', views.tag_ajax, name='tag_ajax'),
+    path('tags/ajax/folder', views.tag_ajax_folder, name='tag_ajax_folder'),
 
     path('admin/people', views.admin_people_list, name='admin_people_list'),
     path('admin/members', views.admin_member_list, name='admin_member_list'),

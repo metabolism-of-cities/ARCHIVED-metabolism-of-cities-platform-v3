@@ -13,19 +13,17 @@
   <div class="pad-all file-manager">
     <div class="fixed-fluid">
       <div class="fixed-sm-300 pull-sm-left file-sidebar">
-        <div class="bord-btm pad-btm">
-          <a href="#" class="btn btn-block btn-lg btn-info v-middle">Upload Files</a>
-        </div>
 
         <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Categories</p>
         <div class="list-group bg-trans pad-btm bord-btm maintags">
-          {% for tag in maintags %}
-          <a href="#" data-id="{{ tag.id }}" class="list-group-item">
-            <i class="pli-folder icon-lg icon-fw"></i> {{ tag }}
-          </a>
-          {% endfor %}
+          <div id="results">
+            {% for tag in maintags %}
+            <a href="#" data-id="{{ tag.id }}" class="list-group-item browse-tags">
+              <i class="pli-folder icon-lg icon-fw"></i> {{ tag }}
+            </a>
+            {% endfor %}
+          </div>
         </div>
-
 
         <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Tags</p>
         <ul class="list-inline mar-hor">
@@ -50,54 +48,19 @@
         </ul>
       </div>
       <div class="fluid file-panel">
-        <div class="bord-btm pad-ver">
-          <ol class="breadcrumb">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">App Views</a></li>
-            <li class="active">File Manager</li>
-          </ol>
-        </div>
-        <div class="file-toolbar bord-btm">
-          <div class="btn-file-toolbar">
-            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Home" data-toggle="tooltip"><i class="icon-2x demo-pli-home"></i></a>
-            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Refresh" data-toggle="tooltip"><i class="icon-2x demo-pli-reload-3"></i></a>
-          </div>
-          <div class="btn-file-toolbar">
-            <a class="btn btn-icon add-tooltip" href="#" data-original-title="New Folder" data-toggle="tooltip"><i class="icon-2x demo-pli-folder"></i></a>
-            <a class="btn btn-icon add-tooltip" href="#" data-original-title="New File" data-toggle="tooltip"><i class="icon-2x demo-pli-file-add"></i></a>
-            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Edit File" data-toggle="tooltip"><i class="icon-2x demo-pli-file-edit"></i></a>
-          </div>
-          <div class="btn-file-toolbar pull-right">
-            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Delete" data-toggle="tooltip"><i class="icon-2x demo-pli-recycling"></i></a>
-            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Download" data-toggle="tooltip"><i class="icon-2x demo-pli-download-from-cloud"></i></a>
-          </div>
-        </div>
-        <ul class="file-list">
 
-          {% for tag in maintags %}
-          <li class="sub-{{ tag.id }}">{{ tag }}<ul>
-            {% for sub in tag.children.all %}
-              <li>{{ sub }}</li>
-            {% endfor %}
-              </ul>
-              </li>
-          {% endfor %}
-        
-        </ul>
+        <div class="file-list-loading loading text-center text-2x pad-all mar-top">
+          <span class="mar-top pad-all"></span>
+          <i class="fas fa-cog fa-spin mar-top"></i>
+        </div>
+
+        <div class="file-list"></div>
+
       </div>
     </div>
   </div>
 
 </div>
-
-<ul>
-  {% for tag in maintags %}
-    <li><a href="http://">{{ tag }}</a></li>
-    {% for sub in tag.children.all %}
-      <li>{{ sub }}</li>
-    {% endfor %}
-  {% endfor %}
-</ul>
 
 <div class="container references">
 
@@ -227,7 +190,18 @@
 
 {% block head %}
 <style type="text/css">
-.file-list > li{display:none}
+.filter { 
+  margin-bottom: 15px;
+}
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+  border: none;
+}
+
+a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+  color: #fff !important;
+}
+
+
 </style>
 {% endblock %}
 
@@ -277,12 +251,106 @@
       tokenSeparators: [',']
     })
 
-    $(".maintags a").click(function(e){
+    $("body").on("click", ".browse-tags",function (e) {
+
       e.preventDefault();
+
       var id = $(this).data("id");
-      $(".file-list > li").hide();
-      $(".sub-"+id).show('fast');
+
+      $('#results').removeClass('alert');
+      $('#results').removeClass('alert-danger');
+
+      $(".loading").show('fast');
+      $("#results").hide('fast');
+      var jqxhr = $.get("{% url 'core:tag_ajax_folder' %}", 
+       { 
+         id: id,
+       })
+        .done(function (response) {
+            $('#results').html(response);
+            $(".loading").hide('fast');
+            $('#results').show('fast');
+        })
+        .fail(function (jqXHR, exception) {
+            // Our error logic here
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            $('#results').html(msg);
+            $(".loading").hide('fast');
+            $('#results').show('fast');
+            $('#results').addClass('alert');
+            $('#results').addClass('alert-danger');
+        });
+
     });
+
+
+    $("body").on("click", ".view-records",function (e) {
+
+      e.preventDefault();
+
+      $(".view-records").removeClass("active");
+      $(this).addClass("active");
+
+      var id = $(this).data("id");
+
+      $('.file-list').removeClass('alert');
+      $('.file-list').removeClass('alert-danger');
+
+      $(".file-list-loading").show();
+      $(".file-list").hide('fast');
+      var jqxhr = $.get("{% url 'core:reference_list_ajax' %}", 
+       { 
+         id: id,
+       })
+        .done(function (response) {
+            $('.file-list').html(response);
+            $(".file-list-loading").hide('fast');
+            $('.file-list').show('fast');
+        })
+        .fail(function (jqXHR, exception) {
+            // Our error logic here
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            $('.file-list').html(msg);
+            $(".file-list-loading").hide('fast');
+            $('.file-list').show('fast');
+            $('.file-list').addClass('alert');
+            $('.file-list').addClass('alert-danger');
+        });
+
+    });
+
+
+
   });
 </script>
 {% endblock %}

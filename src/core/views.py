@@ -334,7 +334,9 @@ def referenceform(request, id=False, dataset=False):
     context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset, 'processes': processes }
     return render(request, 'core/reference.form.html', context)
 
-def references(request, type=False, tag=False):
+# This should be reviewed; see if we want this or not
+# Can be discarded if we don't use it.
+def all_references(request, type=False, tag=False):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
     else:
@@ -356,6 +358,17 @@ def references(request, type=False, tag=False):
     context = { 
         'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 
         'title': title, 'select2': True, 'tag': tag, 'maintags': maintags, 
+
+    }
+    return render(request, 'core/references.html', context)
+
+def references(request, type=False, tag=False):
+    title = "Publications"
+    maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
+    addlink = reverse('core:newreference')
+    context = { 
+        'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 
+        'title': title, 'select2': True, 'maintags': maintags, 
 
     }
     return render(request, 'core/references.html', context)
@@ -627,6 +640,13 @@ def reference_search_ajax(request, active_only=False):
         list.append(d)
     return JsonResponse(list, safe=False)
 
+def reference_list_ajax(request):
+    list = Reference.objects.filter(tags=request.GET['id'],status='active')
+    types = list.values('type__name').order_by('type__name').distinct()
+    list = list.order_by('title')
+    context = { 'references': list, 'show_quantity': True, 'types': types }
+    return render(request, 'core/includes/references.list.html', context)
+
 def register(request, contributor=False, taskforce=False):
 
     if taskforce:
@@ -716,6 +736,16 @@ def tag_ajax(request):
         d['key'] = details.id
         list.append(d)
     return JsonResponse(list, safe=False)
+
+def tag_ajax_folder(request):
+    if request.GET.get('id'):
+        tags = Tag.objects.filter(parent_tag=request.GET['id'], hidden=False).order_by('name')
+        tag = get_object_or_404(Tag, pk=request.GET['id'])
+    else:
+        tags = Tag.objects.filter(parent_tag__isnull=True, hidden=False).order_by('name')
+        tag = None
+    context = { 'list': tags, 'tag': tag }
+    return render(request, 'core/includes/tags.folder.html', context)
 
 # Admin section
 
