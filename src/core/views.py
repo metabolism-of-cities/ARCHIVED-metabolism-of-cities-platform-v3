@@ -643,9 +643,9 @@ def reference_search_ajax(request, active_only=False):
 
 def reference_list_ajax(request):
     list = Reference.objects.filter(tags=request.GET['id'],status='active')
-    types = list.values('type__name').order_by('type__name').distinct()
+    reference_types = list.values('type__name').order_by('type__name').distinct()
     list = list.order_by('title')
-    context = { 'references': list, 'show_quantity': True, 'types': types }
+    context = { 'references': list, 'show_quantity': True, 'reference_types': reference_types }
     return render(request, 'core/includes/references.list.html', context)
 
 def register(request, contributor=False, taskforce=False):

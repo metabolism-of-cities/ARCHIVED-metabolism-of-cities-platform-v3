@@ -4,11 +4,11 @@
   </div>
 {% endif %}
 
-{% if types %}
+{% if reference_types %}
   <p class="filter">
   <i class="pli-filter-2"></i>
     Filter by type:
-    {% for type in types %}
+    {% for type in reference_types %}
     <a href="#" data-type="{{ type.type__name|slugify }}" class="btn btn-default">
       {{ type.type__name }}
     </a>
