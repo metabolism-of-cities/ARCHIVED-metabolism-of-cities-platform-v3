@@ -19,12 +19,14 @@
     {% include 'multiplicity/includes/datasetlist.html' %}
   {% endif %}
 
-    <div class="panel panel-colorful panel-success">
-      <div class="panel-body">
-        <h3>Admin panel</h3>
-        <p><a href="{% url 'multiplicity:information_form_topic' info.slug topic.id %}">{% if information %}Edit{% else %}Add{% endif %} information</a></p>
-      </div>
+{% if request.user.is_staff %}
+  <div class="panel panel-colorful panel-success">
+    <div class="panel-body">
+      <h3>Admin panel</h3>
+      <p><a href="{% url 'multiplicity:information_form_topic' info.slug topic.id %}">{% if information %}Edit{% else %}Add{% endif %} information</a></p>
     </div>
+  </div>
+{% endif %}
 
 {% endblock %}
 
