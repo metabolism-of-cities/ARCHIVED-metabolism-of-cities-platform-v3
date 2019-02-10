@@ -330,7 +330,7 @@ footer#footer {
                 {% else %}
                   <a href="{% url 'core:homepage' %}">
                     {% if SITE_ID == 1 %}
-                      <img src="{% static 'ie/img/logo.new.png' %}" alt="" />
+                      <img src="{% static 'ie/img/logo.new.png' %}" alt="" style="max-height:90px;opacity:0.6;margin-top:10px" />
                     {% else %}
                       <img src="{% static 'ie/img/logo.moi.png' %}" alt="" />
                     {% endif %}

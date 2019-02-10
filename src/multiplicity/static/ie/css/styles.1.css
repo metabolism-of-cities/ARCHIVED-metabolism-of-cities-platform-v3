@@ -37,9 +37,11 @@
 
 #container.boxed-layout .boxed{margin-top:0;position:relative}
 #topstrip{margin-top:59px;background:#FE6D33;padding:10px;min-height:120px}
-#topstrip .leftbox{width:220px}
-#topstrip .leftbox img{max-width:120px}
+#topstrip .leftbox{width:220px;position:absolute;right:0}
 #topstrip .rightbox{position:absolute;left:220px;top:0;text-align:left}
+#topstrip .rightbox{position:absolute;left:0;top:0;text-align:left}
+#topstrip .leftbox img{max-width:120px}
+#topstrip .leftbox{width:220px;position:absolute;width:110px}
 #topstrip .container{padding-left:0}
 #content-container{padding-top:0}
 #mainnav-container{padding-top:0}
