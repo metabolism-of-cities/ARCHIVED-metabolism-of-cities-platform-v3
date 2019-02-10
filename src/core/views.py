@@ -337,7 +337,7 @@ def references(request, type=False, tag=False):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
     else:
-        main_filter = 219
+        main_filter = 219 # Island system
     if type:
         type = get_object_or_404(ReferenceType, pk=type)
         list = Reference.objects.filter(status='active', type=type, tags__id=main_filter).order_by('-year')
@@ -350,8 +350,13 @@ def references(request, type=False, tag=False):
         else:
             list = Reference.objects.filter(status='active', tags__id=main_filter).order_by('-year')
             title = "Publications"
+    maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     addlink = reverse('core:newreference')
-    context = { 'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 'title': title, 'select2': True, 'tag': tag}
+    context = { 
+        'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 
+        'title': title, 'select2': True, 'tag': tag, 'maintags': maintags, 
+
+    }
     return render(request, 'core/references.html', context)
 
 

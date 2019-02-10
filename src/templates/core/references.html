@@ -6,8 +6,101 @@
 
 {% block content %}
 
+<h1>Browse our library</h1>
+
+<div class="panel">
+
+  <div class="pad-all file-manager">
+    <div class="fixed-fluid">
+      <div class="fixed-sm-300 pull-sm-left file-sidebar">
+        <div class="bord-btm pad-btm">
+          <a href="#" class="btn btn-block btn-lg btn-info v-middle">Upload Files</a>
+        </div>
+
+        <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Categories</p>
+        <div class="list-group bg-trans pad-btm bord-btm maintags">
+          {% for tag in maintags %}
+          <a href="#" data-id="{{ tag.id }}" class="list-group-item">
+            <i class="pli-folder icon-lg icon-fw"></i> {{ tag }}
+          </a>
+          {% endfor %}
+        </div>
+
+
+        <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Tags</p>
+        <ul class="list-inline mar-hor">
+          <li class="tag tag-sm">
+            <a href="#">Family</a>
+          </li>
+          <li class="tag tag-sm">
+            <a href="#">Home</a>
+          </li>
+          <li class="tag tag-sm">
+            <a href="#">Work</a>
+          </li>
+          <li class="tag tag-sm">
+            <a href="#">Film</a>
+          </li>
+          <li class="tag tag-sm">
+            <a href="#">Music</a>
+          </li>
+          <li class="tag tag-sm">
+            <a href="#">Videos</a>
+          </li>
+        </ul>
+      </div>
+      <div class="fluid file-panel">
+        <div class="bord-btm pad-ver">
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">App Views</a></li>
+            <li class="active">File Manager</li>
+          </ol>
+        </div>
+        <div class="file-toolbar bord-btm">
+          <div class="btn-file-toolbar">
+            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Home" data-toggle="tooltip"><i class="icon-2x demo-pli-home"></i></a>
+            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Refresh" data-toggle="tooltip"><i class="icon-2x demo-pli-reload-3"></i></a>
+          </div>
+          <div class="btn-file-toolbar">
+            <a class="btn btn-icon add-tooltip" href="#" data-original-title="New Folder" data-toggle="tooltip"><i class="icon-2x demo-pli-folder"></i></a>
+            <a class="btn btn-icon add-tooltip" href="#" data-original-title="New File" data-toggle="tooltip"><i class="icon-2x demo-pli-file-add"></i></a>
+            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Edit File" data-toggle="tooltip"><i class="icon-2x demo-pli-file-edit"></i></a>
+          </div>
+          <div class="btn-file-toolbar pull-right">
+            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Delete" data-toggle="tooltip"><i class="icon-2x demo-pli-recycling"></i></a>
+            <a class="btn btn-icon add-tooltip" href="#" data-original-title="Download" data-toggle="tooltip"><i class="icon-2x demo-pli-download-from-cloud"></i></a>
+          </div>
+        </div>
+        <ul class="file-list">
+
+          {% for tag in maintags %}
+          <li class="sub-{{ tag.id }}">{{ tag }}<ul>
+            {% for sub in tag.children.all %}
+              <li>{{ sub }}</li>
+            {% endfor %}
+              </ul>
+              </li>
+          {% endfor %}
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ul>
+  {% for tag in maintags %}
+    <li><a href="http://">{{ tag }}</a></li>
+    {% for sub in tag.children.all %}
+      <li>{{ sub }}</li>
+    {% endfor %}
+  {% endfor %}
+</ul>
+
 <div class="container references">
-{% if False %}
+
   <h1>Search our database</h1>
   <section class="search mar-btm">
     <p>
@@ -46,13 +139,11 @@
     {% endif %}
   </section>
 
-  {% else %}
 
   <h1>{{ title }}</h1>
   <p>
     <strong>{{ list.count }}</strong> record(s) found.
   </p>
-  {% endif %}
 
   <div class="row mar-top">
     <section class="col-md-3 filters hide">
@@ -135,6 +226,9 @@
 {% endblock %}
 
 {% block head %}
+<style type="text/css">
+.file-list > li{display:none}
+</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -182,6 +276,13 @@
       tags: true,
       tokenSeparators: [',']
     })
+
+    $(".maintags a").click(function(e){
+      e.preventDefault();
+      var id = $(this).data("id");
+      $(".file-list > li").hide();
+      $(".sub-"+id).show('fast');
+    });
   });
 </script>
 {% endblock %}
