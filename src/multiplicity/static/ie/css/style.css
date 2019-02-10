@@ -77,12 +77,12 @@
 }
 .top-page-tabs.nav-tabs li{background:#ecf0f5;opacity:0.67;margin-right:2px}
 .top-page-tabs.nav-tabs li.active{opacity:1}
-body{font-size:15px;line-height:1.5}
+body{font-size:16px;line-height:1.6}
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title{color:#333}
 .panel-colorful h1, .panel-colorful h2, .panel-colorful h3, .panel-colorful h4, .panel-colorful h5, .panel-colorful h6{color:#fff}
-h2 {font-size:24px}
-h3 {font-size:22px}
-h4 {font-size:21px}
+h2 {font-size:26px}
+h3 {font-size:24px}
+h4 {font-size:22px}
 .panel > .panel-body > h2 {
   margin-top:8px;
 }
@@ -235,11 +235,10 @@ ul.nolist li {
 }
 
 /* Play around with fonts */
- @import url('https://fonts.googleapis.com/css?family=Lato|Roboto');
-
+ @import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto');
 
 body, .leaflet-container {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 h1,h2,h3,h4,h5,h6,.brand-text{
     font-family: 'Roboto', sans-serif;
@@ -330,7 +329,7 @@ h1, h2, h3, h4, h5, .brand-text {
 }
 
 .panel-body {
-  padding: 15px;
+  padding: 16px;
 }
 
 table.dataTable.no-footer {

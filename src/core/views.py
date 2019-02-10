@@ -365,10 +365,11 @@ def all_references(request, type=False, tag=False):
 def references(request, type=False, tag=False):
     title = "Publications"
     maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
+    tags = Tag.objects.filter(hidden=False)
     addlink = reverse('core:newreference')
     context = { 
         'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 
-        'title': title, 'select2': True, 'maintags': maintags, 
+        'title': title, 'select2': True, 'maintags': maintags, 'tags': tags
 
     }
     return render(request, 'core/references.html', context)

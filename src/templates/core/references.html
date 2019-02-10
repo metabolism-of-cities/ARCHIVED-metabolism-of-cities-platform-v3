@@ -75,25 +75,15 @@
     <p>
       You can also <a href="publications.export.php">download the full publications database</a> including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
     </p>
-    <form action="#" method="post">
-      <select id="searchbox" multiple="multiple" class="form-control">
-        <optgroup label="Alaskan/Hawaiian Time Zone">
-          <option value="AK">Alaska</option>
-          <option value="HI">Hawaii</option>
-        </optgroup>
-        <optgroup label="Pacific Time Zone">
-          <option value="CA">California</option>
-          <option value="NV">Nevada</option>
-          <option value="OR">Oregon</option>
-          <option value="WA">Washington</option>
-        </optgroup>
+    <form method="get">
+      <select id="searchbox" multiple="multiple" class="form-control" name="terms">
+        {% for tag in tags %}
+          <option value="{{ tag.id }}">{{ tag }}</option>
+        {% endfor %}
       </select>
       <div class="row mar-top">
         <div class="col-lg-6">
-          <button class="btn btn-dark" type="button">Search</button>
-        </div>
-        <div class="col-lg-6 text-right">
-          <strong>{{ list.count }}</strong> publications found | <a href="">Reset all filters</a> | <a href="">View all publications</a>
+          <button type="submit" class="btn btn-dark" type="button">Search</button>
         </div>
       </div>
     </form>
