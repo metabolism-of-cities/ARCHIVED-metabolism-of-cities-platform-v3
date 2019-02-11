@@ -25,27 +25,6 @@
           </div>
         </div>
 
-        <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Tags</p>
-        <ul class="list-inline mar-hor">
-          <li class="tag tag-sm">
-            <a href="#">Family</a>
-          </li>
-          <li class="tag tag-sm">
-            <a href="#">Home</a>
-          </li>
-          <li class="tag tag-sm">
-            <a href="#">Work</a>
-          </li>
-          <li class="tag tag-sm">
-            <a href="#">Film</a>
-          </li>
-          <li class="tag tag-sm">
-            <a href="#">Music</a>
-          </li>
-          <li class="tag tag-sm">
-            <a href="#">Videos</a>
-          </li>
-        </ul>
       </div>
       <div class="fluid file-panel">
 
@@ -54,7 +33,9 @@
           <i class="fas fa-cog fa-spin mar-top"></i>
         </div>
 
-        <div class="file-list"></div>
+        <div class="file-list">
+          <div id="placeholder">Please select a category on the left.</div>
+        </div>
 
       </div>
     </div>
@@ -180,15 +161,25 @@
 
 {% block head %}
 <style type="text/css">
+.file-list-loading {
+  display: none;
+}
 .filter { 
   margin-bottom: 15px;
 }
 .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
   border: none;
 }
-
 a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
   color: #fff !important;
+}
+#placeholder {
+  height: 430px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0.7;
 }
 
 
@@ -250,7 +241,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
       $('#results').removeClass('alert');
       $('#results').removeClass('alert-danger');
 
-      $(".loading").show('fast');
+      $(".side-loading").show('fast');
       $("#results").hide('fast');
       var jqxhr = $.get("{% url 'core:tag_ajax_folder' %}", 
        { 
@@ -258,7 +249,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
        })
         .done(function (response) {
             $('#results').html(response);
-            $(".loading").hide('fast');
+            $(".side-loading").hide('fast');
             $('#results').show('fast');
         })
         .fail(function (jqXHR, exception) {
@@ -280,7 +271,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
                 msg = 'Uncaught Error.\n' + jqXHR.responseText;
             }
             $('#results').html(msg);
-            $(".loading").hide('fast');
+            $(".side-loading").hide('fast');
             $('#results').show('fast');
             $('#results').addClass('alert');
             $('#results').addClass('alert-danger');

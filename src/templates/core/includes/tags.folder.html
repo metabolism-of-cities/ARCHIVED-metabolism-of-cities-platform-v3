@@ -1,11 +1,14 @@
 {% for details in list %}
 <a href="#" data-id="{{ details.id }}" class="list-group-item {% if details.children.all %}browse-tags{% else %}view-records{% endif %}">
-  <i class="{% if details.children.all %}pli-folder{% else %}pli-files{% endif %} icon-lg icon-fw"></i> {{ details }}
+  <i class="{% if details.children.all %}fa fa-folder{% else %}fal fa-file-alt{% endif %} fa-fw"></i> {{ details }}
+  {% if not details.children.all %}
+    ({{ details.reference_set.count }})
+  {% endif %}
 </a>
 {% endfor %}
 
 {% if tag %}
 <a href="#" data-id="{{ tag.parent_tag.id }}" class="list-group-item browse-tags">
-  <i class="pli-left-4 icon-lg icon-fw"></i> Back
+  <i class="fa fa-level-up  fa-fw"></i> Back
 </a>
 {% endif %}
