@@ -863,3 +863,7 @@ article.sector section .section-menu a:hover {
   text-decoration:none;
 }
 
+/* Without this, the navbar will have a higher z-index than the modal */
+#navbar {
+  z-index: 9000;
+}
