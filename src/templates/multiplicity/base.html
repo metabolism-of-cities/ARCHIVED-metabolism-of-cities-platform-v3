@@ -73,6 +73,100 @@ footer#footer {
 {% endif %}
 
 
+{% if request.COOKIES.theme == "blue" or request.COOKIES.theme == "dark" %}
+.navbar-content #dropdown-active,#topstrip,.navbar-top-links > .open > a, .navbar-top-links > .open > a:focus,.navbar-top-links > li > a:hover {
+  background: #1f7a8c;
+}
+
+.panel-success .panel-heading, .panel-success .panel-footer, .panel-success.panel-colorful {
+  background-color: #ababab;
+  border-color: #ababab;
+}
+
+.panel-warning .panel-heading, .panel-warning .panel-footer, .panel-warning.panel-colorful {
+  background-color: #cf4803;
+  border-color: #cf4803;
+}
+
+.panel:not(.panel-colorful) {
+  background-color: #ecf0f5;
+  border-color: #ecf0f5;
+}
+
+footer#actions {
+  background-color: #ECF0F5;
+}
+
+footer#footer {
+  background-color: #053c5e;
+}
+
+.btn-info, .btn-info:focus {
+  background-color: #053c5e !important;
+  border-color: #053c5e !important;
+}
+#container.mainnav-in .brand-title, #container.mainnav-sm .brand-title, #container.mainnav-out .brand-title, #container.mainnav-lg .brand-title,
+.effect .navbar-content,
+.effect #navbar {
+  background: #053c5e;
+}
+
+#footer h4,
+#footer a,
+#container.mainnav-in .brand-title, #container.mainnav-sm .brand-title, #container.mainnav-out .brand-title, #container.mainnav-lg .brand-title,
+#container.mainnav-out .brand-title, .navbar-content a {
+  color: #f4f4f4 !important;
+}
+
+.navbar-content .dropdown-menu a {
+  color: #333 !important;
+}
+
+.navbar-top-links > .open > a, .navbar-top-links > .open > a:focus,
+.navbar-top-links > li > a:hover,.navbar-top-links > li > a:focus {
+  background-color: #A5CAD1 !important;
+}
+
+.panel > .list-group .list-group-item.active-sub {
+  border-color: #1f7a8c;
+}
+
+{% endif %}
+
+{% if request.COOKIES.theme == "dark" %}
+
+#content-container,
+#container.boxed-layout,
+#page-content {
+  background: #333;
+  color: #fff;
+}
+
+footer#actions {
+  background: #000;
+  color: #f4f4f4;
+}
+
+#container .table th, body, #content-container,
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
+  color: #f4f4f4;
+}
+
+.resourcelist h3,
+.panel:not(.panel-colorful),
+.panel:not(.panel-colorful) h1,
+.panel:not(.panel-colorful) h2,
+.panel:not(.panel-colorful) h3,
+.panel:not(.panel-colorful) h4,
+.panel:not(.panel-colorful) h5,
+.panel:not(.panel-colorful) h6
+{
+  color: #333;
+}
+
+{% endif %}
+
+
 </style>
 </head>
 
@@ -285,31 +379,52 @@ footer#footer {
                           <li id="dropdown-profile" class="dropdown">
                               <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                                   <span class="ic-user pull-right">
-                                      <i class="pli-administrator"></i>
+                                      <i class="fal fa-user"></i>
                                   </span>
                               </a>
 
-
-                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
-                                  <ul class="head-list">
-                                    <li>
-                                      <a href="{% url 'core:userdetails' request.user.id %}"><i class="pli-administrator icon-lg icon-fw"></i> Profile</a>
-                                    </li>
-                                    <li>
-                                      <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
-                                    </li>
-                                  </ul>
-                                </div>
+                              <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+                                <ul class="head-list">
+                                  <li>
+                                    <a href="{% url 'core:userdetails' request.user.id %}"><i class="fal fa-user fa-fw"></i> Profile</a>
+                                  </li>
+                                  <li>
+                                    <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
+                                  </li>
+                                </ul>
+                              </div>
                           </li>
                           {% else %}
                               <li id="dropdown-profile">
                                 <a href="/accounts/login?next={{ CURRENT_PAGE }}">
                                   <span class="ic-user pull-right">
-                                    <i class="pli-administrator"></i>
+                                    <i class="fal fa-user fa-fw"></i>
                                   </span>
                                 </a>
                             </li>
                           {% endif %}
+
+                            <li id="dropdown-profile" class="dropdown">
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                                  <span class="ic-user pull-right">
+                                    <i class="fa fa-palette"></i>
+                                  </span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+                                  <ul class="head-list">
+                                    <li>
+                                      <a href="{% url 'core:set_theme' 'orange' %}?next={{ CURRENT_PAGE }}"> Orange</a>
+                                    </li>
+                                    <li>
+                                      <a href="{% url 'core:set_theme' 'blue' %}?next={{ CURRENT_PAGE }}"> Blue</a>
+                                    </li>
+                                    <li>
+                                      <a href="{% url 'core:set_theme' 'dark' %}?next={{ CURRENT_PAGE }}"> Dark</a>
+                                    </li>
+                                  </ul>
+                                </div>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>

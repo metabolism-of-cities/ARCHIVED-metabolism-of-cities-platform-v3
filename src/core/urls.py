@@ -100,6 +100,8 @@ urlpatterns = [
     path('tags/ajax', views.tag_ajax, name='tag_ajax'),
     path('tags/ajax/folder', views.tag_ajax_folder, name='tag_ajax_folder'),
 
+    path('theme/<slug:theme>', views.set_theme, name='set_theme'),
+
     path('admin/people', views.admin_people_list, name='admin_people_list'),
     path('admin/members', views.admin_member_list, name='admin_member_list'),
     path('admin/people/create', views.admin_people, name='admin_people_create'),

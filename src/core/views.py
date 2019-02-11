@@ -748,6 +748,11 @@ def tag_ajax_folder(request):
     context = { 'list': tags, 'tag': tag }
     return render(request, 'core/includes/tags.folder.html', context)
 
+def set_theme(request, theme):
+    response = redirect(request.GET['next'])
+    response.set_cookie('theme', theme, 60*60*25*365)
+    return response
+
 # Admin section
 
 @staff_member_required
