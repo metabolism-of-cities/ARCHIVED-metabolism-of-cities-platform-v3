@@ -6,47 +6,55 @@
 
 {% block content %}
 
-<h1>Browse our library</h1>
+{% if not request.GET.terms %}
 
-<div class="panel">
+  <section class="browse">
+    <h1>Browse our library</h1>
 
-  <div class="pad-all file-manager">
-    <div class="fixed-fluid">
-      <div class="fixed-sm-300 pull-sm-left file-sidebar">
+    <div class="panel">
 
-        <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Categories</p>
-        <div class="list-group bg-trans pad-btm bord-btm maintags">
-          <div id="results">
-            {% for tag in maintags %}
-            <a href="#" data-id="{{ tag.id }}" class="list-group-item browse-tags">
-              <i class="pli-folder icon-lg icon-fw"></i> {{ tag }}
-            </a>
-            {% endfor %}
+      <div class="pad-all file-manager">
+        <div class="fixed-fluid">
+          <div class="fixed-sm-300 pull-sm-left file-sidebar">
+
+            <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Categories</p>
+            <div class="list-group bg-trans pad-btm bord-btm maintags">
+              <div id="results">
+                {% for tag in maintags %}
+                <a href="#" data-id="{{ tag.id }}" class="list-group-item browse-tags">
+                  <i class="fa fa-folder fa-fw"></i> {{ tag }}
+                </a>
+                {% endfor %}
+              </div>
+            </div>
+
+          </div>
+          <div class="fluid file-panel">
+
+            <div class="file-list-loading loading text-center text-2x pad-all mar-top">
+              <span class="mar-top pad-all"></span>
+              <i class="fas fa-cog fa-spin mar-top"></i>
+            </div>
+
+            <div class="file-list">
+              <div id="placeholder">Please select a category on the left.</div>
+            </div>
+
           </div>
         </div>
-
       </div>
-      <div class="fluid file-panel">
 
-        <div class="file-list-loading loading text-center text-2x pad-all mar-top">
-          <span class="mar-top pad-all"></span>
-          <i class="fas fa-cog fa-spin mar-top"></i>
-        </div>
-
-        <div class="file-list">
-          <div id="placeholder">Please select a category on the left.</div>
-        </div>
-
-      </div>
     </div>
-  </div>
 
-</div>
+  </section>
 
-<div class="container references">
+{% endif %}
 
+<section class="search">
   <h1>Search our database</h1>
-  <section class="search mar-btm">
+
+  <div class="panel pad-all">
+
     <p>
       Please enter search terms below to start your search. You will see a list of common terms appear as you start typing.
     </p>
@@ -54,106 +62,66 @@
       To confirm each search term, please hit ENTER to add it to the list. The system will only show records that contain <strong>all</strong> of the search terms that you enter. Remove search terms to increase the number of results. When you see the results, use the filters on the left hand side to refine your results.
     </p>
     <p>
-      You can also <a href="publications.export.php">download the full publications database</a> including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
+      You can also <a href="https://archive.metabolismofcities.org/publications.export.php">download the full publications database</a> including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
     </p>
+
     <form method="get">
       <select id="searchbox" multiple="multiple" class="form-control" name="terms">
+          {% for term in entered_keywords %}
+            <option selected value="{{ term }}">{{ term }}</option>
+          {% endfor %}
         {% for tag in tags %}
-          <option value="{{ tag.id }}">{{ tag }}</option>
+          <option value="{{ tag.id }}" {% if tag.id in selected_keywords %}selected{% endif %}>{{ tag }}</option>
         {% endfor %}
       </select>
+
       <div class="row mar-top">
         <div class="col-lg-6">
           <button type="submit" class="btn btn-dark" type="button">Search</button>
         </div>
       </div>
     </form>
-    {% if tag %}
-      <p>You searched for: <b>{{ tag.name }}</b></p>
-    {% endif %}
-  </section>
 
+  </div>
+
+</section>
+
+{% if references %}
 
   <h1>{{ title }}</h1>
   <p>
-    <strong>{{ list.count }}</strong> record(s) found.
+    <strong>{{ references.count }}</strong> record(s) found.
   </p>
 
-  <div class="row mar-top">
-    <section class="col-md-3 filters hide">
-      <div class="bg-gray-light pad-all">
-        <ul class="nav nav-section-menu nav-sidebar mar-btm mat-top">
-          <li class="nav-header text-bold">Filter by Year</li>
-            <li class="">
-              <a href="#" class="nav-link filter" data-id="2018" data-type="year">2018
-                <span class="pull-right badge badge-dark">3</span>
-              </a>
-            </li>
-            <li class="">
-              <a href="#" class="nav-link filter" data-id="2017" data-type="year">2017
-                <span class="pull-right badge badge-dark">24</span>
-              </a>
-            </li>
-            <li class="">
-              <a href="#" class="nav-link filter" data-id="2016" data-type="year">2016
-                <span class="pull-right badge badge-dark">63</span>
-              </a>
-            </li>
-            <li class="">
-              <a href="#" class="nav-link filter" data-id="2015" data-type="year">2015
-                <span class="pull-right badge badge-dark">48</span>
-              </a>
-            </li>
-        </ul>
-        <ul class="nav nav-section-menu nav-sidebar mar-btm">
-        <li class="nav-header text-bold">Filter by Type</li>
-          <li class="reg">
-            <a href="#" class="nav-link filter" data-id="16" data-type="type">Journal Article
-              <span class="badge badge-dark pull-right">405</span>
-            </a>
-          </li>
-          <li class="reg">
-            <a href="#" class="nav-link filter" data-id="27" data-type="type">Report
-              <span class="badge badge-dark pull-right">28</span>
-            </a>
-          </li>
-          <li class="reg">
-            <a href="#" class="nav-link filter" data-id="29" data-type="type">Thesis
-              <span class="badge badge-dark pull-right">19</span>
-            </a>
-          </li>
-          <li class="reg">
-            <a href="#" class="nav-link filter" data-id="5" data-type="type">Book
-              <span class="badge badge-dark pull-right">13</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
-    <section class="col-md-9 main records resourcelist">
-      {% for details in list %}
-        <a class="single-resource bg-gray-light" href="{% url 'core:reference' details.id %}">
-          <div class="row pad-all">
-            <div class="col-lg-9">
-              <h3 class="title">{{ details.title }}</h3>
-              {% if details.authors.all %}
-                {% for author in details.authors.all %}
-                  <span class="author">{{ author.firstname }} {{ author.lastname }}</span>{% if not forloop.counter == details.authors.all|length %},{% endif %}
-                {% endfor %}
-              {% else %}
-                {{ details.authorlist }}
-              {% endif %}
-            </div>
-            <div class="col-lg-3">
-              {% if details.journal.name %}<div class="journal-name">{{ details.journal.name }}</div>{% endif %}
-              {% if details.type %}<div class="type">{{ details.type }}</div>{% endif %}
-              {% if details.year %}<div class="year">{{ details.year }}</div>{% endif %}
-            </div>
-          </div>
-        </a>
+  {% include 'core/includes/references.list.html' %}
+
+{% endif %}
+
+{% if not request.GET.terms %}
+
+  <section class="cities">
+    <h1>Browse cities</h1>
+
+    <table class="table table-striped datatable">
+      <thead>
+        <tr>
+          <th>City</th>
+          <th>Number of publications</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for tag in cities %}
+        <tr>
+          <td><a href="{% url 'core:references' %}?terms={{ tag.id }}">{{ tag }}</a></td>
+          <td>{{ tag.reference_set.count }}</td>
+        </tr>
       {% endfor %}
-    </section>
-  </div>
+    </table>
+
+  </section>
+
+{% endif %}
+
 
 </div>
 
@@ -161,6 +129,9 @@
 
 {% block head %}
 <style type="text/css">
+section.cities, section.search {
+  margin-top: 50px;
+}
 .file-list-loading {
   display: none;
 }

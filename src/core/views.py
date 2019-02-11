@@ -364,13 +364,41 @@ def all_references(request, type=False, tag=False):
 
 def references(request, type=False, tag=False):
     title = "Publications"
+    list = None
+    cities = None
+    reference_types = False
+    selected_keywords = []
+    entered_keywords = []
+
+    if 'terms' in request.GET:
+        list = Reference.objects.filter(status='active')
+        terms = request.GET.getlist('terms')
+
+        for term in terms:
+            try:
+                int(term)
+                list = list.filter(tags__id=term)
+                selected_keywords.append(int(term))
+                
+            except ValueError:
+                list = list.filter(abstract__icontains=term)
+                entered_keywords.append(term)
+
     maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     tags = Tag.objects.filter(hidden=False)
-    addlink = reverse('core:newreference')
-    context = { 
-        'section': 'resources', 'page': 'publications', 'list': list, 'addlink': addlink, 
-        'title': title, 'select2': True, 'maintags': maintags, 'tags': tags
 
+    addlink = reverse('core:newreference')
+
+    if list:
+        reference_types = list.values('type__name').order_by('type__name').distinct()
+    else:
+        cities = Tag.objects.filter(parent=4, hidden=False).order_by('name')
+
+    context = { 
+        'section': 'resources', 'page': 'publications', 'references': list, 'addlink': addlink, 
+        'title': title, 'select2': True, 'maintags': maintags, 'tags': tags,
+        'selected_keywords': selected_keywords, 'entered_keywords': entered_keywords,
+        'reference_types': reference_types, 'cities': cities, 'datatables': True
     }
     return render(request, 'core/references.html', context)
 
