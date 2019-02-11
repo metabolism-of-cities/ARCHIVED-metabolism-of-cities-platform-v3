@@ -11,6 +11,55 @@
   background: #fff;
   text-decoration: none;
 }
+img.thumbnail {
+  max-width: 200px;
+  display: inline;
+}
+.journal-panel {
+  padding: 10px;
+  text-align: center;
+  margin-left: 10px;
+  max-width: 220px;
+}
+.main-content-block .journal-panel:not(.panel-default) a:not(.btn),
+.main-content-block .moreoptions:not(.panel-default) a:not(.btn) 
+{
+  color: #333;
+  text-decoration: underline;
+}
+.main-content-block .journal-panel:not(.panel-default) a:hover {
+  text-decoration: none;
+}
+p.abstract {
+  text-align: justify;
+}
+.leftbar {
+  padding-top: 10px;
+}
+.leftbar h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+}
+.leftbar li {
+  list-style: none;
+  margin-bottom: 10px;
+}
+.leftbar ul {
+  padding: 0;
+}
+.leftbar a {
+  display: block;
+  text-align: left;
+}
+.moreoptions a, .moreoptions i {
+  opacity: 0.7;
+}
+.moreoptions a:hover {
+  opacity: 1;
+}
+.data {
+  margin-top: 30px;
+}
 </style>
 {% endblock %}
 
@@ -36,11 +85,9 @@
       </div>
     </div>
 
-    <div class="panel authors">
-      <div class="panel-body">
-        <p><strong>Author(s)</strong></p>
-      </div>
+    <div class="leftbar">
 
+        <h3>Author(s)</h3>
 
         {% if authors %}
         <ul class="nav nav-list">
@@ -49,164 +96,139 @@
         {% endfor %}
         </ul>
       {% else %}
-        <p>{{ info.authorlist }}</p>
+        <p style="padding: 15px">{{ info.authorlist }}</p>
       {% endif %}
 
+
+      <h3>Reference</h3>
+      <ul>
+        <li><a class="btn btn-info" data-toggle="modal" href="#bibtex-modal">Bibtex</a></li>
+        <li><a class="btn btn-info" data-toggle="modal" href="#ris-modal">RIS</a></li>
+        <li><a class="btn btn-info" data-toggle="modal" href="#ris-modal">RefWorks</a></li>
+      </ul>
+
+      <h3>Search</h3>
+      <ul>
+        <li><a class="btn btn-warning" href="http://scholar.google.com/scholar?q={{ info.title|urlencode }}">Google Scholar</a></li>
+        <li><a class="btn btn-warning" href="https://www.google.com/search?q={{ info.title|urlencode }}">Google</a></li>
+      </ul>
+
+      <h3>More options</h3>
     </div>
 
+    <div class="moreoptions">
+      <p> <i class="fa fa-plus"></i> <a class="bn-success" href="{% url 'core:newreference' %}">Add a publication</a></p>
+      <p> <i class="fa fa-exclamation-circle"></i> <a class="bn-danger" href="/contact">Report error</a></p>
+    </div>
 
   </div>
   <div class="col-md-10">
-    <h3>{{ info.title }}</h3>
-    
-    <p>{{ info.abstract|linebreaksbr }}</p>
 
+        <h3>{{ info.title }}</h3>
 
-  </div>
-</div>
-
-
-
-
-
-<div style="margin-bottom:1000px"></div>
-<div class="row reference-metadata">
-  <div class="col-lg-2 text-center">
-  </div>
-  <div class="col-lg-10">
-    <div class="panel">
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-md-4">
-            <dl>
-              <dt>Author(s)</dt>
-              {% if authors %}
-              <dd>
-              {% for author in authors %}
-                <a href="{% url 'core:peopledetails' author.id %}">{{ author.firstname }} {{ author.lastname }}</a>{% if not forloop.counter == authors|length %},{% endif %}
-              {% endfor %}
-              </dd>
-            </dl>
-            {% else %}
-            {{ info.authorlist }}
-            {% endif %}
-
-            <dt>Year</dt>
-            <dd>{{ info.year }}</dd>
-          </div>
-          <div class="col-md-4">
-            <dl>
               {% if info.journal %}
-              <dt>Journal</dt>
-              <dd><a href="{% url 'core:journal' info.journal.id %}">{{ info.journal.name }}</a></dd>
+                <div class="panel pull-right journal-panel panel-colorful">
+                {% if info.journal.image %}
+                <a href="{% url 'core:journal' info.journal.id %}">
+                  <img src="{{ info.journal.image.url }}" alt="{{ info.journal.name }}" class="thumbnail" />
+                </a>
+                {% endif %}
+                <p><a href="{% url 'core:journal' info.journal.id %}">{{ info.journal.name }}</a></p>
+                </div>
               {% endif %}
 
-              {% if info.publisher %}
-              <dt>Publisher</dt>
-              <dd><a href="{% url 'core:publisher' info.publisher.id %}">{{ info.publisher.name }}</a></dd>
-              {% endif %}
+        
+        <p class="abstract">{{ info.abstract|linebreaksbr }}</p>
 
-              {% if info.organizations %}
+      
+      </div>
+
+      <div class="row">
+
+      {% if info.organizations.all %}
+
+        <div class="col-sm-4">
+
+          <div class="panel media middle pad-all">
+            <div class="media-left">
+                <span class="icon-wrap icon-wrap-sm icon-circle bg-success">
+                <i class="pli-map-marker-2 icon-2x"></i>
+                </span>
+            </div>
+
+            <div class="media-body">
+              <p class="text-1x mar-no text-semibold text-main">Organisation</p>
               {% for details in info.organizations.all %}
-                <dt>Organization</dt>
-                <dd>
-                  <a href="{% url 'core:organization' details.id %}">{{ details.name }}</a>{% if details.parent %},
+                <p class="text-muted mar-no">
+                  <a href="{% url 'core:organization' details.id %}">{{ details.name }}</a>
+                  {% if details.parent %}<br>
                   <a href="{% url 'core:organization' details.parent.id %}">{{ details.parent.name }}</a>{% endif %}
-                </dd>
+                </p>
               {% endfor %}
-              {% endif %}
+            </div>
 
-              <dt>Type</dt>
-              <dd>{{ info.type.name }}</dd>
+          </div> 
+        </div>
 
-              {% if info.event %}
-              <dt>{{ info.event.type }}</dt>
-              <dd><a href="{% url 'core:event' info.event.id %}">{{ info.event.name }}</a></dd>
-              {% endif %}
+      {% endif %}
+      {% if info.publisher %}
 
-              {% if info.doi %}
-              <dt>DOI</dt>
-              <dd><a href="https://doi.org/{{ info.doi }}">{{ info.doi }}</a></dd>
-              {% endif %}
+        <div class="col-sm-4">
 
-              {% if info.url %}
-              <dt>More information</dt>
-              <dd><a href="{{ info.url }}">{{ info.url }}</a></dd>
-              {% endif %}
-            </dl>
+          <div class="panel media middle pad-all">
+              <div class="media-left">
+                  <span class="icon-wrap icon-wrap-sm icon-circle bg-success">
+                  <i class="pli-tag icon-2x"></i>
+                  </span>
+              </div>
+              <div class="media-body">
+                  <p class="text-1x mar-no text-semibold text-main">Publisher</p>
+                  <p class="text-muted mar-no"><a href="{% url 'core:publisher' info.publisher.id %}">{{ info.publisher.name }}</a></p>
+              </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+      {% endif %}
 
-{% if info.abstract %}
-<div class="panel panel-dark">
-  <div class="panel-heading">
-    <h2 class="panel-title">Abstract</h2>
-  </div>
-  <div class="panel-body">
-    {{ info.abstract|linebreaksbr }}
-  </div>
-</div>
-{% endif %}
+      {% if info.doi or info.url %}
+      <div class="col-sm-4">
 
-<div class="row">
-  <div class="col-lg-8">
-    <div class="panel panel-dark">
-      <div class="panel-heading">
-        <h2 class="panel-title">Recently added publications</h2>
-      </div>
-      <div class="panel-body">
-        <div class="list-group bord-no references">
-          {% for details in related %}
-            <a class="list-group-item" href="{% url 'core:reference' details.id %}">
-              {{ details.title }}
-              <span>
-                <em>{{ details.source }}</em>
-                <strong>{{ details.year }}</strong>
-              </span>
-            </a>
-          {% endfor %}
+        <div class="panel media middle pad-all">
+            <div class="media-left">
+                <span class="icon-wrap icon-wrap-sm icon-circle bg-success">
+                <i class="pli-internet icon-2x"></i>
+                </span>
+            </div>
+            <div class="media-body">
+              <p class="text-1x mar-no text-semibold text-main">More information</p>
+
+                {% if info.doi %}
+                  <p class="text-muted mar-no"><a href="https://doi.org/{{ info.doi }}">{{ info.doi }}</a></p>
+                {% endif %}
+
+                {% if info.url %}
+                <p class="text-muted mar-no"><a href="{{ info.url }}">Website</a></dd>
+                {% endif %}
+
+            </div>
         </div>
+
       </div>
-    </div>
-  </div><div class="col-lg-4">
-    <div class="panel panel-dark">
-      <div class="panel-heading">
-        <h2 class="panel-title">Download reference</h2>
+      {% endif %}
+
+
       </div>
 
-      <div class="panel-body">
-        <a class="btn btn-info" data-toggle="modal" href="#bibtex-modal">Bibtex</a>
-        <a class="btn btn-info" data-toggle="modal" href="#ris-modal">RIS</a>
-        <a class="btn btn-info" data-toggle="modal" href="#ris-modal">RefWorks</a>
-      </div>
+
     </div>
-    <div class="panel panel-dark">
-      <div class="panel-heading">
-        <h2 class="panel-title">More options</h2>
-      </div>
-      <div class="panel-body">
-        <div class="pad-btm">
-          <a class="btn btn-success" href="{% url 'core:newreference' %}">Add a publication</a>
-          <a class="btn btn-danger" href="/contact">Report error</a>
-        </div>
-        <div>
-          <a class="btn btn-default" href="http://"><i class="fab fa-facebook"></i></a>
-          <a class="btn btn-default" href="http://"><i class="fab fa-twitter"></i></a>
-          <a class="btn btn-default" href="http://"><i class="fa fa-envelope"></i></a>
-          <a class="btn btn-default" href="http://"><i class="fa fa-print"></i></a>
-        </div>
-      </div>
-    </div>
+
+
+
   </div>
 </div>
 
 {% if data %}
 
-<div class="panel panel-dark">
+<div class="panel panel-dark data">
   <div class="panel-heading">
     <h2 class="panel-title">Data</h2>
   </div>

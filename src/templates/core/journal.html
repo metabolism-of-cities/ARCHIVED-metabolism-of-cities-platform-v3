@@ -16,7 +16,9 @@
             <div class="text-center">
 
             {% if info.image %}
+            <p class="text-center">
               <img src="{{ info.image.url }}" alt="" class="thumbnail" />
+            </p>
             {% endif %}
 
               <dl>
@@ -59,7 +61,7 @@
 {% block head %}
 <style type="text/css">
 dd{margin-bottom:20px}
-img.thumbnail{max-width:100%}
+img.thumbnail{max-width:200px; display: inline}
 </style>
 {% endblock %}
 
