@@ -30,7 +30,13 @@
 
       <div class="post year-{% if details.event %}{{ details.event.start|date:"Y" }}{% else %}{{ details.date|date:"Y" }}{% endif %}">
 
-          <h2><a href="{% url 'core:news' details.id %}">{{ details.title }}</a></h2>
+          {% if page.title == "News" %}
+            <h2><a href="{% url 'core:news' details.id %}">{{ details.title }}</a></h2>
+          {% elif page.title == "Events" %}
+            <h2><a href="{% url 'core:event' details.id %}">{{ details.title }}</a></h2>
+          {% else %}
+            <h2><a href="{% url 'core:blog' details.id %}">{{ details.title }}</a></h2>
+          {% endif %}
 
           <div>
             {{ details.content|striptags|truncatewords:50|safe }}

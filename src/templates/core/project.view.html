@@ -17,7 +17,11 @@
   <div class="col-lg-8">
       <div class="text-justify">
         <h4>Summary</h4>
-        <p>{{ info.description|linebreaksbr }}</p>
+        {% if info.active %}
+          <div>{{ info.description|safe }}</div>
+        {% else %}
+          <p>{{ info.description|striptags|linebreaksbr }}</p>
+        {% endif %}
     </div>
 
     <div class="panel panel-default panel-body statusdetails">

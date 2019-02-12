@@ -16,16 +16,35 @@ from . import views
 # project_form -> add new/edit existing project
 
 app_name = 'core'
+# site_url = 'https://metabolismofcities.org'
+# archive_url = 'https://archive.metabolismofcities.org'
+site_url = ''
+archive_url = 'http://e/mfa'
 
 urlpatterns = [
 
     # Redirecting old URLs
-    path('page/about', RedirectView.as_view(url='/about/our-story', permanent=True)),
-    path('page/team', RedirectView.as_view(url='/about/team', permanent=True)),
-    path('page/wishlist', RedirectView.as_view(url='/about/mission', permanent=True)),
-    path('page/wishlist', RedirectView.as_view(url='/about/mission', permanent=True)),
-    path('page/contact', RedirectView.as_view(url='/contact', permanent=True)),
-    path('page/version', RedirectView.as_view(url='/about/version-history', permanent=True)),
+    path('page/about', RedirectView.as_view(url=site_url+'/about/our-story', permanent=True)),
+    path('page/team', RedirectView.as_view(url=site_url+'/about/team', permanent=True)),
+    path('page/wishlist', RedirectView.as_view(url=site_url+'/about/mission', permanent=True)),
+    path('page/wishlist', RedirectView.as_view(url=site_url+'/about/mission', permanent=True)),
+    path('page/contact', RedirectView.as_view(url=site_url+'/contact', permanent=True)),
+    path('page/version', RedirectView.as_view(url=site_url+'/about/version-history', permanent=True)),
+    path('page/mailinglist', RedirectView.as_view(url=site_url+'/about/subscribe', permanent=True)),
+    path('news', RedirectView.as_view(url=site_url+'/community/news', permanent=True)),
+    path('blog', RedirectView.as_view(url=site_url+'/community/blog', permanent=True)),
+    path('research/list', RedirectView.as_view(url=site_url+'/community/research/projects', permanent=True)),
+    path('research/add', RedirectView.as_view(url=site_url+'/community/research/create', permanent=True)),
+    path('people', RedirectView.as_view(url=site_url+'/community/people', permanent=True)),
+    path('news/<int:year>/<int:month>', RedirectView.as_view(url=site_url+'/community/news', permanent=True)),
+
+    path('videos', RedirectView.as_view(url=site_url+'/resources/videos', permanent=True)),
+    path('mooc', RedirectView.as_view(url=site_url+'/resources/mooc', permanent=True)),
+    path('journals', RedirectView.as_view(url=site_url+'/resources/journals', permanent=True)),
+
+    # Pending:
+    path('research/<int:id>', RedirectView.as_view(url=site_url+'/community/research/projects', query_string=True, permanent=True)),
+    path('news/<int:id>-<slug:slug>', RedirectView.as_view(url=site_url+'/community/news', permanent=True)),
 
     path('', views.index, name='homepage'),
     path('home', views.home, name='home'),
@@ -38,7 +57,7 @@ urlpatterns = [
 
     path('community/news', views.articles, {'parent': 'news'}, name='news'),
     path('community/news/<int:id>', views.article, name='news'),
-    path('community/blog', views.articles, {'parent': 60}, name='blog'),
+    path('community/blog', views.articles, {'parent': 'blog'}, name='blog'),
     path('community/blog/<int:id>', views.article, name='blog'),
     path('community/events', views.articles, {'parent': 'events'}, name='events'),
     path('community/events/<int:id>', views.article, name='event'),

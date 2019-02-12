@@ -190,10 +190,15 @@ def articles(request, parent):
         parent = match[request.site.id]
         years = [2019, 2018]
         order = 'event__start'
-    if parent == 'news':
+    elif parent == 'news':
         match = { 1: 61, 2: 142 }
         parent = match[request.site.id]
         years = [2019, 2018, 2017]
+        order = '-date'
+    elif parent == 'blog':
+        match = { 1: 60, 2: 142 }
+        parent = match[request.site.id]
+        years = [2017, 2016]
         order = '-date'
     list = Article.objects.filter(active=True, parent__id=parent, site=request.site).order_by(order)
     page = Article.objects.get(pk=parent)
