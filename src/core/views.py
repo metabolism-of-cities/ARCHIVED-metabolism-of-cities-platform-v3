@@ -682,10 +682,23 @@ def project_form(request, id=False):
 
             if new_record:
                 create_record = get_object_or_404(UserAction, pk=1)
-                log = UserLog(user=request.user, action=create_record, model='Research', points=5, description=info.name)
+                if request.user.is_authenticated:
+                    log = UserLog(user=request.user, action=create_record, model='Research', points=5, description=info.name)
                 info.pending_review = True
                 info.save()
+
                 # Must send mail to admins!
+                context = {
+                    'info': info,
+                }
+                msg_plain = render_to_string('core/mail/newproject.txt', context)
+                send_mail(
+                    'New project added: ' + info.name,
+                    msg_plain,
+                    settings.SITE_EMAIL,
+                    [settings.SITE_EMAIL],
+                )
+
             else:
                 edit_record = get_object_or_404(UserAction, pk=2)
                 log = UserLog(user=request.user, action=edit_record, model='Research', points=1, description=info.name)

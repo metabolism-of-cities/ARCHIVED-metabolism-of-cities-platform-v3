@@ -1,0 +1,18 @@
+A new project was added
+
+Details:
+
+Name: {{ info.name }}
+E-mail: {{ info.email }}
+Organisation: {{ info.organization }}
+
+Description:
+--------
+
+{{ info.description }}
+
+
+Next steps:
+-----------
+
+This project is NOT reviewed and NOT online. Please review and activate/deactivate this project in the back-end.
