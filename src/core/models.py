@@ -123,6 +123,9 @@ class People(models.Model):
     def __str__(self):
         return '%s %s' % (self.firstname, self.lastname)
 
+    class Meta:
+        ordering = ["firstname", "lastname"]
+
 class PeopleForm(ModelForm):
     class Meta:
         model = People
