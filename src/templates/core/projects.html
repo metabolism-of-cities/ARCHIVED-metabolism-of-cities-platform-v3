@@ -35,7 +35,13 @@
       <td><a href="{% url 'core:project' details.type details.id %}">{{ details.name }}</a><br>
         <em>{{ details.institution }}</em>
       </td>
-      <td>{{ details.researcher|default_if_none:"" }}</td>
+      <td>
+        {% if page.title == "Projects" %}
+          {{ details.supervisor|default_if_none:"" }}
+        {% else %}
+          {{ details.researcher|default_if_none:"" }}
+        {% endif %}
+      </td>
       <td data-sort="{% if details.start_date %}{{ details.start_date|date:"Ymd" }}{% else %}{{ details.status }}{% endif %}">{{ details.status }}<br>
 
       {% if details.start_date and not details.end_date %}
