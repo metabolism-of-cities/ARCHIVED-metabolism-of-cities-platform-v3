@@ -60,6 +60,17 @@ p.abstract {
 .data {
   margin-top: 30px;
 }
+.tags ul {
+  padding: 0;
+  list-style: none;
+}
+.tags li {
+  margin-right: 10px;
+  display: inline-block;
+}
+.tags {
+  margin: 33px 0;
+}
 </style>
 {% endblock %}
 
@@ -139,6 +150,15 @@ p.abstract {
 
         
         <p class="abstract">{{ info.abstract|linebreaksbr }}</p>
+
+        <section class="tags">
+        <h4><i class="fal fa-tag fa-fw"></i> Tags</h4>
+
+        <ul>
+          {% for tag in info.tags.all %}
+          <li><a class="btn btn-default" href="{% url 'core:references' %}?terms={{ tag.id }}">{{ tag.name }}</a></li>
+          {% endfor %}
+        </ul>
 
       
       </div>
