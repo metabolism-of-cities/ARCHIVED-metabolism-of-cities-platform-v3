@@ -804,6 +804,10 @@ article.sector section#infrastructure #infrastructure-list .single-infrastructur
   margin-top: 5px;
 }
 
+article.sector .single-infrastructure img {
+  max-height: 140px;
+}
+
 article.sector section#infrastructure .data .single-dataset {
   display: none;
 }
