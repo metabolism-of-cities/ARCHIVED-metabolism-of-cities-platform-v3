@@ -118,7 +118,7 @@
         {% if info.member_since %}
           <div class="panel">
             <div class="panel-body text-center bg-success infobox">
-              <img src="{% static 'ie/img/logo.white.svg' %}" alt="" />
+              <img src="{% static 'ie/img/logo.new.png' %}" alt="" />
               <p class="pad-top"><strong>{{ info.firstname }} is a <a href="{% url 'core:team' %}">member of {{ SITE_NAME }}</a></strong></p>
               <p>Member since {{ info.member_since }}</p>
             </div>
@@ -166,6 +166,9 @@
 .main-content-block .bg-success a:not(.btn) {
   color: #fff;
   text-decoration: underline;
+}
+.bg-success img {
+  margin-top: 20px;
 }
 </style>
 {% endblock %}
