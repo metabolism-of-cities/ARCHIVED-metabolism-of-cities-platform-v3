@@ -188,7 +188,7 @@ def articles(request, parent):
     if parent == 'events':
         match = { 1: 59, 2: 143 }
         parent = match[request.site.id]
-        years = [2019, 2018]
+        years = [2020, 2019, 2018]
         order = 'event__start'
     elif parent == 'news':
         match = { 1: 61, 2: 142 }
