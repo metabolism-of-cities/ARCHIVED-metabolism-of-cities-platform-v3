@@ -292,7 +292,7 @@ def flow(request, city, type, slug=False):
 
 def photos(request, city, type='photo'):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    photos = Photo.objects.filter(primary_space=info, deleted=False, type=type)
+    photos = Photo.objects.filter(primary_space=info, deleted=False, type=type).order_by('process')
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
     if type == 'photo':
         page = 'photos'
