@@ -454,6 +454,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
               </div>
               <div class="rightbox">
                 {% block pagehead %}
+                {% if not pagehead %}{% include 'core/includes/breadcrumbs.html' %}{% endif %}
                 {% endblock %}
               </div>
             </div>

@@ -73,7 +73,6 @@
 
 {% endfor %}
     
-
 {% endblock %}
 
 {% block head %}
@@ -82,29 +81,4 @@
   top:-50px;
 }
 </style>
-{% endblock %}
-
-{% block sidebar %}
-{% include 'multiplicity/sidebar.default.html' %}
-
-{% endblock %}
-
-{% block pagehead %}
-<div id="page-head">
-    
-    <div id="page-title">
-        <h1 class="page-header text-overflow">About Us</h1>
-    </div>
-
-    <ol class="breadcrumb">
-        <li><a href="./"><i class="pli-home"></i></a></li>
-        <li><a href="{% url 'core:about' %}">About Us</a></li>
-        <li class="active">Task Forces</li>
-    </ol>
-
-</div>
-{% endblock %}
-
-{% block footer %}
-
 {% endblock %}

@@ -1,0 +1,22 @@
+<div id="page-head">
+    
+    <div id="page-title">
+      <h1 class="page-header text-overflow">{{ section|title }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="/{{ section }}">{{ section|title }}</a></li>
+        {% if page.parent and section != 'about' %}
+        <li><a href="">{{ page.parent.title }}</a></li>
+        {% endif %}
+        {% if page.type.name == "Blog" %}
+          <li><a href="{% url 'core:blog' %}">Blog</a></li>
+        {% elif page.type.name == "News" %}
+          <li><a href="{% url 'core:news' %}">News</a></li>
+        {% endif %}
+        <li class="active">{{ page.title }}</li>
+    </ol>
+
+</div>
+

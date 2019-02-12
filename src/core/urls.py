@@ -31,11 +31,12 @@ urlpatterns = [
     path('community/events', views.articles, {'parent': 'events'}, name='events'),
     path('community/events/<int:id>', views.article, name='event'),
 
+    path('about', views.section_home, {'slug': 'about'}, name='about'),
+
     path('news_events', views.news_and_events, name='news_and_events'),
     path('page/<slug:slug>', views.page, name='page'),
     path('cities', views.sectionpage, { 'id': 33}, name='sectionpage'),
     path('cities/page/<slug:slug>', views.sectionpage, name='sectionpage'),
-    path('about', views.team, name='about'),
     path('about/team', views.team, name='team'),
     path('about/task-forces', views.taskforces, name='taskforces'),
     path('about/task-forces/<slug:slug>', views.taskforce, name='taskforce'),

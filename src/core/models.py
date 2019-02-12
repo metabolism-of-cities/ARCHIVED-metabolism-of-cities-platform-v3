@@ -150,6 +150,7 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True, max_length=255, null=True, blank=True)
     introduction = models.TextField(null=True, blank=True)
+    head = models.TextField(null=True, blank=True)
     content = HTMLField('Content')
     image = models.ImageField(null=True, blank=True, upload_to='articles')
 
@@ -189,7 +190,7 @@ class ArticleForm(ModelForm):
 class SimpleArticleForm(ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'image', 'date', 'active','content']
+        fields = ['title', 'image', 'date', 'head', 'active','content']
 
 class Event(models.Model):
     article = models.OneToOneField(

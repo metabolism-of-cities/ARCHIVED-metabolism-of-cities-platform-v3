@@ -91,19 +91,7 @@
 {% endblock %}
 
 {% block pagehead %}
-<div id="page-head">
-    
-    <div id="page-title">
-        <h1 class="page-header text-overflow">About Us</h1>
-    </div>
-
-    <ol class="breadcrumb">
-        <li><a href="./"><i class="pli-home"></i></a></li>
-        <li><a href="http://">About Us</a></li>
-        <li class="active">Team</li>
-    </ol>
-
-</div>
+  {% include 'core/includes/breadcrumbs.html' %}
 {% endblock %}
 
 {% block footer %}

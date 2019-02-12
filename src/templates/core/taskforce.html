@@ -122,12 +122,12 @@
 <div id="page-head">
     
     <div id="page-title">
-        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+        <h1 class="page-header text-overflow">About</h1>
     </div>
 
     <ol class="breadcrumb">
         <li><a href="./"><i class="pli-home"></i></a></li>
-        <li><a href="{% url 'core:about' %}">About Us</a></li>
+        <li><a href="{% url 'core:section_home' 'about' %}">About</a></li>
         <li><a href="{% url 'core:taskforces' %}">Task Forces</a></li>
         <li class="active">{{ info.name }}</li>
     </ol>

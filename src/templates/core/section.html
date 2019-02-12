@@ -13,12 +13,14 @@
       <div class="panel widget">
           <div class="widget-header bg-dark" style="height:10px;min-height:0;padding:0">
           </div>
-          <div class="widget-body text-center">
+          <div class="widget-body" style="padding-top:20px">
               <h4 class="mar-no text-main">
               {{ details.title }}
               </h4>
 
-              {{ details.content|safe|truncatechars_html:500 }}
+              <p>
+              {{ details.content|striptags|truncatechars:120 }}
+              </p>
 
               <p><a href="{{ details.section }}/{{ details.slug }}" class="btn btn-info">Read more</a></p>
 
@@ -62,8 +64,4 @@
     </ol>
 
 </div>
-{% endblock %}
-
-{% block footer %}
-
 {% endblock %}

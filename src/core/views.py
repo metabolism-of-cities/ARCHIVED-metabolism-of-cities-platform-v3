@@ -83,7 +83,9 @@ def empty(request):
     return render(request, 'core/empty.html', context)
 
 def section_home(request, slug):
-    list = Article.on_site.filter(section=slug)
+    if slug == 'about':
+        pages = [36, 37, 39, 40, 43, 45, 46]
+        list = Article.on_site.filter(id__in=pages)
     context = { 'section': slug, 'list': list}
     return render(request, 'core/section.html', context)
 
