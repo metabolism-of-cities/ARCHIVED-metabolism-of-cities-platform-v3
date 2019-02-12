@@ -1,0 +1,12 @@
+The online contact form has been filled out. 
+
+Details:
+
+Name: {{ name }}
+E-mail: {{ email }}
+Organisation: {{ organization }}
+
+Message:
+--------
+
+{{ message }}

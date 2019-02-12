@@ -115,8 +115,43 @@ def taskforce(request, slug):
 
 def page(request, slug):
     page = get_object_or_404(Article, slug=slug, site=request.site)
-    context = { 'section': page.section, 'page': 'news', 'page': page}
+    if page.includes_form:
+        from django.middleware import csrf
+        token = request.META.get('CSRF_COOKIE', None)
+        if token is None:
+            token = csrf._get_new_csrf_key()
+            request.META['CSRF_COOKIE'] = token
+            request.META['CSRF_COOKIE_USED'] = True
+        content = page.content.replace('__csrf_token__', token)
+    else:
+        content = page.content
+    context = { 'section': page.section, 'page': 'news', 'page': page, 'content': content }
     return render(request, 'core/page.html', context)
+
+def contact(request):
+
+    name = request.POST['name']
+    email = request.POST['email']
+    message = request.POST['message']
+    organization = request.POST['organization']
+    context = {
+        'name': name,
+        'email': email,
+        'organization': organization,
+        'message': message
+    }
+
+    message = render_to_string('core/mail/contactform.txt', context)
+
+    send_mail(
+        'Contact form Metabolism of Cities (' + name + ')',
+        message,
+        settings.SITE_EMAIL,
+        [settings.SITE_EMAIL],
+    )
+    messages.success(request, 'Thanks, we have received your message!')
+    return redirect('core:contact')
+
 
 def sectionpage(request, id=None, slug=None):
     if id:
@@ -214,10 +249,6 @@ def userdetails(request, id):
         raise Http404("No user found")
     else:
         return redirect(reverse('core:peopledetails', args=[people.id]))
-
-def contact(request):
-    context = { 'section': 'about', 'page': 'contact'}
-    return render(request, 'core/contact.html', context)
 
 def journals(request):
     list = Journal.objects.order_by('name').annotate(num_references=Count('reference'))

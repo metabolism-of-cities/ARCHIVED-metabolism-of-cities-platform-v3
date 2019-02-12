@@ -70,8 +70,6 @@ urlpatterns = [
     path('register', views.register),
     path('contributor', views.register, {'contributor': True}, name='contributor'),
 
-    path('<slug:slug>', views.section_home, name='section_home'),
-
     path('about/<slug:slug>', views.page, name='about'),
     path('community/<slug:slug>', views.page, name='community'),
     path('resources/data/<slug:slug>', views.page, name='data'),
@@ -80,7 +78,8 @@ urlpatterns = [
     path('services/research/<slug:slug>', views.page, name='research'),
     path('services/stakeholders-engagement/<slug:slug>', views.page, name='engagement'),
     path('services/support/<slug:slug>', views.page, name='support'),
-    path('contact', views.contact, name='contact'),
+    path('contact', views.page, { 'slug': 'contact'}, name='contact'),
+    path('contact/form', views.contact),
     path('literature', views.literature, name='literature'),
     path('publishers', views.publishers, name='publishers'),
     path('publishers/<int:id>', views.publisher, name='publisher'),
@@ -102,6 +101,7 @@ urlpatterns = [
     path('tags/ajax/folder', views.tag_ajax_folder, name='tag_ajax_folder'),
 
     path('theme/<slug:theme>', views.set_theme, name='set_theme'),
+    path('<slug:slug>', views.section_home, name='section_home'),
 
     path('admin/people', views.admin_people_list, name='admin_people_list'),
     path('admin/members', views.admin_member_list, name='admin_member_list'),
