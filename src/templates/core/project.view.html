@@ -48,7 +48,7 @@
 
         {% if info.status != 'finished' and info.target_finish_date %}
           <div class="col-md-4">
-            <p>Targete completion date</p>
+            <p>Target completion date</p>
             <p>{{ info.target_finish_date }}</p>
           </div>
         {% endif %}
@@ -80,12 +80,16 @@
           {% if info.type == 'regular' %}
             <dt>Project leader</dt>
           {% else %}
-            <dt>Researcher</dt>
+            <dt>Researcher(s)</dt>
           {% endif %}
           <dd>{{ info.researcher }}</dd>
 
           {% if info.supervisor %}
-            <dt>Supervisor</dt>
+              {% if info.type == "theses" %}
+                <dt>Supervisor</dt>
+              {% else %}
+                <dt>Project leader</dt>
+              {% endif %}
             <dd>{{ info.supervisor }}</dd>
           {% endif %}
 

@@ -42,6 +42,8 @@
         <em>Start: {{ details.start_date|date:"Y" }}</em>
       {% elif details.start_date and details.end_date %}
         <em>{{ details.start_date|date:"Y" }}{% ifnotequal details.end_date|date:"Y" details.start_date|date:"Y" %}-{{ details.end_date|date:"Y" }}{% endifnotequal %}</em>
+      {% elif details.end_date %}
+        <em>{{ details.end_date|date:"Y" }}</em>
       {% endif %}
       
       </td>
