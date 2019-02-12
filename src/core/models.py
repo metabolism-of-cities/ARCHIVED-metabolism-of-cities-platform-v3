@@ -224,6 +224,7 @@ class VideoCollection(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
     objects = models.Manager()
     on_site = CurrentSiteManager()
+    show_in_list = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
