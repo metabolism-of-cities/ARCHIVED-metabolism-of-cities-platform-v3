@@ -85,7 +85,12 @@ def empty(request):
 def section_home(request, slug):
     if slug == 'about':
         pages = [36, 37, 39, 40, 43, 45, 46]
-        list = Article.on_site.filter(id__in=pages)
+    elif slug == 'community':
+        pages = [50, 57, 49, 59, 61]
+    else:
+        from django.http import Http404
+        raise Http404("Page does not exist (section home)")
+    list = Article.on_site.filter(id__in=pages)
     context = { 'section': slug, 'list': list}
     return render(request, 'core/section.html', context)
 

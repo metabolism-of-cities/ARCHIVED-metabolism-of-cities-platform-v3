@@ -439,8 +439,8 @@ class Project(models.Model):
     active = models.BooleanField(default=True)
     pending_review = models.BooleanField(default=True)
     TYPE = (
-        ('theses', 'Theses projects'),
-        ('projects', 'Research projects'),
+        ('theses', 'Theses'),
+        ('projects', 'Projects'),
         ('applied', 'Applied research'),
     )
     type = models.CharField(max_length=20, choices=TYPE)
