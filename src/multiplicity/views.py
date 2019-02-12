@@ -303,8 +303,10 @@ def photos(request, city, type='photo'):
         tab = 'other'
         title = 'Other maps'
 
-    context = { 'section': 'cities', 'menu':  'resources', 'page': page, 'info': info, 'photos': photos, 
-    'addlink': addlink, 'gallery': True, 'tab': tab, 'title': title }
+    context = { 
+        'section': 'cities', 'menu':  'resources', 'page': page, 'info': info, 'photos': photos, 
+        'addlink': addlink, 'gallery': True, 'tab': tab, 'title': title, 'show_photo_categories': True
+    }
     return render(request, 'multiplicity/resources.photos.html', context)
 
 def videos(request, city):

@@ -5,6 +5,22 @@
   <div class="row">
 
   {% for photo in photos %}
+
+    {% if show_photo_categories %}
+      {% ifchanged photo.process %}
+        </div><div class="row">
+
+          <h4 class="mar-top">
+            {% if photo.process %}
+              {{ photo.process.name|lower|capfirst }}
+            {% else %}
+              General photos
+            {% endif %}
+          </h4>
+
+      {% endifchanged %}
+    {% endif %}
+
     <figure class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
       <a href="{{ photo.image.large.url }}" data-fancybox="images">
         <img
