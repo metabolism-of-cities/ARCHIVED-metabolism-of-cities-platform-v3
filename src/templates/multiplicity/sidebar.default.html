@@ -71,7 +71,6 @@
 
 {% if SITE_ID == 1 %}
 
-  {% if False %}
 
   <li>
       <a href="./">
@@ -90,6 +89,7 @@
       </ul>
   </li>
 
+  {% if False %}
   <li>
       <a href="./">
         <i class="far fa-fw fa-bolt fa-fw"></i>
@@ -103,6 +103,7 @@
           <li{% if page == "nuclear" %} class="active"{% endif %}><a href="{% url 'multiplicity:energy_flows' info.slug 'nuclear' %}">Nuclear energy</a></li>
       </ul>
   </li>
+  {% endif %}
 
   <li>
       <a href="./">
@@ -116,8 +117,6 @@
           <li{% if menu == "stocks" and page == "minerals" %} class="active"{% endif %}><a href="{% url 'multiplicity:stocks' info.slug 'minerals' %}">Minerals</a></li>
       </ul>
   </li>
-
-  {% endif %}
 
   <li {% if menu == "profile" %} class="active-sub"{% endif %}>
       <a href="./">
