@@ -226,7 +226,7 @@ ul.nolist li {
 #content-container {
   background:#fff;
 }
-.panel:not(.panel-colorful) {
+.panel:not(.panel-colorful):not(.panel-white) {
   background-color: #ecf0f5;
 }
 

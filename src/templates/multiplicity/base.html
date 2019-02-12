@@ -414,13 +414,13 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                                   <ul class="head-list">
                                     <li>
-                                      <a href="{% url 'core:set_theme' 'orange' %}?next={{ CURRENT_PAGE }}"> Orange</a>
+                                        <a href="{% url 'core:set_theme' 'orange' %}?next={{ CURRENT_PAGE }}">{% if SITE_ID == 1 %}Orange Theme{% else %}Purple Theme{% endif %}</a>
                                     </li>
                                     <li>
-                                      <a href="{% url 'core:set_theme' 'blue' %}?next={{ CURRENT_PAGE }}"> Blue</a>
+                                      <a href="{% url 'core:set_theme' 'blue' %}?next={{ CURRENT_PAGE }}">Blue Theme</a>
                                     </li>
                                     <li>
-                                      <a href="{% url 'core:set_theme' 'dark' %}?next={{ CURRENT_PAGE }}"> Dark</a>
+                                      <a href="{% url 'core:set_theme' 'dark' %}?next={{ CURRENT_PAGE }}">Dark Theme</a>
                                     </li>
                                   </ul>
                                 </div>

@@ -1,7 +1,7 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
 
-{% block title %}About Us{% endblock %}
+{% block title %}Team{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
@@ -9,13 +9,10 @@
 <div class="row">
 
   <div class="col-lg-12">
-      <div class="panel">
+      <div class="panel panel-white">
         <div class="panel-body">
-        <p>
-        Below in chronological order our team members. Our team is slowly expanding
-        and we welcome new people! There are various ways to join our group, depending
-        on your interests and background. 
-        </p>
+          <h1>{{ page.title }}</h1>
+          {{ page.content|safe }}
       </div>
     </div>
   </div>
@@ -29,7 +26,7 @@
       <div class="panel widget">
           <div class="widget-header bg-purple">
             {% if details.city.system_photo %}
-              <img class="widget-bg img-responsive" src="{{ details.city.system_photo.image.url }}" alt="">
+              <img class="widget-bg img-responsive" src="{{ details.city.system_photo.image.medium.url }}" alt="">
             {% endif %}
           </div>
           <div class="widget-body text-center">

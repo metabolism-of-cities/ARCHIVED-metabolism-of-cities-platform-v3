@@ -92,8 +92,9 @@ def literature(request):
     return render(request, 'core/literature.html', context)
 
 def team(request):
+    page = Article.objects.get(pk=39)
     list = People.objects.exclude(member_since__isnull=True).order_by('member_since')
-    context = { 'section': 'about', 'page': 'team', 'list': list}
+    context = { 'section': 'about', 'list': list, 'page': page }
     return render(request, 'core/team.html', context)
 
 def taskforces(request):
