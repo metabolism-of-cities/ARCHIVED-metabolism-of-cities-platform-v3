@@ -2,6 +2,8 @@ from django.urls import path
 from django.contrib.auth import urls
 from django.conf.urls import include
 
+from django.views.generic.base import RedirectView
+
 from . import views
 
 # both for the link names and the view names, try to stick to this:
@@ -16,10 +18,20 @@ from . import views
 app_name = 'core'
 
 urlpatterns = [
+
+    # Redirecting old URLs
+    path('page/about', RedirectView.as_view(url='/about/our-story', permanent=True)),
+    path('page/team', RedirectView.as_view(url='/about/team', permanent=True)),
+    path('page/wishlist', RedirectView.as_view(url='/about/mission', permanent=True)),
+    path('page/wishlist', RedirectView.as_view(url='/about/mission', permanent=True)),
+    path('page/contact', RedirectView.as_view(url='/contact', permanent=True)),
+    path('page/version', RedirectView.as_view(url='/about/version-history', permanent=True)),
+
     path('', views.index, name='homepage'),
     path('home', views.home, name='home'),
     path('search', views.search, name='search'),
     path('more', views.empty, name='more'),
+
     path('resources/videos', views.videos, name='videos'),
     path('resources/videos/collections/<int:collection>', views.videos, name='videocollection'),
     path('resources/videos/<int:id>', views.video, name='video'),
