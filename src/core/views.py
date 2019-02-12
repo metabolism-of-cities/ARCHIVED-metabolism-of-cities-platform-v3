@@ -184,15 +184,18 @@ def article(request, id):
     return render(request, 'core/article.html', context)
 
 def articles(request, parent):
+    order = '-created_at'
     if parent == 'events':
         match = { 1: 59, 2: 143 }
         parent = match[request.site.id]
         years = [2019, 2018]
+        order = 'event__start'
     if parent == 'news':
         match = { 1: 61, 2: 142 }
         parent = match[request.site.id]
         years = [2019, 2018, 2017]
-    list = Article.objects.filter(active=True, parent__id=parent, site=request.site).order_by('-created_at')
+        order = '-date'
+    list = Article.objects.filter(active=True, parent__id=parent, site=request.site).order_by(order)
     page = Article.objects.get(pk=parent)
     section = page.section
     addlink = reverse('core:admin_article_parent', args=[parent])
