@@ -125,7 +125,7 @@
       </a>
 
       <ul class="collapse {% if menu == "profile" %}in{% endif %}">
-          <li{% if page == "population" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'population' %}">Demographics</a></li>
+          <li{% if page == "demographics" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'demographics' %}">Demographics</a></li>
           <li{% if page == "economy" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'economy' %}">Economy</a></li>
           <li{% if page == "environment" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'environment' %}">Environment</a></li>
           <li{% if page == "climate" %} class="active"{% endif %}><a href="{% url 'multiplicity:topic' info.slug 'climate' %}">Climate</a></li>
