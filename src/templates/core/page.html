@@ -28,8 +28,6 @@
 
 {% endblock %}
 
-{% if page.head %}
-  {% block head %}
-    {{ page.head|safe }}
-  {% endblock %}
-{% endif %}
+{% block head %}
+  {{ page.head|default_if_none:""|safe }}
+{% endblock %}
