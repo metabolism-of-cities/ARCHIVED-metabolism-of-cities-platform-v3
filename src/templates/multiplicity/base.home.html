@@ -7,9 +7,18 @@
   {% block head %}{% endblock %}
   <link rel="stylesheet" href="{% static 'ie/css/onepage-scroll.css' %}" />
   <style>
+
+#footerwarning {
+    z-index: 100000;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+
     header#navbar {
       position: fixed;
       background-color: #fff;
+      top: 50px;
     }
 
     .social-media-bar {
@@ -321,11 +330,9 @@
 
 <body>
 
-{% if SITE_ID == 2 %}
-<div class="alert alert-danger" id="footerwarning" style="font-size:19px">
-  This website is under active development. Official launch will take place March 2019.
+<div class="alert alert-dark" id="footerwarning" style="font-size:17px">
+  This is the new Metabolism of Cities prototype website. <a style="text-decoration:underline;color:#fff" href="{% url 'core:contact' %}">Please leave your feedback here.</a>
 </div>
-{% endif %}
 
 <div id="container" class="effect boxed-layout aside-float slide {% if mainnav %}{{ mainnav }}{% elif section == 'cities' or sidenav %}mainnav-lg{% else %}mainnav-out{% endif %} {% block container %}{% endblock %}">
 

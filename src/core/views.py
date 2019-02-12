@@ -59,6 +59,8 @@ def home(request):
 def index(request):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
+        context = { 'section': 'home', 'page': ''  }
+        return render(request, 'core/home.html', context)
     else:
         main_filter = 219
     publications = False
