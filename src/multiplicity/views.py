@@ -330,9 +330,13 @@ def resources(request, city, slug):
         type = 24
     type = get_object_or_404(ReferenceType, pk=type)
     references = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
+
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
 
-    context = { 'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 'references': references,  'addlink': addlink, 'type': type, 'slug': slug}
+    context = { 
+        'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 
+        'references': references,  'addlink': addlink, 'type': type, 'slug': slug
+    }
     return render(request, 'multiplicity/resources.list.html', context)
 
 def datasets(request, city):

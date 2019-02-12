@@ -14,6 +14,11 @@
   </button>
 </div>
 
+<p><em>There are additional options to browse and filter resources in our
+<a href="{% url 'core:references' %}?terms={{ info.tag.id }}">resources library</a>.
+</em>
+</p>
+
 {% include 'core/includes/references.list.html' %}
 
 {% endblock %}
