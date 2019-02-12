@@ -1,5 +1,5 @@
 from django.contrib.sites.models import Site
-from core.models import Event
+from core.models import Event, Article
 from multiplicity.models import ProcessGroup
 from datetime import datetime, timedelta, time
 from django.conf import settings
@@ -8,6 +8,11 @@ def site(request):
     site = Site.objects.get_current()
     today = datetime.now().date()
     event = Event.objects.filter(article__site=site, start__gte=today).order_by('start').first()
+    if site.id == 1:
+        news = 61
+    else:
+        news = 142
+    latest_news = Article.objects.filter(parent=news, active=True).order_by('-created_at')[0]
     processgroups = ProcessGroup.objects.order_by('name').exclude(pk__in=[13,14,12])
 
     return {
@@ -19,4 +24,5 @@ def site(request):
         'MAPBOX_API_KEY': "pk.eyJ1IjoibWV0YWJvbGlzbW9mY2l0aWVzIiwiYSI6ImNqcHA5YXh6aTAxcmY0Mm8yMGF3MGZjdGcifQ.lVZaiSy76Om31uXLP3hw-Q", 
         'DEBUG': settings.DEBUG,
         'CURRENT_PAGE': request.get_full_path(),
+        'LATEST_NEWS': latest_news
     }

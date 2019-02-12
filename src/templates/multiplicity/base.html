@@ -586,14 +586,22 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
 
 {% endif %}
 
+<footer id="latest_news">
+  <div class="container">
+    <div class="row">
+        <p>Latest news: <a href="{% url 'core:news' LATEST_NEWS.id %}">{{ LATEST_NEWS.title }}</a> ({{ LATEST_NEWS.date }})</p>
+    </div>
+  </div>
+</footer>
+
 <footer id="actions">
 
   <div class="container">
     <div class="row">
-      <div class="col-lg-6">
-        <h2>Join {{ SITE_NAME }}</h2>
+      <div class="col-lg-3">
+        <h3>Join the team</h3>
         <p>
-          We are a global network of volunteers <br>and we
+          We are a global network of volunteers and we
           can use <em>your</em> help.
         </p>
         <p>
@@ -618,6 +626,17 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
           </p>
         {% endif %}
       </div>
+      <div class="col-lg-3">
+        <h3>Contact us</h3>
+        <p>
+          Ideas? Incomplete or incorrect information? 
+          Interested in a partnership?
+        </p>
+        <p>
+          <a class="btn btn-lg btn-default" href="{% url 'core:about' 'contact' %}">Contact us</a>
+        </p>
+      </div>
+
       {% if EVENT %}
         <div class="col-lg-3">
           <h3>Upcoming event</h3>
@@ -629,8 +648,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
               </strong>
               <br>
               <em>
-                {{ EVENT.start|date:"M d, Y" }}-
+                {{ EVENT.start|date:"M d, Y" }}
+                {% if EVENT.start != EVENT.end %}-
                 {{ EVENT.end|date:"M d, Y" }}
+                {% endif %}
               </em>
             </p>
             <p>
@@ -647,13 +668,12 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
 
 <footer id="footer">
 
-
   <div class="container">
     <div class="row">
       <div class="col-lg-3">
         <h4>{{ SITE_NAME }}</h4>
         <p>
-          <a href="http://">
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/">
             Creative Commons Attribution 4.0 International license.
           </a>
           <br>
@@ -679,6 +699,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
           <li><a href="https://twitter.com/CityMetabolism"><i class="psi-twitter"></i> Twitter</a></li>
           <li><a href="https://www.youtube.com/channel/UCwaliuWsJWhdhk-KUfQHlYA"><i class="psi-youtube"></i> YouTube</a></li>
           <li><a href="https://www.instagram.com/metabolism_of_cities/"><i class="psi-instagram"></i> Instagram</a></li>
+          <li><a href="https://www.instagram.com/metabolism_of_cities/"><i class="psi-linkedin"></i> LinkedIn</a></li>
         </ul>
         {% endif %}
       </div>

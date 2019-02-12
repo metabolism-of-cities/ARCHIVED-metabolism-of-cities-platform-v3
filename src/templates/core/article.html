@@ -116,21 +116,23 @@
         </div>
 
       </div>
-      <div class="col-sm-4">
+      {% if event.url %}
+        <div class="col-sm-4">
 
-        <div class="panel media middle pad-all">
-            <div class="media-left">
-                <span class="icon-wrap icon-wrap-sm icon-circle bg-success">
-                <i class="pli-internet icon-2x"></i>
-                </span>
-            </div>
-            <div class="media-body">
-                <p class="text-1x mar-no text-semibold text-main">More information</p>
-                <p class="text-muted mar-no"><a href="{{ event.url }}">Website</a></p>
-            </div>
+          <div class="panel media middle pad-all">
+              <div class="media-left">
+                  <span class="icon-wrap icon-wrap-sm icon-circle bg-success">
+                  <i class="pli-internet icon-2x"></i>
+                  </span>
+              </div>
+              <div class="media-body">
+                  <p class="text-1x mar-no text-semibold text-main">More information</p>
+                  <p class="text-muted mar-no"><a href="{{ event.url }}">Website</a></p>
+              </div>
+          </div>
+
         </div>
-
-      </div>
+      {% endif %}
 
   {% endif %}
 

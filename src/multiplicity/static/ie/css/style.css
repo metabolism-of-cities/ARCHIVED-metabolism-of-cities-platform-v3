@@ -278,11 +278,21 @@ footer#footer img {
   text-decoration:underline;
   color:#fff;
 }
-
 footer#actions{
   background:#ECF0F5;
   color:#333;
   font-size:2rem;
+}
+footer#latest_news {
+  background: #DADEE2;
+}
+footer#latest_news p {
+  margin: 5px;
+  color: #666;
+  text-align: center;
+}
+footer#latest_news a {
+  text-decoration: underline;
 }
 
 @media (max-width:992px){
@@ -290,14 +300,12 @@ footer#actions{
 }
 
 @media (max-width:750px){
-  #topstrip .rightbox {left:130px}
   #topstrip .leftbox{width:120px}
 }
 
 @media (max-width:520px){
   .navbar-top-links i{display:none}
   #topstrip .leftbox{width:1px;overflow:hidden}
-  #topstrip .rightbox{left:0}
 }
 @media (max-width:420px){
   li[data-id="services"]{display:none}
@@ -870,4 +878,9 @@ article.sector section .section-menu a:hover {
 /* Without this, the navbar will have a higher z-index than the modal */
 #navbar {
   z-index: 9000;
+}
+
+/* This avoids the page title box from flowing on top of the logo */
+.leftbox {
+  z-index: 10;
 }
