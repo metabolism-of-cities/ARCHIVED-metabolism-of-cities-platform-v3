@@ -22,7 +22,11 @@
               {{ details.content|striptags|truncatechars:120 }}
               </p>
 
-              <p><a href="{{ details.section }}/{{ details.slug }}" class="btn btn-info">Read more</a></p>
+              {% if details.title == "Projects" or details.title == "Theses" %}
+                <p><a href="{{ details.section }}/research/{{ details.title|lower }}" class="btn btn-info">Read more</a></p>
+              {% else %}
+                <p><a href="{{ details.section }}/{{ details.slug }}" class="btn btn-info">Read more</a></p>
+              {% endif %}
 
           </div>
       </div>
