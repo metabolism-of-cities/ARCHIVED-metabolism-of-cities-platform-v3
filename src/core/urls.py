@@ -80,7 +80,8 @@ urlpatterns = [
     path('resources', views.journals, name='resources_home'),
     path('community', views.empty, name='community_home'),
     path('register', views.register),
-    path('contributor', views.register, {'contributor': True}, name='contributor'),
+    path('signup/contributor', views.register, {'contributor': True}, name='contributor'),
+    path('signup/teammember', views.register, name='contributor'),
 
     path('about/<slug:slug>', views.page, name='about'),
     path('community/<slug:slug>', views.page, name='community'),

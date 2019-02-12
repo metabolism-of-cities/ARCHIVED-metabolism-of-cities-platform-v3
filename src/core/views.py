@@ -780,8 +780,8 @@ def register(request, contributor=False, taskforce=False):
             return redirect(reverse('core:taskforce', args=[taskforce.slug]))
         else:
             return redirect('/about/join')
-    context = { 'taskforce': taskforce }
-    if contributor or taskforce:
+    context = { 'taskforce': taskforce, 'contributor': contributor }
+    if contributor or taskforce or True:
         return render(request, 'registration/contributor.html', context)
     else:
         return render(request, 'registration/register.html')

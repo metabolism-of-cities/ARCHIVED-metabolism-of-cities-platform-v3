@@ -17,9 +17,15 @@ textarea.form-control{height:150px}
       <div class="panel-body">
 
         <div class="mar-ver pad-btm">
+          {% if contributor %}
+          <h1 class="h3">Become a contributor</h1>
+          {% else %}
           <h1 class="h3">Join {% if taskforce %}{{ taskforce }}{% else %}our team{% endif %}</h1>
+          {% endif %}
           {% if taskforce %}
             <p>Fill out the form below to become join the {{ taskforce }} taskforce!</p>
+          {% elif not contributor %}
+            <p>Sign up to become a team member at {{ SITE_NAME }}!.</p>
           {% else %}
             <p>Sign up to become a contributor on {{ SITE_NAME }}!.</p>
           {% endif %}
