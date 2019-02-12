@@ -210,6 +210,7 @@ class Event(models.Model):
     start = models.DateField(null=True, blank=True)
     end = models.DateField(null=True, blank=True)
     type = models.CharField(max_length=20, choices=EVENT_TYPE)
+    estimated_date = models.CharField(max_length=60, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):

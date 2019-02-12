@@ -39,7 +39,8 @@
           <p class="date">
             <span class="tag tag-info">
               <i class="fal fa-calendar"></i>
-              {% if details.event and details.event.start != details.event.end %}
+              {% if details.event.estimated_date %}{{ details.event.estimated_date }}
+              {% elif details.event and details.event.start != details.event.end %}
                 {{ details.event.start }} - {{ details.event.end }}
               {% elif details.event %}
                 {{ details.event.start }}

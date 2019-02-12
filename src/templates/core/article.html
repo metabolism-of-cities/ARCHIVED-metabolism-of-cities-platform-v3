@@ -20,7 +20,9 @@
           <li class="list-group-item {% if info.id == details.id %} active-sub{% endif %}"><a href="{% url 'core:news' details.id %}">{{ details.title }}</a>
           <br>
             <em>
-              {% if details.event %}
+              {% if details.event.estimated_date %}
+                {{ details.event.estimated_date }}
+              {% elif details.event %}
                 {{ details.event.start|date:"M d, Y" }}
               {% else %}
                 {{ details.date|date:"M d, Y" }}
@@ -44,8 +46,12 @@
             <h3>{{ info.title }}</h3>
             {% if event.start %}
               <p class="date">
+              {% if event.estimated_date %}
+              {{ event.estimated_date }}
+              {% else %}
                 {{ event.start|date:"M d, Y" }}-
                 {{ event.end|date:"M d, Y" }}
+                {% endif %}
               </p>
               {% elif info.date %}
               <p class="date">{{ info.date|date:"M d, Y" }}</p>
