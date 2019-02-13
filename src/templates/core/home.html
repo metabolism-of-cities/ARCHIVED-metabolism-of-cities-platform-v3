@@ -10,8 +10,10 @@
   <section class="section hero">
     <div class="complete-center">
       <div class="container">
-        <h1 class="white text">Cities are where the struggle for global sustainability "will either be won or lost"</h1>
-        <h4 class="white text hidden-xs hidden-sm">Cities <span class="changing cities">consume 70% of global natural resources|generate 64% of global waste|do something else|are where many people live</span></h4>
+          <h1 class="white text">Cities are where the struggle for global sustainability <br>"will either be won or lost"
+              <span style="font-size:17px">(Maimunah Mohd Sharif, Executive Director of UN-Habitat)</span>
+          </h1>
+        <h4 class="white text hidden-xs hidden-sm">Cities <span class="changing cities">house more than 54% of global population|generate 80% of GDP|produce 64% of global waste|consume 75% of global natural resources</span></h4>
       </div>
     </div>
     <img class="hidden-md hidden-lg" src="https://prototype.metabolismofcities.org/media/referencespace/capetown.jpg">
@@ -32,7 +34,7 @@
         </div>
         <div class="col-md-6 left-right-padding">
           <h2 class="white text mar-no we-need-to hidden-xs hidden-sm">
-            To be more successfully used, we need to <span class="changing success">collect more data|do research|eat candy|get down to business</span>
+            To be more successfully used, we need to <span class="changing success">centralise knowledge|do research|raise awareness|develop common tools</span>
           </h2>
         </div>
       </div>
@@ -129,17 +131,28 @@
     <div class="row">
       <div class="col-md-6 left-right-padding">
         <div class="standard split-text">
-          <h2 class="white text text-center">
-            Who is Metabolism of Cities for?
+          <h2 class="white text text-left">
+            <img src="{% static 'ie/img/logo.large.png' %}" alt="" style="max-width:50%" /><br>
+            <br>
+            is for <span class="changing cities">citizens|city officials|academia|businesses</span><br><br>
+            benefits <span class="changing cities">citizens|city officials|academia|businesses</span><br><br>
+            interacts with <span class="changing cities">citizens|city officials|academia|businesses</span>
           </h2>
         </div>
         <div class="citizens white text split-text">
           <h3 class="white text">
             <i class="fas fa-users fa-fw mar-rgt"></i> Citizens
           </h3>
-          <p>
-            Fuga accusamus incidunt aliquid. Dolores tempore repellat qui. Ea enim laborum earum. Repellat iste et quidem assumenda autem adipisci necessitatibus deleniti. Consectetur architecto omnis praesentium. Optio facere voluptas et molestiae quisquam recusandae beatae est.
-          </p>
+          <ul class="w">
+            <li><a href="{% url 'core:about' 'mission' %}">Mission</a></li>
+            <li><a href="{% url 'core:resources' 'introduction' %}">About Urban Metabolism</a></li>
+            <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter’s Kit</a></li>
+            <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
+            <li><a href="{% url 'multiplicity:index' %}">Cities (MultipliCity homepage)</a></li>
+            <li><a href="{% url 'core:news' %}">News</a></li>
+            <li><a href="">Social media</a></li>
+            <li><a href="{% url 'core:about' 'join' %}">Join Us</a></li>
+          </ul>
         </div>
         <div class="city-officials white text split-text">
           <h3 class="white text">
@@ -162,7 +175,7 @@
         </div>
         <div class="business white text split-text">
           <h3 class="white text">
-            <i class="fas fa-piggy-bank fa-fw mar-rgt"></i> Business
+            <i class="fas fa-piggy-bank fa-fw mar-rgt"></i> Businesses
           </h3>
           <p>
             Non qui adipisci quis in. Quam reprehenderit eos provident et possimus aspernatur ab. Pariatur veniam ab nisi nisi et id.
@@ -195,7 +208,7 @@
           <div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
             <div panelClass="business" class="panel panel-info panel-colorful pad-all mar-no">
               <p class="text-2x mar-no text-semibold">
-                <i class="fas fa-piggy-bank fa-fw mar-rgt"></i> Business
+                <i class="fas fa-piggy-bank fa-fw mar-rgt"></i> Businesses
               </p>
             </div>
           </div>

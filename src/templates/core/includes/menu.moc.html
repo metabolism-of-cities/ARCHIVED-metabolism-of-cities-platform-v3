@@ -85,17 +85,12 @@
       <div class="col-sm-4 col-md-4">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-books icon-fw"></i>Publications</p>
         <ul class="list-unstyled">
-          <li><a href="{% url 'core:references' %}">Introduction</a></li>
-          <li><a href="{% url 'core:publications' 'library' %}">Library</a></li>
-          <li><a href="{% url 'core:publications' 'region' %}">- By Region</a></li>
-          <li><a href="{% url 'core:publications' 'type' %}">- By Type</a></li>
-          <li><a href="{% url 'core:publications' 'topic' %}">- By Topic</a></li>
-          <li><a href="{% url 'core:publications' 'map' %}">Map</a></li>
+          <li><a href="{% url 'core:references' %}">Library</a></li>
           <li><a href="{% url 'core:resources' 'journals' %}">Journals</a></li>
           <li><a href="{% url 'core:publications' 'add' %}"><span class="pull-right label label-success">Contribute</span>Add Publication</a></li>
         </ul>
       </div>
-      <div class="col-sm-4 col-md-4">
+      <div class="col-sm-4 col-md-4 hide">
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-layout-grid icon-fw"></i>Data</p>
         <ul class="list-unstyled">
           <li><a href="{% url 'core:data' 'datasets' %}">Datasets</a></li>
