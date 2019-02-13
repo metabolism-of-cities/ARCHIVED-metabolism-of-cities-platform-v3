@@ -133,13 +133,16 @@
         <div class="standard split-text">
           <h2 class="white text text-left">
             <img src="{% static 'ie/img/logo.large.png' %}" alt="" style="max-width:50%" />
-            <span style="margin-left:15px" class="changing cities">brings together ...|benefits from ...|serves ...</span>
+            <span style="margin-left:15px" class="changing cities">serves ...|brings together ...|collaborates with ...|benefits from ...</span>
           </h2>
         </div>
         <div class="citizens white text split-text">
           <h3 class="white text">
             <i class="fas fa-users fa-fw mar-rgt"></i> Citizens
           </h3>
+          <p>
+            Curious about the sustainability of cities and wish to learn more about how to act and contribute? Visit the following links:
+          </p>
           <ul class="w">
             <li><a href="{% url 'core:about' 'mission' %}">Mission</a></li>
             <li><a href="{% url 'core:resources' 'introduction' %}">About Urban Metabolism</a></li>
@@ -154,6 +157,9 @@
           <h3 class="white text">
             <i class="fas fa-university fa-fw mar-rgt"></i> City officials
           </h3>
+          <p>
+            Want to learn how to use Urban Metabolism to develop systemic policies or engage with us? Visit the following links:
+          </p>
           <ul class="w">
             <li><a href="cities">Cities</a></li>
             <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
@@ -168,6 +174,9 @@
           <h3 class="white text">
             <i class="fas fa-graduation-cap fa-fw mar-rgt"></i> Academia
           </h3>
+          <p>
+            Need to find Urban Metabolism related datasets, publications, tools, and events or want to collaborate? Visit the following links:
+          </p>
           <ul class="w">
             <li><a href="{% url 'core:references' %}">Library</a></li>
             <li><a href="community/research/projects">Research</a></li>
@@ -177,6 +186,7 @@
             <li><a href="{% url 'core:tools' 'omat' %}">OMAT</a></li>
             <li><a href="{% url 'core:data' 'gumd' %}">GUMD</a></li>
             <li><a href="{% url 'core:news' %}">News</a></li>
+            <li><a href="{% url 'core:events' %}">Events</a></li>
             <li><a href="{% url 'core:about' 'join' %}">Join Us</a></li>
           </ul>
         </div>
@@ -184,10 +194,15 @@
           <h3 class="white text">
             <i class="fas fa-piggy-bank fa-fw mar-rgt"></i> Businesses
           </h3>
+          <p>
+            Wish to find out how to collaborate and make your business more environmentally friendly across supply chains? Visit the following links:
+          </p>
           <ul class="w">
             <li><a href="{% url 'core:about' 'mission' %}">Mission</a></li>
             <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter Kit</a></li>
+            <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
             <li><a href="{% url 'core:events' %}">Events</li>
+            <li><a href="{% url 'core:references' %}">Library</a></li>
             <li><a href="{% url 'core:contact' %}">Contact Us</a></li>
           </ul>
         </div>
