@@ -12,13 +12,16 @@
     z-index: 100000;
     margin-bottom: 0;
     text-align: center;
+    position: fixed;
+      width: auto;
+    right: 10px;
+    bottom: 10px;
 }
 
 
     header#navbar {
       position: fixed;
       background-color: #fff;
-      top: 50px;
     }
 
     .social-media-bar {
@@ -336,7 +339,7 @@
 <body>
 
 <div class="alert alert-dark" id="footerwarning" style="font-size:17px">
-  This is the new Metabolism of Cities prototype website. <a style="text-decoration:underline;color:#fff" href="{% url 'core:contact' %}">Please leave your feedback here.</a>
+  This is the new Metabolism of Cities prototype website. <a style="text-decoration:underline;color:#fff" href="{% url 'core:contact' %}"><br>Please leave your feedback here.</a>
 </div>
 
 <div id="container" class="effect boxed-layout aside-float slide {% if mainnav %}{{ mainnav }}{% elif section == 'cities' or sidenav %}mainnav-lg{% else %}mainnav-out{% endif %} {% block container %}{% endblock %}">
