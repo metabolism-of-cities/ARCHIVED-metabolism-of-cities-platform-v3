@@ -133,7 +133,7 @@
         <div class="standard split-text">
           <h2 class="white text text-left">
             <img src="{% static 'ie/img/logo.large.png' %}" alt="" style="max-width:50%" />
-            <span style="margin-left:15px" class="changing cities">brings together|benefits from|serves</span>
+            <span style="margin-left:15px" class="changing cities">brings together...|benefits from...|serves...</span>
           </h2>
         </div>
         <div class="citizens white text split-text">
@@ -145,7 +145,7 @@
             <li><a href="{% url 'core:resources' 'introduction' %}">About Urban Metabolism</a></li>
             <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter’s Kit</a></li>
             <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
-            <li><a href="{% url 'multiplicity:index' %}">Cities (MultipliCity homepage)</a></li>
+            <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
             <li><a href="{% url 'core:news' %}">News</a></li>
             <li><a href="">Social media</a></li>
             <li><a href="{% url 'core:about' 'join' %}">Join Us</a></li>
@@ -155,12 +155,16 @@
           <h3 class="white text">
             <i class="fas fa-university fa-fw mar-rgt"></i> City officials
           </h3>
-          <p>
-            Non qui adipisci quis in. Quam reprehenderit eos provident et possimus aspernatur ab. Pariatur veniam ab nisi nisi et id.
-          </p>
-          <p>
-            Fuga accusamus incidunt aliquid. Dolores tempore repellat qui. Ea enim laborum earum. Repellat iste et quidem.
-          </p>
+          <ul class="w">
+            <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+            <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
+            <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter’s Kit</a></li>
+            <li><a href="{% url 'core:about' 'mission' %}">Mission</a></li>
+            <li><a href="{% url 'core:resources' 'introduction' %}">About Urban Metabolism</a></li>
+            <li><a href="{% url 'core:news' %}">News</a></li>
+            <li><a href="">Social media</a></li>
+            <li><a href="{% url 'core:about' 'join' %}">Join Us</a></li>
+          </ul>
         </div>
         <div class="academia white text split-text">
           <h3 class="white text">
