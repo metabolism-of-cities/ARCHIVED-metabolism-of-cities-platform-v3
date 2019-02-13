@@ -133,7 +133,7 @@
         <div class="standard split-text">
           <h2 class="white text text-left">
             <img src="{% static 'ie/img/logo.large.png' %}" alt="" style="max-width:50%" />
-            <span style="margin-left:15px" class="changing cities">brings together...|benefits from...|serves...</span>
+            <span style="margin-left:15px" class="changing cities">brings together ...|benefits from ...|serves ...</span>
           </h2>
         </div>
         <div class="citizens white text split-text">
@@ -145,7 +145,7 @@
             <li><a href="{% url 'core:resources' 'introduction' %}">About Urban Metabolism</a></li>
             <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter’s Kit</a></li>
             <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
-            <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+            <li><a href="cities">Cities</a></li>
             <li><a href="{% url 'core:news' %}">News</a></li>
             <li><a href="">Social media</a></li>
             <li><a href="{% url 'core:about' 'join' %}">Join Us</a></li>
@@ -156,23 +156,30 @@
             <i class="fas fa-university fa-fw mar-rgt"></i> City officials
           </h3>
           <ul class="w">
-            <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+            <li><a href="cities">Cities</a></li>
             <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
             <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter’s Kit</a></li>
-            <li><a href="{% url 'core:about' 'mission' %}">Mission</a></li>
-            <li><a href="{% url 'core:resources' 'introduction' %}">About Urban Metabolism</a></li>
-            <li><a href="{% url 'core:news' %}">News</a></li>
-            <li><a href="">Social media</a></li>
-            <li><a href="{% url 'core:about' 'join' %}">Join Us</a></li>
+            <li><a href="community/research/projects">Research</a></li>
+            <li><a href="{% url 'core:references' %}">Library</a></li>
+            <li><a href="{% url 'core:events' %}">Events</li>
+            <li><a href="{% url 'core:contact' %}">Contact Us</a></li>
           </ul>
         </div>
         <div class="academia white text split-text">
           <h3 class="white text">
             <i class="fas fa-graduation-cap fa-fw mar-rgt"></i> Academia
           </h3>
-          <p>
-            Fuga accusamus incidunt aliquid. Dolores tempore repellat qui. Ea enim laborum earum. Repellat iste et quidem assumenda autem adipisci necessitatibus deleniti. Consectetur architecto omnis praesentium. Optio facere voluptas et molestiae quisquam recusandae beatae est.
-          </p>
+          <ul class="w">
+            <li><a href="{% url 'core:references' %}">Library</a></li>
+            <li><a href="community/research/projects">Research</a></li>
+            <li><a href="community/research/theses">Theses</a></li>
+            <li><a href="cities">Cities</a></li>
+            <li><a href="{% url 'core:data' 'datasets' %}">Datasets</a></li>
+            <li><a href="{% url 'core:tools' 'omat' %}">OMAT</a></li>
+            <li><a href="{% url 'core:data' 'gumd' %}">GUMD</a></li>
+            <li><a href="{% url 'core:news' %}">News</a></li>
+            <li><a href="{% url 'core:about' 'join' %}">Join Us</a></li>
+          </ul>
         </div>
         <div class="business white text split-text">
           <h3 class="white text">
