@@ -185,9 +185,12 @@
           <h3 class="white text">
             <i class="fas fa-piggy-bank fa-fw mar-rgt"></i> Businesses
           </h3>
-          <p>
-            Non qui adipisci quis in. Quam reprehenderit eos provident et possimus aspernatur ab. Pariatur veniam ab nisi nisi et id.
-          </p>
+          <ul class="w">
+            <li><a href="{% url 'core:about' 'mission' %}">Mission</a></li>
+            <li><a href="{% url 'core:resources' 'starters-kit' %}">Starter’s Kit</a></li>
+            <li><a href="{% url 'core:events' %}">Events</li>
+            <li><a href="{% url 'core:contact' %}">Contact Us</a></li>
+          </ul>
         </div>
       </div>
       <div class="col-md-6 panels hidden-xs hidden-sm">
