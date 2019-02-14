@@ -21,7 +21,9 @@ from django.template.loader import render_to_string
 
 from django.conf import settings
 
-# Create your views here.
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
+
 def videos(request, collection=False):
     if not collection:
         if request.site.id == 1:
@@ -120,21 +122,14 @@ def taskforce(request, slug):
     context = { 'section': 'about', 'page': 'taskforces', 'info': info, 'tickets': tickets, 'units': units, 'sidenav': True, 'taskforces': taskforces }
     return render(request, 'core/taskforce.html', context)
 
+@csrf_exempt
 def page(request, slug):
     page = get_object_or_404(Article, slug=slug, site=request.site)
-    if page.includes_form:
-        from django.middleware import csrf
-        token = request.META.get('CSRF_COOKIE', None)
-        if token is None:
-            token = csrf._get_new_csrf_key()
-            request.META['CSRF_COOKIE'] = token
-            request.META['CSRF_COOKIE_USED'] = True
-        content = page.content.replace('__csrf_token__', token)
-    else:
-        content = page.content
+    content = page.content
     context = { 'section': page.section, 'page': 'news', 'page': page, 'content': content }
     return render(request, 'core/page.html', context)
 
+@csrf_exempt
 def contact(request):
 
     name = request.POST['name']
