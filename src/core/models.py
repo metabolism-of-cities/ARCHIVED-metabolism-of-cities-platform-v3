@@ -191,7 +191,7 @@ class ArticleForm(ModelForm):
 class SimpleArticleForm(ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'image', 'date', 'head', 'includes_form', 'active','content']
+        fields = ['title', 'image', 'date', 'head', 'includes_form', 'slug', 'active','content']
 
 class Event(models.Model):
     article = models.OneToOneField(

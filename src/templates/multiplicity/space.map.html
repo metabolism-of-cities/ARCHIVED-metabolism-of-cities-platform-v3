@@ -78,15 +78,13 @@
           Do you see any errors or do you know of any missing information?
         </p>
         <ul class="nolist">
-          <li><a href="{% url 'multiplicity:download_location' info.slug boundary.id %}" class="btn btn-default"><i class="fa fa-envelope"></i> Contact us</a></li>
-          <li><a href="{% url 'multiplicity:download_location' info.slug boundary.id %}" class="btn btn-default"><i class="fa fa-envelope"></i> Become a data contributor</a></li>
+          <li><a href="{% url 'core:contact' %}" class="btn btn-default"><i class="fa fa-envelope"></i> Contact us</a></li>
+          <li><a href="{% url 'core:about' 'join' %}" class="btn btn-default"><i class="fa fa-envelope"></i> Become a data contributor</a></li>
         </ul>
       </div>
     </div>
   </div>
 </div>
-
-
 
 {% endblock %}
 

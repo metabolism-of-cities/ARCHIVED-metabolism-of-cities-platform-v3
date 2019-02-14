@@ -180,13 +180,15 @@
   </a>
   </li>
 
-  <li{% if menu == "download" %} class="active-sub"{% endif %}><a href="{% url 'multiplicity:download' info.slug %}">
-  <i class="fal fa-download fa-fw"></i>
-      <span class="menu-title">
-          Download
-      </span>
-  </a>
-  </li>
+  {% if False %}
+    <li{% if menu == "download" %} class="active-sub"{% endif %}><a href="{% url 'multiplicity:download' info.slug %}">
+    <i class="fal fa-download fa-fw"></i>
+        <span class="menu-title">
+            Download
+        </span>
+    </a>
+    </li>
   {% endif %}
+{% endif %}
 
 </ul>
