@@ -5,6 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
 
+{% if request.GET.logo2 %}
+<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet">
+{% endif %}
+
 <link href="{% static 'ie/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'ie/css/nifty.min.css' %}" rel="stylesheet">
 <link href="{% static 'ie/css/themes/type-a/theme-dust.min.css' %}" rel="stylesheet">
