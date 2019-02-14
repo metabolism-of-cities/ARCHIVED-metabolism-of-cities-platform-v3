@@ -350,15 +350,15 @@
 <div id="container" class="effect boxed-layout aside-float slide {% if mainnav %}{{ mainnav }}{% elif section == 'cities' or sidenav %}mainnav-lg{% else %}mainnav-out{% endif %} {% block container %}{% endblock %}">
 
 <header id="navbar">
-  <div id="navbar-container" class="boxed">
+  <div id="navbar-container" style="background:#fff" class="boxed">
     <div class="navbar-header">
       <a href="/" class="navbar-brand">
-        <div class="brand-title">
-          <span class="brand-text">{{ SITE_NAME }}</span>
+        <div class="brand-title" style="width:auto">
+          <img src="{% static 'ie/img/logo.moc/icon.svg' %}" alt="{{ SITE_NAME }}" style="height:40px" />
         </div>
       </a>
     </div>
-    <div class="navbar-content clearfix">
+    <div class="navbar-content clearfix" style="margin-left:58px">
       <ul class="nav navbar-top-links">
 
         <li class="tgl-menu-btn">
