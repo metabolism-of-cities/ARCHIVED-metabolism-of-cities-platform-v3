@@ -354,7 +354,13 @@
     <div class="navbar-header">
       <a href="/" class="navbar-brand">
         <div class="brand-title" style="width:auto">
+          {% if request.GET.logo2 %}
+          <img src="{% static 'ie/img/logo.moc/logo.horizontal.svg' %}" alt="{{ SITE_NAME }}" style="width:200px;margin-right:20px" />
+          {% elif request.GET.logo3 %}
+          <img src="{% static 'ie/img/logo.moc/logo.horizontal.black.svg' %}" alt="{{ SITE_NAME }}" style="width:200px;margin-right:20px" />
+          {% else %}
           <img src="{% static 'ie/img/logo.moc/logo.svg' %}" alt="{{ SITE_NAME }}" style="height:40px" />
+          {% endif %}
         </div>
       </a>
     </div>
