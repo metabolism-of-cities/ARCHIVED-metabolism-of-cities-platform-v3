@@ -164,7 +164,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
 
 {% endif %}
 
-{% if request.GET.logo2 %}
+{% if True %}
 #page-title{display:none}
 #topstrip{min-height:50px}
 {% endif %}
@@ -208,6 +208,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                         <div class="brand-title">
                           {% if request.GET.logo2 %}
                             <img src="{% static 'ie/img/logo.moc/logo.horizontal.black.svg' %}" alt="{{ SITE_NAME }}" style="width:200px;margin-right:20px" />
+                          {% elif True %}
+                            <img src="{% static 'ie/img/logo.moc/logo.svg' %}" alt="{{ SITE_NAME }}" style="height:55px;margin-top: 10px" />
                           {% else %}
                             <span class="brand-text">{{ SITE_NAME }}</span>
                           {% endif %}
@@ -466,7 +468,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                 {% else %}
                   <a href="{% url 'core:homepage' %}">
                     {% if SITE_ID == 1 %}
-                      {% if request.GET.logo2 %}
+                      {% if True %}
                       {% else %}
                         <img src="{% static 'ie/img/logo.new.png' %}" alt="" style="max-height:90px;opacity:0.6;margin-top:10px" />
                       {% endif %}

@@ -58,3 +58,17 @@
 .nav-tabs.nav-justified.topnav > li.active > a{
   background:#fff;
 }
+
+/* Adjusting the height of the top nav menu */
+.brand-title,
+.navbar-brand,
+.navbar-content,
+.navbar-top-links > li > a {
+  height: 75px;
+}
+#topstrip {
+  margin-top: 75px;
+}
+.navbar-top-links > li {
+  font-size: 19px;
+}
