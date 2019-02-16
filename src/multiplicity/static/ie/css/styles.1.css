@@ -69,6 +69,7 @@
 #topstrip {
   margin-top: 75px;
 }
+.navbar-content li.dropdown > a,
 .navbar-top-links > li {
   font-size: 19px;
 }
