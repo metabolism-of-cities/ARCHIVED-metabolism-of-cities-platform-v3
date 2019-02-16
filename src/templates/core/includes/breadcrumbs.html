@@ -15,7 +15,14 @@
         {% elif page.type.name == "News" %}
           <li><a href="{% url 'core:news' %}">News</a></li>
         {% endif %}
-        <li class="active">{{ page.title }}</li>
+        <li class="active">
+          {% if title %}
+            {{ title }}
+          {% else %}
+            {{ page.title }}
+          {% endif %}
+        </li>
+
     </ol>
 
 </div>

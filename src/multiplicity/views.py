@@ -64,6 +64,7 @@ def index(request, slug):
         'references': references,
         'datasets_flows': datasets_flows,
         'datasets_stocks': datasets_stocks,
+        'title': info.name,
 
     }
     return render(request, 'multiplicity/index.html', context)

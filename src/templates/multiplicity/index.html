@@ -163,20 +163,6 @@
 {% include 'multiplicity/sidebar.default.html' %}
 {% endblock %}
 
-{% block pagehead %}
-<div id="page-head">
-        <h3>{{ info.name }} | <span class="text-thin">{{ info.country.name }}</span></h3>
-        {% if info.slug == "cape-town" %}
-            <p>Population <strong class="text-main">3.8 million (2016)</strong> | Area <strong class="text-main">2,446 km<sup>2</sup></strong> | Income group <strong>low-medium</strong></p>
-        {% elif info.slug == "the-hague" %}
-            <p>Population <strong class="text-main">527,748 (2018)</strong> | Area <strong class="text-main">98.12 km<sup>2</sup></strong> | Density <strong>6,445 people/km<sup>2</sup></strong></p>
-        {% elif info.slug == "montreal" %}
-            <p>Population <strong class="text-main">1.7 million (2016)</strong> | Area <strong class="text-main">431.50 km<sup>2</sup></strong> | Density <strong>3,955 people/km<sup>2</sup></strong></p>
-        {% endif %}
-</div>
-
-{% endblock %}
-
 {% block footer %}
 
   {% if info.location.geojson %}
