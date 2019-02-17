@@ -208,7 +208,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                         <div class="brand-title">
                           {% if request.GET.logo2 %}
                             <img src="{% static 'ie/img/logo.moc/logo.horizontal.black.svg' %}" alt="{{ SITE_NAME }}" style="width:200px;margin-right:20px" />
-                          {% elif True %}
+                          {% elif SITE_ID == 1 %}
                             <img src="{% static 'ie/img/logo.moc/logo.svg' %}" alt="{{ SITE_NAME }}" style="height:55px;margin-top: 10px" />
                           {% else %}
                             <span class="brand-text">{{ SITE_NAME }}</span>
