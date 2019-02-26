@@ -7,7 +7,7 @@ from django.conf import settings
 def site(request):
     site = Site.objects.get_current()
     today = datetime.now().date()
-    event = Event.objects.filter(article__site=site, start__gte=today).order_by('start').first()
+    event = Event.objects.filter(article__site=site, article__active=True, start__gte=today).order_by('start').first()
     if site.id == 1:
         news = 61
     else:
