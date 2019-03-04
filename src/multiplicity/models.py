@@ -134,6 +134,7 @@ class ReferenceSpace(models.Model):
     csv = models.ForeignKey('multiplicity.ReferenceSpaceCSV', on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ForeignKey('core.Tag', on_delete=models.CASCADE, null=True, blank=True)
     mtu = models.ForeignKey('multiplicity.MTU', on_delete=models.CASCADE, null=True, blank=True)
+    active = models.BooleanField(default=True, db_index=True)
 
     def __str__(self):
         return self.name + " (" + self.type.name + ")"
@@ -168,6 +169,7 @@ class ReferenceSpaceLocation(models.Model):
     timeframe = models.CharField(max_length=255, null=True, blank=True)
     source = models.CharField(max_length=255, null=True, blank=True)
     geojson = models.TextField(null=True, blank=True)
+    active = models.BooleanField(default=True, db_index=True)
     def __str__(self):
         return self.name or 'Location for ' + self.space.name
     class Meta:
@@ -209,6 +211,7 @@ class MTU(models.Model):
     source = models.CharField(max_length=255)
     file = models.CharField(max_length=255)
     description = models.TextField()
+    active = models.BooleanField(default=True, db_index=True)
 
 class ReferenceSpaceCSV(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -110,7 +110,7 @@
 
     <ol class="breadcrumb">
         <li><a href="./"><i class="pli-home"></i></a></li>
-        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:index' %}">{{ MULTIPLICITY_NAME }}</a></li>
         <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
         <li><a href="{% url 'multiplicity:overview_flows' info.slug type.category.slug %}">Material flows</a></li>
         <li><a href="{% url 'multiplicity:overview_flows' info.slug type.category.slug %}">{{ type.category.name }}</a></li>

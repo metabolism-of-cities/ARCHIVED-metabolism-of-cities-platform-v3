@@ -228,7 +228,7 @@ dl.featureslist dd{margin-bottom:20px}
 
     <ol class="breadcrumb">
         <li><a href="./"><i class="pli-home"></i></a></li>
-        <li><a href="{% url 'multiplicity:index' %}">Cities</a></li>
+        <li><a href="{% url 'multiplicity:index' %}">{{ MULTIPLICITY_NAME }}</a></li>
         <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
         <li><a href="{% url 'multiplicity:infrastructure_list' info.slug %}">Infrastructure</a></li>
         <li><a href="{% url 'multiplicity:space_list' info.slug space.type.slug %}">{{ space.type.name }}</a></li>

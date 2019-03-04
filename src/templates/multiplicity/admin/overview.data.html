@@ -192,6 +192,38 @@
 
 {% endif %}
 
+{% if mtu_list %}
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>MTU List</h3>
+        <table class="table table-striped datatable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for details in mtu_list %}
+                <tr>
+                  <td><a href="{% url 'multiplicity:map_mtu' info.slug details.type.slug %}">{{ details.type.name }}</a></td>
+                  <td>{% if details.active %}Active{% else %}Inactive{% endif %}</td>
+                  <td><a href="{% url 'multiplicity:admin_mtu_delete' info.slug details.id %}" onclick="javascript:return confirm('Are you sure you want to deactivate all the MTUs in this category?')">Deactivate</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
 {% if spaces %}
 
 <div class="row">
@@ -201,16 +233,18 @@
         <h3>Reference spaces</h3>
         <table class="table table-striped datatable">
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                </tr>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Status</th>
+              </tr>
             </thead>
             <tbody>
             {% for details in spaces %}
                 <tr>
-                    <td><a href="{% url 'multiplicity:space' info.slug details.type.slug details.slug %}">{{ details.name }}</a></td>
-                    <td>{{ details.type.name }}</td>
+                  <td><a href="{% url 'multiplicity:space' info.slug details.type.slug details.slug %}">{{ details.name }}</a></td>
+                  <td>{{ details.type.name }}</td>
+                  <td>{% if details.active %}Active{% else %}Inactive{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>

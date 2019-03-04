@@ -127,12 +127,13 @@ def space(request, city, type, space):
     else:
         menu = 'infrastructure'
         page = 'unsure'
-    context = { 'section': 'cities', 'menu': menu, 'page': page, 'info': info, 
-    'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-    'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 
-    'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
-    'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
-    'videouploadlink': videouploadlink, 
+    context = { 
+        'section': 'cities', 'menu': menu, 'page': page, 'info': info, 
+        'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
+        'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 
+        'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
+        'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
+        'videouploadlink': videouploadlink, 
     }
     return render(request, 'multiplicity/space.html', context)
 
@@ -142,7 +143,7 @@ def map(request, city, type='boundaries', id=False):
         boundary = get_object_or_404(ReferenceSpaceLocation, pk=id)
     else:
         boundary = info.location
-    list = ReferenceSpaceLocation.objects.filter(space=info)
+    list = ReferenceSpaceLocation.objects.filter(space=info, active=True)
     editlink = reverse('multiplicity:upload_systemboundary', args=[info.slug, boundary.id])
     addlink = reverse('multiplicity:upload_systemboundary', args=[info.slug])
     if type == 'boundaries':
@@ -181,7 +182,7 @@ def map_infrastructure(request, city):
 
 def mtu_map(request, city, type=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    mtu_list = MTU.objects.filter(space=info)
+    mtu_list = MTU.objects.filter(space=info, active=True)
     
     if type:
         type = get_object_or_404(ReferenceSpaceType, slug=type)
@@ -196,7 +197,7 @@ def mtu_map(request, city, type=False):
     else:
         datatables = False
         map = False
-    list = ReferenceSpace.objects.filter(city=info, type=type)
+    list = ReferenceSpace.objects.filter(city=info, type=type, active=True)
     tab = 'mtu'
     context = { 
         'section': 'cities', 'menu':  'resources', 'info': info, 
@@ -656,7 +657,7 @@ def upload_infrastructure_review(request, city, type, id):
 
                     existing = False
                     if row[0].strip() != "Name" and row[0]:
-                        check = ReferenceSpace.objects.filter(city=info, type=type, name=row[0].strip())
+                        check = ReferenceSpace.objects.filter(active=True, city=info, type=type, name=row[0].strip())
                         if check:
                             existing = True
 
@@ -805,9 +806,9 @@ def upload_flow_review(request, city, type, id):
                             elif destination == info.name:
                                 destination_info = info
                             else:
-                                destination_info = ReferenceSpace.objects.filter(city=info,name=destination)
+                                destination_info = ReferenceSpace.objects.filter(active=True, city=info,name=destination)
                                 if not destination_info:
-                                    destination_info = ReferenceSpace.objects.filter(name=destination)
+                                    destination_info = ReferenceSpace.objects.filter(active=True, name=destination)
                                 if destination_info:
                                     # We only want a single result, so slice this
                                     destination_info = destination_info[0]
@@ -827,9 +828,9 @@ def upload_flow_review(request, city, type, id):
                             elif origin == info.name:
                                 origin_info = info
                             else:
-                                origin_info = ReferenceSpace.objects.filter(city=info,name=origin)
+                                origin_info = ReferenceSpace.objects.filter(active=True, city=info,name=origin)
                                 if not origin_info:
-                                    origin_info = ReferenceSpace.objects.filter(name=origin)
+                                    origin_info = ReferenceSpace.objects.filter(active=True, name=origin)
                                 if origin_info:
                                     origin_info = origin_info[0]
                                 else:
@@ -895,7 +896,7 @@ def upload_infrastructure_meta(request, city, type, id):
             for row in reader:
                 existing = False
                 if row[0] != "Name".strip() and row[0]:
-                    check = ReferenceSpace.objects.filter(city=info, type=type, name=row[0].strip())
+                    check = ReferenceSpace.objects.filter(active=True, city=info, type=type, name=row[0].strip())
                     if check:
                         existing = True
                     else:
@@ -1155,7 +1156,7 @@ def upload_flow_meta(request, city, type, id):
                                 if destination in referencespacelist:
                                     destination_info = referencespacelist[destination]
                                 else:
-                                    destination_info = ReferenceSpace.objects.filter(name=destination)
+                                    destination_info = ReferenceSpace.objects.filter(active=True, name=destination)
                                     if destination_info:
                                         # We only want a single result, so slice this
                                         destination_info = destination_info[0]
@@ -1182,7 +1183,7 @@ def upload_flow_meta(request, city, type, id):
                                 if origin in referencespacelist:
                                     origin_info = referencespacelist[origin]
                                 else:
-                                    origin_info = ReferenceSpace.objects.filter(name=origin)
+                                    origin_info = ReferenceSpace.objects.filter(active=True, name=origin)
                                     if origin_info:
                                         origin_info = origin_info[0]
                                     else:
@@ -1261,7 +1262,7 @@ def upload_systemboundary(request, city, location=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
 
     Form = modelform_factory(ReferenceSpaceLocation, 
-        fields=('name', 'source', 'timeframe', 'description', 'geojson'),
+        fields=('name', 'source', 'timeframe', 'description', 'geojson', 'active'),
         labels={"lat": "Latitude", "lng": "Longitude"}
     )
     if request.method == 'POST':
@@ -1399,7 +1400,7 @@ def reference_form(request, city, type):
 def infrastructure_list(request, topic, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     topic = get_object_or_404(Topic, slug=topic)
-    spaces = ReferenceSpace.objects.filter(city=info, type__topic=topic)
+    spaces = ReferenceSpace.objects.filter(active=True, city=info, type__topic=topic)
     types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace'))
     # TODO Surely we can do better than this? A single db query should be possible.
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
@@ -1747,6 +1748,7 @@ def admin_data_overview(request, city):
     photos = Photo.objects.filter(primary_space=info)
     information = Information.objects.filter(space=info)
     sectors = ProcessGroup.objects.all().order_by('name')
+    mtu_list = MTU.objects.filter(space=info)
 
     active_sectors = []
     for sector in info.sectors.all():
@@ -1756,7 +1758,7 @@ def admin_data_overview(request, city):
         'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 
         'space_csv': space_csv, 'datatables': True, 
         'information': information, 'spaces': spaces, 'photos': photos,
-        'sectors': sectors, 'active_sectors': active_sectors
+        'sectors': sectors, 'active_sectors': active_sectors, 'mtu_list': mtu_list
     }
     return render(request, 'multiplicity/admin/overview.data.html', context)
 
@@ -1768,6 +1770,16 @@ def admin_activate_sector(request, city, sector):
     if not check:
         ReferenceSpaceSector.objects.create(space=info, process_group=sector)
     messages.success(request, 'Sector activated')
+    return redirect('multiplicity:admin_data_overview', city=info.slug)
+
+@staff_member_required
+def admin_mtu_delete(request, city, mtu):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    mtu = get_object_or_404(MTU, pk=mtu)
+    mtu.active = False
+    mtu.save()
+    ReferenceSpace.objects.filter(mtu=mtu).update(active=False)
+    messages.success(request, 'MTU was deactivated')
     return redirect('multiplicity:admin_data_overview', city=info.slug)
 
 @staff_member_required

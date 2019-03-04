@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/referencephotos', views.admin_referencephoto, name='admin_referencephotos'),
     path('admin/referencephotos/<int:id>', views.admin_referencephoto, name='admin_referencephoto'),
     path('admin/referencephotos/create', views.admin_referencephoto, name='admin_referencephoto'),
+    path('admin/<slug:city>/mtu/<int:mtu>/delete', views.admin_mtu_delete, name='admin_mtu_delete'),
 
     # General
     path('table/datasets/<int:dataset>', views.datatable, name='datatable_dataset'),

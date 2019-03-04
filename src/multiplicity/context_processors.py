@@ -10,8 +10,14 @@ def site(request):
     event = Event.objects.filter(article__site=site, article__active=True, start__gte=today).order_by('start').first()
     if site.id == 1:
         news = 61
+        system = "city"
+        systems = "cities"
+        multiplicity_name = "Cities"
     else:
         news = 142
+        system = "island"
+        systems = "islands"
+        multiplicity_name = "Data"
     latest_news = Article.objects.filter(parent=news, active=True).order_by('-created_at')[0]
     processgroups = ProcessGroup.objects.order_by('name').exclude(pk__in=[13,14,12])
 
@@ -24,5 +30,8 @@ def site(request):
         'MAPBOX_API_KEY': "pk.eyJ1IjoibWV0YWJvbGlzbW9mY2l0aWVzIiwiYSI6ImNqcHA5YXh6aTAxcmY0Mm8yMGF3MGZjdGcifQ.lVZaiSy76Om31uXLP3hw-Q", 
         'DEBUG': settings.DEBUG,
         'CURRENT_PAGE': request.get_full_path(),
-        'LATEST_NEWS': latest_news
+        'LATEST_NEWS': latest_news,
+        'SYSTEM': system,
+        'SYSTEMS': systems,
+        'MULTIPLICITY_NAME': multiplicity_name,
     }
