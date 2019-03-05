@@ -270,6 +270,7 @@
       $(".charts-icons a").click(function(e){
         e.preventDefault();
         var url = $(this).attr("href");
+        $("#graph").html("Loading graph...<br><br><i style='font-size:60px;margin-top:30px' class='fa fa-spinner fa-pulse'></i>")
         $("#graph").load(url);
         $(".charts-icons a").removeClass("active");
         $(this).addClass("active");
