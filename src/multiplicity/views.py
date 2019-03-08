@@ -839,23 +839,25 @@ def upload_flow_review(request, city, type, id):
                     if dataset.type == "stocks":
 
                         try:
-                            start = parse(date)
+                            start = parse(date, dayfirst=True)
                             end = False
                             timeframe = start
                         except ValueError:
                             error = "Date not valid: " + str(date)
-                            end = "Unknown date"
+                            start = "Unknown date"
                             timeframe = date
 
                     else:
                         try:
-                            start = parse(start_date)
+                            start = parse(start_date, dayfirst=True)
+                            print(start)
                         except ValueError:
                             error = "Date not valid: " + str(start_date)
-                            end = "Unknown date"
+                            start = "Unknown date"
 
                         try:
-                            end = parse(end_date)
+                            end = parse(end_date, dayfirst=True)
+                            print(end)
                         except ValueError:
                             error = "Date not valid: " + str(end_date)
                             end = "Unknown date"
@@ -1114,14 +1116,14 @@ def upload_flow_meta(request, city, type, id):
                             if timeframe in timeframelist:
                                 timeframe_info = timeframelist[timeframe]
                             else:
-                                timeframe_info = TimePeriod.objects.filter(start=parse(date), end__isnull=True)
+                                timeframe_info = TimePeriod.objects.filter(start=parse(date, dayfirst=True), end__isnull=True)
                                 if timeframe_info:
                                     timeframe_info = timeframe_info[0]
                                     timeframelist[timeframe] = timeframe_info
                                 else:
                                     timeframe_info = TimePeriod(
-                                        start=parse(date),
-                                        name=parse(date).strftime('%b %d, %Y'),
+                                        start=parse(date, dayfirst=True),
+                                        name=parse(date, dayfirst=True).strftime('%b %d, %Y'),
                                     )
                                     timeframe_info.save()
                                     timeframelist[timeframe] = timeframe_info
@@ -1130,14 +1132,14 @@ def upload_flow_meta(request, city, type, id):
                             if timeframe in timeframelist:
                                 timeframe_info = timeframelist[timeframe]
                             else:
-                                timeframe_info = TimePeriod.objects.filter(start=parse(row[1]), end=parse(row[2]))
+                                timeframe_info = TimePeriod.objects.filter(start=parse(row[1], dayfirst=True), end=parse(row[2], dayfirst=True))
                                 if timeframe_info:
                                     timeframe_info = timeframe_info[0]
                                     timeframelist[timeframe] = timeframe_info
                                 else:
                                     timeframe_info = TimePeriod(
-                                        start=parse(row[1]),
-                                        end=parse(row[2]),
+                                        start=parse(row[1], dayfirst=True),
+                                        end=parse(row[2], dayfirst=True),
                                         name=row[0],
                                     )
                                     timeframe_info.save()
