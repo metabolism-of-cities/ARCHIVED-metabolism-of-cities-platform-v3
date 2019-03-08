@@ -3,7 +3,10 @@ from django.contrib import admin
 # Register your models here.
 from .models import *
 
-admin.site.register(Dataset)
+class ChoiceAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['references']
+
+admin.site.register(Dataset, ChoiceAdmin)
 admin.site.register(ProcessType)
 admin.site.register(Process)
 admin.site.register(Material)

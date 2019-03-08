@@ -11,6 +11,9 @@ class ArticleAdmin(admin.ModelAdmin):
 class PeopleAdmin(admin.ModelAdmin):
     list_display = ('firstname', 'lastname', 'city', 'email')
 
+class ReferenceAdmin(admin.ModelAdmin):
+    search_fields = ['title']
+
 admin.site.register(Journal)
 admin.site.register(Publisher)
 admin.site.register(Organization)
@@ -24,4 +27,4 @@ admin.site.register(People, PeopleAdmin)
 admin.site.register(Timeline)
 admin.site.register(Project)
 admin.site.register(ReferenceType)
-admin.site.register(Reference)
+admin.site.register(Reference, ReferenceAdmin)
