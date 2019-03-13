@@ -30,17 +30,9 @@
   {% else %}
     <td>
       {% if details.origin_space %}
-        {% if dataset.primary_space == details.origin_space %}
-          <a href="{% url 'multiplicity:map' dataset.primary_space.slug dataset.primary_space.location.id %}">{{ details.origin_space }}</a>
-        {% else %}
-          <a href="{% url 'multiplicity:mtu_space' dataset.primary_space.slug details.origin_space.type.slug details.origin_space.slug %}">{{ details.origin_space }}</a>
-        {% endif %}
+        <a href="{{ details.origin_space.get_absolute_url }}">{{ details.origin_space.name }}</a>
       {% else %}
-        {% if dataset.primary_space == details.destination_space %}
-          <a href="{% url 'multiplicity:map' dataset.primary_space.slug dataset.primary_space.location.id %}">{{ details.destination_space }}</a>
-        {% else %}
-          <a href="{% url 'multiplicity:mtu_space' dataset.primary_space.slug details.destination_space.type.slug details.destination_space.slug %}">{{ details.destination_space }}</a>
-        {% endif %}
+        <a href="{{ details.destination_space.get_absolute_url }}">{{ details.destination_space.name }}</a>
       {% endif %}
     </td>
   {% endif %}

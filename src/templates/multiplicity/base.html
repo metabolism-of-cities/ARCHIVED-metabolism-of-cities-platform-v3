@@ -192,7 +192,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
 <div class="alert alert-danger" id="footerwarning" style="font-size:19px">
   This website is under active development. Official launch will take place March 2019.
 </div>
-{% else %}
+{% elif not DEBUG %}
 <div class="alert alert-dark" id="footerwarning" style="font-size:17px">
   This is the new Metabolism of Cities prototype website. <a style="text-decoration:underline;color:#fff" href="{% url 'core:contact' %}">Please leave your feedback here.</a>
 </div>

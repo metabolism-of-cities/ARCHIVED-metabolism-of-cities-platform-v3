@@ -9,6 +9,9 @@ from django.forms import ModelForm
 from stdimage.models import StdImageField
 import re
 
+# For absolute URL reversing
+from django.urls import reverse
+
 User = get_user_model()
 
 class TimestampedModel(models.Model):
@@ -152,6 +155,14 @@ class ReferenceSpace(models.Model):
 
     class Meta:
         ordering = ["name"]
+
+    def get_absolute_url(self):
+        if self.mtu:
+            return reverse("multiplicity:mtu_space", args=[self.city.slug, self.type.slug, self.slug])
+        elif self.city:
+            return reverse("multiplicity:map", args=[self.city.slug])
+        else:
+            return reverse("multiplicity:map", args=[self.slug])
 
 class ReferenceSpaceForm(ModelForm):
     class Meta:
