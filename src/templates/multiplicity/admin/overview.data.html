@@ -60,7 +60,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Type</th>
+                    <th>Process</th>
                     <th>User</th>
                     <th>Creation date</th>
                 </tr>
@@ -68,8 +68,8 @@
             <tbody>
             {% for details in datasets %}
                 <tr>
-                    <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
-                    <td>{{ details.type.name }}</td>
+                    <td>{{ details.id }}. <a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
+                    <td>{{ details.process.name|lower|capfirst }}</td>
                     <td>
                       {% for csv in details.csv_set.all %}
                         {{ csv.user }}<br>
