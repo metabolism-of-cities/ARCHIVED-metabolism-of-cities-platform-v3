@@ -1264,8 +1264,8 @@ def upload_systemboundary(request, city, location=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
 
     Form = modelform_factory(ReferenceSpaceLocation, 
-        fields=('name', 'source', 'timeframe', 'description', 'geojson', 'active'),
-        labels={"lat": "Latitude", "lng": "Longitude"}
+        fields=('name', 'source', 'start', 'end', 'description', 'geojson', 'active'),
+        labels={"lat": "Latitude", "lng": "Longitude", 'start': 'In place since', 'end': 'Until'}
     )
     if request.method == 'POST':
         if location:

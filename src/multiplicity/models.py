@@ -177,14 +177,15 @@ class ReferenceSpaceLocation(models.Model):
     area = models.FloatField(null=True, blank=True)
     default_zoom = models.PositiveSmallIntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    timeframe = models.CharField(max_length=255, null=True, blank=True)
+    start = models.DateField(null=True, blank=True, db_index=True)
+    end = models.DateField(null=True, blank=True, db_index=True)
     source = models.CharField(max_length=255, null=True, blank=True)
     geojson = models.TextField(null=True, blank=True)
     active = models.BooleanField(default=True, db_index=True)
     def __str__(self):
         return self.name or 'Location for ' + self.space.name
     class Meta:
-        ordering = ["-timeframe"]
+        ordering = ["-start"]
 
 class ReferenceSpaceLocationForm(ModelForm):
     class Meta:

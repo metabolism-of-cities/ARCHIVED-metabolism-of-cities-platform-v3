@@ -27,7 +27,7 @@
 
         <dl class="dl dl-horizontal">
           <dt>Time frame</dt>
-          <dd>{{ boundary.timeframe }}</dd>
+          <dd>{{ boundary.start }}-{% if boundary.end %}{{ boundary.end }}{% else %}<em>present</em>{% endif %}</dd>
           <dt>Source</dt>
           <dd>{{ boundary.source }}</dd>
         </dl>
@@ -43,7 +43,7 @@
       {% if list %}
         <div class="list-group bord-no">
           {% for details in list %}
-            <a class="list-group-item{% if details == boundary %} active{% endif %}" href="{% url 'multiplicity:map' info.slug details.id %}">{{ details.name }} ({{ details.timeframe }})</a></li>
+            <a class="list-group-item{% if details == boundary %} active{% endif %}" href="{% url 'multiplicity:map' info.slug details.id %}">{{ details.name }} ({{ details.start }}-{% if details.end %}{{ details.end }}{% else %}<em>present</em>{% endif %})</a></li>
           {% endfor %}
         </div>
       {% endif %}

@@ -212,7 +212,7 @@
                 <tr>
                   <td><a href="{% url 'multiplicity:map_mtu' info.slug details.type.slug %}">{{ details.type.name }}</a></td>
                   <td>{% if details.active %}Active{% else %}Inactive{% endif %}</td>
-                  <td><a href="{% url 'multiplicity:admin_mtu_delete' info.slug details.id %}" onclick="javascript:return confirm('Are you sure you want to deactivate all the MTUs in this category?')">Deactivate</a></td>
+                  <td>{% if details.active %}<a href="{% url 'multiplicity:admin_mtu_delete' info.slug details.id %}" onclick="javascript:return confirm('Are you sure you want to deactivate all the MTUs in this category?')">Deactivate</a>{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
