@@ -159,6 +159,22 @@
 </style>
 {% endblock %}
 
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">{{ MULTIPLICITY_NAME }}</a></li>
+        <li>{{ info.name }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
 {% block sidebar %}
 {% include 'multiplicity/sidebar.default.html' %}
 {% endblock %}
