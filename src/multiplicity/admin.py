@@ -9,6 +9,7 @@ class TopicAdmin(admin.ModelAdmin):
 
 class ReferenceSpaceAdmin(admin.ModelAdmin):
     list_display = ('name', 'type')
+    search_fields = ['name']
 
 admin.site.register(DatasetType)
 admin.site.register(Topic, TopicAdmin)
