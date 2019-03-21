@@ -96,7 +96,7 @@ def space_list(request, city, type):
             single = data
 
     data_in = Data.objects.filter(destination_space__type=type)
-    context = { 'section': 'cities', 'menu': 'infrastructure', 'info': info, 'type': type, 'list': list, 'datatables': True, 'tab': tab, 'page': type.topic.slug, 'topic':topic, 'features': features,
+    context = { 'section': 'cities', 'menu': 'infrastructure', 'info': info, 'type': type, 'list': list, 'datatables': True, 'tab': tab, 'page': type.process.slug, 'topic':topic, 'features': features,
     'feature': feature, 'data_in': data_in, 'data_out': data_out, 'charts': True, 'single': single}
     return render(request, 'multiplicity/space.list.html', context)
 
