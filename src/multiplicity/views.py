@@ -105,8 +105,13 @@ def space(request, city, type, space):
     type = get_object_or_404(ReferenceSpaceType, slug=type)
     space = get_object_or_404(ReferenceSpace, city=info, type=type, slug=space)
     log = UserLog.objects.filter(space=space)
-    data_in = Data.objects.filter(destination_space=space)
-    data_out = Data.objects.filter(origin_space=space)
+    #data_in = Data.objects.filter(destination_space=space)
+    #data_out = Data.objects.filter(origin_space=space)
+    datasets = Dataset.objects.filter(Q(data__origin_space=space) | Q(data__destination_space=space)).distinct()
+    data = {}
+    for details in datasets:
+        data[details.id] = Data.objects.filter(Q(origin_space=space) | Q(destination_space=space))
+    print(data)
     feature_list = ReferenceSpaceFeature.objects.filter(space=space)
     photos = space.photos.filter(deleted=False)
     videos = Video.objects.filter(primary_space=space)
@@ -130,7 +135,7 @@ def space(request, city, type, space):
     context = { 
         'section': 'cities', 'menu': menu, 'page': page, 'info': info, 
         'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-        'data_in': data_in, 'data_out': data_out, 'datatables': True, 'charts': True, 
+        'data': data, 'datasets': datasets, 'datatables': True, 'charts': True, 
         'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
         'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
         'videouploadlink': videouploadlink, 
@@ -386,11 +391,14 @@ def datatable(request, dataset=False, material=False):
     context = { 'data': data, 'dataset': dataset }
     return render(request, 'multiplicity/includes/datatable.html', context)
 
-def graph(request, city, dataset, id):
+def graph(request, city, dataset, id, space=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(Dataset, pk=dataset)
     timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset).distinct('timeframe__start').order_by('timeframe__start')
-    data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
+    if space:
+        data = Data.objects.filter(dataset=dataset).filter(Q(origin_space=space) | Q(destination_space=space)).order_by('timeframe__start')
+    else:
+        data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
     data_groups = Data.objects.select_related('material').filter(dataset=dataset).distinct('material__name').order_by('material__name')
     data_subgroups = Data.objects.filter(dataset=dataset).distinct('material_name').order_by('material_name')
     unit = False

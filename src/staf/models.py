@@ -142,7 +142,7 @@ class Data(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE, null=True, blank=True)
     material_name = models.CharField(max_length=500, null=True, blank=True)
     subset = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
+    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='data')
     origin_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True, related_name='origin_space')
     destination_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True, related_name='destination_space')
     timeframe = models.ForeignKey(TimePeriod, on_delete=models.CASCADE)
