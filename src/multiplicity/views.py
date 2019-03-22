@@ -108,10 +108,6 @@ def space(request, city, type, space):
     #data_in = Data.objects.filter(destination_space=space)
     #data_out = Data.objects.filter(origin_space=space)
     datasets = Dataset.objects.filter(Q(data__origin_space=space) | Q(data__destination_space=space)).distinct()
-    data = {}
-    for details in datasets:
-        data[details.id] = Data.objects.filter(Q(origin_space=space) | Q(destination_space=space))
-    print(data)
     feature_list = ReferenceSpaceFeature.objects.filter(space=space)
     photos = space.photos.filter(deleted=False)
     videos = Video.objects.filter(primary_space=space)
@@ -135,7 +131,7 @@ def space(request, city, type, space):
     context = { 
         'section': 'cities', 'menu': menu, 'page': page, 'info': info, 
         'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-        'data': data, 'datasets': datasets, 'datatables': True, 'charts': True, 
+        'datasets': datasets, 'datatables': True, 'charts': True, 
         'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
         'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
         'videouploadlink': videouploadlink, 
@@ -858,14 +854,12 @@ def upload_flow_review(request, city, type, id):
                     else:
                         try:
                             start = parse(start_date, dayfirst=True)
-                            print(start)
                         except ValueError:
                             error = "Date not valid: " + str(start_date)
                             start = "Unknown date"
 
                         try:
                             end = parse(end_date, dayfirst=True)
-                            print(end)
                         except ValueError:
                             error = "Date not valid: " + str(end_date)
                             end = "Unknown date"

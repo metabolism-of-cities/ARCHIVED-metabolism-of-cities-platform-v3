@@ -127,7 +127,7 @@
         <tr>
           <td><a href="{% url 'multiplicity:dataset' info.slug details.id %}">{{ details.name }}</a></td>
           <td>{{ details.timeframe.start }} - {{ details.timeframe.end }}</td>
-          <td><a class="btn btn-sm btn-mint" data-id="{{ details.id }}" data-graph="{{ details.graph.id|default:4 }}" onclick="previewChart({{ details.id }}, {{ details.graph.id|default:4 }}, {{ info.id }})"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a>
+          <td><a class="btn btn-sm btn-mint" data-id="{{ details.id }}" data-graph="{{ details.graph.id|default:4 }}" onclick="previewChart({{ details.id }}, {{ details.graph.id|default:4 }}, {{ space.id }})"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a>
           <a class="btn btn-sm btn-primary" href="{% url 'multiplicity:dataset' info.slug details.id %}">View details</a>
           </td>
         </tr>
@@ -193,8 +193,9 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
 <style type="text/css">
 #sat,#map{height:500px;border:1px solid #ccc}
-#chart{height:400px}
 dl.featureslist dd{margin-bottom:20px}
+div.loading,#graph{height:600px}
+div.loading{background:#f4f4f4;border:1px #ccc solid}
 </style>
 
 {% if datasets %}
@@ -245,16 +246,28 @@ dl.featureslist dd{margin-bottom:20px}
 {% block footer %}
   {% if datasets %}
     <script type="text/javascript">
+    function scrollToDiv(id){
+      $('html,body').animate({
+       scrollTop: $("#" + id).offset().top - 20
+      }, 'slow');
+    }
     function previewChart(id, type, space){
-      $("#graph").html("<div class='loading text-center text-2x pad-all mar-top'><span class='mar-top pad-all'>Loading graph</span><i class='fas fa-cog fa-spin mar-top'></i></div>");
+      $("#graph").html("<div class='fullcenter loading text-center text-2x pad-all mar-top'><span class='mar-top pad-all'>Loading graph</span><i class='fas fa-cog fa-spin mar-top'></i></div>");
       url = '/cities/{{ info.slug }}/datasets/' + id + '/graph/' + type + '/space/' + space;
       $("#graph").load(url);
     };
 
+    // make clicked button active, scroll to top of chart
+    $("#datasets .table a.btn").on("click", function() {
+      $("#datasets .table a.btn").removeClass("active");
+      $(this).addClass("active");
+      scrollToDiv("datasets");
+    });
+
       // We want the first dataset to start loading so we check the ID and type and load this
       first_dataset = $("#datasets table tr:first-child a.btn-mint");
       first_dataset.addClass("active");
-      previewChart(first_dataset.data("id"), first_dataset.data("graph"), {{ info.id }});
+      previewChart(first_dataset.data("id"), first_dataset.data("graph"), {{ space.id }});
   </script>
   {% endif %}
   {% if space.location %}

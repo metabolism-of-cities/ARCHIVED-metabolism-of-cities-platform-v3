@@ -884,3 +884,9 @@ article.sector section .section-menu a:hover {
 .leftbox {
   z-index: 10;
 }
+.fullcenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align:center;
+}
