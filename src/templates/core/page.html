@@ -16,6 +16,14 @@
               <h3>{{ page.title }}</h3>
           </div>
           <div class="panel-body">
+
+            {% if request.GET.report == "error" %}
+              <div class="alert alert-info">
+                Thanks for reporting errors to us. Please provide as many details as possible and 
+                we will do our best to correct this error as soon as possible.
+              </div>
+            {% endif %}
+
               <p>
                   {{ content|safe }}
               </p>

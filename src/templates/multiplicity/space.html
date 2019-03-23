@@ -82,8 +82,8 @@
 
 
           <div class="text-right">
-              <button class="btn btn-sm btn-primary">Report Error</button>
-              <button class="btn btn-sm btn-primary">Ask Question</button>
+              <a href="{% url 'core:contact' %}?report=error" class="btn btn-sm btn-primary">Report Error</a>
+              <a href="{% url 'core:contact' %}" class="btn btn-sm btn-primary">Ask Question</a>
               <a class="btn btn-sm btn-success" href="{% url 'multiplicity:upload_flow_file' info.slug 5 %}">Add Missing Data</a>
           </div>
 
@@ -93,7 +93,7 @@
           {% endif %}
 
 
-          <p><a href="{% url 'multiplicity:space_list' info.slug type.slug %}" class="btn btn-success">Back to overview</a></p>
+          <p><a href="{% url 'multiplicity:space_list' info.slug type.slug %}" class="btn btn-success">Back to list: {{ type }}</a></p>
 
       </div>
 
