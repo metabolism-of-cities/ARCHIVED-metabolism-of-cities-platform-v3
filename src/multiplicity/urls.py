@@ -89,6 +89,7 @@ urlpatterns = [
     path('<slug:city>/upload/flow', views.upload_flow, name='upload_flow'),
     path('<slug:city>/upload/flow/<int:id>', views.upload_flow_file, name='upload_flow_file'),
     path('<slug:city>/upload/flow/<int:id>/sample', views.upload_flow_file_sample, name='upload_flow_file_sample'),
+    path('<slug:city>/upload/flow/<int:type>/<int:id>/update/<int:update>', views.upload_flow_review, name='upload_flow_review'),
     path('<slug:city>/upload/flow/<int:type>/<int:id>', views.upload_flow_review, name='upload_flow_review'),
     path('<slug:city>/upload/flow/<int:type>/<int:id>/meta', views.upload_flow_meta, name='upload_flow_meta'),
     path('<slug:city>/upload/stock', views.upload_flow, {'type': 'stocks'}, name='upload_stock'),

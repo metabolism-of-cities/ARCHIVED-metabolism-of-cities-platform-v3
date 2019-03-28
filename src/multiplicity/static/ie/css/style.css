@@ -95,7 +95,8 @@ ul.nolist li {
 }
 
 /*.main-content-block .references a span{display:block;color:#333}*/
-.main-content-block .alert-info a:not(.btn){color:#fff;text-decoration:underline}
+.main-content-block .alert-warning a:not(.btn),.main-content-block .alert-info a:not(.btn){color:#fff;text-decoration:underline}
+#page-content .alert-warning a:not(.btn):hover,#page-content .alert-info a:not(.btn):hover{color:#f4f4f4;text-decoration:none}
 .fa-plus-square.fa-lg{margin-right:6px}
 .label-text {
   margin-top:7px;

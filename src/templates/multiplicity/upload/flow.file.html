@@ -6,6 +6,14 @@
 
 {% block content %}
 
+{% if update %}
+  <p class="alert alert-warning">
+    You are <strong>adding</strong> data to an existing dataset 
+    (<a href="{% url 'multiplicity:dataset' info.slug update.id %}">{{ update }}</a>). <br>
+    If you want to create a new dataset instead, <a href="{% url 'multiplicity:upload' info.slug %}">click here</a>.
+  </p>
+{% endif %}
+
 <div class="panel">
   <div class="panel-heading">
       <h3 class="panel-title">Material {{ type }} data</h3>
@@ -13,7 +21,7 @@
   <div class="panel-body">
 
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-3">
         <div class="panel panel-success panel-colorful">
             <div class="pad-all text-center">
                 <span class="text-3x text-thin">1</span>
@@ -22,7 +30,7 @@
             </div>
         </div>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-3">
         <div class="panel panel-default panel-colorful">
             <div class="pad-all text-center">
                 <span class="text-3x text-thin">2</span>
@@ -31,7 +39,7 @@
             </div>
         </div>
       </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
           <div class="panel panel-default panel-colorful">
               <div class="pad-all text-center">
                   <span class="text-3x text-thin">3</span>

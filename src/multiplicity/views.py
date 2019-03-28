@@ -374,11 +374,17 @@ def dataset(request, city, id, slug=False):
         materials_hidden = all_materials-5
     materials = materials[:5]
     dates = Data.objects.filter(dataset=dataset).aggregate(start=Min('timeframe__start'), end=Max('timeframe__end'))
+    addlink = reverse('multiplicity:upload_flow_file', args=[info.slug, dataset.type.id]) + '?update=' + str(dataset.id)
 
     #for datapoint in dataset.data_set.all():
     #datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
     deletelink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/delete'
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset, 'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'editlink': editlink, 'topic': topic, 'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials, 'materials_hidden': materials_hidden, 'timeframes': timeframes, }
+    context = { 
+        'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset,
+        'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'editlink': editlink, 'topic': topic, 
+        'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials,
+        'materials_hidden': materials_hidden, 'timeframes': timeframes, 'addlink': addlink, 
+    }
     return render(request, 'multiplicity/dataset.html', context)
 
 def datatable(request, dataset=False, material=False):
@@ -550,6 +556,9 @@ def upload_flow_file(request, city, id):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(DatasetType, pk=id)
     type = dataset.type
+    update = None
+    if 'update' in request.GET:
+        update = get_object_or_404(Dataset, pk=request.GET['update'])
     if request.user.is_staff:
         previous = CSV.objects.filter(datasettype=dataset, space=info)
     else:
@@ -574,11 +583,14 @@ def upload_flow_file(request, city, id):
 
         csv_file = CSV(name=filename, original_name=file, imported=False, user=request.user, datasettype=dataset, space=info)
         csv_file.save()
-        return redirect('multiplicity:upload_flow_review', id=csv_file.id, type=dataset.id, city=info.slug)
+        if update:
+            return redirect('multiplicity:upload_flow_review', id=csv_file.id, type=dataset.id, city=info.slug, update=update.id)
+        else:
+            return redirect('multiplicity:upload_flow_review', id=csv_file.id, type=dataset.id, city=info.slug)
 
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     editlink = '/admin/multiplicity/datasettype/' + str(id) +'/change/'
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'type': type, 'previous': previous, 'dataset': dataset, 'editlink': editlink, 'topics': topics }
+    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'type': type, 'previous': previous, 'dataset': dataset, 'editlink': editlink, 'topics': topics, 'update': update }
     return render(request, 'multiplicity/upload/flow.file.html', context)
 
 @login_required
@@ -684,13 +696,15 @@ def upload_infrastructure_review(request, city, type, id):
 
 
 @login_required
-def upload_flow_review(request, city, type, id):
+def upload_flow_review(request, city, type, id, update=None):
     info = get_object_or_404(ReferenceSpace, slug=city)
     if request.user.is_staff:
         csv_file = CSV.objects.get(pk=id)
     else:
         csv_file = CSV.objects.get(pk=id, user=request.user)
     dataset = get_object_or_404(DatasetType, pk=type)
+    if update:
+        update = get_object_or_404(Dataset, pk=update)
 
     data = []
     datatables = True
@@ -879,7 +893,7 @@ def upload_flow_review(request, city, type, id):
 
     context = { 'section': 'cities', 'menu': 'upload', 'data': data, 'file': csv_file, 'datatables': datatables, 'info': info, 
     'dataset': dataset, 'show_origin': show_origin, 'show_destination': show_destination, 'error': error, 'show_location': show_location, 'topics': topics, 'warning': warning,
-    'type': dataset.type }
+    'type': dataset.type, 'update': update }
     return render(request, 'multiplicity/upload/flow.review.html', context)
 
 @login_required
@@ -958,6 +972,9 @@ def upload_flow_meta(request, city, type, id):
         csv_file = CSV.objects.get(pk=id, user=request.user)
     dataset = get_object_or_404(DatasetType, pk=type)
     error = False
+    update = None
+    if 'update' in request.GET:
+        update = get_object_or_404(Dataset, pk=request.GET['update'])
 
     if dataset.type == "stocks":
         column_count = 7
@@ -983,67 +1000,75 @@ def upload_flow_meta(request, city, type, id):
 
     if request.method == 'POST':
 
-        if 'reference_id' in request.POST:
-            reference = get_object_or_404(Reference, pk=request.POST['reference_id'])
-        else:
-            referenceform = ReferenceForm(request.POST)
-            if referenceform.is_valid():
-                reference = referenceform.save(commit=False)
-                reference.status = 'pending'
-                reference.save()
-                create_record = get_object_or_404(UserAction, pk=1)
-                log = UserLog(user=request.user, action=create_record, reference=reference, points=5)
+        if not update:
 
+            if 'reference_id' in request.POST:
+                reference = get_object_or_404(Reference, pk=request.POST['reference_id'])
             else:
-                error = True
+                referenceform = ReferenceForm(request.POST)
+                if referenceform.is_valid():
+                    reference = referenceform.save(commit=False)
+                    reference.status = 'pending'
+                    reference.save()
+                    create_record = get_object_or_404(UserAction, pk=1)
+                    log = UserLog(user=request.user, action=create_record, reference=reference, points=5)
+
+                else:
+                    error = True
 
         if not error:
 
-            try:
-                reliability = int(request.POST['quality_1'])
-                reliability = DQIRating.objects.get(indicator_id=1, score=reliability)
-            except ValueError:
-                reliability = None
+            if not update:
 
-            try:
-                completeness = int(request.POST['quality_2'])
-                completeness = DQIRating.objects.get(indicator_id=2, score=completeness)
-            except ValueError:
-                completeness = None
+                try:
+                    reliability = int(request.POST['quality_1'])
+                    reliability = DQIRating.objects.get(indicator_id=1, score=reliability)
+                except ValueError:
+                    reliability = None
 
-            try:
-                geographical_correlation = int(request.POST['quality_4'])
-                geographical_correlation = DQIRating.objects.get(indicator_id=3, score=geographical_correlation)
-            except ValueError:
-                geographical_correlation = None
+                try:
+                    completeness = int(request.POST['quality_2'])
+                    completeness = DQIRating.objects.get(indicator_id=2, score=completeness)
+                except ValueError:
+                    completeness = None
 
-            try:
-                access = int(request.POST['quality_3'])
-                access = DQIRating.objects.get(indicator_id=4, score=access)
-            except ValueError:
-                access = None
+                try:
+                    geographical_correlation = int(request.POST['quality_4'])
+                    geographical_correlation = DQIRating.objects.get(indicator_id=3, score=geographical_correlation)
+                except ValueError:
+                    geographical_correlation = None
 
-            newdataset = Dataset(
-                name = request.POST['name'],
-                primary_space = info,
-                reliability = reliability,
-                completeness = completeness, 
-                geographical_correlation = geographical_correlation,
-                access = access,
-                notes = request.POST['notes'],
-                replication = request.POST['instructions'],
-            )
-            newdataset.save()
+                try:
+                    access = int(request.POST['quality_3'])
+                    access = DQIRating.objects.get(indicator_id=4, score=access)
+                except ValueError:
+                    access = None
+
+                newdataset = Dataset(
+                    name = request.POST['name'],
+                    primary_space = info,
+                    reliability = reliability,
+                    completeness = completeness, 
+                    geographical_correlation = geographical_correlation,
+                    access = access,
+                    notes = request.POST['notes'],
+                    replication = request.POST['instructions'],
+                )
+                newdataset.save()
+                newdataset.references.add(reference)
+
+                if dataset.name == "Population":
+                    # Population figures must be linked directly to population topic
+                    topic = Topic.objects.get(pk=17)
+                    newdataset.topics.add(topic)
+
+            else:
+
+                newdataset = update
+
             csv_file.dataset = newdataset
             csv_file.save()
-
-            newdataset.references.add(reference)
             
-            if dataset.name == "Population":
-                # Population figures must be linked directly to population topic
-                topic = Topic.objects.get(pk=17)
-                newdataset.topics.add(topic)
-
             messages.success(request, 'Information was saved.')
 
             path = settings.MEDIA_ROOT + '/csv/' + csv_file.name
@@ -1246,7 +1271,11 @@ def upload_flow_meta(request, city, type, id):
     referenceform = ReferenceForm(initial={'type': 16, 'language': 'EN'})
     dqi = DQI.objects.all
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'upload', 'file': csv_file, 'info': info, 'type': dataset.type, 'dataset': dataset, 'datasetform': datasetform, 'referenceform': referenceform, 'dqi': dqi, 'topics': topics }
+    context = { 
+        'section': 'cities', 'menu': 'upload', 'file': csv_file, 'info': info, 'type': dataset.type, 
+        'dataset': dataset, 'datasetform': datasetform, 'referenceform': referenceform, 'dqi': dqi, 
+        'topics': topics, 'update': update
+    }
     return render(request, 'multiplicity/upload/flow.meta.html', context)
 
 

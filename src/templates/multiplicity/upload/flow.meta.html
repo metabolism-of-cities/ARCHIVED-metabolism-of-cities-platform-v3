@@ -7,6 +7,13 @@
 
 {% block content %}
 
+{% if update %}
+  <p class="alert alert-warning">
+    You are <strong>adding</strong> data to an existing dataset 
+    (<a href="{% url 'multiplicity:dataset' info.slug update.id %}">{{ update }}</a>).
+  </p>
+{% endif %}
+
 <div class="panel">
   <div class="panel-heading">
       <h3 class="panel-title">Enter meta data</h3>
@@ -14,8 +21,8 @@
   <div class="panel-body">
 
     <div class="row">
-      <a href="{% url 'multiplicity:upload_flow_file' info.slug dataset.id %}">
-      <div class="col-sm-2">
+      <a href="{% url 'multiplicity:upload_flow_file' info.slug dataset.id %}{% if update %}?update={{ update.id }}{% endif %}">
+      <div class="col-sm-3">
         <div class="panel panel-default panel-colorful">
             <div class="pad-all text-center">
                 <span class="text-3x text-thin">1</span>
@@ -25,8 +32,12 @@
         </div>
       </div>
       </a>
-      <a href="{% url 'multiplicity:upload_flow_review' info.slug dataset.id file.id %}">
-      <div class="col-sm-2">
+      {% if update %}
+        <a href="{% url 'multiplicity:upload_flow_review' info.slug dataset.id file.id update.id %}">
+      {% else %}
+        <a href="{% url 'multiplicity:upload_flow_review' info.slug dataset.id file.id %}">
+      {% endif %}
+      <div class="col-sm-3">
         <div class="panel panel-default panel-colorful">
             <div class="pad-all text-center">
                 <span class="text-3x text-thin">2</span>
@@ -36,7 +47,7 @@
         </div>
       </div>
       </a>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
           <div class="panel panel-success panel-colorful">
               <div class="pad-all text-center">
                   <span class="text-3x text-thin">3</span>
@@ -54,12 +65,13 @@
 
 <form method="post" class="form form-horizontal" enctype="multipart/form-data">
 
+  {% csrf_token %}
+
+  {% if not update %}
   <div class="row">
     <div class="col-lg-12">
       <div class="panel">
         <div class="panel-body">
-
-          {% csrf_token %}
 
           <fieldset class="dqilist">
             <legend>Data quality indicators</legend>
@@ -157,6 +169,22 @@
       </div>
     </div>
   </div>
+
+{% else %}
+
+  <div class="panel">
+    <div class="panel-body">
+      <p>
+        You are adding data to an existing dataset. Meta information is stored for the whole dataset so it is not necessary to 
+        enter this again. If the new data that you are adding has different properties (e.g. different data quality or source), 
+        then please create a new dataset instead of adding it to an existing one.
+      </p>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i> Save data</button>
+
+{% endif %}
 
 </form>
 

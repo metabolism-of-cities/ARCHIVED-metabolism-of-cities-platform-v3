@@ -73,3 +73,6 @@
 .navbar-top-links > li {
   font-size: 19px;
 }
+#container.mainnav-sm #navbar .navbar-brand {
+  width: 90px;
+}

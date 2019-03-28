@@ -7,6 +7,13 @@
 
 {% block content %}
 
+{% if update %}
+  <p class="alert alert-warning">
+    You are <strong>adding</strong> data to an existing dataset 
+    (<a href="{% url 'multiplicity:dataset' info.slug update.id %}">{{ update }}</a>). <br>
+  </p>
+{% endif %}
+
 <div class="panel">
   <div class="panel-heading">
       <h3 class="panel-title">Review your data</h3>
@@ -14,38 +21,38 @@
   <div class="panel-body">
 
     <div class="row">
-              <a href="{% url 'multiplicity:upload_flow_file' info.slug dataset.id %}">
-              <div class="col-sm-2">
-                <div class="panel panel-default panel-colorful">
-                    <div class="pad-all text-center">
-                        <span class="text-3x text-thin">1</span>
-                        <p>Upload data</p>
-                        <i class="psi-upload icon-lg"></i>
-                    </div>
-                </div>
-              </div>
-              </a>
-              <div class="col-sm-2">
-                <div class="panel panel-success panel-colorful">
-                    <div class="pad-all text-center">
-                        <span class="text-3x text-thin">2</span>
-                        <p>Review data</p>
-                        <i class="psi-eye icon-lg"></i>
-                    </div>
-                </div>
-              </div>
-                <a href="{% url 'multiplicity:upload_flow_meta' info.slug dataset.id file.id %}">
-                <div class="col-sm-2">
-                  <div class="panel panel-default panel-colorful">
-                      <div class="pad-all text-center">
-                          <span class="text-3x text-thin">3</span>
-                          <p>Meta data</p>
-                          <i class="psi-lock icon-lg"></i>
-                      </div>
-                  </div>
-                </div>
-              </a>
+      <a href="{% url 'multiplicity:upload_flow_file' info.slug dataset.id %}{% if update %}?update={{ update.id }}{% endif %}">
+      <div class="col-sm-3">
+        <div class="panel panel-default panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">1</span>
+                <p>Upload data</p>
+                <i class="psi-upload icon-lg"></i>
             </div>
+        </div>
+      </div>
+      </a>
+      <div class="col-sm-3">
+        <div class="panel panel-success panel-colorful">
+            <div class="pad-all text-center">
+                <span class="text-3x text-thin">2</span>
+                <p>Review data</p>
+                <i class="psi-eye icon-lg"></i>
+            </div>
+        </div>
+      </div>
+        <a href="{% url 'multiplicity:upload_flow_meta' info.slug dataset.id file.id %}{% if update %}?update={{ update.id }}{% endif %}">
+        <div class="col-sm-3">
+          <div class="panel panel-default panel-colorful">
+              <div class="pad-all text-center">
+                  <span class="text-3x text-thin">3</span>
+                  <p>Meta data</p>
+                  <i class="psi-lock icon-lg"></i>
+              </div>
+          </div>
+        </div>
+      </a>
+    </div>
 
     <p class="well">File: <strong>{{ file.original_name }}</strong></p>
 
@@ -127,7 +134,7 @@
           {% if warning %}
             <p><a href="javascript:history.back()" class="btn btn-dark btn-lg">Back</a></p>
           {% else %}
-            <p><a href="{% url 'multiplicity:upload_flow_meta' info.slug dataset.id file.id %}" class="btn btn-success btn-lg">Next</a></p>
+            <p><a href="{% url 'multiplicity:upload_flow_meta' info.slug dataset.id file.id %}{% if update %}?update={{ update.id }}{% endif %}" class="btn btn-success btn-lg">Next</a></p>
           {% endif %}
 
         {% endif %}
