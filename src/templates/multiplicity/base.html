@@ -569,7 +569,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
     </div>
 
 {% if request.user.is_authenticated %}
-
   
   {% if request.user.is_staff %}
     <a title="Go to back-end homepage" href="{% url 'team:controlpanel' %}" id="controlpanelbutton" class="btn"><i class="psi-lock"></i></a>
@@ -587,9 +586,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
   <a title="Edit this record" href="{{ editlink }}?ref={{ request.get_full_path|urlencode }}" id="editpagebutton" class="btn"><i class="psi-pencil"></i></a>
 {% endif %}
 
+
   {% if request.user.is_staff %}
     {% if deletelink %}
-      <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="psi-trash"></i></a>
+      <a title="Delete this record" href="{{ deletelink }}" id="deletepagebutton" class="btn" onclick="javascript:return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></a>
     {% endif %}
 
     {% if page.id %}

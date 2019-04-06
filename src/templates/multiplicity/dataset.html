@@ -224,6 +224,13 @@
   </section>
 </div>
 
+{% if request.user.is_authenticated %}
+  {% if resetlink %}
+    <a title="Remove data but keep the dataset" href="{{ resetlink }}" id="resetbutton" class="btn" onclick="javascript:return confirm('This will remove the data from this dataset and allow you to upload new data. Are you sure?')"><i class="fas fa-trash-restore"></i></a>
+  {% endif %}
+{% endif %}
+
+
 {% endblock %}
 
 

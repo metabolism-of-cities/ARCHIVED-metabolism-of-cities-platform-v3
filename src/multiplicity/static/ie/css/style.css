@@ -105,7 +105,7 @@ ul.nolist li {
 .leaflet-popup-content{text-align:center}
 .legend img{position:relative;top:6px}
 
-#editpagebutton,#controlpanelbutton, #addpagebutton, #datasetbutton, #deletepagebutton, #editextrabutton, #photouploadlink, #videouploadlink {
+#editpagebutton,#controlpanelbutton, #addpagebutton, #datasetbutton, #deletepagebutton, #editextrabutton, #photouploadlink, #videouploadlink, #resetbutton {
     display: inline-block;
     background-color: #3a444e;
     border-radius: 7px 0 0 7px !important;
@@ -143,11 +143,16 @@ ul.nolist li {
   bottom:20px;
   opacity:0.4;
 }
-#deletepagebutton:hover {
+#resetbutton {
+  top:auto;
+  bottom:80px;
+  opacity:0.4;
+}
+#resetbutton:hover, #deletepagebutton:hover {
   opacity:1;
   background-color:red;
 }
-#editpagebutton i,#controlpanelbutton i,#addpagebutton i, #datasetbutton i, #deletepagebutton i, #editextrabutton i, #photouploadlink i, #videouploadlink i{
+#editpagebutton i,#controlpanelbutton i,#addpagebutton i, #datasetbutton i, #deletepagebutton i, #editextrabutton i, #photouploadlink i, #videouploadlink i, #resetbutton i{
     font-size: 25px;
     display: block;
     margin: 5px 0;

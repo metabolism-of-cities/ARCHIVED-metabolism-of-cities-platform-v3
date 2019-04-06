@@ -360,49 +360,53 @@ def datasets_overview(request, city, topic, type='flows'):
 def dataset(request, city, id, slug=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(Dataset, pk=id)
-    csv_files = CSV.objects.filter(dataset=id)
+    csv_files = CSV.objects.filter(dataset=id, active=True)
     scoring = range(1,6)
     editlink = '/admin/staf/dataset/' + str(id) + '/change/'
     topic = None
     unit = get_object_or_404(Unit, pk=1)
     graphs = GraphType.objects.exclude(pk__in=[7,8,10])
-    materials = Data.objects.filter(dataset=dataset).values('material_name').order_by('material_name').distinct()
-    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset).distinct('timeframe__start').order_by('timeframe__start').count()
+    materials = Data.objects.filter(dataset=dataset, csv__active=True).values('material_name').order_by('material_name').distinct()
+    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset, csv__active=True).distinct('timeframe__start').order_by('timeframe__start').count()
     all_materials = materials.count()
     materials_hidden = False
     if all_materials > 5:
         materials_hidden = all_materials-5
     materials = materials[:5]
-    dates = Data.objects.filter(dataset=dataset).aggregate(start=Min('timeframe__start'), end=Max('timeframe__end'))
-    addlink = reverse('multiplicity:upload_flow_file', args=[info.slug, dataset.type.id]) + '?update=' + str(dataset.id)
+    dates = Data.objects.filter(dataset=dataset, csv__active=True).aggregate(start=Min('timeframe__start'), end=Max('timeframe__end'))
+    addlink = None
+    if dataset.type:
+        addlink = reverse('multiplicity:upload_flow_file', args=[info.slug, dataset.type.id]) + '?update=' + str(dataset.id)
 
     #for datapoint in dataset.data_set.all():
     #datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
     deletelink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/delete'
+    resetlink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/reset'
     context = { 
         'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset,
         'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'editlink': editlink, 'topic': topic, 
         'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials,
         'materials_hidden': materials_hidden, 'timeframes': timeframes, 'addlink': addlink, 
+        'resetlink': resetlink
     }
     return render(request, 'multiplicity/dataset.html', context)
 
 def datatable(request, dataset=False, material=False):
     dataset = get_object_or_404(Dataset, pk=dataset)
-    data = Data.objects.filter(dataset=dataset)
+    data = Data.objects.filter(dataset=dataset, csv__active=True)
     context = { 'data': data, 'dataset': dataset }
     return render(request, 'multiplicity/includes/datatable.html', context)
 
 def graph(request, city, dataset, id, space=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(Dataset, pk=dataset)
-    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset).distinct('timeframe__start').order_by('timeframe__start')
+    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset, csv__active=True).distinct('timeframe__start').order_by('timeframe__start')
     if space:
-        data = Data.objects.filter(dataset=dataset).filter(Q(origin_space=space) | Q(destination_space=space)).order_by('timeframe__start')
+        data = Data.objects.filter(dataset=dataset, csv__active=True).filter(Q(origin_space=space) | Q(destination_space=space)).order_by('timeframe__start')
     else:
-        data = Data.objects.filter(dataset=dataset).order_by('timeframe__start')
-    data_groups = Data.objects.select_related('material').filter(dataset=dataset).distinct('material__name').order_by('material__name')
-    data_subgroups = Data.objects.filter(dataset=dataset).distinct('material_name').order_by('material_name')
+        data = Data.objects.filter(dataset=dataset, csv__active=True).order_by('timeframe__start')
+    data_groups = Data.objects.select_related('material').filter(dataset=dataset, csv__active=True).distinct('material__name').order_by('material__name')
+    data_subgroups = Data.objects.filter(dataset=dataset, csv__active=True).distinct('material_name').order_by('material_name')
     unit = False
 
     space = dataset.primary_space
@@ -1678,6 +1682,12 @@ def upload_video(request, city, id=False, space=False):
     }
     return render(request, 'multiplicity/upload/video.html', context)
 
+@login_required
+def reset_dataset(request, city, id):
+    info = get_object_or_404(Dataset, pk=id)
+    CSV.objects.filter(dataset=info, active=True).update(active=False)
+    messages.success(request, 'Dataset was reset')
+    return redirect('multiplicity:dataset', city=city, id=info.id)
 
 # Admin
 

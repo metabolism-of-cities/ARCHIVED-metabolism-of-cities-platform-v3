@@ -135,6 +135,7 @@ class CSV(models.Model):
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, null=True, blank=True)
     datasettype = models.ForeignKey('multiplicity.DatasetType', on_delete=models.CASCADE, null=True, blank=True)
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True, related_name='csv_import')
+    active = models.BooleanField(default=True, db_index=True)
 
 class Data(models.Model):
     quantity = models.FloatField(null=True, blank=True)
