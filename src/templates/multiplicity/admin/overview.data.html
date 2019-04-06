@@ -261,6 +261,8 @@
   <div class="panel" id="gallery">
     <div class="panel-body">
       <div class="row">
+      <h3>Photos</h3>
+      <p>Images with red borders are not shown in the galleries. The number indicates the order in which the images are shown.</p>
       {% for details in photos %}
         {% ifchanged details.process %}
           </div><div class="row">
@@ -270,13 +272,16 @@
                 {{ details.process.name|lower|capfirst }}
               {% else %}
                 General photos
+                <br>
+                <span style="font-size:15px">The first photo in this list will be shown on the homepage</span>
               {% endif %}
             </h4>
 
         {% endifchanged %}
 
-      <figure class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo">
+      <figure class="col-lg-2 col-md-3 col-sm-4 col-xs-6 single-photo {% if details.deleted %}fade{% endif %}">
         <a href="{% url 'multiplicity:photo_form' info.slug details.id %}"><img src="{{ details.image.thumbnail.url }}" alt="" /></a>
+        <span class="badge badge-default">{{ details.position }}</span>
       </figure>
       {% endfor %}
       </div>
@@ -305,6 +310,23 @@
 {% block head %}
 <style type="text/css">
 textarea.form-control{height:200px}
+
+#gallery figure {
+  position:relative;
+}
+#gallery figure span {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  opacity:0.7;
+}
+
+#gallery figure.fade {
+  opacity: 0.6;
+}
+#gallery .fade img {
+  border: 2px solid #f00;
+}
 </style>
 {% endblock %}
 
