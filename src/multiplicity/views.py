@@ -295,7 +295,7 @@ def flow(request, city, type, slug=False):
 
 def photos(request, city, type='photo'):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    photos = Photo.objects.filter(primary_space=info, deleted=False, type=type).order_by('process')
+    photos = Photo.objects.filter(primary_space=info, deleted=False, type=type).order_by('process', 'position')
     addlink = reverse('multiplicity:photo_form', args=[info.slug])
     if type == 'photo':
         page = 'photos'
@@ -1778,7 +1778,7 @@ def admin_data_overview(request, city):
     csv = CSV.objects.filter(space=info)
     space_csv = ReferenceSpaceCSV.objects.filter(space=info)
     spaces = ReferenceSpace.objects.filter(city=info)
-    photos = Photo.objects.filter(primary_space=info)
+    photos = Photo.objects.filter(primary_space=info).order_by('process', 'position')
     information = Information.objects.filter(space=info)
     sectors = ProcessGroup.objects.all().order_by('name')
     mtu_list = MTU.objects.filter(space=info)

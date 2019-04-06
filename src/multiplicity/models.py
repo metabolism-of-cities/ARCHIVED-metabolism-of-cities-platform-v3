@@ -149,7 +149,7 @@ class ReferenceSpace(models.Model):
         super(ReferenceSpace, self).save(*args, **kwargs)
 
     def system_photo(self):
-        photo = Photo.objects.filter(primary_space=self, secondary_space__isnull=True, process__isnull=True, deleted=False)
+        photo = Photo.objects.filter(primary_space=self, secondary_space__isnull=True, process__isnull=True, deleted=False).order_by('position')
         if photo:
             return photo[0]
 
@@ -291,6 +291,7 @@ class Photo(TimestampedModel):
         ('map', 'Map'),
     )
     type = models.CharField(max_length=6, choices=TYPES, default='photo')
+    position = models.PositiveSmallIntegerField(default=99)
 
     def __str__(self):
         if self.description:
