@@ -103,8 +103,8 @@
   </div>
 </li>
 
-<li {% if section == "cities" or section == "markcities" %}id="dropdown-active"{% endif %} class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle ">
+<li {% if section == "cities" or section == "markcities" %}id="dropdown-active"{% endif %} class="mega-dropdown" data-id="cities">
+    <a href="cities" data-id="cities" class="mega-dropdown-toggle ">
         <span class="ic-user pull-right">
           {% if section != "cities" %} 
             <i class="pli-map-marker-2"></i>
@@ -115,16 +115,37 @@
         </span>
     </a>
 
-    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
-        <ul class="head-list">
-            <li><a href="/cities/page/multiplicity">Introduction</a></li>
-            <li><a href="{% url 'multiplicity:city' 'cape-town' %}">Prototype: Cape Town</a></li>
-            <li><a href="/cities/page/video">Video</a></li>
-            <li><a href="/cities/page/contribute">Contribute</a></li>
-            <li><a href="/cities/page/data-collection-events">Data Collection Events</a></li>
-            <li style="display:none"><a href="/cities/page/development-roadmap">Development Roadmap</a></li>
+
+  <div class="dropdown-menu mega-dropdown-menu " id="dropdown-community">
+    <div class="row">
+      <div class="col-sm-4">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-open-book icon-fw"></i>MultipliCity</p>
+        <ul class="list-unstyled">
+          <li><a href="/cities/page/multiplicity">Introduction</a></li>
+          <li><a href="/cities/page/video">Video</a></li>
+          <li><a href="/cities/page/contribute">Contribute</a></li>
+          <li><a href="/cities/page/data-collection-events">Data Collection Events</a></li>
+          <li style="display:none"><a href="/cities/page/development-roadmap">Development Roadmap</a></li>
         </ul>
+      </div>
+      <div class="col-sm-4">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-bulleted-list icon-fw"></i>Existing Data Portals</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'multiplicity:city' 'cape-town' %}">Prototype: Cape Town, South Africa</a></li>
+          <li><a href="{% url 'multiplicity:city' 'the-hague' %}">Prototype: The Hague, Netherlands</a></li>
+        </ul>
+      </div>
+
+      <div class="col-sm-4">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg psi-bulleted-list icon-fw"></i>Upcoming Data Portals</p>
+        <ul class="list-unstyled future-cities">
+          <li><a href=""><span class="faded">Beijing, China</span> <span class="pull-right label label-warning">Coming soon</span> </a></li>
+          <li><a href=""><span class="faded">Brussels, Belgium</span> <span class="pull-right label label-warning">Coming soon</span></a></li>
+          <li><a href=""><span class="faded">Toronto, Canada</span> <span class="pull-right label label-warning">Coming soon</span></a></li>
+        </ul>
+      </div>
     </div>
+
 </li>
 
 {% if False %}

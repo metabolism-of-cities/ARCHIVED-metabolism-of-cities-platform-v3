@@ -76,3 +76,9 @@
 #container.mainnav-sm #navbar .navbar-brand {
   width: 90px;
 }
+span.faded {
+  opacity:0.5;
+}
+.future-cities a {
+  cursor: default;
+}
