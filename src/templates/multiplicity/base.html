@@ -73,7 +73,7 @@ footer#footer {
 {% endif %}
 
 
-{% if request.COOKIES.theme == "blue" or request.COOKIES.theme == "dark" %}
+{% if request.COOKIES.theme != "orange" and SITE_ID == 1 %}
 .navbar-content #dropdown-active,#topstrip,.navbar-top-links > .open > a, .navbar-top-links > .open > a:focus,.navbar-top-links > li > a:hover {
   background: #1f7a8c;
 }
