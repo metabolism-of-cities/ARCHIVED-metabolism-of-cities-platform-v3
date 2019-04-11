@@ -24,6 +24,17 @@
 {% endif %}
 
 <link rel="shortcut icon" type="image/ico" href="{% static 'ie/img/favicon.ico' %}"/>
+
+{% if SITE_ID == 1 %}
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'ie/img/favicon/apple-touch-icon.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'ie/img/favicon/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'ie/img/favicon/favicon-16x16.png' %}">
+<link rel="manifest" href="{% static 'ie/img/favicon/site.webmanifest' %}">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+{% endif %}
+
+
 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-6jHF7Z3XI3fF4XZixAuSu0gGKrXwoX/w3uFPxC56OtjChio7wtTGJWRW53Nhx6Ev" crossorigin="anonymous">
 
 {% if SITE_ID == 1 %}
