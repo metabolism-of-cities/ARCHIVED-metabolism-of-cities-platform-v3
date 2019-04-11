@@ -145,7 +145,10 @@ def map(request, city, type='boundaries', id=False):
     else:
         boundary = info.location
     list = ReferenceSpaceLocation.objects.filter(space=info, active=True)
-    editlink = reverse('multiplicity:upload_systemboundary', args=[info.slug, boundary.id])
+    if boundary:
+        editlink = reverse('multiplicity:upload_systemboundary', args=[info.slug, boundary.id])
+    else:
+        editlink = None
     addlink = reverse('multiplicity:upload_systemboundary', args=[info.slug])
     if type == 'boundaries':
         tab = 'boundaries'
