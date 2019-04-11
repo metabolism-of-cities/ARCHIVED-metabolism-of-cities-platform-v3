@@ -82,3 +82,6 @@ span.faded {
 .future-cities a {
   cursor: default;
 }
+.future-cities a.showpointer {
+  cursor: pointer;
+}
