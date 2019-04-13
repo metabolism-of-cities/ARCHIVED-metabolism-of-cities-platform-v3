@@ -20,7 +20,7 @@ textarea.form-control{height:120px}
 {% block content %}
 
     <ol class="breadcrumb">
-        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="/"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
         {% if info.taskforce.group == 'project' %}
           <li><a href="{% url 'team:projects' %}">Projects</a></li>

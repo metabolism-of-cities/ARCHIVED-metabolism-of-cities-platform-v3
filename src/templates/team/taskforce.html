@@ -25,7 +25,7 @@ h4 strong.tag:not(.label){opacity:0.5;font-size:70%}
 {% block content %}
 
     <ol class="breadcrumb">
-        <li><a href="./"><i class="pli-home"></i></a></li>
+        <li><a href="/"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
         {% if project.id %}
           <li><a href="{% url 'team:projects' %}">Projects</a></li>
