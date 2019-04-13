@@ -41,7 +41,9 @@ from django.forms import modelform_factory
 # To get a representative image for a set of reference spaces
 from django.db.models import OuterRef, Subquery
 
-def index(request, slug):
+def index(request, slug=None):
+    if not slug:
+        return redirect('core:citieshomepage')
     info = get_object_or_404(ReferenceSpace, slug=slug)
     types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1).exclude(pk=8)
     references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]

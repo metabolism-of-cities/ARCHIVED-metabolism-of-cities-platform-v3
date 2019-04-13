@@ -67,7 +67,7 @@ urlpatterns = [
 
     path('news_events', views.news_and_events, name='news_and_events'),
     path('page/<slug:slug>', views.page, name='page'),
-    path('cities', views.sectionpage, { 'id': 33}, name='sectionpage'),
+    path('cities', views.sectionpage, { 'id': 33}, name='citieshomepage'),
     path('cities/page/<slug:slug>', views.sectionpage, name='sectionpage'),
     path('about/team', views.team, name='team'),
     path('about/task-forces', views.taskforces, name='taskforces'),
