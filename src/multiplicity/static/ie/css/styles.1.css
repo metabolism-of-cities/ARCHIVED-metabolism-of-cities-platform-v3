@@ -85,3 +85,11 @@ span.faded {
 .future-cities a.showpointer {
   cursor: pointer;
 }
+#mainnav-menu > .active-sub > a, #mainnav-menu > .active-sub > a:hover {
+  background-color: #ecf0f5;
+  color: #333;
+}
+#mainnav-menu .active:not(.active-sub) > a {
+  color: #cf3c21;
+  font-weight: bold;
+}

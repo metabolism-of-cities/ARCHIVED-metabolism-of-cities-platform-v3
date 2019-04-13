@@ -784,11 +784,18 @@ def register(request, contributor=False, taskforce=False):
             'taskforce': taskforce,
         }
 
+        if contributor:
+            subject = "Data contributor signup"
+        elif taskforce:
+            subject = taskforce.name + " task force signup"
+        else:
+            subject = "New team member signup"
+
         msg_html = render_to_string('team/mail/newaccount.html', context)
         msg_plain = render_to_string('team/mail/newaccount.txt', context)
 
         send_mail(
-            'New contributor signup: ' + people.firstname + ' ' + people.lastname,
+            subject + ' - ' + people.firstname + ' ' + people.lastname,
             msg_plain,
             settings.SITE_EMAIL,
             [settings.SITE_EMAIL],

@@ -11,5 +11,10 @@ What would you like to help with?
 ---------------------------------
 {{ contribution }}
 
+{% if taskforce %}
+TASK FORCE: {{ taskforce.name }}
+
+{% endif %}
+
 Activate/review this profile here:
 {{ url }}
