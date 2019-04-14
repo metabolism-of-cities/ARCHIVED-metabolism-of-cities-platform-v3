@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, PeopleAffiliation
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process
@@ -868,18 +868,56 @@ def admin_people(request, id=False):
     else:
         info = False
         form = PeopleForm()
+    list = People.objects.filter(status='active')
     if request.method == 'POST':
-        if not id:
-            form = PeopleForm(request.POST, request.FILES)
+        if 'merge' in request.POST:
+            error = False
+            old = info
+            new = get_object_or_404(People, pk=request.POST['merge'])
+            PeopleNote.objects.filter(people=old).update(people=new)
+            PeopleAffiliation.objects.filter(people=old).update(people=new)
+
+            # We will reassign the existing publications.
+            ReferenceAuthor = Reference.authors.through
+            try:
+                ReferenceAuthor.objects.filter(people=old).update(people=new)
+            except:
+                messages.error(request, 'Could not reassign publications because some publications are already assigned to the new person -- please check and retry')
+                error = True
+
+            # Same with articles
+            ArticleAuthor = Article.authors.through
+            try:
+                ArticleAuthor.objects.filter(people=old).update(people=new)
+            except:
+                messages.error(request, 'Could not reassign article because some articles are already assigned to the new person -- please check and retry')
+                error = True
+
+            # Videos
+            VideoPeople = Video.people.through
+            try:
+                VideoPeople.objects.filter(people=old).update(people=new)
+            except:
+                messages.error(request, 'Could not reassign videos because some videos are already assigned to the new person -- please check and retry')
+                error = True
+
+            if not error:
+                old.delete()
+                messages.success(request, 'Records have been merged and old record was deleted.')
+                return redirect('core:admin_people_list')
+
         else:
-            form = PeopleForm(request.POST, request.FILES, instance=info)
-        if form.is_valid():
-            info = form.save()
-            messages.success(request, 'Information was saved.')
-            return redirect(reverse('core:admin_people', args=[info.id]))
-        else:
-            messages.error(request, 'We could not save your form, please correct the errors')
-    context = { 'navbar': 'backend', 'form': form, 'info': info }
+            if not id:
+                form = PeopleForm(request.POST, request.FILES)
+            else:
+                form = PeopleForm(request.POST, request.FILES, instance=info)
+            if form.is_valid():
+                info = form.save()
+                messages.success(request, 'Information was saved.')
+                return redirect(reverse('core:admin_people', args=[info.id]))
+            else:
+                messages.error(request, 'We could not save your form, please correct the errors')
+    context = { 'navbar': 'backend', 'form': form, 'info': info, 'list': list, 'select2': True }
     return render(request, 'core/admin/people.html', context)
 
 @staff_member_required

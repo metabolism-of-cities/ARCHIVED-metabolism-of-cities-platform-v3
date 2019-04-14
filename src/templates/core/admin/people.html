@@ -25,6 +25,37 @@
     {% csrf_token %}
   </form>
 
+  {% if info %}
+
+    <h2>Merge this person</h2>
+    <p>
+      If this person is duplicated then you can merge this person with an existing record.
+      This is preferred over removing the record because any links to existing publications etc.
+      will be retained. 
+    </p>
+
+    <p>Select the person to merge this record with. Note: the record below will remain in 
+    existence and this record (#{{ info.id }}) will be removed. The list below will only
+    show active records.</p>
+
+    <form method="post" class="form form-horizontal">
+      <p>
+      <select name="merge" class="select2">
+        <option value=""></option>
+        {% for details in list %}
+          <option value="{{ details.id }}">{{ details }} ({{ details.id }})</option>
+        {% endfor %}
+      </select>
+      </p>
+      <p>
+        <button type="submit" class="btn btn-success">Merge</button>
+       {% csrf_token %}
+      </p>
+    </form>
+    
+
+  {% endif %}
+
 {% endblock %}
 
 {% block head %}
