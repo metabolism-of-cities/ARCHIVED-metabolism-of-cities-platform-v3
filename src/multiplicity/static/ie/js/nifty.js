@@ -145,7 +145,7 @@
         mega = function(el){
             var megaBtn = el.find('.mega-dropdown-toggle'), megaMenu = el.find('.mega-dropdown-menu');
 
-            megaBtn.on('mouseenter', function(e){
+            megaBtn.on('click', function(e){
                 e.preventDefault();
 
                 $('.mega-dropdown.open').each(function(){
