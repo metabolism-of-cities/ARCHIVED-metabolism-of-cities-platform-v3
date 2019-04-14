@@ -6,11 +6,9 @@
 
 {% block content %}
 
-    <ol class="breadcrumb">
-        <li><a href="./"><i class="pli-home"></i></a></li>
-        <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
-        <li class="active">Publications</li>
-    </ol>
+</div>
+</div>
+</div>
 
   <h3>Publications</h3>
 
@@ -22,9 +20,12 @@
               <tr>
                 <th>ID</th>
                 <th>Title</th>
-                <th>Date</th>
-                <th>Added</th>
+                <th>Year</th>
+                <th>Type</th>
                 <th>Status</th>
+                <th>Tags</th>
+                <th>Added</th>
+                <th>Added by</th>
               </tr>
             </thead>
             <tbody>
@@ -33,8 +34,15 @@
                 <td><a href="{% url 'core:admin_reference' details.id %}">{{ details.id }}</a></td>
                 <td>{{ details.title|truncatewords:10 }}</td>
                 <td>{{ details.year }}</td>
-                <td>{{ details.date_added }}</td>
+                <td>{{ details.type }}</td>
                 <td>{{ details.status }}</td>
+                <td>
+                  {% for tag in details.tags.all %}
+                    <div><span class="label label-default">{{ tag }}</span></div>
+                  {% endfor %}
+                </td>
+                <td data-sort="{{ details.date_added|date:"Ymd" }}">{{ details.date_added|date:"M d, Y" }}</td>
+                <td></td>
               </tr>
             {% endfor %}
             </tbody>
@@ -49,6 +57,11 @@
 {% endblock %}
 
 {% block head %}
+<style type="text/css">
+#container.boxed-layout.reveal #content-container, #container.boxed-layout #content-container{min-height:1px}
+.breadcrumb{display:none}
+table.datatable{white-space:normal}
+</style>
 {% endblock %}
 
 {% block sidebar %}
