@@ -7,13 +7,12 @@
 
 {% block content %}
 
-  <ol class="breadcrumb">
-      <li><a href="./"><i class="pli-home"></i></a></li>
-      <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
-      <li><a href="{% url 'core:references' %}">Publications</a></li>
-      <li><a href="{% url 'core:admin_reference' info.id %}">{{ info.title|truncatechars:40 }}</a></li>
-        <li class="active">Tags</li>
-  </ol>
+  <ul class="nav nav-list nav-tabs">
+    <li><a href="{% url "core:editreference" info.id %}">Publication details</a></li>
+    <li><a href="{% url "core:editreference_authors" info.id %}">Authors</a></li>
+    <li class="active"><a href="{% url "core:editreference_tags" info.id %}">Tags</a></li>
+    <li><a href="{% url "core:editreference_multiplicity" info.id %}">MultipliCity settings</a></li>
+  </ul>
 
   <h2>Edit tags</h2>
 

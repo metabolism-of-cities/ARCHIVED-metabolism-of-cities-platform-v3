@@ -400,14 +400,23 @@ def referenceform_authors(request, id, delete=False):
 
 @staff_member_required
 def referenceform_tags(request, id):
-
+    info = get_object_or_404(Reference, pk=id)
+    if request.method == 'POST':
+        info.tags.clear()
+        selected = request.POST.getlist('tags')
+        for tag in selected:
+            info.tags.add(Tag.objects.get(pk=tag))
+        messages.success(request, 'Information was saved.')
+        return redirect('core:reference', id=info.id)
     context = { 
-        'section': 'resources', 
-        'page': 'publications', 
-        'info': get_object_or_404(Reference, pk=id), 
-        'list': People.objects.filter(status='active'),
+        'navbar': 'backend', 
+        'tags': Tag.objects.filter(hidden=False, parent_tag__isnull=False), 
+        'info': info, 
+        'parent_tags': Tag.objects.filter(parent_tag__isnull=True, hidden=False), 
+        'select2': True,
     }
-    return render(request, 'core/reference.form.tags.html', context)
+    return render(request, 'core/admin/reference.tags.html', context)
+
 
 @staff_member_required
 def referenceform_multiplicity(request, id):
@@ -1201,21 +1210,6 @@ def admin_article(request, id=False, type=False, parent=False):
 
     context = { 'navbar': 'backend', 'form': form, 'info': info, 'eventform': eventform, 'parent': parent, 'tinymce': True}
     return render(request, 'core/admin/article.html', context)
-
-@staff_member_required
-def admin_referencetags(request, id):
-    info = get_object_or_404(Reference, pk=id)
-    if request.method == 'POST':
-        info.tags.clear()
-        selected = request.POST.getlist('tags')
-        for tag in selected:
-            info.tags.add(Tag.objects.get(pk=tag))
-        messages.success(request, 'Information was saved.')
-        return redirect('core:reference', id=info.id)
-    tags = Tag.objects.filter(hidden=False, parent_tag__isnull=False)
-    parent_tags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
-    context = { 'navbar': 'backend', 'tags': tags, 'info': info, 'parent_tags': parent_tags, 'select2': True }
-    return render(request, 'core/admin/reference.tags.html', context)
 
 @staff_member_required
 def admin_references(request):
