@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, PeopleAffiliation
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, PeopleAffiliation, ReferenceAuthors
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process
@@ -328,7 +328,6 @@ def reference(request, id):
 
 @login_required
 def referenceform(request, id=False, dataset=False):
-    processes = Process.objects.filter(slug__isnull=False).order_by('id')
     new_record = False
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
@@ -364,20 +363,71 @@ def referenceform(request, id=False, dataset=False):
             if new_record:
                 create_record = get_object_or_404(UserAction, pk=1)
                 log = UserLog(user=request.user, action=create_record, reference=info, points=5)
-            else:
-                info.processes.clear()
-
-            selected = request.POST.getlist('process')
-            for process in selected:
-                info.processes.add(Process.objects.get(pk=process))
 
             messages.success(request, 'Information was saved.')
             return redirect('core:reference', id=info.id)
         else:
             messages.error(request, 'We could not save your form, please correct the errors')
 
-    context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset, 'processes': processes }
+    context = { 'section': 'resources', 'page': 'publications', 'info': info, 'form': form, 'dataset': dataset }
     return render(request, 'core/reference.form.html', context)
+
+@staff_member_required
+def referenceform_authors(request, id, delete=False):
+
+    info = get_object_or_404(Reference, pk=id)
+
+    if delete:
+        ReferenceAuthors.objects.get(pk=delete).delete()
+        messages.success(request, 'Author was deleted.')
+
+    if request.method == "POST" and "author" in request.POST:
+        ReferenceAuthors.objects.create(
+            people = get_object_or_404(People, pk=request.POST["author"]),
+            reference = info
+        )
+        messages.success(request, 'Author was added.')
+        
+    context = { 
+        'section': 'resources', 
+        'page': 'publications', 
+        'info': get_object_or_404(Reference, pk=id), 
+        'list': People.objects.filter(status='active'),
+        'authors': ReferenceAuthors.objects.filter(reference=info).order_by('id'),
+    }
+    return render(request, 'core/reference.form.authors.html', context)
+
+
+@staff_member_required
+def referenceform_tags(request, id):
+
+    context = { 
+        'section': 'resources', 
+        'page': 'publications', 
+        'info': get_object_or_404(Reference, pk=id), 
+        'list': People.objects.filter(status='active'),
+    }
+    return render(request, 'core/reference.form.tags.html', context)
+
+@staff_member_required
+def referenceform_multiplicity(request, id):
+
+    info = get_object_or_404(Reference, pk=id)
+
+    if request.method == "POST":
+        info.processes.clear()
+        selected = request.POST.getlist('process')
+        for process in selected:
+            info.processes.add(Process.objects.get(pk=process))
+
+    context = {
+        'section': 'resources', 
+        'page': 'publications', 
+        'info': info, 
+        'processes': Process.objects.filter(slug__isnull=False).order_by('id'),
+    }
+    return render(request, 'core/reference.form.multiplicity.html', context)
+
 
 # This should be reviewed; see if we want this or not
 # Can be discarded if we don't use it.

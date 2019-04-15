@@ -32,7 +32,7 @@
             {% for details in list %}
               <tr>
                 <td><a href="{% url 'core:admin_reference' details.id %}">{{ details.id }}</a></td>
-                <td>{{ details.title|truncatewords:10 }}</td>
+                <td><a href="{% url 'core:admin_reference' details.id %}">{{ details.title|truncatewords:10 }}</a></td>
                 <td>{{ details.year }}</td>
                 <td>{{ details.type }}</td>
                 <td>{{ details.status }}</td>
@@ -61,6 +61,7 @@
 #container.boxed-layout.reveal #content-container, #container.boxed-layout #content-container{min-height:1px}
 .breadcrumb{display:none}
 table.datatable{white-space:normal}
+a{color:#337ab7}
 </style>
 {% endblock %}
 

@@ -316,16 +316,6 @@ class TagForm(ModelForm):
 
 class Reference(models.Model):
     title = models.CharField(max_length=255)
-    title_original_language = models.CharField(max_length=255, blank=True, null=True)
-    authorlist = models.TextField()
-    type = models.ForeignKey(ReferenceType, on_delete=models.CASCADE)
-    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
-    year = models.PositiveSmallIntegerField()
-    abstract = models.TextField(null=True, blank=True)
-    abstract_original_language = models.TextField(null=True, blank=True)
-    date_added = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    file = models.FileField(null=True, blank=True, upload_to='references')
     LANGUAGES = (
         ('EN', 'English'),
         ('ES', 'Spanish'),
@@ -336,6 +326,16 @@ class Reference(models.Model):
         ('OT', 'Other'),
     )
     language = models.CharField(max_length=2, choices=LANGUAGES)
+    title_original_language = models.CharField(max_length=255, blank=True, null=True)
+    authorlist = models.TextField()
+    type = models.ForeignKey(ReferenceType, on_delete=models.CASCADE)
+    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
+    year = models.PositiveSmallIntegerField()
+    abstract = models.TextField(null=True, blank=True)
+    abstract_original_language = models.TextField(null=True, blank=True)
+    date_added = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+    file = models.FileField(null=True, blank=True, upload_to='references')
     open_access = models.NullBooleanField(null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
     doi = models.CharField(max_length=255, null=True, blank=True)
@@ -345,7 +345,7 @@ class Reference(models.Model):
         ('deleted', 'Deleted'),
     )
     status = models.CharField(max_length=8, choices=STATUS, db_index=True)
-    authors = models.ManyToManyField(People, blank=True)
+    authors = models.ManyToManyField(People, through='ReferenceAuthors')
     organizations = models.ManyToManyField(Organization, through='ReferenceOrganization')
     tags = models.ManyToManyField(Tag, blank=True, limit_choices_to={'hidden': False})
     processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
@@ -366,6 +366,12 @@ class Reference(models.Model):
         else:
             return self.type.name
 
+class ReferenceAuthors(models.Model):
+    reference = models.ForeignKey(Reference, on_delete=models.CASCADE)
+    people = models.ForeignKey(People, on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'core_reference_authors'
+
 class ReferenceForm(ModelForm):
     class Meta:
         model = Reference
@@ -379,7 +385,7 @@ class ReferenceForm(ModelForm):
 class ReferenceFormAdmin(ModelForm):
     class Meta:
         model = Reference
-        exclude = ['id', 'organizations', 'processes', 'date_added', 'event', 'authors']
+        exclude = ['id', 'organizations', 'processes', 'date_added', 'event', 'authors', 'primary_space', 'tags']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',

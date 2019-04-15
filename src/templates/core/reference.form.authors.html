@@ -9,34 +9,43 @@
 
 {% if request.user.is_staff and info %}
   <ul class="nav nav-list nav-tabs">
-    <li class="active"><a href="{% url "core:editreference" info.id %}">Publication details</a></li>
-    <li><a href="{% url "core:editreference_authors" info.id %}">Authors</a></li>
+    <li><a href="{% url "core:editreference" info.id %}">Publication details</a></li>
+    <li class="active"><a href="{% url "core:editreference_authors" info.id %}">Authors</a></li>
     <li><a href="{% url "core:editreference_tags" info.id %}">Tags</a></li>
     <li><a href="{% url "core:editreference_multiplicity" info.id %}">MultipliCity settings</a></li>
   </ul>
 {% endif %}
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-body">
-        <div class="panel-heading">
-            <h3>{% if info %}Edit{% else %}Add{% endif %} publication</h3>
-        </div>
-        <div class="panel-body">
-          <form method="post" class="form form-horizontal" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% bootstrap_form form layout='horizontal' %}
-            {% buttons %}
-              <div class="col-sm-offset-3 col-sm-9">
-                <button type="submit" class="btn btn-success">Save</button>
-              </div>
-            {% endbuttons %}
-          </form>
-        </div>
-        </div>
-    </div>
-</div>
+  <h2>Manage authors</h2>
 
+  <ul>
+  {% for details in authors %}
+
+    <li>
+      {{ details.people }}
+      <a href="{% url "core:editreference_authors_delete" info.id details.id %}" class="tag tag-danger">Delete</a>
+    </li>
+
+  {% endfor %}
+
+  </ul>
+
+    <h3>Add author</h3>
+    <form method="post" class="form form-horizontal">
+      <p>
+      <select name="author" class="select2" required>
+        <option value=""></option>
+        {% for details in list %}
+          <option value="{{ details.id }}">{{ details }} ({{ details.id }})</option>
+        {% endfor %}
+      </select>
+      </p>
+      <p>
+        <button type="submit" class="btn btn-success">Add this author</button>
+       {% csrf_token %}
+      </p>
+    </form>
+    
 {% endblock %}
 
 {% block head %}
@@ -75,17 +84,7 @@ textarea[name='authorlist']{height:100px}
   <script type="text/javascript" src="{% static 'ie/js/select2.min.js' %}"></script>
   <script type="text/javascript">
   $(function(){
-    $("#id_journal").select2();
-    $("select[name=language]").change(function(){
-      if ($(this).val() == "EN") {
-        $("#id_title_original_language").closest(".form-group").hide('fast');
-        $("#id_abstract_original_language").closest(".form-group").hide('fast');
-      } else {
-        $("#id_title_original_language").closest(".form-group").show('fast');
-        $("#id_abstract_original_language").closest(".form-group").show('fast');
-      }
-    });
-    $("select[name=language]").change();
+    $(".select2").select2();
   });
   </script>
 {% endblock %}
