@@ -124,7 +124,7 @@ def taskforce(request, slug):
 
 @csrf_exempt
 def page(request, slug):
-    page = get_object_or_404(Article, slug=slug, site=request.site)
+    page = get_object_or_404(Article, slug=slug, site=request.site, active=True)
     content = page.content
     context = { 'section': page.section, 'page': 'news', 'page': page, 'content': content }
     return render(request, 'core/page.html', context)
