@@ -613,6 +613,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
 
 {% endif %}
 
+{% if SITE_ID == 2 %}
 <footer id="latest_news">
   <div class="container">
     <div class="row">
@@ -620,9 +621,63 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
     </div>
   </div>
 </footer>
+{% endif %}
 
 <footer id="actions">
 
+{% if SITE_ID == 1 %}
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <h3>Latest news</h3>
+        <p>
+          <a style="color:#337ab7" href="{% url 'core:news' LATEST_NEWS.id %}">{{ LATEST_NEWS.title }}</a><br>
+          <em>{{ LATEST_NEWS.date }}</em>
+        </p>
+        <p>
+          <a class="btn btn-lg btn-default" href="{% url 'core:news' LATEST_NEWS.id %}">Read more</a>
+        </p>
+      </div>
+
+      <div class="col-lg-{% if EVENT %}6{% else %}9{% endif %} text-center">
+
+        <p>Do you have data on resource flows?</p>
+        <p><a href="{% url 'core:about' 'join' %}" class="btn btn-lg btn-warning">Share data</a></p>
+
+        <p>We can use your help</p>
+        <p><a href="{% url 'core:about' 'join' %}" class="btn btn-lg btn-danger">Join us</a></p>
+
+        <p>Questions or suggestions?</p>
+        <p><a href="{% url 'core:contact' %}" class="btn btn-lg btn-info">Contact us</a></p>
+
+
+      </div>
+
+      {% if EVENT %}
+        <div class="col-lg-3 text-right">
+          <h3>Upcoming event</h3>
+            <p>
+              <a style="color:#337ab7" href="{% url 'core:event' EVENT.article.id %}">{{ EVENT.article.title }}</a>
+              <br>
+              <strong>
+              {{ EVENT.location }}
+              </strong>
+              <br>
+              <em>
+                {{ EVENT.start|date:"M d, Y" }}
+                {% if EVENT.start != EVENT.end %}-
+                {{ EVENT.end|date:"M d, Y" }}
+                {% endif %}
+              </em>
+            </p>
+            <p>
+              <a class="btn btn-lg btn-default" href="{% url 'core:event' EVENT.article.id %}">View event</a>
+            </p>
+          </div>
+        {% endif %}
+    </div>
+  </div>
+{% else %}
   <div class="container">
     <div class="row">
       <div class="col-lg-3">
@@ -688,6 +743,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
         {% endif %}
     </div>
   </div>
+
+  {% endif %}
 
 </footer>
 
