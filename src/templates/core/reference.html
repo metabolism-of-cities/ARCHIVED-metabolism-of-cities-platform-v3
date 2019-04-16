@@ -80,7 +80,7 @@ p.abstract {
 {% include 'core/includes/ris.html' %}
 
 {% if request.user.is_staff %}
-  <a title="Edit tags" href="{% url 'core:admin_referencetags' info.id %}" id="editextrabutton" class="btn"><i class="psi-tag"></i></a>
+  <a title="Edit tags" href="{% url 'core:editreference_tags' info.id %}" id="editextrabutton" class="btn"><i class="psi-tag"></i></a>
 {% endif %}
 
 <div class="row">
