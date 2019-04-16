@@ -64,6 +64,7 @@ urlpatterns = [
 
     path('about', views.section_home, {'slug': 'about'}, name='about'),
     path('community', views.section_home, {'slug': 'community'}, name='community_home'),
+    path('resources', views.section_home, {'slug': 'resources'}, name='resources_home'),
 
     path('news_events', views.news_and_events, name='news_and_events'),
     path('page/<slug:slug>', views.page, name='page'),
@@ -97,7 +98,6 @@ urlpatterns = [
     path('community/research/<slug:type>', views.projects, name='projects'),
     path('community/research/<slug:type>/<int:id>', views.project, name='project'),
 
-    path('resources', views.journals, name='resources_home'),
     path('register', views.register),
     path('contributor', views.register, {'contributor': True}),
     path('signup/contributor', views.register, {'contributor': True}, name='contributor'),

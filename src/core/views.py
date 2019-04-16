@@ -89,6 +89,8 @@ def empty(request):
 def section_home(request, slug):
     if slug == 'about':
         pages = [36, 37, 39, 40, 43, 45, 46]
+    elif slug == 'resources':
+        pages = [68, 125, 65, 88, 87, 75, 111, 77]
     elif slug == 'community':
         pages = [50, 57, 49, 59, 61]
     else:
