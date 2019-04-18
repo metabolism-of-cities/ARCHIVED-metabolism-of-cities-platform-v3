@@ -24,8 +24,10 @@
                 <th>Type</th>
                 <th>Status</th>
                 <th>Tags</th>
+                {% if testing %}
                 <th>Added</th>
                 <th>Added by</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -41,8 +43,10 @@
                     <div><span class="label label-default">{{ tag }}</span></div>
                   {% endfor %}
                 </td>
+                {% if testing %}
                 <td data-sort="{{ details.date_added|date:"Ymd" }}">{{ details.date_added|date:"M d, Y" }}</td>
                 <td></td>
+                {% endif %}
               </tr>
             {% endfor %}
             </tbody>
