@@ -428,6 +428,8 @@ def referenceform_multiplicity(request, id):
         from django.template.defaultfilters import slugify
         parents = Tag.objects.filter(parent_tag__id=620)
         for details in parents:
+            details.hidden = True
+            details.save()
             # continents
             continent = ReferenceSpace.objects.filter(name=details.name)
             if not continent:
@@ -453,6 +455,8 @@ def referenceform_multiplicity(request, id):
             else:
                 supra = supra[0]
             for area in areas:
+                area.hidden = True
+                area.save()
                 # continents
                 check = ReferenceSpace.objects.filter(name=area.name)
                 if not check:
@@ -467,6 +471,8 @@ def referenceform_multiplicity(request, id):
 
                 child = Tag.objects.filter(parent_tag=area)
                 for subarea in child:
+                    subarea.hidden = True
+                    subarea.save()
                     check = ReferenceSpace.objects.filter(name=subarea.name)
                     if not check:
                         country = ReferenceSpace.objects.create(
@@ -482,6 +488,8 @@ def referenceform_multiplicity(request, id):
 
                     child = Tag.objects.filter(parent_tag=subarea)
                     for subsubarea in child:
+                        subsubarea.hidden = True
+                        subsubarea.save()
                         check = ReferenceSpace.objects.filter(name=subsubarea.name)
                         if not check:
                             city = ReferenceSpace.objects.create(
@@ -497,6 +505,8 @@ def referenceform_multiplicity(request, id):
 
                         child = Tag.objects.filter(parent_tag=subsubarea)
                         for subsubsubarea in child:
+                            subsubsubarea.hidden = True
+                            subsubsubarea.save()
                             check = ReferenceSpace.objects.filter(name=subsubsubarea.name)
                             if not check:
                                 subcity = ReferenceSpace.objects.create(
