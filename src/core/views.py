@@ -423,6 +423,121 @@ def referenceform_tags(request, id):
 @staff_member_required
 def referenceform_multiplicity(request, id):
 
+    if "process" in request.GET:
+        from multiplicity.models import ReferenceSpaceType
+        from django.template.defaultfilters import slugify
+        parents = Tag.objects.filter(parent_tag__id=620)
+        for details in parents:
+            details.hidden = True
+            details.save()
+            # continents
+            continent = ReferenceSpace.objects.filter(name=details.name)
+            if not continent:
+                continent = ReferenceSpace.objects.create(
+                    name = details.name,
+                    type = ReferenceSpaceType.objects.get(pk=1),
+                    slug = slugify(details.name),
+                )
+            else:
+                continent = continent[0]
+
+            areas = Tag.objects.filter(parent_tag=details)
+
+            sub = ReferenceSpaceType.objects.filter(name="Sub-national territory")
+            if not sub:
+                sub = ReferenceSpaceType.objects.create(name="Sub-national territory", slug="sub-national-territory", type="SOC", user_accessible=False)
+            else:
+                sub = sub[0]
+
+            supra = ReferenceSpaceType.objects.filter(name="Supra-national territory")
+            if not supra:
+                supra = ReferenceSpaceType.objects.create(name="Supra-national territory", slug="supra-national-territory", type="SOC", user_accessible=False)
+            else:
+                supra = supra[0]
+            for area in areas:
+                area.hidden = True
+                area.save()
+                # continents
+                check = ReferenceSpace.objects.filter(name=area.name)
+                if not check:
+                    space = ReferenceSpace.objects.create(
+                        name = area.name,
+                        type = supra,
+                        slug = slugify(area.name),
+                        parent = continent,
+                    )
+                else:
+                    space = check[0]
+
+                child = Tag.objects.filter(parent_tag=area)
+                for subarea in child:
+
+                    subarea.hidden = True
+                    subarea.save()
+                    check = ReferenceSpace.objects.filter(name=subarea.name)
+                    if not check:
+                        country = ReferenceSpace.objects.create(
+                            name = subarea.name,
+                            type = ReferenceSpaceType.objects.get(pk=2),
+                            slug = slugify(subarea.name),
+                            parent = space,
+                        )
+                    else:
+                        country = check[0]
+                        country.parent = space
+                        country.save()
+
+                    records = Reference.objects.filter(tags=subarea)
+                    for record in records:
+                        record.spaces.add(country)
+
+
+                    child = Tag.objects.filter(parent_tag=subarea)
+                    for subsubarea in child:
+                        subsubarea.hidden = True
+                        subsubarea.save()
+                        check = ReferenceSpace.objects.filter(name=subsubarea.name)
+                        if not check:
+                            city = ReferenceSpace.objects.create(
+                                name = subsubarea.name,
+                                type = sub,
+                                slug = slugify(subsubarea.name),
+                                parent = country,
+                            )
+                        else:
+                            city = check[0]
+                            city.parent = country
+                            city.save()
+
+                        records = Reference.objects.filter(tags=subsubarea)
+                        for record in records:
+                            record.spaces.add(city)
+
+
+                        child = Tag.objects.filter(parent_tag=subsubarea)
+                        for subsubsubarea in child:
+                            subsubsubarea.hidden = True
+                            subsubsubarea.save()
+                            check = ReferenceSpace.objects.filter(name=subsubsubarea.name)
+                            if not check:
+                                subcity = ReferenceSpace.objects.create(
+                                    name = subsubsubarea.name,
+                                    type = sub,
+                                    slug = slugify(subsubsubarea.name),
+                                    parent = city,
+                                )
+                            else:
+                                subcity = check[0]
+                                subcity.parent = city
+                                subcity.save()
+
+
+                            records = Reference.objects.filter(tags=subsubsubarea)
+                            for record in records:
+                                record.spaces.add(subcity)
+
+                            # Run: UPDATE multiplicity_referencespace set parent_id = city_id where city_id > 0;
+
     info = get_object_or_404(Reference, pk=id)
 
     if request.method == "POST":
