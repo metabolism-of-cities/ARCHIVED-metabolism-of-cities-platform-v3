@@ -132,4 +132,7 @@ urlpatterns = [
     path('<slug:slug>/', views.index, name='city'),
     #path('profile', views.detail, name='profile'),
 
+    # AJAX
+    path('search/ajax', views.referencespace_search_ajax, name='referencespace_search_ajax'),
+
 ]

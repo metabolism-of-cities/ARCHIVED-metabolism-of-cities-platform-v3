@@ -14,6 +14,9 @@ from collections import defaultdict
 
 from django.http import JsonResponse
 
+# To search annotate
+from django.db.models import Q
+
 @login_required
 def index(request):
     context = { 'section': 'data', 'menu': 'index' }
@@ -128,6 +131,17 @@ def searchajax(request):
 
     context = { 'list': list, 'total': total }
     return render(request, 'staf/includes/datatable.html', context)
+
+def material_search_ajax(request):
+    list = []
+    if "term" in request.GET:
+        materials = Material.objects.filter(Q(name__icontains=request.GET["term"]) | Q(code__icontains=request.GET["term"])).order_by("name")
+        for details in materials:
+            d = {}
+            d["text"] = details.code + ": " + details.name
+            d["id"] = details.id
+            list.append(d)
+    return JsonResponse(list, safe=False)
 
 
 @login_required

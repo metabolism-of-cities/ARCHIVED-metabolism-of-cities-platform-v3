@@ -349,7 +349,8 @@ class Reference(models.Model):
     organizations = models.ManyToManyField(Organization, through='ReferenceOrganization')
     tags = models.ManyToManyField(Tag, blank=True, limit_choices_to={'hidden': False})
     processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
-    primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
+    materials = models.ManyToManyField('staf.Material', blank=True)
+    spaces = models.ManyToManyField(ReferenceSpace, blank=True)
 
     def __str__(self):
         return self.title
@@ -385,7 +386,7 @@ class ReferenceForm(ModelForm):
 class ReferenceFormAdmin(ModelForm):
     class Meta:
         model = Reference
-        exclude = ['id', 'organizations', 'processes', 'date_added', 'event', 'authors', 'primary_space', 'tags']
+        exclude = ['id', 'organizations', 'processes', 'date_added', 'event', 'authors', 'spaces', 'tags', 'materials']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',

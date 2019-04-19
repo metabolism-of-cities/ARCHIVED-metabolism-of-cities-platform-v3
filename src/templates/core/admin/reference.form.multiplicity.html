@@ -1,0 +1,193 @@
+{% extends 'multiplicity/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}Tags{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{% if info %}Edit{% else %}Add{% endif %} publication</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+        <li><a href="{% url 'core:references' %}">Publications</a></li>
+        <li><a href="{% url 'core:reference' info.id %}">{{ info.title|truncatewords:6 }}</a></li>
+        <li class="active">Edit publication</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+
+{% block content %}
+
+  <ul class="nav nav-list nav-tabs">
+    <li><a href="{% url "core:editreference" info.id %}">Publication details</a></li>
+    <li><a href="{% url "core:editreference_authors" info.id %}">Authors</a></li>
+    <li><a href="{% url "core:editreference_tags" info.id %}">Tags</a></li>
+    <li class="active"><a href="{% url "core:editreference_multiplicity" info.id %}">MultipliCity settings</a></li>
+  </ul>
+
+  <h2>Reference spaces</h2>
+
+  <form method="post" class="form form-horizontal">
+
+  <div class="well">
+    Instructions: only select the reference space(s) that this publication directly relates to.
+    For instance, a South African law should be linked to <em>South Africa</em>; a technical report on
+    a power plant in South Africa should be linked to this power plant only, not to the country or
+    city.
+  </div>
+
+    <div class="form-group">
+      <div class="col-sm-12">
+        <select name="spaces" class="form-control" multiple id="spaces">
+          {% for details in info.spaces.all %}
+            <option selected value="{{ details.id }}">{{ details.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+
+    <h2>Processes</h2>
+
+    <div class="well">
+      Instructions: select the process(es) that this publication directly covers. A publication doing
+      an EW-MFA does <em>not</em> cover any specific process. A publication about the sewage pipes in 
+      Oslo <em>does</em> relate directly to sewerage.
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-12">
+        <select name="processes" multiple id="processes">
+          {% for details in processes %}
+            <option value="{{ details.id }}" {% if details in info.processes.all %}selected{% endif %}>{{ details.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+  <h2>Materials and products</h2>
+
+  <div class="well">
+    Instructions: select the relevant materials that this publication covers. Select the highest-level group
+    that is fully covered. For instance, a paper on the quantification of biomass should be tagged with 
+    biomass only, not with all the subcategories of biomass. If only particular crops are covered (e.g. fruit
+    and cereals), then those should be selected instead. Use the Eurostat classification for materials, and
+    the Combined Nomenclature for products, unless the publication specifically uses another classification 
+    (e.g. HS).
+  </div>
+
+    <div class="form-group">
+      <div class="col-sm-12">
+        <select name="materials" class="form-control" multiple id="materials">
+          {% for details in info.materials.all %}
+            <option selected value="{{ details.id }}">{{ details.code }}: {{ details.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <p>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success btn-lg">
+          <i class="fa fa-save"></i>
+          Save
+        </button>
+    </p>
+
+
+
+
+  </form>
+
+  <h3>Browse materials tree</h3>
+
+  <p>Use the list below to see which tags exist.</p>
+
+  <div id="tree"></div>
+
+  <p><a href="{% url 'core:admin_tag_list' %}" target="_blank">Edit tag list</a></p>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/skin-lion/ui.fancytree.min.css" />
+<style type="text/css">
+#tree{overflow:hidden}
+#details{margin-top:20px}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/jquery.fancytree-all-deps.min.js"></script>
+<script type="text/javascript">
+$(function(){
+
+    // Load tree from Ajax JSON
+    $("#tree").fancytree({
+      source: 
+        [
+          {% for details in materials %}
+            {title: "{{ details.code }} - {{ details.name }}", key: "{{ details.id }}", lazy: true},
+          {% endfor %}
+        ]
+      ,
+			lazyLoad: function(event, data){
+        var node = data.node;
+				data.result = $.ajax({
+					url: "{% url 'staf:materialajax' %}",
+					dataType: "json",
+          data: {mode: "children", parent: node.key},
+				});
+			},
+      activate: function(event, data) {
+        var node = data.node;
+      },
+		});
+
+  $('#processes').select2({
+    width: '100%',
+  });
+
+  $('#spaces').select2({
+    width: '100%',
+    ajax: {
+      url: '{% url 'multiplicity:referencespace_search_ajax' %}',
+      dataType: 'json',
+      processResults: function (data) {
+        return {
+          results: data
+        };
+      },
+    }
+  });
+    
+  $('#materials').select2({
+    width: '100%',
+    ajax: {
+      url: '{% url 'staf:material_search_ajax' %}',
+      dataType: 'json',
+      processResults: function (data) {
+        return {
+          results: data
+        };
+      },
+    }
+  });
+    
+});
+
+</script>
+{% endblock %}

@@ -17,6 +17,7 @@ urlpatterns = [
     path('materials/<int:id>/child', views.materialchild, name='material_child'),
     path('materials/create', views.materialform, name='material_create'),
     path('materials/ajax', views.materiallistajax, name='materialajax'),
+    path('materials/ajax/select2', views.material_search_ajax, name='material_search_ajax'),
 
     path('processes', views.processlist, name='processes'),
     path('processes/table', views.processtable, name='processtable'),

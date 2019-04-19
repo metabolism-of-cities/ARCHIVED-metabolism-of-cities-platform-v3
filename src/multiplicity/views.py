@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
@@ -12,7 +12,7 @@ from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Mate
 from django.db.models import Count
 from django.contrib import messages
 
-# To serialize into json
+# To serialize into  son
 from django.core import serializers
 
 # For file uploads
@@ -348,6 +348,21 @@ def resources(request, city, slug):
         'references': references,  'addlink': addlink, 'type': type, 'slug': slug
     }
     return render(request, 'multiplicity/resources.list.html', context)
+
+# AJAX search functions
+
+def referencespace_search_ajax(request):
+    list = []
+    if "term" in request.GET:
+        spaces = ReferenceSpace.objects.filter(name__icontains=request.GET["term"], active=True).order_by("name")
+        for details in spaces:
+            d = {}
+            d["text"] = details.name
+            d["id"] = details.id
+            list.append(d)
+    return JsonResponse(list, safe=False)
+
+# END OF AJAX SEARCH FUNCTIONS
 
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)

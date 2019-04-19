@@ -5,6 +5,24 @@
 {% block title %}Tags{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{% if info %}Edit{% else %}Add{% endif %} publication</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+        <li><a href="{% url 'core:references' %}">Publications</a></li>
+        <li><a href="{% url 'core:reference' info.id %}">{{ info.title|truncatewords:6 }}</a></li>
+        <li class="active">Edit publication</li>
+    </ol>
+
+</div>
+{% endblock %}
+
 {% block content %}
 
   <ul class="nav nav-list nav-tabs">

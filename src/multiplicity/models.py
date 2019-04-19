@@ -130,6 +130,7 @@ class ReferenceSpace(models.Model):
     type = models.ForeignKey(ReferenceSpaceType, on_delete=models.CASCADE)
     city = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='city_location')
     country = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='country_location')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='child')
     description = models.TextField(null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
     slug = models.SlugField(db_index=True, max_length=255, null=True)
