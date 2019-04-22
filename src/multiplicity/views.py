@@ -1926,4 +1926,73 @@ def temp_slide(request, city):
     context = { 'section': 'cites', 'menu': 'dashboard', 'info': info }
     return render(request, 'multiplicity/slide.html', context)
 
+@staff_member_required
+def import_cpa(request):
+    
+    from staf.models import MaterialCatalog
+    cpa = MaterialCatalog.objects.create(
+        name = "CPA 2008",
+        description = "Statistical Classification of Products by Activity in the European Community, 2008 version (CPA 2008)\n\nThe Statistical classification of products by activity, abbreviated as CPA, is the classification of products (goods as well as services) at the level of the European Union (EU).\n\nProduct classifications are designed to categorize products that have common characteristics. They provide the basis for collecting and calculating statistics on the production, distributive trade, consumption, international trade and transport of such products.\n\nCPA product categories are related to activities as defined by the Statistical classification of economic activities in the European Community (NACE). Each CPA product - whether a transportable or non-transportable good or a service - is assigned to one single NACE activity. This linkage to NACE activities gives the CPA a structure parallel to that of NACE at all levels.",
+        url = "https://ec.europa.eu/eurostat/ramon/nomenclatures/index.cfm?TargetUrl=LST_CLS_DLD&StrNom=CPA_2008&StrLanguageCode=EN&StrLayoutCode=HIERARCHIC#"
+    )
+    filename = "CPA_2008_20190422_181726.csv"
+    path = settings.MEDIA_ROOT + '/csv/' + filename
+    f = codecs.open(path, encoding='utf-8', errors='strict')
+    reader = csv.reader(f)
+
+    name = "Classification of Products by Activity (CPA)"
+
+    mainparent = Material.objects.create(
+            name=name,
+            code="Group 5",
+            parent=None,
+            catalog=cpa,
+            is_separator=False
+        )
+
+    for row in reader:
+        order = row[0]
+        level = row[1]
+        code = row[2]
+        parent = row[3]
+        name = row[4]
+        rulings = row[5]
+        includes = row[6]
+        also_includes = row[7]
+        excludes = row[8]
+        description = None
+        if rulings:
+            descriptions = rulings
+        if includes:
+            description = includes
+        if also_includes:
+            if description:
+                description += "\n\n" + also_includes
+            else:
+                description = also_includes
+        if excludes:
+            if description:
+                description += "\n\n" + excludes
+            else:
+                description = excludes
+        getparent = mainparent
+        if parent:
+            getparent = Material.objects.filter(code="CPA."+parent)
+            if getparent:
+                getparent = getparent[0]
+            else:
+                getparent = mainparent
+
+        if name != "Code":
+            Material.objects.create(
+                name=name,
+                code="CPA."+code,
+                parent=getparent,
+                catalog=cpa,
+                is_separator=False
+            )
+
+    messages.success(request, 'Information was saved.')
+    return redirect(reverse('multiplicity:admin_datasettypes'))
+
 

@@ -48,6 +48,8 @@ class ProcessTree(models.Model):
 
 class MaterialCatalog(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    url = models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):
         return self.name
 

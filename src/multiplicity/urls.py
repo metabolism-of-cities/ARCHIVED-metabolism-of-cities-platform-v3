@@ -6,6 +6,8 @@ app_name = 'multiplicity'
 urlpatterns = [
 
     # Admin
+    path('admin/cpa/', views.import_cpa),
+
     path('admin/locations/', views.admin_locations, name='admin_locations'),
     path('admin/locations/<int:id>/', views.admin_location, name='admin_location'),
     path('admin/locations/create/', views.admin_location, name='admin_location_create'),
