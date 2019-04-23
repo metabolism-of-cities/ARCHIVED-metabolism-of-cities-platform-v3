@@ -39,7 +39,7 @@ def videos(request, collection=False):
     collections = VideoCollection.on_site.all()
     list = Video.on_site.filter(collection=collection)
     addlink = "/admin/videos/create"
-    context = { "section": "resources", "page": "videos", "collection": collection, "page": page, "addlink": addlink,
+    context = { "section": "resources", "collection": collection, "page": page, "addlink": addlink,
     "collections": collections, "list": list }
     return render(request, "core/videos.html", context)
 
@@ -476,11 +476,17 @@ def all_references(request, type=False, tag=False):
     maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     addlink = reverse("core:newreference")
     context = { 
-        "section": "resources", "page": "publications", "list": list, "addlink": addlink, 
-        "title": title, "select2": True, "tag": tag, "maintags": maintags, 
+        "section": "resources",
+        "list": list, 
+        "addlink": addlink, 
+        "title": title, 
+        "select2": True, 
+        "tag": tag, 
+        "maintags": maintags, 
+        "page": get_object_or_404(Article, pk=75),
 
     }
-    return render(request, "core/references.html", context)
+    return render(request, "core/references.list.html", context)
 
 def references(request, type=False, tag=False):
     title = "Publications"

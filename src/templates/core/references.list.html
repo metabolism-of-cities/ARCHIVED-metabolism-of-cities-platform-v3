@@ -1,0 +1,448 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="col-lg-12 text-right">
+  <div class="section-menu">
+    Introduction | 
+    <a onclick="scrollToDiv('browse')">Browse</a> | 
+    <a onclick="scrollToDiv('collections')">Collections</a> | 
+    <a onclick="scrollToDiv('tree')">Tagging tree</a>
+  </div>
+</div>
+
+<div class="col-lg-12">
+  <h2>Introduction</h2>
+  {{ page.content|safe }}
+</div>
+
+
+<div class="col-lg-12 text-right">
+  <div class="section-menu">
+    <a onclick="scrollToDiv('introduction')">Introduction</a> | 
+    Browse | 
+    <a onclick="scrollToDiv('collections')">Collections</a> | 
+    <a onclick="scrollToDiv('tree')">Tagging tree</a>
+  </div>
+</div>
+
+
+<div class="col-lg-12" id="browse">
+  <h2>Browse</h2>
+
+
+  <input class="search form-control" placeholder="Search" />
+  <button class="sort btn btn-default" data-sort="title">
+    Sort by title
+  </button>
+  <button class="sort btn btn-default" data-sort="year">
+    Sort by year
+  </button>
+  <button class="sort btn btn-default" data-sort="type">
+    Sort by type
+  </button>
+
+  <table class="table table-striped datatable">
+    <thead>
+      <tr>
+        <th class="hidden-title"></th>
+        <th>Title</th>
+        <th>Author(s)</th>
+        <th>Type</th>
+        <th>Year</th>
+        <th>Tags</th>
+      </tr>
+    </thead>
+    <tbody class="list">
+    {% for details in list %}
+      <tr>
+        <td class="hidden-title">{{ details.title }}</td>
+        <td class="title"><a href="{% url 'core:reference' details.id %}">{{ details.title|truncatewords:10 }}</a></td>
+        <td class="authors">{{ details.authorlist }}</td>
+        <td class="type">{{ details.type }}</td>
+        <td class="year">{{ details.year }}</td>
+        <td class="tags">
+          <div class="taglist">
+          {% for tag in details.tags.all %}
+            <div><span class="label label-default">{{ tag }}</span></div>
+          {% endfor %}
+          </div>
+        </td>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <ul class="pagination"></ul>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  <script type="text/javascript">
+    var options = {
+      valueNames: [ 'hidden-title', 'title', 'authors', 'type', 'year', 'tags' ],
+      page: 10,
+      pagination: true
+    };
+
+    var userList = new List('browse', options);
+  </script>
+</div>
+
+
+
+{% if not request.GET.terms %}
+
+  <section class="browse">
+    <h1>Browse our library</h1>
+
+    <div class="panel">
+
+      <div class="pad-all file-manager">
+        <div class="fixed-fluid">
+          <div class="fixed-sm-300 pull-sm-left file-sidebar">
+
+            <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Categories</p>
+            <div class="list-group bg-trans pad-btm bord-btm maintags">
+              <div id="results">
+                {% for tag in maintags %}
+                <a href="#" data-id="{{ tag.id }}" class="list-group-item browse-tags">
+                  <i class="fa fa-folder fa-fw"></i> {{ tag }}
+                </a>
+                {% endfor %}
+              </div>
+            </div>
+
+          </div>
+          <div class="fluid file-panel">
+
+            <div class="file-list-loading loading text-center text-2x pad-all mar-top">
+              <span class="mar-top pad-all"></span>
+              <i class="fas fa-cog fa-spin mar-top"></i>
+            </div>
+
+            <div class="file-list">
+              <div id="placeholder">Please select a category on the left.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+{% endif %}
+
+<section class="search">
+  <h1>Search our library</h1>
+
+  <div class="panel pad-all">
+
+    <p>
+      Please enter search terms below to start your search. You will see a list of common terms appear as you start typing.
+    </p>
+    <p>
+      To confirm each search term, please hit ENTER to add it to the list. The system will only show records that contain <strong>all</strong> of the search terms that you enter. Remove search terms to increase the number of results. When you see the results, use the filters on the left hand side to refine your results.
+    </p>
+    <p>
+      You can also <a href="https://archive.metabolismofcities.org/publications.export.php">download the full publications library</a> including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
+    </p>
+
+    <form method="get">
+      <select id="searchbox" multiple="multiple" class="form-control" name="terms">
+          {% for term in entered_keywords %}
+            <option selected value="{{ term }}">{{ term }}</option>
+          {% endfor %}
+        {% for tag in tags %}
+          <option value="{{ tag.id }}" {% if tag.id in selected_keywords %}selected{% endif %}>{{ tag }}</option>
+        {% endfor %}
+      </select>
+
+      <div class="row mar-top">
+        <div class="col-lg-6">
+          <button type="submit" class="btn btn-dark" type="button">Search</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+</section>
+
+{% if references %}
+
+  <h1>{{ title }}</h1>
+  <p>
+    <strong>{{ references.count }}</strong> record(s) found.
+  </p>
+
+  {% include 'core/includes/references.list.html' %}
+
+{% endif %}
+
+{% if not request.GET.terms %}
+
+  <section class="cities">
+    <h1>Browse city publications</h1>
+
+    <table class="table table-striped datatable">
+      <thead>
+        <tr>
+          <th>City</th>
+          <th>Number of publications</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for tag in cities %}
+        <tr>
+          <td><a href="{% url 'core:references' %}?terms={{ tag.id }}">{{ tag }}</a></td>
+          <td>{{ tag.reference_set.count }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+
+  </section>
+
+{% endif %}
+
+
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+section.cities, section.search {
+  margin-top: 50px;
+}
+.file-list-loading {
+  display: none;
+}
+.filter { 
+  margin-bottom: 15px;
+}
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+  border: none;
+}
+a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+  color: #fff !important;
+}
+#placeholder {
+  height: 430px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0.7;
+}
+
+
+
+
+
+.sort:after {
+  display:inline-block;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  content:"";
+  position: relative;
+  top:-10px;
+  right:-5px;
+}
+.sort.asc:after {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #333;
+  content:"";
+  position: relative;
+  top:4px;
+  right:-5px;
+}
+.sort.desc:after {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #333;
+  content:"";
+  position: relative;
+  top:-4px;
+  right:-5px;
+}
+
+.hidden-title {
+  display:none;
+}
+
+.main-content-block #browse .pagination .active a{
+  color:#fff;
+}
+#browse input.form-control {
+  border-color: #333;
+  margin-bottom: 10px;
+}
+table td .taglist {
+  max-height: 100px;
+  overflow: hidden;
+}
+
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ title }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+        <li class="active">{{ title }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+  <script type="text/javascript">
+  $(function(){
+    $(".filters .filter").click(function(e){
+      e.preventDefault();
+      var type = $(this).data("type");
+      var id = $(this).data("id");
+      var hide = ".recordbox:not(."+type+"-"+id+")";
+      var show = ".recordbox."+type+"-"+id;
+      $(show).show('fast');
+      $(hide).hide('fast');
+      $(this).closest("ul").find("li a").removeClass('active');
+      $(this).addClass("active");
+    });
+    $(".show-all").click(function(e){
+      e.preventDefault();
+      var type = $(this).data("type");
+      $(".hide-"+type).show('fast');
+      $(this).hide();
+    });
+    $("#searchbox").select2({
+      tags: true,
+      tokenSeparators: [',']
+    })
+
+    $("body").on("click", ".browse-tags",function (e) {
+
+      e.preventDefault();
+
+      var id = $(this).data("id");
+
+      $('#results').removeClass('alert');
+      $('#results').removeClass('alert-danger');
+
+      $(".side-loading").show('fast');
+      $("#results").hide('fast');
+      var jqxhr = $.get("{% url 'core:tag_ajax_folder' %}", 
+       { 
+         id: id,
+       })
+        .done(function (response) {
+            $('#results').html(response);
+            $(".side-loading").hide('fast');
+            $('#results').show('fast');
+        })
+        .fail(function (jqXHR, exception) {
+            // Our error logic here
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            $('#results').html(msg);
+            $(".side-loading").hide('fast');
+            $('#results').show('fast');
+            $('#results').addClass('alert');
+            $('#results').addClass('alert-danger');
+        });
+
+    });
+
+
+    $("body").on("click", ".view-records",function (e) {
+
+      e.preventDefault();
+
+      $(".view-records").removeClass("active");
+      $(this).addClass("active");
+
+      var id = $(this).data("id");
+
+      $('.file-list').removeClass('alert');
+      $('.file-list').removeClass('alert-danger');
+
+      $(".file-list-loading").show();
+      $(".file-list").hide('fast');
+      var jqxhr = $.get("{% url 'core:reference_list_ajax' %}", 
+       { 
+         id: id,
+       })
+        .done(function (response) {
+            $('.file-list').html(response);
+            $(".file-list-loading").hide('fast');
+            $('.file-list').show('fast');
+        })
+        .fail(function (jqXHR, exception) {
+            // Our error logic here
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'parsererror') {
+                msg = 'Requested JSON parse failed.';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Ajax request aborted.';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            $('.file-list').html(msg);
+            $(".file-list-loading").hide('fast');
+            $('.file-list').show('fast');
+            $('.file-list').addClass('alert');
+            $('.file-list').addClass('alert-danger');
+        });
+
+    });
+
+
+
+  });
+</script>
+{% endblock %}
