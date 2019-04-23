@@ -1930,12 +1930,13 @@ def temp_slide(request, city):
 def import_cpa(request):
     
     from staf.models import MaterialCatalog
+    MaterialCatalog.objects.get(pk=5).delete()
     cpa = MaterialCatalog.objects.create(
-        name = "CPA 2008",
-        description = "Statistical Classification of Products by Activity in the European Community, 2008 version (CPA 2008)\n\nThe Statistical classification of products by activity, abbreviated as CPA, is the classification of products (goods as well as services) at the level of the European Union (EU).\n\nProduct classifications are designed to categorize products that have common characteristics. They provide the basis for collecting and calculating statistics on the production, distributive trade, consumption, international trade and transport of such products.\n\nCPA product categories are related to activities as defined by the Statistical classification of economic activities in the European Community (NACE). Each CPA product - whether a transportable or non-transportable good or a service - is assigned to one single NACE activity. This linkage to NACE activities gives the CPA a structure parallel to that of NACE at all levels.",
-        url = "https://ec.europa.eu/eurostat/ramon/nomenclatures/index.cfm?TargetUrl=LST_CLS_DLD&StrNom=CPA_2008&StrLanguageCode=EN&StrLayoutCode=HIERARCHIC#"
+        name = "CPA 2.1",
+        description = "Statistical Classification of Products by Activity in the European Community, version 2.1 (CPA 2.1)\n\nThe Statistical classification of products by activity, abbreviated as CPA, is the classification of products (goods as well as services) at the level of the European Union (EU).\n\nProduct classifications are designed to categorize products that have common characteristics. They provide the basis for collecting and calculating statistics on the production, distributive trade, consumption, international trade and transport of such products.\n\nCPA product categories are related to activities as defined by the Statistical classification of economic activities in the European Community (NACE). Each CPA product - whether a transportable or non-transportable good or a service - is assigned to one single NACE activity. This linkage to NACE activities gives the CPA a structure parallel to that of NACE at all levels.",
+        url = "https://ec.europa.eu/eurostat/ramon/nomenclatures/index.cfm?TargetUrl=LST_CLS_DLD&StrNom=CPA_2_1&StrLanguageCode=EN&StrLayoutCode=HIERARCHIC#"
     )
-    filename = "CPA_2008_20190422_181726.csv"
+    filename = "CPA_2_1_20190423_200404.csv"
     path = settings.MEDIA_ROOT + '/csv/' + filename
     f = codecs.open(path, encoding='utf-8', errors='strict')
     reader = csv.reader(f)
@@ -1983,7 +1984,7 @@ def import_cpa(request):
             else:
                 getparent = mainparent
 
-        if name != "Code":
+        if name != "Description":
             Material.objects.create(
                 name=name,
                 code="CPA."+code,
