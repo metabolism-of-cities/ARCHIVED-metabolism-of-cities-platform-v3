@@ -22,6 +22,7 @@
                 <th>Title</th>
                 <th>Year</th>
                 <th>Type</th>
+                <th>Journal</th>
                 <th>Status</th>
                 <th>Tags</th>
                 {% if testing %}
@@ -37,6 +38,7 @@
                 <td><a href="{% url 'core:admin_reference' details.id %}">{{ details.title|truncatewords:10 }}</a></td>
                 <td>{{ details.year }}</td>
                 <td>{{ details.type }}</td>
+                <td>{{ details.journal|default_if_none:"" }}</td>
                 <td>{{ details.status }}</td>
                 <td>
                   {% for tag in details.tags.all %}
