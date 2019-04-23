@@ -1930,8 +1930,6 @@ def temp_slide(request, city):
 def import_cpa(request):
     
     from staf.models import MaterialCatalog
-    old = MaterialCatalog.objects.get(pk=5)
-    Material.objects.filter(catalog=old).delete()
     cpa = MaterialCatalog.objects.create(
         name = "CPA 2.1",
         description = "Statistical Classification of Products by Activity in the European Community, version 2.1 (CPA 2.1)\n\nThe Statistical classification of products by activity, abbreviated as CPA, is the classification of products (goods as well as services) at the level of the European Union (EU).\n\nProduct classifications are designed to categorize products that have common characteristics. They provide the basis for collecting and calculating statistics on the production, distributive trade, consumption, international trade and transport of such products.\n\nCPA product categories are related to activities as defined by the Statistical classification of economic activities in the European Community (NACE). Each CPA product - whether a transportable or non-transportable good or a service - is assigned to one single NACE activity. This linkage to NACE activities gives the CPA a structure parallel to that of NACE at all levels.",
