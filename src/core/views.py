@@ -456,9 +456,8 @@ def referenceform_multiplicity(request, id):
     return render(request, "core/admin/reference.form.multiplicity.html", context)
 
 
-# This should be reviewed; see if we want this or not
-# Can be discarded if we don"t use it.
-def all_references(request, type=False, tag=False):
+
+def references(request, type=False, tag=False):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
     else:
@@ -511,7 +510,7 @@ def all_references(request, type=False, tag=False):
     }
     return render(request, "core/references.list.html", context)
 
-def references(request, type=False, tag=False):
+def references_old(request, type=False, tag=False):
     title = "Publications"
     list = None
     cities = None

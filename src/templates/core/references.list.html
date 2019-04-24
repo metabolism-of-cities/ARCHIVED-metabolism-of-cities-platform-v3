@@ -6,12 +6,13 @@
 
 {% block content %}
 
+{% if not tag %}
 <div class="col-lg-12 text-right">
   <div class="section-menu">
     Introduction | 
     <a onclick="scrollToDiv('browse')">Browse</a> | 
     <a onclick="scrollToDiv('collections')">Collections</a> | 
-    <a onclick="scrollToDiv('tree')">Tagging tree</a>
+    <a onclick="scrollToDiv('taggingtree')">Tagging tree</a>
   </div>
 </div>
 
@@ -20,20 +21,29 @@
   {{ page.content|safe }}
 </div>
 
-
 <div class="col-lg-12 text-right">
   <div class="section-menu">
     <a onclick="scrollToDiv('introduction')">Introduction</a> | 
     Browse | 
     <a onclick="scrollToDiv('collections')">Collections</a> | 
-    <a onclick="scrollToDiv('tree')">Tagging tree</a>
+    <a onclick="scrollToDiv('taggingtree')">Tagging tree</a>
   </div>
 </div>
 
+{% endif %}
 
 <div class="col-lg-12" id="browse">
   <h2>Browse</h2>
 
+  {% if tag %}
+
+  <p>
+    You are viewing all publications with the tag: <strong>{{ tag }}</strong>.
+    <br>
+    <a href="{% url "core:references" %}">Go back to the publications overview.</a>
+  </p>
+
+  {% endif %}
 
   <input class="search form-control" placeholder="Search" />
   <button class="sort btn btn-default" data-sort="title">
@@ -95,14 +105,14 @@
   </script>
 </div>
 
-
+{% if not tag %}
 
 <div class="col-lg-12 text-right">
   <div class="section-menu">
     <a onclick="scrollToDiv('introduction')">Introduction</a> | 
     <a onclick="scrollToDiv('browse')">Browse</a> | 
     Collections | 
-    <a onclick="scrollToDiv('tree')">Tagging tree</a>
+    <a onclick="scrollToDiv('taggingtree')">Tagging tree</a>
   </div>
 </div>
 
@@ -119,7 +129,9 @@
   {% endfor %}
   </ul>
 
-  <h3>By city</h3>
+  <h3>View map</h3>
+
+  <p>The map below indicates the cities linked to publications in our database.</p>
 
   <div id="map"></div>
 
@@ -128,122 +140,60 @@
 
 {% if not request.GET.terms %}
 
-  <section class="browse">
-    <h1>Browse our library</h1>
+<div class="col-lg-12 text-right">
+  <div class="section-menu">
+    <a onclick="scrollToDiv('introduction')">Introduction</a> | 
+    <a onclick="scrollToDiv('browse')">Browse</a> | 
+    <a onclick="scrollToDiv('collections')">Collections</a> | 
+    Tagging tree
+  </div>
+</div>
 
-    <div class="panel">
 
-      <div class="pad-all file-manager">
-        <div class="fixed-fluid">
-          <div class="fixed-sm-300 pull-sm-left file-sidebar">
+<section class="tt">
 
-            <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Categories</p>
-            <div class="list-group bg-trans pad-btm bord-btm maintags">
-              <div id="results">
-                {% for tag in maintags %}
-                <a href="#" data-id="{{ tag.id }}" class="list-group-item browse-tags">
-                  <i class="fa fa-folder fa-fw"></i> {{ tag }}
-                </a>
-                {% endfor %}
-              </div>
+  <div class="col-lg-12" id="taggingtree">
+
+  <h2>Tagging tree</h2>
+
+    <div class="pad-all file-manager">
+      <div class="fixed-fluid">
+        <div class="fixed-sm-300 pull-sm-left file-sidebar">
+
+          <p class="pad-hor mar-top text-main text-bold text-sm text-uppercase">Categories</p>
+          <div class="list-group bg-trans pad-btm bord-btm maintags">
+            <div id="results">
+              {% for tag in maintags %}
+              <a href="#" data-id="{{ tag.id }}" class="list-group-item browse-tags">
+                <i class="fa fa-folder fa-fw"></i> {{ tag }}
+              </a>
+              {% endfor %}
             </div>
-
           </div>
-          <div class="fluid file-panel">
 
-            <div class="file-list-loading loading text-center text-2x pad-all mar-top">
-              <span class="mar-top pad-all"></span>
-              <i class="fas fa-cog fa-spin mar-top"></i>
-            </div>
+        </div>
+        <div class="fluid file-panel">
 
-            <div class="file-list">
-              <div id="placeholder">Please select a category on the left.</div>
-            </div>
-
+          <div class="file-list-loading loading text-center text-2x pad-all mar-top">
+            <span class="mar-top pad-all"></span>
+            <i class="fas fa-cog fa-spin mar-top"></i>
           </div>
+
+          <div class="file-list">
+            <div id="placeholder">Please select a category on the left.</div>
+          </div>
+
         </div>
       </div>
-
     </div>
-
-  </section>
-
-{% endif %}
-
-<section class="search">
-  <h1>Search our library</h1>
-
-  <div class="panel pad-all">
-
-    <p>
-      Please enter search terms below to start your search. You will see a list of common terms appear as you start typing.
-    </p>
-    <p>
-      To confirm each search term, please hit ENTER to add it to the list. The system will only show records that contain <strong>all</strong> of the search terms that you enter. Remove search terms to increase the number of results. When you see the results, use the filters on the left hand side to refine your results.
-    </p>
-    <p>
-      You can also <a href="https://archive.metabolismofcities.org/publications.export.php">download the full publications library</a> including publication title, author(s), year, journal, tags, etc. as a <strong>CSV file</strong>.
-    </p>
-
-    <form method="get">
-      <select id="searchbox" multiple="multiple" class="form-control" name="terms">
-          {% for term in entered_keywords %}
-            <option selected value="{{ term }}">{{ term }}</option>
-          {% endfor %}
-        {% for tag in tags %}
-          <option value="{{ tag.id }}" {% if tag.id in selected_keywords %}selected{% endif %}>{{ tag }}</option>
-        {% endfor %}
-      </select>
-
-      <div class="row mar-top">
-        <div class="col-lg-6">
-          <button type="submit" class="btn btn-dark" type="button">Search</button>
-        </div>
-      </div>
-    </form>
 
   </div>
 
 </section>
 
-{% if references %}
-
-  <h1>{{ title }}</h1>
-  <p>
-    <strong>{{ references.count }}</strong> record(s) found.
-  </p>
-
-  {% include 'core/includes/references.list.html' %}
-
 {% endif %}
 
-{% if not request.GET.terms %}
-
-  <section class="cities">
-    <h1>Browse city publications</h1>
-
-    <table class="table table-striped datatable">
-      <thead>
-        <tr>
-          <th>City</th>
-          <th>Number of publications</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for tag in cities %}
-        <tr>
-          <td><a href="{% url 'core:references' %}?terms={{ tag.id }}">{{ tag }}</a></td>
-          <td>{{ tag.reference_set.count }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-
-  </section>
-
 {% endif %}
-
-
-</div>
 
 {% endblock %}
 
