@@ -60,7 +60,11 @@
     <tbody class="list">
     {% for details in list %}
       <tr>
-        <td class="hidden-title">{{ details.title }}</td>
+        <td class="hidden-title">
+        {{ details.title }}
+        {{ details.abstract }}
+        {{ details.abstract_original_language }}
+        </td>
         <td class="title"><a href="{% url 'core:reference' details.id %}">{{ details.title|truncatewords:10 }}</a></td>
         <td class="authors">{{ details.authorlist }}</td>
         <td class="type">{{ details.type }}</td>
@@ -87,6 +91,7 @@
     };
 
     var userList = new List('browse', options);
+    userList.update();
   </script>
 </div>
 
