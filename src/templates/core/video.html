@@ -31,7 +31,7 @@
               {% if info.primary_space %}
                 <a href="{% url 'multiplicity:space' info.primary_space.city.slug info.primary_space.type.slug info.primary_space.slug %}" class="btn btn-info">Related: {{ info.primary_space.name }}</a>
               {% endif %}
-              <a href="{% url 'core:videos' %}" class="btn btn-success">Back to video list</a>
+              <a href="{% url 'core:videocollection' info.collection.id %}" class="btn btn-success">Back to video list</a>
             </p>
           </div>
         </div>

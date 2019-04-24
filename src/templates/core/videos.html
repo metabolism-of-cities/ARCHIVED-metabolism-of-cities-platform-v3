@@ -6,24 +6,14 @@
 
 {% block content %}
 
-{% if collection.title == "Main Video Collection" %}
 <div class="row">
 
-    <div class="col-lg-12">
-        <div class="panel panel-body">
-          <div class="panel-heading">
-            <h3>Videos</h3>
-          </div>
-          <div class="panel-body">
-            <p><strong>Collection: {{ collection }}</strong></p>
-            {{ page.content|safe }}
-          </div>
-        </div>
-    </div>
+  <div class="col-lg-12">
+    <h3>{{ collection }}</h3>
+    {{ collection.description|safe }}
+  </div>
 
 </div>
-
-{% endif %}
 
 <div class="row blog">
 {% for details in list %}
