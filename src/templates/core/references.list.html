@@ -480,7 +480,7 @@ table td .taglist {
 
     {% for key,space in cities.items %}
       {% if space.location.lat %}
-        L.marker([{{ space.location.lat }}, {{ space.location.lng }}], {icon:greenmarker})
+        L.marker([{{ space.location.lat }}, {{ space.location.lng }}], {icon:orangemarker})
         .bindPopup("<b>{{ space.name }}</b><ul>{% for reference in cities_references|get_item:key %}<li><a href='{% url 'core:reference' reference.id %}'>{{ reference }}</a> ({{ reference.year }})</li>{%endfor %}</ul>", {minWidth:200})
         .addTo(map);
 
