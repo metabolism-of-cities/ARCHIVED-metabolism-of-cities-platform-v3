@@ -24,6 +24,8 @@ from django.conf import settings
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
 
+from collections import defaultdict
+
 def videos(request, collection=False):
     if not collection:
         if request.site.id == 1:
@@ -475,6 +477,37 @@ def all_references(request, type=False, tag=False):
             title = "Publications"
     maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     addlink = reverse("core:newreference")
+
+    cities_list = Reference.objects.filter(status="active", tags__id=main_filter, spaces__type__id=3)
+    cities = defaultdict(dict)
+    cities_references = {}
+
+    change = {}
+    # TODO
+    # We can improve this a lot
+    for details in cities_list:
+        for sub in details.spaces.all():
+            if sub.type.id == 3:
+                if sub.name != "The Hague" and sub.name != "Cape Town" and sub.name != "London":
+                    change[sub.id] = sub
+                cities[sub.id] = sub
+                reference = details
+                if sub.id in cities_references and details not in cities_references[sub.id]:
+                    cities_references[sub.id].append(details)
+                else:
+                    cities_references[sub.id] = []
+                    cities_references[sub.id].append(details)
+    
+    for key,value in change.items():
+        print(value)
+        city = value
+        if city.location:
+            lat = city.location.lng
+            lng = city.location.lat
+            city.location.lng = lng
+            city.location.lat = lat
+            city.location.save()
+    cities = dict(cities)
     context = { 
         "section": "resources",
         "list": list, 
@@ -485,6 +518,8 @@ def all_references(request, type=False, tag=False):
         "maintags": maintags, 
         "page": get_object_or_404(Article, pk=75),
         "methodologies": Tag.objects.filter(parent_tag__id=318, hidden=False),
+        "cities": cities,
+        "cities_references": cities_references,
     }
     return render(request, "core/references.list.html", context)
 
