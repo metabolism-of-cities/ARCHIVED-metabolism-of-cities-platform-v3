@@ -225,12 +225,16 @@ class VideoCollection(models.Model):
     title = models.CharField(max_length=255)
     description = HTMLField('description', null=True, blank=True)
     site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
+    position = models.PositiveSmallIntegerField(default=1)
     objects = models.Manager()
     on_site = CurrentSiteManager()
     show_in_list = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["position"]
 
 class VideoCollectionForm(ModelForm):
     class Meta:

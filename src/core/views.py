@@ -38,11 +38,11 @@ def videos(request, collection=False):
     if request.site.id == 2:
         id = 150
     page = Article.objects.get(pk=id)
-    collections = VideoCollection.on_site.all()
+    collections = VideoCollection.on_site.all().exclude(pk=7)
     list = Video.on_site.filter(collection=collection)
     addlink = "/admin/videos/create"
     context = { "section": "resources", "collection": collection, "page": page, "addlink": addlink,
-    "collections": collections, "list": list }
+    "collections": collections, "list": list, "sidenav": True,  }
     return render(request, "core/videos.html", context)
 
 def video(request, id):
