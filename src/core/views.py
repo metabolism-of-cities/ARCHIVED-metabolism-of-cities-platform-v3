@@ -482,14 +482,11 @@ def all_references(request, type=False, tag=False):
     cities = defaultdict(dict)
     cities_references = {}
 
-    change = {}
     # TODO
     # We can improve this a lot
     for details in cities_list:
         for sub in details.spaces.all():
             if sub.type.id == 3:
-                if sub.name != "The Hague" and sub.name != "Cape Town" and sub.name != "London":
-                    change[sub.id] = sub
                 cities[sub.id] = sub
                 reference = details
                 if sub.id in cities_references and details not in cities_references[sub.id]:
@@ -497,16 +494,7 @@ def all_references(request, type=False, tag=False):
                 else:
                     cities_references[sub.id] = []
                     cities_references[sub.id].append(details)
-    
-    for key,value in change.items():
-        print(value)
-        city = value
-        if city.location:
-            lat = city.location.lng
-            lng = city.location.lat
-            city.location.lng = lng
-            city.location.lat = lat
-            city.location.save()
+
     cities = dict(cities)
     context = { 
         "section": "resources",
