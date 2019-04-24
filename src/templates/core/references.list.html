@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="col-lg-12">
+<div class="col-lg-12" id="introduction">
   <h2>Introduction</h2>
   {{ page.content|safe }}
 </div>
@@ -96,6 +96,35 @@
 </div>
 
 
+
+<div class="col-lg-12 text-right">
+  <div class="section-menu">
+    <a onclick="scrollToDiv('introduction')">Introduction</a> | 
+    <a onclick="scrollToDiv('browse')">Browse</a> | 
+    Collections | 
+    <a onclick="scrollToDiv('tree')">Tagging tree</a>
+  </div>
+</div>
+
+
+<div class="col-lg-12" id="collections">
+
+  <h2>Collections</h2>
+
+  <h3>Methodologies</h3>
+
+  <ul class="multicolumn">
+  {% for details in methodologies %}
+    <li><a href="{% url "core:tag_search" details.id %}">{{ details }}</a> ({{ details.reference_set.count }})</li>
+  {% endfor %}
+  </ul>
+
+  <h3>By city</h3>
+
+
+
+
+</div>
 
 {% if not request.GET.terms %}
 
@@ -220,6 +249,21 @@
 
 {% block head %}
 <style type="text/css">
+
+.multicolumn {
+  -moz-column-count: 3;
+  -moz-column-gap: 10px;
+  -webkit-column-count: 3;
+  -webkit-column-gap: 10px;
+  column-count: 3;
+  column-gap: 10px;
+}
+.section-menu {
+  margin-top: 30px;
+}
+.section-menu a:hover {
+  cursor: pointer;
+}
 section.cities, section.search {
   margin-top: 50px;
 }
@@ -446,8 +490,14 @@ table td .taglist {
 
     });
 
-
-
   });
+
+    // smooth scroll to an element on the page
+    function scrollToDiv(id){
+      $('html,body').animate({
+       scrollTop: $("#" + id).offset().top - 20
+      }, 'slow');
+    }
+
 </script>
 {% endblock %}

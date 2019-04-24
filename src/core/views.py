@@ -484,7 +484,7 @@ def all_references(request, type=False, tag=False):
         "tag": tag, 
         "maintags": maintags, 
         "page": get_object_or_404(Article, pk=75),
-
+        "methodologies": Tag.objects.filter(parent_tag__id=318, hidden=False),
     }
     return render(request, "core/references.list.html", context)
 
