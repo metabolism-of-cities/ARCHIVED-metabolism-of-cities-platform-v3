@@ -109,3 +109,7 @@ footer#actions .btn-danger, footer#actions .btn-danger:hover {
   background-color:#A31621 !important;
   border-color:#A31621 !important;
 }
+
+.alert-info {
+  background-color: #003B5F;
+}
