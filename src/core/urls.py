@@ -72,6 +72,7 @@ urlpatterns = [
     path('datavisualization', RedirectView.as_view(url=archive_url+'/datavisualization', permanent=False)),
     path('datavisualization/<slug:slug>', RedirectView.as_view(url=archive_url+'/datavisualization/%(slug)s', permanent=False)),
 
+
     # Fixing URLs
     path('resources/starters-kit', RedirectView.as_view(url=site_url+'/resources/starter-kit', permanent=True)),
 
