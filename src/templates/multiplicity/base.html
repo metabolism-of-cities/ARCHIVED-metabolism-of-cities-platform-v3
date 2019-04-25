@@ -631,7 +631,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
       <div class="col-lg-3">
         <h3>Latest news</h3>
         <p>
-          <a style="color:#337ab7" href="{% url 'core:news' LATEST_NEWS.id %}">{{ LATEST_NEWS.title }}</a><br>
+          <a style="color:#1F7A8C" href="{% url 'core:news' LATEST_NEWS.id %}">{{ LATEST_NEWS.title }}</a><br>
           <em>{{ LATEST_NEWS.date }}</em>
         </p>
         <p>
@@ -655,7 +655,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
         <div class="col-lg-3 text-right">
           <h3>Upcoming event</h3>
             <p>
-              <a style="color:#337ab7" href="{% url 'core:event' EVENT.article.id %}">{{ EVENT.article.title }}</a>
+              <a style="color:#1F7A8C" href="{% url 'core:event' EVENT.article.id %}">{{ EVENT.article.title }}</a>
               <br>
               <strong>
               {{ EVENT.location }}
