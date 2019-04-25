@@ -478,7 +478,13 @@ def references(request, type=False, tag=False):
     else:
         if tag:
             list = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags__id=tag).order_by("-year")
-            tag = get_object_or_404(Tag, pk=tag, hidden=False)
+            tag = get_object_or_404(Tag, pk=tag)
+            if tag.hidden:
+                tag = Tag.objects.filter(name=tag.name, hidden=False)
+                if tag:
+                    tag = tag[0]
+                else:
+                    return redirect("core:references")
             title = tag.name + " | Publications"
         else:
             list = Reference.objects.filter(status="active", tags__id=main_filter).order_by("-year")

@@ -19,6 +19,7 @@ app_name = 'core'
 # site_url = 'https://metabolismofcities.org'
 site_url = ''
 archive_url = 'https://archive.metabolismofcities.org'
+archive_url = 'http://e/mfa'
 
 urlpatterns = [
 
@@ -40,6 +41,17 @@ urlpatterns = [
     path('videos', RedirectView.as_view(url=site_url+'/resources/videos', permanent=True)),
     path('mooc', RedirectView.as_view(url=site_url+'/resources/mooc', permanent=True)),
     path('journals', RedirectView.as_view(url=site_url+'/resources/journals', permanent=True)),
+
+    path('publications', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
+    path('publications/collections', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
+    path('publications/add', RedirectView.as_view(url=site_url+'/resources/publications/add', permanent=True)),
+    path('publications/search', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
+    path('publications/all', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
+    path('collections/<int:id>', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
+    path('tags/<int:id>/<slug:slug>', RedirectView.as_view(url=site_url+'/resources/publications/tags/%(id)s', permanent=True)),
+    path('people/<int:id>-<slug:slug>', RedirectView.as_view(url=site_url+'/community/people/%(id)s', permanent=True)),
+    path('publication/<int:id>', RedirectView.as_view(url=site_url+'/resources/publications/%(id)s', permanent=True)),
+    path('source/<int:id>', RedirectView.as_view(url=site_url+'/resources/journals/%(id)s', permanent=True)),
 
     path('omat', RedirectView.as_view(url=site_url+'/resources/omat', permanent=True)),
     path('omat/<slug:slug>', RedirectView.as_view(url=archive_url+'/omat/%(slug)s', permanent=True)),
