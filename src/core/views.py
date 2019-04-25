@@ -47,7 +47,7 @@ def videos(request, collection=False, all=False):
         list = Video.on_site.filter(collections=collection)
     addlink = "/admin/videos/create"
     context = { "section": "resources", "collection": collection, "addlink": addlink,
-    "collections": collections, "list": list, "sidenav": True,  "editlink": editlink, 'all': all }
+    "collections": collections, "list": list, "editlink": editlink, 'all': all }
     return render(request, "core/videos.html", context)
 
 def video(request, id):
