@@ -261,7 +261,7 @@ class Video(models.Model):
     objects = models.Manager()
     on_site = CurrentSiteManager()
     primary_space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, null=True, blank=True)
-    collection = models.ForeignKey(VideoCollection, on_delete=models.CASCADE, null=True, blank=True)
+    collection = models.ManyToManyField(VideoCollection, blank=True)
     thumbnail = models.ImageField(null=True, blank=True, upload_to='video_thumbnails')
     license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
 

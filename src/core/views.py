@@ -38,6 +38,11 @@ def videos(request, collection=False):
     if request.site.id == 2:
         id = 150
     collections = VideoCollection.on_site.all().exclude(pk=7)
+    if "go" in request.GET:
+        all = Video.on_site.all()
+        for details in all:
+            main = VideoCollection.objects.get(pk=4)
+            details.collection.add(main)
     list = Video.on_site.filter(collection=collection)
     addlink = "/admin/videos/create"
     editlink = reverse("core:admin_videocollection", args=[collection.id])
