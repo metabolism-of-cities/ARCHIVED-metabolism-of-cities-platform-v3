@@ -32,7 +32,7 @@
                 <a href="{% url 'multiplicity:space' info.primary_space.city.slug info.primary_space.type.slug info.primary_space.slug %}" class="btn btn-info">Related: {{ info.primary_space.name }}</a>
               {% endif %}
               {% for details in info.collections.all %}
-                <a href="{% url 'core:videocollection' details.id %}" class="btn btn-success">{{ details }}</a>
+                <a href="{% url 'core:videocollection' details.id %}" class="btn btn-info">{{ details }}</a>
               {% endfor %}
             </p>
           </div>
