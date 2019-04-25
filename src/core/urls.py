@@ -54,6 +54,7 @@ urlpatterns = [
     path('resources/videos', views.videos, name='videos'),
     path('resources/videos/collections/<int:collection>', views.videos, name='videocollection'),
     path('resources/videos/<int:id>', views.video, name='video'),
+    path('resources/videos/all', views.videos, name='videos_all'),
 
     path('community/news', views.articles, {'parent': 'news'}, name='news'),
     path('community/news/<int:id>', views.article, name='news'),

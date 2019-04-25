@@ -79,6 +79,7 @@
     {% for details in collections %}
       <li{% if details.id == collection.id %} class="active-sub"{% endif %}><a href="{% url 'core:videocollection' details.id %}">{{ details.title }}</a></li>
     {% endfor %}
+      <li{% if all %} class="active-sub"{% endif %}><a href="{% url 'core:videos_all' %}">All videos</a></li>
   </ul>
 {% endif %}
 
