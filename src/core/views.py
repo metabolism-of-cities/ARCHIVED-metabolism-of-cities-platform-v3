@@ -26,23 +26,28 @@ from django.views.decorators.csrf import csrf_exempt
 
 from collections import defaultdict
 
-def videos(request, collection=False):
-    if not collection:
+def videos(request, collection=False, all=False):
+    editlink = False
+    if not collection and not all:
         if request.site.id == 1:
             collection = 4
         else:
             collection = 6
 
-    collection = get_object_or_404(VideoCollection, pk=collection)
+    if collection:
+        collection = get_object_or_404(VideoCollection, pk=collection)
+        editlink = reverse("core:admin_videocollection", args=[collection.id])
     id = 87
     if request.site.id == 2:
         id = 150
     collections = VideoCollection.on_site.all().exclude(pk=7)
-    list = Video.on_site.filter(collections=collection)
+    if all:
+        list = Video.on_site.all().exclude(collections__id=7)
+    else:
+        list = Video.on_site.filter(collections=collection)
     addlink = "/admin/videos/create"
-    editlink = reverse("core:admin_videocollection", args=[collection.id])
     context = { "section": "resources", "collection": collection, "addlink": addlink,
-    "collections": collections, "list": list, "sidenav": True,  "editlink": editlink }
+    "collections": collections, "list": list, "sidenav": True,  "editlink": editlink, 'all': all }
     return render(request, "core/videos.html", context)
 
 def video(request, id):
