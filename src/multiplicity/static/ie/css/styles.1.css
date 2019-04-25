@@ -101,3 +101,11 @@ body .select2-container--default .select2-results__option[aria-selected="true"]:
     background-color: #ddd;
     color: #333;
 }
+footer#actions .btn-warning, footer#actions .btn-warning:hover {
+  background-color:#cf4803 !important;
+  border-color:#cf4803 !important;
+}
+footer#actions .btn-danger, footer#actions .btn-danger:hover {
+  background-color:#A31621 !important;
+  border-color:#A31621 !important;
+}
