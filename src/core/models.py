@@ -487,6 +487,9 @@ class ProjectUserForm(ModelForm):
         labels = {
             'name': 'Project title',
             'thesistype': 'Thesis type',
+            'researcher': 'Researcher(s)',
+            'supervisor': 'Supervisor(s) / Project leader(s)',
+            'url': 'URL',
         }
 
 class Timeline(models.Model):
