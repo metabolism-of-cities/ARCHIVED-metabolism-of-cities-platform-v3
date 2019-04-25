@@ -44,6 +44,9 @@ urlpatterns = [
     path('omat', RedirectView.as_view(url=site_url+'/resources/omat', permanent=True)),
     path('omat/<slug:slug>', RedirectView.as_view(url=archive_url+'/omat/%(slug)s', permanent=True)),
 
+    # Fixing URLs
+    path('resources/starters-kit', RedirectView.as_view(url=site_url+'/resources/starter-kit', permanent=True)),
+
     # Pending:
     path('research/<int:id>', RedirectView.as_view(url=site_url+'/community/research/projects', query_string=True, permanent=True)),
     path('news/<int:id>-<slug:slug>', RedirectView.as_view(url=site_url+'/community/news', permanent=True)),
