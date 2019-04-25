@@ -37,12 +37,6 @@
 
 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-6jHF7Z3XI3fF4XZixAuSu0gGKrXwoX/w3uFPxC56OtjChio7wtTGJWRW53Nhx6Ev" crossorigin="anonymous">
 
-{% if SITE_ID == 1 %}
-  <link href="{% static 'ie/css/styles.1.css' %}?new" rel="stylesheet">
-{% else %}
-  <link href="{% static 'ie/css/styles.2.css' %}?sep092018" rel="stylesheet">
-{% endif %}
-
 {% if tinymce %}
   <script type="text/javascript" src="{% static 'tinymce/js/tinymce/tinymce.min.js' %}"></script>
 {% endif %}
@@ -57,3 +51,10 @@
 {% endif %}
 
 <link href="{% static 'ie/css/style.css' %}?0092" rel="stylesheet">
+
+{% if SITE_ID == 1 %}
+  <link href="{% static 'ie/css/styles.1.css' %}?again" rel="stylesheet">
+{% else %}
+  <link href="{% static 'ie/css/styles.2.css' %}?sep092018" rel="stylesheet">
+{% endif %}
+

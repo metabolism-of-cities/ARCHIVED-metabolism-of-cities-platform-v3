@@ -119,3 +119,6 @@ footer#actions .btn-danger, footer#actions .btn-danger:hover {
 .panel-dark .panel-heading, .panel-dark .panel-footer, .panel-dark.panel-colorful {
   background-color: #285775;
 }
+.main-content-block a:not(.btn) {
+  color: #1F7A8C;
+}
