@@ -46,6 +46,7 @@ urlpatterns = [
     path('publications/collections', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
     path('publications/add', RedirectView.as_view(url=site_url+'/resources/publications/add', permanent=True)),
     path('publications/search', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
+    path('page/map', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
     path('publications/all', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
     path('collections/<int:id>', RedirectView.as_view(url=site_url+'/resources/publications', permanent=True)),
     path('tags/<int:id>/<slug:slug>', RedirectView.as_view(url=site_url+'/resources/publications/tags/%(id)s', permanent=True)),
@@ -53,8 +54,23 @@ urlpatterns = [
     path('publication/<int:id>', RedirectView.as_view(url=site_url+'/resources/publications/%(id)s', permanent=True)),
     path('source/<int:id>', RedirectView.as_view(url=site_url+'/resources/journals/%(id)s', permanent=True)),
 
+    path('blog/<int:id>-<slug:slug>', RedirectView.as_view(url=site_url+'/community/blog/%(id)s', permanent=True)),
+
+    path('data/', RedirectView.as_view(url=site_url+'/resources/data/datasets', permanent=True)),
+    path('data', RedirectView.as_view(url=site_url+'/resources/data/datasets', permanent=True)),
+    path('data/add', RedirectView.as_view(url=site_url+'/about/join', permanent=True)),
+
     path('omat', RedirectView.as_view(url=site_url+'/resources/omat', permanent=True)),
-    path('omat/<slug:slug>', RedirectView.as_view(url=archive_url+'/omat/%(slug)s', permanent=True)),
+    path('omat/<slug:slug>', RedirectView.as_view(url=archive_url+'/omat/%(slug)s', permanent=False)),
+    path('page/casestudies', RedirectView.as_view(url=archive_url+'/page/casestudies', permanent=False)),
+    path('page/casestudies/<slug:slug>', RedirectView.as_view(url=archive_url+'/page/casestudies/%(slug)s', permanent=False)),
+    path('casestudy/<slug:slug>', RedirectView.as_view(url=archive_url+'/casestudy/%(slug)s', permanent=False)),
+    path('data/areas/<slug:slug>', RedirectView.as_view(url=archive_url+'/data/areas/%(slug)s', permanent=False)),
+    path('data/subareas/<slug:slug>', RedirectView.as_view(url=archive_url+'/data/subareas/%(slug)s', permanent=False)),
+    path('stakeholders', RedirectView.as_view(url=archive_url+'/stakeholders', permanent=False)),
+    path('stakeholders/<slug:slug>', RedirectView.as_view(url=archive_url+'/stakeholders/%(slug)s', permanent=False)),
+    path('datavisualization', RedirectView.as_view(url=archive_url+'/datavisualization', permanent=False)),
+    path('datavisualization/<slug:slug>', RedirectView.as_view(url=archive_url+'/datavisualization/%(slug)s', permanent=False)),
 
     # Fixing URLs
     path('resources/starters-kit', RedirectView.as_view(url=site_url+'/resources/starter-kit', permanent=True)),
