@@ -127,6 +127,9 @@ def taskforce(request, slug):
     context = { "section": "about", "page": "taskforces", "info": info, "tickets": tickets, "units": units, "sidenav": True, "taskforces": taskforces }
     return render(request, "core/taskforce.html", context)
 
+def notfound(request):
+    return render(request, "404.html")
+
 @csrf_exempt
 def page(request, slug):
     page = get_object_or_404(Article, slug=slug, site=request.site, active=True)

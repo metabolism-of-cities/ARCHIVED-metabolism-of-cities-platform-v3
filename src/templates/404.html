@@ -1,21 +1,37 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
 
-{% block title %}Page not found{% endblock %}
+{% block title %}404 Page Not Found{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
+{% include 'multiplicity/includes/top.navbar.html' %}
 
-  <div class="cls-content">
-    <h1 class="error-code text-info">404</h1>
-    <p class="h4 text-uppercase text-bold">Page Not Found!</p>
-    <div class="pad-btm">
-      Sorry, the requested page was not found. We recently restructured our site - please 
-      navigate our menu to find what you are looking for.
+<div class="cls-content text-center">
+  <h1 class="error-code text-info" style="color:#cf3c21">404</h1>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Page Not Found</h3>
+        <p>
+          Sorry, we could not find the page you are looking for. Please use our main navigation menu
+          to find what you are looking for. If this is an unexpected error, please 
+          <a href="{% url "core:contact" %}">contact us</a>.
+        </p>
+
+        {% if SITE_ID == 1 %}
+        <p>
+          We launched a new website in April 2019. If you want to access our old site, please go to
+          <a href="https://archive.metabolismofcities.org">https://archive.metabolismofcities.org</a>
+        </p>
+        {% endif %}
+      </div>
     </div>
-    <hr class="new-section-sm bord-no">
-    <div class="pad-top"><a class="btn btn-primary" href="./">Back to the homepage</a></div>
   </div>
+</div>
 
 {% endblock %}
 
@@ -30,9 +46,14 @@
 {% block pagehead %}
 <div id="page-head">
     
-    <div id="page-title">
-        <h1 class="page-header text-overflow">Page not found</h1>
-    </div>
+  <div id="page-title">
+    <h1 class="page-header text-overflow">About Us</h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="pli-home"></i></a></li>
+    <li class="active">Page not found</li>
+  </ol>
 
 </div>
 {% endblock %}
