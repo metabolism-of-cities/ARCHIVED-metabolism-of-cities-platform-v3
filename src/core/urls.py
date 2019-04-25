@@ -19,7 +19,6 @@ app_name = 'core'
 # site_url = 'https://metabolismofcities.org'
 site_url = ''
 archive_url = 'https://archive.metabolismofcities.org'
-archive_url = 'http://e/mfa'
 
 urlpatterns = [
 
