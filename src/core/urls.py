@@ -15,7 +15,6 @@ from . import views
 # project -> project view
 # project_form -> add new/edit existing project
 
-
 app_name = 'core'
 # site_url = 'https://metabolismofcities.org'
 site_url = ''
