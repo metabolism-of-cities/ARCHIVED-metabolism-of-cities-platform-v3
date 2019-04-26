@@ -156,7 +156,9 @@ p.abstract {
 
         <ul>
           {% for tag in info.tags.all %}
-          <li><a class="btn btn-default" href="{% url 'core:references' %}?terms={{ tag.id }}">{{ tag.name }}</a></li>
+            {% if not tag.hidden %}
+              <li><a class="btn btn-default" href="{% url 'core:tag_search' tag.id %}">{{ tag.name }}</a></li>
+            {% endif %}
           {% endfor %}
         </ul>
 

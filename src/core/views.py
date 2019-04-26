@@ -496,20 +496,21 @@ def references(request, type=False, tag=False):
     cities = defaultdict(dict)
     cities_references = {}
 
-    # TODO
-    # We can improve this a lot
-    for details in cities_list:
-        for sub in details.spaces.all():
-            if sub.type.id == 3:
-                cities[sub.id] = sub
-                reference = details
-                if sub.id in cities_references and details not in cities_references[sub.id]:
-                    cities_references[sub.id].append(details)
-                else:
-                    cities_references[sub.id] = []
-                    cities_references[sub.id].append(details)
+    if not tag:
+        # TODO
+        # We can improve this a lot
+        for details in cities_list:
+            for sub in details.spaces.all():
+                if sub.type.id == 3:
+                    cities[sub.id] = sub
+                    reference = details
+                    if sub.id in cities_references and details not in cities_references[sub.id]:
+                        cities_references[sub.id].append(details)
+                    else:
+                        cities_references[sub.id] = []
+                        cities_references[sub.id].append(details)
+        cities = dict(cities)
 
-    cities = dict(cities)
     context = { 
         "section": "resources",
         "list": list, 
