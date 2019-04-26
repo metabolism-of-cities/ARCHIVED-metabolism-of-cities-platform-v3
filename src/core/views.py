@@ -492,7 +492,7 @@ def references(request, type=False, tag=False):
     maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     addlink = reverse("core:newreference")
 
-    cities_list = Reference.objects.filter(status="active", tags__id=main_filter, spaces__type__id=3)
+    cities_list = Reference.objects.filter(status="active", tags__id=main_filter, spaces__type__id=3).prefetch_related('spaces')
     cities = defaultdict(dict)
     cities_references = {}
 
