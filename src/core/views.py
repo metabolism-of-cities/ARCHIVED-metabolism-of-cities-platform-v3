@@ -54,8 +54,12 @@ def video(request, id):
     info = get_object_or_404(Video, pk=id)
     editlink = ""+str(id) + "/change/"
     editlink = reverse("core:admin_video", args=[id])
+    download = False
+    download_videos = [34,35,37,38,39,40,41,42,43]
+    if id in download_videos:
+        download = True
 
-    context = { "section": "resources", "page": "video", "info": info, "editlink": editlink }
+    context = { "section": "resources", "page": "video", "info": info, "editlink": editlink, "download": download }
     return render(request, "core/video.html", context)
 
 def search(request):

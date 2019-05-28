@@ -27,6 +27,11 @@
             {% endif %}
             {{ info.description|safe }}
 
+            {% if download %}
+              <p class="pad-top">
+                <a href="{{ MEDIA_URL }}videos/{{ info.id }}.mp4" target="_blank" class="btn btn-success">Download this video</a>
+              </p>
+            {% endif %}
             <p class="pad-top">
               {% if info.primary_space %}
                 <a href="{% url 'multiplicity:space' info.primary_space.city.slug info.primary_space.type.slug info.primary_space.slug %}" class="btn btn-info">Related: {{ info.primary_space.name }}</a>
