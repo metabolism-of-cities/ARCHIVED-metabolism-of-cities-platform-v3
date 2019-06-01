@@ -1401,7 +1401,7 @@ def upload_mtu_review(request, city, filename):
                 else:
                     type = ReferenceSpaceType.objects.create(name=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
 
-            mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST['timeframe'], source=request.POST['source'], file=filename, description=request.POST['details'])
+            mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST['start'], source=request.POST['source'], file=filename, description=request.POST['details'])
 
         for record in data['features']:
             properties = record['properties']
@@ -1414,7 +1414,15 @@ def upload_mtu_review(request, city, filename):
                     area = float(properties[request.POST['area']])/float(request.POST['unit'])
 
                 space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, slug=slugify(name), mtu=mtu)
-                location = ReferenceSpaceLocation.objects.create(space=space, area=area, timeframe=request.POST['timeframe'], source=request.POST['source'], geojson=geometry)
+                if 'start' in request.POST and request.POST['start']:
+                    start = request.POST['start']
+                else:
+                    start = None
+                if 'end' in request.POST and request.POST['end']:
+                    end = request.POST['end']
+                else:
+                    end = None
+                location = ReferenceSpaceLocation.objects.create(space=space, area=area, start=start, end=end, source=request.POST['source'], geojson=geometry)
                 space.location = location
                 space.save()
 
