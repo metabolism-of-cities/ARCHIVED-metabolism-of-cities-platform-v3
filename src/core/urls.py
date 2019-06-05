@@ -98,6 +98,7 @@ urlpatterns = [
     path('about', views.section_home, {'slug': 'about'}, name='about'),
     path('community', views.section_home, {'slug': 'community'}, name='community_home'),
     path('resources', views.section_home, {'slug': 'resources'}, name='resources_home'),
+    path('resources/', views.section_home, {'slug': 'resources'}, name='resources_home'),
 
     path('news_events', views.news_and_events, name='news_and_events'),
     path('page/<slug:slug>', views.page, name='page'),
