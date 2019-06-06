@@ -37,6 +37,14 @@ def get_item(dictionary, key):
     return dictionary.get(key)
 
 @login_required
+def export(request):
+    list = TaskForceTicket.objects.exclude(taskforce__id=16)
+    topics = Topic.objects.all()
+    msg = Message.objects.all().order_by('id')
+    context = { "list": list, "topics": topics, "msg": msg }
+    return render(request, "core/export.html", context)
+
+@login_required
 def index(request):
     categories = Category.objects.order_by('name').exclude(group='project').annotate(topic_count=Count('topics'))
 

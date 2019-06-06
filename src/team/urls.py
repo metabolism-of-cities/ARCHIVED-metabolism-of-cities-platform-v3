@@ -9,6 +9,7 @@ app_name = 'team'
 urlpatterns = [
     path('', views.index, name='homepage'),
     path('controlpanel', views.controlpanel, name='controlpanel'),
+    path('export', views.export, name='export'),
     path('category/<int:id>', views.category),
     path('taskforce/<int:id>', views.taskforce, name='taskforce'),
     path('taskforce/<int:category>/task', views.ticket, name='newticket'),

@@ -1,0 +1,84 @@
+<pre>
+
+{% for details in msg %}
+ INSERT INTO core_interaction (id, date, message, created_by_id, type_id, thread_id) 
+ VALUES ({{ details.id|add:"1000" }}, '{{ details.date|date:"Y-m-d H:i:s" }}', '{{ details.message }}', {{ details.newauthor }}, 1, {{ details.topic_id|add:"1000" }}); 
+{% endfor %}
+
+
+
+update team_message set newauthor = 282 where author_id = 1;
+update team_message set newauthor = 609 where author_id = 56;
+update team_message set newauthor = 658 where author_id = 57;
+update team_message set newauthor = 767 where author_id = 58;
+update team_message set newauthor = 381 where author_id = 50;
+update team_message set newauthor = 769 where author_id = 59;
+update team_message set newauthor = 886 where author_id = 60;
+update team_message set newauthor = 1025 where author_id = 61;
+update team_message set newauthor = 931 where author_id = 62;
+
+update team_message set newauthor = 1 where author_id = 1;
+update team_message set newauthor = 56 where author_id = 2;
+update team_message set newauthor = 57 where author_id = 3;
+update team_message set newauthor = 58 where author_id = 5;
+update team_message set newauthor = 50 where author_id = 7;
+update team_message set newauthor = 59 where author_id = 8;
+update team_message set newauthor = 60 where author_id = 4;
+update team_message set newauthor = 61 where author_id = 65;
+update team_message set newauthor = 62 where author_id = 52;
+update team_message set newauthor = 180 where author_id = 6;
+
+UPDATE team_message SET message = replace(message, '''', '"');
+
+
+{% for details in topics %}
+INSERT INTO core_interactionthread (id, name, project_id, type) VALUES
+({{ details.id|add:"1000" }}, '{{ details.name }}', {% for cat in details.categories.all %}{% if forloop.first %}{{ cat.getparent }}{% endif %}{% endfor %}, 'internal');
+{% endfor %}
+
+
+{% for details in list %}
+INSERT INTO core_project (id, name, type_id, parent_id, main_parent_id, status_id, deadline, description, active) VALUES
+    ({{ details.id|add:"1000" }}, '{{ details.title }}', 3, {{ details.taskforce.getparent }}, 22, {{ details.newstatus }}, NULL, '{{ details.description }}', true);
+{% endfor %}
+
+
+ALTER TABLE "team_category"
+ADD "getparent" smallint NULL;
+COMMENT ON TABLE "team_category" IS '';
+
+
+        UPDATE team_category SET getparent = 64 WHERE id = 8;
+        UPDATE team_category SET getparent = 45 WHERE id = 5;
+        UPDATE team_category SET getparent = 47 WHERE id = 3;
+        UPDATE team_category SET getparent = 46 WHERE id = 7;
+        UPDATE team_category SET getparent = 43 WHERE id = 1;
+        UPDATE team_category SET getparent = 40 WHERE id = 10;
+        UPDATE team_category SET getparent = 67 WHERE id = 12;
+        UPDATE team_category SET getparent = 68 WHERE id = 6;
+
+        UPDATE team_topic_categories SET project = 64 WHERE category_id = 8;
+        UPDATE team_topic_categories SET project = 45 WHERE category_id = 5;
+        UPDATE team_topic_categories SET project = 47 WHERE category_id = 3;
+        UPDATE team_topic_categories SET project = 46 WHERE category_id = 7;
+        UPDATE team_topic_categories SET project = 43 WHERE category_id = 1;
+        UPDATE team_topic_categories SET project = 40 WHERE category_id = 10;
+        UPDATE team_topic_categories SET project = 67 WHERE category_id = 12;
+        UPDATE team_topic_categories SET project = 68 WHERE category_id = 6;
+
+ALTER TABLE "team_taskforceticket"
+ADD "newstatus" character varying(100) NULL;
+COMMENT ON TABLE "team_taskforceticket" IS '';
+
+
+UPDATE team_taskforceticket SET newstatus = 12 WHERE status = 'unassigned';
+UPDATE team_taskforceticket SET newstatus = 14 WHERE status = 'completed';
+UPDATE team_taskforceticket SET newstatus = 16 WHERE status = 'removed';
+UPDATE team_taskforceticket SET newstatus = 12 WHERE status = 'assigned';
+UPDATE team_taskforceticket SET newstatus = 13 WHERE status = 'in_progress';
+
+UPDATE team_taskforceticket SET description = replace(description, '''', '"');
+
+DELETE FROM core_project WHERE id > 1000;
+
+</pre>

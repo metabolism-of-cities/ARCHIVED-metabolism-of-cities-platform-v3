@@ -34,6 +34,8 @@ class Category(models.Model):
     group = models.CharField(max_length=10, choices=GROUPS, default='community')
     members = models.ManyToManyField(User, through='TaskForceMember')
     position = models.PositiveSmallIntegerField(null=True, blank=True)
+    # To be deleted
+    getparent = models.PositiveSmallIntegerField(null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -59,6 +61,8 @@ class Topic(models.Model):
     deleted_at = models.DateTimeField(null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
+    # To be deleted
+    project = models.CharField(max_length=255)
     objects = models.Manager() # The default manager.
     active_objects = ActiveManager() # Only show active topics
     def __str__(self):
@@ -93,6 +97,7 @@ class Message(models.Model):
     message = models.TextField()
     file = models.FileField(upload_to='uploads/', null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    newauthor = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -231,6 +236,8 @@ class TaskForceTicket(models.Model):
     deadline = models.DateField(null=True, blank=True)
     good_entry_task = models.BooleanField(default=False)
     objects = TicketQuerySet.as_manager()
+    # To be deleted
+    newstatus = models.CharField(max_length=255, null=True, blank=True)
 
 class TaskForceTicketForm(ModelForm):
     class Meta:
