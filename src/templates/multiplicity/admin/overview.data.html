@@ -112,7 +112,10 @@
             {% for details in csv %}
                 <tr>
                     <td data-sort="{{ details.created_at|date:"Y-m-d H:i" }}">{{ details.created_at }}</td>
-                    <td><a href="{% url 'multiplicity:upload_flow_review' info.slug details.datasettype.id details.id %}">{{ details.original_name }}</a></td>
+                    <td>
+                      <a href="{% url 'multiplicity:download_csv' info.slug details.id %}"><i class="fa fa-download"></i></a>
+                      <a href="{% url 'multiplicity:upload_flow_review' info.slug details.datasettype.id details.id %}">{{ details.original_name }}</a>
+                    </td>
                     <td><a href="{% url 'core:userdetails' details.user.id %}">{{ details.user.first_name }} {{ details.user.last_name }}</a></td>
                     <td>
                     {% if details.dataset %}
