@@ -522,7 +522,11 @@ def download_csv(request, city, id):
     contents = open(file_path, 'r')
     date = str(file.created_at.year) + '-' + str(file.created_at.month) + '-' + str(file.created_at.day)
     response = HttpResponse(contents, content_type="text/csv")
-    response['Content-Disposition'] = 'attachment; filename="'+file.dataset.name+'-'+date+'.csv"'
+    if file.dataset:
+        name = file.dataset.name
+    else:
+        name = 'download'
+    response['Content-Disposition'] = 'attachment; filename="'+name+'-'+date+'.csv"'
     return response
 
 @login_required
