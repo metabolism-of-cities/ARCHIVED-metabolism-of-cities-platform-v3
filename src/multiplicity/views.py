@@ -784,7 +784,7 @@ def upload_flow_review(request, city, type, id, update=None):
             if len(row) != column_count and len(row) > 0:
                 error = "File format invalid. The number of columns in the files is not correct. We expect " + str(column_count) + "  columns but the file had " + str(len(row))
             elif not error and len(row) > 0:
-                if row[0].strip() != "Timeframe" and row[0] and row[0].strip() != "Timeframe name" and row[0].strip() != "Date" :
+                if row[0].strip().lower() != "timeframe" and row[0] and row[0].strip().lower() != "timeframe name" and row[0].strip().lower() != "date" :
 
                     if dataset.name == "Population":
                         material = "People"
@@ -852,9 +852,9 @@ def upload_flow_review(request, city, type, id, update=None):
                             elif destination == info.name:
                                 destination_info = info
                             else:
-                                destination_info = ReferenceSpace.objects.filter(active=True, city=info,name=destination)
+                                destination_info = ReferenceSpace.objects.filter(active=True, city=info,name__iexact=destination)
                                 if not destination_info:
-                                    destination_info = ReferenceSpace.objects.filter(active=True, name=destination)
+                                    destination_info = ReferenceSpace.objects.filter(active=True, name__iexact=destination)
                                 if destination_info:
                                     # We only want a single result, so slice this
                                     destination_info = destination_info[0]
@@ -874,9 +874,9 @@ def upload_flow_review(request, city, type, id, update=None):
                             elif origin == info.name:
                                 origin_info = info
                             else:
-                                origin_info = ReferenceSpace.objects.filter(active=True, city=info,name=origin)
+                                origin_info = ReferenceSpace.objects.filter(active=True, city=info,name__iexact=origin)
                                 if not origin_info:
-                                    origin_info = ReferenceSpace.objects.filter(active=True, name=origin)
+                                    origin_info = ReferenceSpace.objects.filter(active=True, name__iexact=origin)
                                 if origin_info:
                                     origin_info = origin_info[0]
                                 else:
@@ -1109,7 +1109,7 @@ def upload_flow_meta(request, city, type, id):
             with open(path) as f:
                 reader = csv.reader(f)
                 for row in reader:
-                    if len(row) > 0 and row[0].strip() != "Timeframe" and row[0] and row[0].strip() != "Timeframe name" and row[0].strip() != "Date":
+                    if len(row) > 0 and row[0].strip().lower() != "timeframe" and row[0] and row[0].strip().lower() != "timeframe name" and row[0].strip().lower() != "date":
 
                         if dataset.name == "Population":
                             material = "People"
@@ -1213,7 +1213,7 @@ def upload_flow_meta(request, city, type, id):
                                 if destination in referencespacelist:
                                     destination_info = referencespacelist[destination]
                                 else:
-                                    destination_info = ReferenceSpace.objects.filter(active=True, name=destination)
+                                    destination_info = ReferenceSpace.objects.filter(active=True, name__iexact=destination)
                                     if destination_info:
                                         # We only want a single result, so slice this
                                         destination_info = destination_info[0]
@@ -1240,7 +1240,7 @@ def upload_flow_meta(request, city, type, id):
                                 if origin in referencespacelist:
                                     origin_info = referencespacelist[origin]
                                 else:
-                                    origin_info = ReferenceSpace.objects.filter(active=True, name=origin)
+                                    origin_info = ReferenceSpace.objects.filter(active=True, name__iexact=origin)
                                     if origin_info:
                                         origin_info = origin_info[0]
                                     else:
@@ -1395,7 +1395,7 @@ def upload_mtu_review(request, city, filename):
 
             log = UserLog.objects.create(user=request.user, action=import_data, space=info, points=10, model="MTU geojson", description="File: " + filename)
 
-            type = ReferenceSpaceType.objects.filter(name=request.POST['mtu_name'])
+            type = ReferenceSpaceType.objects.filter(name__iexact=request.POST['mtu_name'])
             if type:
                 type = type[0]
             else:
@@ -1403,7 +1403,7 @@ def upload_mtu_review(request, city, filename):
                 if type:
                     type = type[0]
                 else:
-                    type = ReferenceSpaceType.objects.create(name=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
+                    type = ReferenceSpaceType.objects.create(name__iexact=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
 
             mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST['start'], source=request.POST['source'], file=filename, description=request.POST['details'])
 
