@@ -55,6 +55,7 @@ urlpatterns = [
     path('<slug:city>/maps/<slug:type>/', views.map, name='map'),
     path('<slug:city>/mtu/<slug:type>/<slug:space>/', views.space, name='mtu_space'),
     path('<slug:city>/maps/mtu/<slug:type>/', views.mtu_map, name='map_mtu'),
+    path('<slug:city>/maps/mtu/<slug:type>/download/', views.download_mtu, name='download_mtu'),
     path('<slug:city>/maps/boundaries/<int:id>/', views.map, name='map'),
     path('<slug:city>/maps/boundaries/<int:id>/download/', views.download_location, name='download_location'),
     path('<slug:city>/datasets/', views.datasets, name='datasets'),

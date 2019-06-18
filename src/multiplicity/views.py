@@ -515,6 +515,19 @@ def download_location(request, city, id):
     response['Content-Disposition'] = 'attachment; filename="' + info.name + '.json"'
     return response
 
+def download_mtu(request, city, type):
+    list = ReferenceSpace.objects.filter(city__slug=city, type__slug=type, active=True)
+    output = '{"type":"FeatureCollection", "features": ['
+    for details in list:
+        output += '{"type":"Feature","geometry":'
+        output += details.location.geojson
+        output += '},'
+        output += "\n"
+    output += ']}'
+    print(output)
+    response = HttpResponse(output, content_type="application/json")
+    response['Content-Disposition'] = 'attachment; filename="' + type + '.json"'
+    return response
 
 def download_csv(request, city, id):
     file = get_object_or_404(CSV, pk=id)
