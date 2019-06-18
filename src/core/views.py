@@ -343,7 +343,6 @@ def reference(request, id):
     context = { "section": "literature", "page": "publications", "info": info, "related": related, "authors": authors, "editlink": editlink, "data": data, "datatables": True }
     return render(request, "core/reference.html", context)
 
-@login_required
 def referenceform(request, id=False, dataset=False):
     new_record = False
     if request.site.id == 1:
@@ -351,7 +350,7 @@ def referenceform(request, id=False, dataset=False):
     else:
         main_filter = 219
 
-    if id:
+    if id and request.user.is_staff:
         info = get_object_or_404(Reference, pk=id)
         if request.user.is_staff:
             form = ReferenceFormAdmin(instance=info)
@@ -379,10 +378,44 @@ def referenceform(request, id=False, dataset=False):
             info = form.save()
             if new_record:
                 create_record = get_object_or_404(UserAction, pk=1)
-                log = UserLog(user=request.user, action=create_record, reference=info, points=5)
+                if request.user.is_authenticated:
+                    log = UserLog(user=request.user, action=create_record, reference=info, points=5)
+                else:
+                    info.status = "pending"
+                    info.save()
 
-            messages.success(request, "Information was saved.")
-            return redirect("core:reference", id=info.id)
+                # Send mail to notify team that a new record was added.
+                title = request.POST["title"]
+                if request.user.is_authenticated:
+                    name = request.user.username
+                    email = request.user.email
+                else:
+                    name = request.POST["name"]
+                    email = request.POST["email"]
+                context = {
+                    "name": name,
+                    "email": email,
+                    "title": title,
+                    "link": reverse("core:editreference", args=[info.id]),
+                    "domain": Site.objects.get_current().domain,
+                }
+
+                message = render_to_string("core/mail/referenceform.txt", context)
+
+                send_mail(
+                    "Publication added to Metabolism of Cities (" + title + ")",
+                    message,
+                    settings.SITE_EMAIL,
+                    [settings.SITE_EMAIL],
+                )
+
+            if request.user.is_authenticated:
+                messages.success(request, "Information was saved.")
+                return redirect("core:reference", id=info.id)
+            else:
+                messages.success(request, "Thanks, the record has been added! Our team will review this and notify you when it has been activated. Use the form below if you would like to add another record.")
+                return redirect("core:newreference")
+
         else:
             messages.error(request, "We could not save your form, please correct the errors")
 

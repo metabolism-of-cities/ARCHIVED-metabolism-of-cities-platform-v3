@@ -333,7 +333,7 @@ class Reference(models.Model):
     title_original_language = models.CharField(max_length=255, blank=True, null=True)
     authorlist = models.TextField()
     type = models.ForeignKey(ReferenceType, on_delete=models.CASCADE)
-    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True)
+    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, null=True, blank=True, help_text="If the journal does not appear in the list, please leave empty and add the name in the comments")
     event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
     year = models.PositiveSmallIntegerField()
     abstract = models.TextField(null=True, blank=True)
@@ -343,6 +343,8 @@ class Reference(models.Model):
     open_access = models.NullBooleanField(null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
     doi = models.CharField(max_length=255, null=True, blank=True)
+    isbn = models.CharField(max_length=255, null=True, blank=True)
+    comments = models.TextField(null=True, blank=True)
     STATUS = (
         ('pending', 'Pending'),
         ('active', 'Active'),
@@ -380,10 +382,11 @@ class ReferenceAuthors(models.Model):
 class ReferenceForm(ModelForm):
     class Meta:
         model = Reference
-        fields = ['title', 'authorlist', 'type', 'journal', 'year', 'abstract', 'language', 'open_access', 'doi', 'url']
+        fields = ['language', 'title', 'title_original_language', 'authorlist', 'type', 'journal', 'year', 'abstract', 'abstract_original_language', 'open_access', 'doi', 'isbn', 'url', 'comments']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',
+            'isbn': 'ISBN',
             'url': 'URL',
         }
 
@@ -394,6 +397,7 @@ class ReferenceFormAdmin(ModelForm):
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',
+            'isbn': 'ISBN',
             'url': 'URL',
         }
 

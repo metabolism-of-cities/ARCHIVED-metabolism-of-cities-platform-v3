@@ -1,0 +1,12 @@
+Someone has added a new publication to our library. Please find the details below:
+
+Details:
+
+Name: {{ name }}
+E-mail: {{ email }}
+Title: {{ title }}
+
+Please review this application and activate it if it is appropriate. Notify the uploader after activating the publication.
+
+Review online at:
+https://{{ domain }}{{ link }}

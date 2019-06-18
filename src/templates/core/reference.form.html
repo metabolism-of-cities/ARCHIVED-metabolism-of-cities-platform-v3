@@ -26,6 +26,26 @@
           <form method="post" class="form form-horizontal" enctype="multipart/form-data">
             {% csrf_token %}
             {% bootstrap_form form layout='horizontal' %}
+
+            {% if not request.user.is_authenticated %}
+              <div class="form-group">
+                <label class="col-md-3 control-label">
+                  Your name
+                </label>
+                <div class="col-md-9">
+                  <input type="text" name="name" placeholder="Your name" class="form-control" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">
+                  E-mail
+                </label>
+                <div class="col-md-9">
+                  <input type="text" name="email" placeholder="Your e-mail address" class="form-control" required />
+                </div>
+              </div>
+            {% endif %}
+
             {% buttons %}
               <div class="col-sm-offset-3 col-sm-9">
                 <button type="submit" class="btn btn-success">Save</button>
@@ -76,6 +96,10 @@ textarea[name='authorlist']{height:100px}
   <script type="text/javascript">
   $(function(){
     $("#id_journal").select2();
+    {% if not info %}
+      $("select[name=language]").val("EN");
+      $("select[name=type]").val("16");
+    {% endif %}
     $("select[name=language]").change(function(){
       if ($(this).val() == "EN") {
         $("#id_title_original_language").closest(".form-group").hide('fast');
@@ -85,7 +109,33 @@ textarea[name='authorlist']{height:100px}
         $("#id_abstract_original_language").closest(".form-group").show('fast');
       }
     });
+    $("select[name=type]").change(function(){
+      if ($(this).val() == "16") {
+        $("#id_journal").closest(".form-group").show('fast');
+        $("#id_doi").closest(".form-group").show('fast');
+      } else {
+        $("#id_journal").closest(".form-group").hide('fast');
+        $("#id_doi").closest(".form-group").hide('fast');
+      }
+      if ($(this).val() == "5" || $(this).val() == "6") {
+        $("#id_isbn").closest(".form-group").show('fast');
+      } else {
+        $("#id_isbn").closest(".form-group").hide('fast');
+      }
+      if ($(this).val() == "29") {
+        $("#id_comments").attr("placeholder", "What level was the thesis (bachelor, masters, etc)? Which faculty and university? Who was the supervisor?");
+      } else if ($(this).val() == "6") {
+        $("#id_comments").attr("placeholder", "Please provide details of the book that this section / chapter is part of.");
+      } else if ($(this).val() == "9") {
+        $("#id_comments").attr("placeholder", "Please provide details of the conference (name, location, dates, etc).");
+      } else {
+        $("#id_comments").attr("placeholder", "Any additional information.");
+      }
+    });
     $("select[name=language]").change();
+    $("select[name=type]").change();
+    $("input[name=title]").attr("placeholder", "Do not write in all-caps");
+    $("textarea[name=authorlist]").attr("placeholder", "Add all authors, preferably in this format: Last Name, First name; Last Name, First Name");
   });
   </script>
 {% endblock %}
