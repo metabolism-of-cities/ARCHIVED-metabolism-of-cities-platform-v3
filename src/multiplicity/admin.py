@@ -12,7 +12,9 @@ class ReferenceSpaceAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 class DatasetTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'origin_process', 'destination_process', 'category', 'active')
+    list_display = ['name', 'category', 'origin_process', 'destination_process', 'type', 'active']
+    list_filter = ['active', 'category', 'type']
+    list_editable = ['active', 'origin_process', 'destination_process']
 
 admin.site.register(DatasetType, DatasetTypeAdmin)
 admin.site.register(Topic, TopicAdmin)

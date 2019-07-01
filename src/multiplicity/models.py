@@ -14,6 +14,8 @@ from django.urls import reverse
 
 User = get_user_model()
 
+from django.db.models import Q
+
 class TimestampedModel(models.Model):
     # A timestamp representing when this object was created.
     created_at = models.DateTimeField(auto_now_add=True)
@@ -264,6 +266,8 @@ class ProcessGroup(models.Model):
         return self.name
     def spaces(self):
         return ReferenceSpaceType.objects.filter(processes__in=self.processes.all())
+    def datasets(self):
+        return DatasetType.objects.filter(Q(origin_process__in=self.processes.all()) | Q(destination_process__in=self.processes.all()))
 
 class ReferenceSpaceSector(models.Model):
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, related_name='sectors')

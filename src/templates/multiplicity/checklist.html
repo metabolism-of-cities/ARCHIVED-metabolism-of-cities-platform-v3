@@ -15,7 +15,7 @@
 
         <p>Which sector? Any | {% for sector in info.sectors.all %}{{ sector.process_group.name }} | {% endfor %}</p>
         <p>What type of work?
-          Georeferencing | Identify and describe | Obtain photos
+          Georeferencing | Identify and describe | Obtain photos | Data aquisition | Data processing
         </p>
 
         <table class="table datatable">
@@ -43,6 +43,18 @@
                   <td>{{ sector.process_group.name }}</td>
                   <td>{{ details }}</td>
                   <td>Obtain photos</td>
+                </tr>
+              {% endfor %}
+              {% for dataset in sector.process_group.datasets.all %}
+                <tr>
+                  <td>{{ sector.process_group.name }}</td>
+                  <td>{{ dataset }}</td>
+                  <td>Locate and obtain dataset</td>
+                </tr>
+                <tr>
+                  <td>{{ sector.process_group.name }}</td>
+                  <td>{{ dataset }}</td>
+                  <td>Process and upload dataset</td>
                 </tr>
               {% endfor %}
             {% endfor %}

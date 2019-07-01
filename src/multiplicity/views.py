@@ -677,7 +677,7 @@ def upload_flow_file_sample(request, city, id):
         contents = contents + ",Comments"
 
     response = HttpResponse(contents, content_type="text/csv")
-    response["Content-Disposition"] = "attachment; filename='sample.csv'"
+    response["Content-Disposition"] = "attachment; filename=sample.csv"
     return response
 
 @login_required
@@ -698,7 +698,7 @@ def upload_infrastructure_file_sample(request, city, type):
         for details in features:
             contents = contents + "," + details.name
     response = HttpResponse(contents, content_type="text/csv")
-    response["Content-Disposition"] = "attachment; filename='sample.csv'"
+    response["Content-Disposition"] = "attachment; filename=sample.csv"
     return response
 
 
