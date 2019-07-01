@@ -43,38 +43,38 @@ from django.db.models import OuterRef, Subquery
 
 def index(request, slug=None):
     if not slug:
-        return redirect('core:citieshomepage')
+        return redirect("core:citieshomepage")
     info = get_object_or_404(ReferenceSpace, slug=slug)
-    types = ReferenceSpaceType.objects.annotate(total=Count('referencespace', filter=Q(referencespace__city=info))).filter(total__gte=1).exclude(pk=8)
-    references = Reference.objects.filter(status='active', tags=info.tag).order_by('-id')[:5]
-    datasets_stocks = Dataset.objects.filter(primary_space=info, type__type='stocks').order_by('-id')[:5]
-    datasets_flows = Dataset.objects.filter(primary_space=info, type__type='flows').order_by('-id')[:5]
+    types = ReferenceSpaceType.objects.annotate(total=Count("referencespace", filter=Q(referencespace__city=info))).filter(total__gte=1).exclude(pk=8)
+    references = Reference.objects.filter(status="active", tags=info.tag).order_by("-id")[:5]
+    datasets_stocks = Dataset.objects.filter(primary_space=info, type__type="stocks").order_by("-id")[:5]
+    datasets_flows = Dataset.objects.filter(primary_space=info, type__type="flows").order_by("-id")[:5]
     photos = Photo.objects.filter(primary_space=info, deleted=False)[:6]
 
     editlink = reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id])
 
     context = {
-        'section': 'cities', 
-        'info' : info,
-        'menu' : 'dashboard',
-        'gallery': True,
-        'photos': photos,
-        'map': True,
+        "section": "cities", 
+        "info" : info,
+        "menu" : "dashboard",
+        "gallery": True,
+        "photos": photos,
+        "map": True,
 
-        'types': types, 
-        'editlink': editlink,
-        'references': references,
-        'datasets_flows': datasets_flows,
-        'datasets_stocks': datasets_stocks,
-        'title': info.name,
+        "types": types, 
+        "editlink": editlink,
+        "references": references,
+        "datasets_flows": datasets_flows,
+        "datasets_stocks": datasets_stocks,
+        "title": info.name,
 
     }
-    return render(request, 'multiplicity/index.html', context)
+    return render(request, "multiplicity/index.html", context)
 
 def index_old_remove(request):
     list = ReferenceSpace.objects.filter(type__id=3)
-    context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'topics': topics }
-    return render(request, 'multiplicity/city.html', context)
+    context = { "section": "cites", "menu": "dashboard", "list": list, "datatables": True, "topics": topics }
+    return render(request, "multiplicity/city.html", context)
 
 def space_list(request, city, type):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -98,9 +98,9 @@ def space_list(request, city, type):
             single = data
 
     data_in = Data.objects.filter(destination_space__type=type)
-    context = { 'section': 'cities', 'menu': 'infrastructure', 'info': info, 'type': type, 'list': list, 'datatables': True, 'tab': tab, 'page': type.process.slug, 'topic':topic, 'features': features,
-    'feature': feature, 'data_in': data_in, 'data_out': data_out, 'charts': True, 'single': single}
-    return render(request, 'multiplicity/space.list.html', context)
+    context = { "section": "cities", "menu": "infrastructure", "info": info, "type": type, "list": list, "datatables": True, "tab": tab, "page": type.process.slug, "topic":topic, "features": features,
+    "feature": feature, "data_in": data_in, "data_out": data_out, "charts": True, "single": single}
+    return render(request, "multiplicity/space.list.html", context)
 
 def space(request, city, type, space):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -121,26 +121,26 @@ def space(request, city, type, space):
         features[details.feature.name] = details.value
     topic = type.topic
     tab = type.slug
-    photouploadlink = '/cities/'+info.slug+'/photo?space='+str(space.id)
-    videouploadlink = '/cities/'+info.slug+'/upload/video?space='+str(space.id)
-    editlink = '/admin/multiplicity/referencespace/'+str(space.id)+'/change/'
+    photouploadlink = "/cities/"+info.slug+"/photo?space="+str(space.id)
+    videouploadlink = "/cities/"+info.slug+"/upload/video?space="+str(space.id)
+    editlink = "/admin/multiplicity/referencespace/"+str(space.id)+"/change/"
     if space.mtu:
-        menu = 'resources'
-        page = 'maps'
+        menu = "resources"
+        page = "maps"
     else:
-        menu = 'infrastructure'
-        page = 'unsure'
+        menu = "infrastructure"
+        page = "unsure"
     context = { 
-        'section': 'cities', 'menu': menu, 'page': page, 'info': info, 
-        'type': type, 'space': space, 'tab': tab, 'log': log, 'features': features, 'topic': topic,
-        'datasets': datasets, 'datatables': True, 'charts': True, 
-        'feature_list': feature_list, 'editlink': editlink, 'photos': photos,
-        'gallery': gallery, 'videos': videos, 'photouploadlink': photouploadlink,
-        'videouploadlink': videouploadlink, 
+        "section": "cities", "menu": menu, "page": page, "info": info, 
+        "type": type, "space": space, "tab": tab, "log": log, "features": features, "topic": topic,
+        "datasets": datasets, "datatables": True, "charts": True, 
+        "feature_list": feature_list, "editlink": editlink, "photos": photos,
+        "gallery": gallery, "videos": videos, "photouploadlink": photouploadlink,
+        "videouploadlink": videouploadlink, 
     }
-    return render(request, 'multiplicity/space.html', context)
+    return render(request, "multiplicity/space.html", context)
 
-def map(request, city, type='boundaries', id=False):
+def map(request, city, type="boundaries", id=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     if id:
         boundary = get_object_or_404(ReferenceSpaceLocation, pk=id)
@@ -148,26 +148,26 @@ def map(request, city, type='boundaries', id=False):
         boundary = info.location
     list = ReferenceSpaceLocation.objects.filter(space=info, active=True)
     if boundary:
-        editlink = reverse('multiplicity:upload_systemboundary', args=[info.slug, boundary.id])
+        editlink = reverse("multiplicity:upload_systemboundary", args=[info.slug, boundary.id])
     else:
         editlink = None
-    addlink = reverse('multiplicity:upload_systemboundary', args=[info.slug])
-    if type == 'boundaries':
-        tab = 'boundaries'
+    addlink = reverse("multiplicity:upload_systemboundary", args=[info.slug])
+    if type == "boundaries":
+        tab = "boundaries"
     context = { 
-        'section': 'cities', 'menu':  'resources', 'page': 'maps', 'info': info, 
-        'boundary': boundary, 'tab': tab, 'list': list,
-        'editlink': editlink, 'addlink': addlink
+        "section": "cities", "menu":  "resources", "page": "maps", "info": info, 
+        "boundary": boundary, "tab": tab, "list": list,
+        "editlink": editlink, "addlink": addlink
     }
-    return render(request, 'multiplicity/space.map.html', context)
+    return render(request, "multiplicity/space.map.html", context)
 
 def map_infrastructure(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     boundary = info.location
     list = ReferenceSpaceLocation.objects.filter(space=info)
-    tab = 'map_infrastructure'
+    tab = "map_infrastructure"
 
-    types = ReferenceSpaceType.objects.all().annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
+    types = ReferenceSpaceType.objects.all().annotate(total=Count("referencespace", filter=Q(referencespace__city=info)))
 
     spaces_list = {}
     for type in types:
@@ -180,11 +180,11 @@ def map_infrastructure(request, city):
 
 
     context = { 
-        'section': 'cities', 'menu':  'resources', 'page': 'maps', 'info': info, 
-        'boundary': boundary, 'tab': tab, 'list': list, 'types': types,
-        'spaces_list': spaces_list, 'map': True
+        "section": "cities", "menu":  "resources", "page": "maps", "info": info, 
+        "boundary": boundary, "tab": tab, "list": list, "types": types,
+        "spaces_list": spaces_list, "map": True
     }
-    return render(request, 'multiplicity/infrastructure.map.html', context)
+    return render(request, "multiplicity/infrastructure.map.html", context)
 
 def mtu_map(request, city, type=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -204,35 +204,35 @@ def mtu_map(request, city, type=False):
         datatables = False
         map = False
     list = ReferenceSpace.objects.filter(city=info, type=type, active=True)
-    tab = 'mtu'
+    tab = "mtu"
     context = { 
-        'section': 'cities', 'menu':  'resources', 'info': info, 
-        'tab': tab, 'list': list, 'page': 'maps', 'datatables': datatables, 
-        'mtu_list': mtu_list, 'type': type, 'map': map, 
+        "section": "cities", "menu":  "resources", "info": info, 
+        "tab": tab, "list": list, "page": "maps", "datatables": datatables, 
+        "mtu_list": mtu_list, "type": type, "map": map, 
     }
-    return render(request, 'multiplicity/mtu.map.html', context)
+    return render(request, "multiplicity/mtu.map.html", context)
 
 def sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)
-    information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by('position')
-    references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).distinct().order_by('title')
-    organizations = Organization.objects.filter(processes__in=sector.processes.all(), reference_spaces=info).order_by('name')
+    information = Information.objects.filter(process__in=sector.processes.all(), space=info).order_by("position")
+    references = Reference.objects.filter(processes__in=sector.processes.all(), tags=info.tag).distinct().order_by("title")
+    organizations = Organization.objects.filter(processes__in=sector.processes.all(), reference_spaces=info).order_by("name")
     datasets = Dataset.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
-    addlink = reverse('multiplicity:information_form', args=[info.slug])
+    addlink = reverse("multiplicity:information_form", args=[info.slug])
     photos = Photo.objects.filter(primary_space=info, process__in=sector.processes.all(), deleted=False)
     map = False
     infrastructure = False
 
-    last_space = ReferenceSpace.objects.filter(type=OuterRef('pk')).order_by('-id')
-    space_photo = Photo.objects.filter(secondary_space__type=OuterRef('pk')).order_by('id')
-    types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count('referencespace', filter=Q(referencespace__city=info)))
-    types = types.annotate(image=Subquery(space_photo.values('image')[:1]))
+    last_space = ReferenceSpace.objects.filter(type=OuterRef("pk")).order_by("-id")
+    space_photo = Photo.objects.filter(secondary_space__type=OuterRef("pk")).order_by("id")
+    types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count("referencespace", filter=Q(referencespace__city=info)))
+    types = types.annotate(image=Subquery(space_photo.values("image")[:1]))
 
-    #Photo.objects.filter(primary_space=OuterRef('referencespace', secondary_space__isnull=True, process__isnull=True, deleted=False)
+    #Photo.objects.filter(primary_space=OuterRef("referencespace", secondary_space__isnull=True, process__isnull=True, deleted=False)
 
-# newest = Comment.objects.filter(post=OuterRef('pk')).order_by('-created_at')
-# Post.objects.annotate(newest_commenter_email=Subquery(newest.values('email')[:1]))
+# newest = Comment.objects.filter(post=OuterRef("pk")).order_by("-created_at")
+# Post.objects.annotate(newest_commenter_email=Subquery(newest.values("email")[:1]))
 
     spaces_list = {}
     for type in types:
@@ -248,14 +248,14 @@ def sector(request, city, sector):
     for details in features_list:
         feature[details.space.id][details.feature.id] = details.value
 
-    context = { 'section': 'cities', 'menu':  'sectors', 'sector': sector, 'info': info, 'information': information, 'datasets': datasets, 
-    'map': map, 'addlink': addlink, 'types': types, 'gallery': True, 'spaces_list': spaces_list, 'datatables': True, 'feature': feature, 
-    'infrastructure': infrastructure, 'photos': photos, 'references': references, 'organizations': organizations, 
+    context = { "section": "cities", "menu":  "sectors", "sector": sector, "info": info, "information": information, "datasets": datasets, 
+    "map": map, "addlink": addlink, "types": types, "gallery": True, "spaces_list": spaces_list, "datatables": True, "feature": feature, 
+    "infrastructure": infrastructure, "photos": photos, "references": references, "organizations": organizations, 
     }
-    return render(request, 'multiplicity/sector.html', context)
+    return render(request, "multiplicity/sector.html", context)
 
 def overview(request, city, slug):
-    groups = ProcessGroup.objects.order_by('name')
+    groups = ProcessGroup.objects.order_by("name")
     flow = get_object_or_404(DatasetTypeStructure, slug=slug)
     list = DatasetType.objects.filter(category__parent=flow)
     types = DatasetTypeStructure.objects.filter(parent=flow)
@@ -264,67 +264,67 @@ def overview(request, city, slug):
     info = get_object_or_404(ReferenceSpace, slug=city)
 
     if flow.parent and flow.parent.name == "Material Flows":
-      menu = 'material-flows'
+      menu = "material-flows"
     elif flow.parent and flow.parent.parent and flow.parent.parent.name == "Material Flows":
-      menu = 'material-flows'
+      menu = "material-flows"
       slug = flow.parent.slug
     else:
-      menu = 'material-stocks'
+      menu = "material-stocks"
 
     page = slug
-    context = { 'section': 'cities', 'menu':  menu, 'page': slug, 'info': info,
-    'list': list, 'types': types, 'flow': flow, 'slug': slug,
-    'editlink': reverse('multiplicity:admin_datasettypes'),
-    'groups': groups
+    context = { "section": "cities", "menu":  menu, "page": slug, "info": info,
+    "list": list, "types": types, "flow": flow, "slug": slug,
+    "editlink": reverse("multiplicity:admin_datasettypes"),
+    "groups": groups
     }
-    return render(request, 'multiplicity/overview.html', context)
+    return render(request, "multiplicity/overview.html", context)
 
 def flow(request, city, type, slug=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     type = get_object_or_404(DatasetType, slug=type)
     list = Dataset.objects.filter(type=type)
-    if type.category.slug == 'internal': 
-      page = 'internal'
+    if type.category.slug == "internal": 
+      page = "internal"
     else:
-      page = 'external'
-    editlink = reverse('multiplicity:admin_datasettype', args=[type.id])
-    addlink = reverse('multiplicity:information_form', args=[info.slug])
+      page = "external"
+    editlink = reverse("multiplicity:admin_datasettype", args=[type.id])
+    addlink = reverse("multiplicity:information_form", args=[info.slug])
     information = Information.objects.filter(space=info, dataset_types=type)
     photos = Photo.objects.filter(primary_space=info, topic=type.topic, deleted__isnull=False)
-    context = { 'section': 'cities', 'menu':  'material-flows', 'page': page, 'info': info,
-        'list': list, 'flow': flow, 'slug': slug, 'type': type, 'editlink': editlink,
-        'addlink': addlink, 'information': information, 'photos': photos,
-        'gallery': True,
+    context = { "section": "cities", "menu":  "material-flows", "page": page, "info": info,
+        "list": list, "flow": flow, "slug": slug, "type": type, "editlink": editlink,
+        "addlink": addlink, "information": information, "photos": photos,
+        "gallery": True,
     }
-    return render(request, 'multiplicity/flow.html', context)
+    return render(request, "multiplicity/flow.html", context)
 
-def photos(request, city, type='photo'):
+def photos(request, city, type="photo"):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    photos = Photo.objects.filter(primary_space=info, deleted=False, type=type).order_by('process', 'position')
-    addlink = reverse('multiplicity:photo_form', args=[info.slug])
-    if type == 'photo':
-        page = 'photos'
+    photos = Photo.objects.filter(primary_space=info, deleted=False, type=type).order_by("process", "position")
+    addlink = reverse("multiplicity:photo_form", args=[info.slug])
+    if type == "photo":
+        page = "photos"
         tab = False
-        title = 'Photos'
+        title = "Photos"
     else:
-        page = 'maps'
-        tab = 'other'
-        title = 'Other maps'
+        page = "maps"
+        tab = "other"
+        title = "Other maps"
 
     context = { 
-        'section': 'cities', 'menu':  'resources', 'page': page, 'info': info, 'photos': photos, 
-        'addlink': addlink, 'gallery': True, 'tab': tab, 'title': title, 'show_photo_categories': True
+        "section": "cities", "menu":  "resources", "page": page, "info": info, "photos": photos, 
+        "addlink": addlink, "gallery": True, "tab": tab, "title": title, "show_photo_categories": True
     }
-    return render(request, 'multiplicity/resources.photos.html', context)
+    return render(request, "multiplicity/resources.photos.html", context)
 
 def videos(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     list = Video.objects.filter(primary_space=info)
-    addlink = reverse('multiplicity:photo_form', args=[info.slug])
+    addlink = reverse("multiplicity:photo_form", args=[info.slug])
 
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'videos', 'info': info, 'list': list,
-    'addlink': addlink, }
-    return render(request, 'multiplicity/resources.videos.html', context)
+    context = { "section": "cities", "menu":  "resources", "page": "videos", "info": info, "list": list,
+    "addlink": addlink, }
+    return render(request, "multiplicity/resources.videos.html", context)
 
 def resources(request, city, slug):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -339,15 +339,31 @@ def resources(request, city, slug):
     elif slug == "podcasts":
         type = 24
     type = get_object_or_404(ReferenceType, pk=type)
-    references = Reference.objects.filter(status='active', tags=info.tag, type=type).order_by('-year')
+    references = Reference.objects.filter(status="active", tags=info.tag, type=type).order_by("-year")
 
-    addlink = reverse('multiplicity:photo_form', args=[info.slug])
+    addlink = reverse("multiplicity:photo_form", args=[info.slug])
 
     context = { 
-        'section': 'cities', 'menu':  'resources', 'page': type.name, 'info': info, 
-        'references': references,  'addlink': addlink, 'type': type, 'slug': slug
+        "section": "cities", "menu":  "resources", "page": type.name, "info": info, 
+        "references": references,  "addlink": addlink, "type": type, "slug": slug
     }
-    return render(request, 'multiplicity/resources.list.html', context)
+    return render(request, "multiplicity/resources.list.html", context)
+
+def checklist(request, city):
+    info = get_object_or_404(ReferenceSpace, slug=city)
+    list = Video.objects.filter(primary_space=info)
+
+    context = { 
+        "section": "cities", 
+        "menu":  "resources", 
+        "page": "videos", 
+        "info": info, 
+        "list": list,
+        "addlink": addlink, 
+    }
+    return render(request, "multiplicity/resources.videos.html", context)
+
+
 
 # AJAX search functions
 
@@ -367,66 +383,66 @@ def referencespace_search_ajax(request):
 def datasets(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     datasets = Dataset.objects.filter(primary_space=info, deleted=False)
-    context = { 'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'datasets': datasets }
-    return render(request, 'multiplicity/datasets.html', context)
+    context = { "section": "cities", "menu":  "resources", "page": "datasets", "info": info, "datasets": datasets }
+    return render(request, "multiplicity/datasets.html", context)
 
-def datasets_overview(request, city, topic, type='flows'):
+def datasets_overview(request, city, topic, type="flows"):
     info = get_object_or_404(ReferenceSpace, slug=city)
     topic = Topic.objects.get(slug=topic)
     datasets = Dataset.objects.filter(primary_space=info, deleted=False, topics=topic, type__type=type)
-    context = { 'section': 'cities', 'menu':  type, 'page': topic.slug, 'info': info, 'datasets': datasets, 'topic': topic}
-    return render(request, 'multiplicity/datasets.html', context)
+    context = { "section": "cities", "menu":  type, "page": topic.slug, "info": info, "datasets": datasets, "topic": topic}
+    return render(request, "multiplicity/datasets.html", context)
 
 def dataset(request, city, id, slug=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(Dataset, pk=id)
     csv_files = CSV.objects.filter(dataset=id, active=True)
     scoring = range(1,6)
-    editlink = '/admin/staf/dataset/' + str(id) + '/change/'
+    editlink = "/admin/staf/dataset/" + str(id) + "/change/"
     topic = None
     unit = get_object_or_404(Unit, pk=1)
     graphs = GraphType.objects.exclude(pk__in=[7,8,10])
-    materials = Data.objects.filter(dataset=dataset, csv__active=True).values('material_name').order_by('material_name').distinct()
-    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset, csv__active=True).distinct('timeframe__start').order_by('timeframe__start').count()
+    materials = Data.objects.filter(dataset=dataset, csv__active=True).values("material_name").order_by("material_name").distinct()
+    timeframes = Data.objects.select_related("timeframe").filter(dataset=dataset, csv__active=True).distinct("timeframe__start").order_by("timeframe__start").count()
     all_materials = materials.count()
     materials_hidden = False
     if all_materials > 5:
         materials_hidden = all_materials-5
     materials = materials[:5]
-    dates = Data.objects.filter(dataset=dataset, csv__active=True).aggregate(start=Min('timeframe__start'), end=Max('timeframe__end'))
+    dates = Data.objects.filter(dataset=dataset, csv__active=True).aggregate(start=Min("timeframe__start"), end=Max("timeframe__end"))
     addlink = None
     if dataset.type:
-        addlink = reverse('multiplicity:upload_flow_file', args=[info.slug, dataset.type.id]) + '?update=' + str(dataset.id)
+        addlink = reverse("multiplicity:upload_flow_file", args=[info.slug, dataset.type.id]) + "?update=" + str(dataset.id)
 
     #for datapoint in dataset.data_set.all():
     #datapoint.material in topic.materials.all() or datapoint.material.parent in topic.materials.all():
-    deletelink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/delete'
-    resetlink = '/cities/' + info.slug + '/datasets/' + str(dataset.id) + '/reset'
+    deletelink = "/cities/" + info.slug + "/datasets/" + str(dataset.id) + "/delete"
+    resetlink = "/cities/" + info.slug + "/datasets/" + str(dataset.id) + "/reset"
     context = { 
-        'section': 'cities', 'menu':  'resources', 'page': 'datasets', 'info': info, 'dataset': dataset,
-        'csv_files': csv_files, 'datatables': True, 'scoring': scoring, 'editlink': editlink, 'topic': topic, 
-        'deletelink': deletelink, 'graphs': graphs, 'dates': dates, 'materials': materials,
-        'materials_hidden': materials_hidden, 'timeframes': timeframes, 'addlink': addlink, 
-        'resetlink': resetlink
+        "section": "cities", "menu":  "resources", "page": "datasets", "info": info, "dataset": dataset,
+        "csv_files": csv_files, "datatables": True, "scoring": scoring, "editlink": editlink, "topic": topic, 
+        "deletelink": deletelink, "graphs": graphs, "dates": dates, "materials": materials,
+        "materials_hidden": materials_hidden, "timeframes": timeframes, "addlink": addlink, 
+        "resetlink": resetlink
     }
-    return render(request, 'multiplicity/dataset.html', context)
+    return render(request, "multiplicity/dataset.html", context)
 
 def datatable(request, dataset=False, material=False):
     dataset = get_object_or_404(Dataset, pk=dataset)
     data = Data.objects.filter(dataset=dataset, csv__active=True)
-    context = { 'data': data, 'dataset': dataset }
-    return render(request, 'multiplicity/includes/datatable.html', context)
+    context = { "data": data, "dataset": dataset }
+    return render(request, "multiplicity/includes/datatable.html", context)
 
 def graph(request, city, dataset, id, space=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     dataset = get_object_or_404(Dataset, pk=dataset)
-    timeframes = Data.objects.select_related('timeframe').filter(dataset=dataset, csv__active=True).distinct('timeframe__start').order_by('timeframe__start')
+    timeframes = Data.objects.select_related("timeframe").filter(dataset=dataset, csv__active=True).distinct("timeframe__start").order_by("timeframe__start")
     if space:
-        data = Data.objects.filter(dataset=dataset, csv__active=True).filter(Q(origin_space=space) | Q(destination_space=space)).order_by('timeframe__start')
+        data = Data.objects.filter(dataset=dataset, csv__active=True).filter(Q(origin_space=space) | Q(destination_space=space)).order_by("timeframe__start")
     else:
-        data = Data.objects.filter(dataset=dataset, csv__active=True).order_by('timeframe__start')
-    data_groups = Data.objects.select_related('material').filter(dataset=dataset, csv__active=True).distinct('material__name').order_by('material__name')
-    data_subgroups = Data.objects.filter(dataset=dataset, csv__active=True).distinct('material_name').order_by('material_name')
+        data = Data.objects.filter(dataset=dataset, csv__active=True).order_by("timeframe__start")
+    data_groups = Data.objects.select_related("material").filter(dataset=dataset, csv__active=True).distinct("material__name").order_by("material__name")
+    data_subgroups = Data.objects.filter(dataset=dataset, csv__active=True).distinct("material_name").order_by("material_name")
     unit = False
 
     space = dataset.primary_space
@@ -435,21 +451,21 @@ def graph(request, city, dataset, id, space=False):
     t2 = []
     t3 = []
     for row in timeframes:
-        t1.append({'label':row.timeframe.name})
-        t2.append({'date':row.timeframe.start.strftime("%Y-%m-%d")})
-        t3.append({'date':row.timeframe.start.strftime("%Y, %m, %d")})
+        t1.append({"label":row.timeframe.name})
+        t2.append({"date":row.timeframe.start.strftime("%Y-%m-%d")})
+        t3.append({"date":row.timeframe.start.strftime("%Y, %m, %d")})
     t1 = json.dumps(t1)
     t2 = json.dumps(t2)
     t3 = json.dumps(t3)
 
     groups = []
     for row in data_groups:
-        groups.append({'label': row.material.name})
+        groups.append({"label": row.material.name})
     groups = json.dumps(groups)
 
     subgroups = []
     for row in data_subgroups:
-        subgroups.append({'label': row.material_name, 'group': row.material.name})
+        subgroups.append({"label": row.material_name, "group": row.material.name})
     subgroups = json.dumps(subgroups)
 
     datapoints = []
@@ -472,31 +488,31 @@ def graph(request, city, dataset, id, space=False):
             if this_space not in spaces:
                 spaces.append(this_space)
 
-        datapoints.append({'material_name': row.material_name, 'material_group': row.material.name, 'date': row.timeframe.start.strftime("%Y-%m-%d"), 'date_label': row.timeframe.name, 'date_formatted':row.timeframe.start.strftime("%Y, %m, %d"), 'quantity': row.quantity, 'unit': unit, 'type': this_space})
+        datapoints.append({"material_name": row.material_name, "material_group": row.material.name, "date": row.timeframe.start.strftime("%Y-%m-%d"), "date_label": row.timeframe.name, "date_formatted":row.timeframe.start.strftime("%Y, %m, %d"), "quantity": row.quantity, "unit": unit, "type": this_space})
     datapoints = json.dumps(datapoints)
 
     spaces = json.dumps(spaces)
 
     graph = get_object_or_404(GraphType, pk=id)
-    context = {'graph': graph, 'dataset': dataset, 'info': info, 
-    't1': t1, 
-    't2': t2,
-    't3': t3,
-    'groups': groups,
-    'subgroups': subgroups,
-    'data': datapoints,
-    'spaces': spaces,
-    'info': info,
-    'dataset': dataset,
-    'unit': unit,
+    context = {"graph": graph, "dataset": dataset, "info": info, 
+    "t1": t1, 
+    "t2": t2,
+    "t3": t3,
+    "groups": groups,
+    "subgroups": subgroups,
+    "data": datapoints,
+    "spaces": spaces,
+    "info": info,
+    "dataset": dataset,
+    "unit": unit,
     }
-    return render(request, 'multiplicity/graphs/' + graph.slug + '.html', context)
+    return render(request, "multiplicity/graphs/" + graph.slug + ".html", context)
 
 def topicmap(request, city, theme, topic):
     info = get_object_or_404(ReferenceSpace, slug=city)
     topic = get_object_or_404(Topic, slug=topic)
     spaces = ReferenceSpace.objects.filter(city=info, type__topic=topic)
-    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace', filter=Q(city=info)))
+    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count("referencespace", filter=Q(city=info)))
     # TODO Surely we can do better than this? A single db query should be possible.
     count = {}
     for details in spaces:
@@ -504,15 +520,15 @@ def topicmap(request, city, theme, topic):
             count[details.type.id] += 1
         else:
             count[details.type.id] = 1
-    context = { 'section': 'cities', 'menu': topic.theme.slug, 'page': topic.slug, 'info': info, 'topic': topic, 'spaces': spaces, 'types': types, 'count': count, 'tab': 'overview'}
-    return render(request, 'multiplicity/topic.html', context)
+    context = { "section": "cities", "menu": topic.theme.slug, "page": topic.slug, "info": info, "topic": topic, "spaces": spaces, "types": types, "count": count, "tab": "overview"}
+    return render(request, "multiplicity/topic.html", context)
 
 # Download options
 
 def download_location(request, city, id):
     info = get_object_or_404(ReferenceSpaceLocation, pk=id)
     response = HttpResponse(info.geojson, content_type="application/json")
-    response['Content-Disposition'] = 'attachment; filename="' + info.name + '.json"'
+    response["Content-Disposition"] = "attachment; filename='" + info.name + ".json'"
     return response
 
 def download_mtu(request, city, type):
@@ -521,44 +537,44 @@ def download_mtu(request, city, type):
     for details in list:
         output += '{"type":"Feature","geometry":'
         output += details.location.geojson
-        output += '},'
+        output += "},"
         output += "\n"
-    output += ']}'
+    output += "]}"
     print(output)
     response = HttpResponse(output, content_type="application/json")
-    response['Content-Disposition'] = 'attachment; filename="' + type + '.json"'
+    response["Content-Disposition"] = "attachment; filename='" + type + ".json'"
     return response
 
 def download_csv(request, city, id):
     file = get_object_or_404(CSV, pk=id)
-    file_path = settings.MEDIA_ROOT + '/csv/' + file.name
-    contents = open(file_path, 'r')
-    date = str(file.created_at.year) + '-' + str(file.created_at.month) + '-' + str(file.created_at.day)
+    file_path = settings.MEDIA_ROOT + "/csv/" + file.name
+    contents = open(file_path, "r")
+    date = str(file.created_at.year) + "-" + str(file.created_at.month) + "-" + str(file.created_at.day)
     response = HttpResponse(contents, content_type="text/csv")
     if file.dataset:
         name = file.dataset.name
     else:
-        name = 'download'
-    response['Content-Disposition'] = 'attachment; filename="'+name+'-'+date+'.csv"'
+        name = "download"
+    response["Content-Disposition"] = "attachment; filename='"+name+"-"+date+".csv'"
     return response
 
 @login_required
-def upload_flow(request, city, type='flows'):
+def upload_flow(request, city, type="flows"):
     info = get_object_or_404(ReferenceSpace, slug=city)
     types = False
-    if type == 'flows':
+    if type == "flows":
         types = DatasetTypeStructure.objects.filter(pk__in=[8,9,10,11,6])
     list = DatasetType.objects.filter(type=type, active=True)
-    addlink = '/admin/multiplicity/datasettype/add/'
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'types': types, 'addlink': addlink, 'type': type}
-    return render(request, 'multiplicity/upload/index.flow.html', context)
+    addlink = "/admin/multiplicity/datasettype/add/"
+    context = { "section": "cities", "menu": "upload", "info": info, "list": list, "types": types, "addlink": addlink, "type": type}
+    return render(request, "multiplicity/upload/index.flow.html", context)
 
 @login_required
 def upload_infrastructure(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    list = ReferenceSpaceType.objects.filter(user_accessible=True).order_by('name')
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'list': list, 'datatables': True }
-    return render(request, 'multiplicity/upload/index.infrastructure.html', context)
+    list = ReferenceSpaceType.objects.filter(user_accessible=True).order_by("name")
+    context = { "section": "cities", "menu": "upload", "info": info, "list": list, "datatables": True }
+    return render(request, "multiplicity/upload/index.infrastructure.html", context)
 
 @login_required
 def upload_infrastructure_file(request, city, type):
@@ -566,31 +582,31 @@ def upload_infrastructure_file(request, city, type):
     type = get_object_or_404(ReferenceSpaceType, slug=type)
     features = Feature.objects.filter(type=type.id).filter(Q(exclusively_for__isnull=True) | Q(exclusively_for=info))
     previous = ReferenceSpaceCSV.objects.filter(user=request.user, type=type, space=info)
-    if request.method == 'POST':
-        if 'data' in request.POST:
-            input = request.POST['data']
+    if request.method == "POST":
+        if "data" in request.POST:
+            input = request.POST["data"]
             filename = str(uuid.uuid4())
-            file = 'Data entry on ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-            path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
-            in_txt = csv.reader(input.split('\n'), delimiter = '\t')
-            out_csv = csv.writer(open(path, 'w', newline=''))
+            file = "Data entry on " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            path = settings.MEDIA_ROOT + "/csv-referencespace/" + filename
+            in_txt = csv.reader(input.split("\n"), delimiter = "\t")
+            out_csv = csv.writer(open(path, "w", newline=""))
             out_csv.writerows(in_txt)
         else:
-            file = request.FILES['file']
+            file = request.FILES["file"]
             filename = str(uuid.uuid4())
-            path = settings.MEDIA_ROOT + '/csv-referencespace/' + filename
+            path = settings.MEDIA_ROOT + "/csv-referencespace/" + filename
 
-            with open(path, 'wb+') as destination:
+            with open(path, "wb+") as destination:
                 for chunk in file.chunks():
                     destination.write(chunk)
 
         csv_file = ReferenceSpaceCSV(name=filename, original_name=file, imported=False, user=request.user, type=type, space=info)
         csv_file.save()
-        return redirect('multiplicity:upload_infrastructure_review', id=csv_file.id, type=type.slug, city=info.slug)
+        return redirect("multiplicity:upload_infrastructure_review", id=csv_file.id, type=type.slug, city=info.slug)
 
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'features': features, 'type': type, 'previous': previous, 'topics': topics }
-    return render(request, 'multiplicity/upload/infrastructure.file.html', context)
+    context = { "section": "cities", "menu": "upload", "info": info, "features": features, "type": type, "previous": previous, "topics": topics }
+    return render(request, "multiplicity/upload/infrastructure.file.html", context)
 
 @login_required
 def upload_flow_file(request, city, id):
@@ -598,49 +614,49 @@ def upload_flow_file(request, city, id):
     dataset = get_object_or_404(DatasetType, pk=id)
     type = dataset.type
     update = None
-    if 'update' in request.GET:
-        update = get_object_or_404(Dataset, pk=request.GET['update'])
+    if "update" in request.GET:
+        update = get_object_or_404(Dataset, pk=request.GET["update"])
     if request.user.is_staff:
         previous = CSV.objects.filter(datasettype=dataset, space=info)
     else:
         previous = CSV.objects.filter(user=request.user, datasettype=dataset, space=info)
-    if request.method == 'POST':
-        if 'data' in request.POST:
-            input = request.POST['data']
+    if request.method == "POST":
+        if "data" in request.POST:
+            input = request.POST["data"]
             filename = str(uuid.uuid4())
-            file = 'Data entry on ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-            path = settings.MEDIA_ROOT + '/csv/' + filename
-            in_txt = csv.reader(input.split('\n'), delimiter = '\t')
-            out_csv = csv.writer(open(path, 'w', newline=''))
+            file = "Data entry on " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            path = settings.MEDIA_ROOT + "/csv/" + filename
+            in_txt = csv.reader(input.split("\n"), delimiter = "\t")
+            out_csv = csv.writer(open(path, "w", newline=""))
             out_csv.writerows(in_txt)
         else:
-            file = request.FILES['file']
+            file = request.FILES["file"]
             filename = str(uuid.uuid4())
-            path = settings.MEDIA_ROOT + '/csv/' + filename
+            path = settings.MEDIA_ROOT + "/csv/" + filename
 
-            with open(path, 'wb+') as destination:
+            with open(path, "wb+") as destination:
                 for chunk in file.chunks():
                     destination.write(chunk)
 
         csv_file = CSV(name=filename, original_name=file, imported=False, user=request.user, datasettype=dataset, space=info)
         csv_file.save()
         if update:
-            return redirect('multiplicity:upload_flow_review', id=csv_file.id, type=dataset.id, city=info.slug, update=update.id)
+            return redirect("multiplicity:upload_flow_review", id=csv_file.id, type=dataset.id, city=info.slug, update=update.id)
         else:
-            return redirect('multiplicity:upload_flow_review', id=csv_file.id, type=dataset.id, city=info.slug)
+            return redirect("multiplicity:upload_flow_review", id=csv_file.id, type=dataset.id, city=info.slug)
 
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    editlink = '/admin/multiplicity/datasettype/' + str(id) +'/change/'
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'type': type, 'previous': previous, 'dataset': dataset, 'editlink': editlink, 'topics': topics, 'update': update }
-    return render(request, 'multiplicity/upload/flow.file.html', context)
+    editlink = "/admin/multiplicity/datasettype/" + str(id) +"/change/"
+    context = { "section": "cities", "menu": "upload", "info": info, "type": type, "previous": previous, "dataset": dataset, "editlink": editlink, "topics": topics, "update": update }
+    return render(request, "multiplicity/upload/flow.file.html", context)
 
 @login_required
 def upload_flow_file_sample(request, city, id):
-    most_recent_file = CSV.objects.filter(dataset__type__id=id, imported=True).order_by('-id')
+    most_recent_file = CSV.objects.filter(dataset__type__id=id, imported=True).order_by("-id")
     if most_recent_file:
         most_recent_file = most_recent_file[0]
-        file = settings.MEDIA_ROOT + '/csv/' + most_recent_file.name
-        contents = open(file, 'r')
+        file = settings.MEDIA_ROOT + "/csv/" + most_recent_file.name
+        contents = open(file, "r")
     else:
         info = get_object_or_404(DatasetType, id=id)
         if info.type == "stocks":
@@ -655,17 +671,17 @@ def upload_flow_file_sample(request, city, id):
         contents = contents + ",Comments"
 
     response = HttpResponse(contents, content_type="text/csv")
-    response['Content-Disposition'] = 'attachment; filename="sample.csv"'
+    response["Content-Disposition"] = "attachment; filename='sample.csv'"
     return response
 
 @login_required
 def upload_infrastructure_file_sample(request, city, type):
     from django.http import FileResponse
-    most_recent_file = ReferenceSpaceCSV.objects.filter(type__slug=type, imported=True).order_by('-id')
+    most_recent_file = ReferenceSpaceCSV.objects.filter(type__slug=type, imported=True).order_by("-id")
     if most_recent_file:
         most_recent_file = most_recent_file[0]
-        file = settings.MEDIA_ROOT + '/csv-referencespace/' + most_recent_file.name
-        contents = open(file, 'r')
+        file = settings.MEDIA_ROOT + "/csv-referencespace/" + most_recent_file.name
+        contents = open(file, "r")
     else:
         type = get_object_or_404(ReferenceSpaceType, slug=type)
         # If the file has not yet been uploaded before, then we need to create our own
@@ -676,7 +692,7 @@ def upload_infrastructure_file_sample(request, city, type):
         for details in features:
             contents = contents + "," + details.name
     response = HttpResponse(contents, content_type="text/csv")
-    response['Content-Disposition'] = 'attachment; filename="sample.csv"'
+    response["Content-Disposition"] = "attachment; filename='sample.csv'"
     return response
 
 
@@ -693,7 +709,7 @@ def upload_infrastructure_review(request, city, type, id):
     error = False
     feature_list = {}
 
-    path = settings.MEDIA_ROOT + '/csv-referencespace/' + csv_file.name
+    path = settings.MEDIA_ROOT + "/csv-referencespace/" + csv_file.name
     features = Feature.objects.filter(type=type.id).filter(Q(exclusively_for__isnull=True) | Q(exclusively_for=info))
     # By default there are 5 rows, so we start the count at 4 for additional rows
     start = 4
@@ -702,7 +718,7 @@ def upload_infrastructure_review(request, city, type, id):
         column_count = column_count+features.count()
 
     try:
-        f = codecs.open(path, encoding='utf-8', errors='strict')
+        f = codecs.open(path, encoding="utf-8", errors="strict")
         reader = csv.reader(f)
 
         if not error:
@@ -725,15 +741,15 @@ def upload_infrastructure_review(request, city, type, id):
                                 count = count + 1
                                 feature_list[details.name] = row[count]
 
-                        data.append({'name': row[0], 'existing': existing, 'lat': row[1], 'lng': row[2], 'url': row[4], 'description': row[3],'features': feature_list});
+                        data.append({"name": row[0], "existing": existing, "lat": row[1], "lng": row[2], "url": row[4], "description": row[3],"features": feature_list});
 
     except UnicodeDecodeError:
         error = "File is not saved as UTF-8. Please save in UTF-8 format, or use our template files."
 
-    menu = 'infrastructure'
+    menu = "infrastructure"
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'upload', 'data': data, 'file': csv_file, 'datatables': datatables, 'info': info, 'type': type, 'features': features, 'topics': topics, 'error': error }
-    return render(request, 'multiplicity/upload/infrastructure.review.html', context)
+    context = { "section": "cities", "menu": "upload", "data": data, "file": csv_file, "datatables": datatables, "info": info, "type": type, "features": features, "topics": topics, "error": error }
+    return render(request, "multiplicity/upload/infrastructure.review.html", context)
 
 
 @login_required
@@ -751,7 +767,7 @@ def upload_flow_review(request, city, type, id, update=None):
     datatables = True
     feature_list = {}
 
-    path = settings.MEDIA_ROOT + '/csv/' + csv_file.name
+    path = settings.MEDIA_ROOT + "/csv/" + csv_file.name
     # By default there are 5 rows, so we start the count at 4 for additional rows
     start = 4
 
@@ -771,11 +787,11 @@ def upload_flow_review(request, city, type, id, update=None):
         if dataset.name == "Population":
             column_count = 5
             column_destination = 3
-    elif dataset.flows == 'origin_and_destination':
+    elif dataset.flows == "origin_and_destination":
         column_count = 10
         column_origin = 7
         column_destination = 8
-    elif dataset.flows == 'origin_only':
+    elif dataset.flows == "origin_only":
         column_count = 9
         column_origin = 7
         column_destination = False
@@ -788,7 +804,7 @@ def upload_flow_review(request, city, type, id, update=None):
     column_comments = column_count-1
 
     try:
-        f = codecs.open(path, encoding='utf-8', errors='strict')
+        f = codecs.open(path, encoding="utf-8", errors="strict")
         reader = csv.reader(f)
         for row in reader:
 
@@ -826,7 +842,7 @@ def upload_flow_review(request, city, type, id, update=None):
                     material_info = False
 
                     # We create a dictionary that holds all the query results for each of the names.
-                    # Otherwise we'll keep running the same queries if the names repeat
+                    # Otherwise we"ll keep running the same queries if the names repeat
                     # So before we run a query, we check if the query has already been done 
 
                     if material_code in materiallist:
@@ -857,7 +873,7 @@ def upload_flow_review(request, city, type, id, update=None):
                             show_destination = True
 
                             # We create a dictionary that holds all the query results for each of the names.
-                            # Otherwise we'll keep running the same queries if the names repeat
+                            # Otherwise we"ll keep running the same queries if the names repeat
                             # So before we run a query, we check if the query has already been done 
 
                             if destination in referencespacelist:
@@ -878,7 +894,7 @@ def upload_flow_review(request, city, type, id, update=None):
                     origin = False
                     origin_info = False
                     if column_origin:
-                        # We'll do the exact same thing with origin as we did with destination
+                        # We"ll do the exact same thing with origin as we did with destination
                         origin = row[column_origin].strip()
                         if origin:
                             show_origin = True
@@ -920,22 +936,22 @@ def upload_flow_review(request, city, type, id, update=None):
                             end = "Unknown date"
 
                     try:
-                        quantity = float(qty.replace(',',''))
+                        quantity = float(qty.replace(",",""))
                     except ValueError:
                         quantity = None
 
-                    data.append({'timeframe': timeframe, 'from': start, 'to': end, 'material': material, 'material_info': material_info, 'quantity': quantity,
-                    'unit': unit, 'origin': origin, 'origin_info': origin_info, 'destination': destination, 'destination_info': destination_info, 'comments': row[column_comments]})
+                    data.append({"timeframe": timeframe, "from": start, "to": end, "material": material, "material_info": material_info, "quantity": quantity,
+                    "unit": unit, "origin": origin, "origin_info": origin_info, "destination": destination, "destination_info": destination_info, "comments": row[column_comments]})
 
     except UnicodeDecodeError:
         error = "File is not saved as UTF-8. Please save in UTF-8 format, or use our template files."
 
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
 
-    context = { 'section': 'cities', 'menu': 'upload', 'data': data, 'file': csv_file, 'datatables': datatables, 'info': info, 
-    'dataset': dataset, 'show_origin': show_origin, 'show_destination': show_destination, 'error': error, 'show_location': show_location, 'topics': topics, 'warning': warning,
-    'type': dataset.type, 'update': update }
-    return render(request, 'multiplicity/upload/flow.review.html', context)
+    context = { "section": "cities", "menu": "upload", "data": data, "file": csv_file, "datatables": datatables, "info": info, 
+    "dataset": dataset, "show_origin": show_origin, "show_destination": show_destination, "error": error, "show_location": show_location, "topics": topics, "warning": warning,
+    "type": dataset.type, "update": update }
+    return render(request, "multiplicity/upload/flow.review.html", context)
 
 @login_required
 def upload_infrastructure_meta(request, city, type, id):
@@ -948,8 +964,8 @@ def upload_infrastructure_meta(request, city, type, id):
     # By default there are 5 rows, so we start the count at 4 for additional rows
     start = 4
 
-    if request.method == 'POST':
-        path = settings.MEDIA_ROOT + '/csv-referencespace/' + csv_file.name
+    if request.method == "POST":
+        path = settings.MEDIA_ROOT + "/csv-referencespace/" + csv_file.name
         with open(path) as f:
             reader = csv.reader(f)
             for row in reader:
@@ -993,16 +1009,16 @@ def upload_infrastructure_meta(request, city, type, id):
                         log.save()
 
         csv_file.imported = True
-        csv_file.how_obtained = request.POST['how_obtained']
-        csv_file.gaps = request.POST['gaps']
-        csv_file.source = request.POST['source']
+        csv_file.how_obtained = request.POST["how_obtained"]
+        csv_file.gaps = request.POST["gaps"]
+        csv_file.source = request.POST["source"]
         csv_file.save()
 
-        return redirect('multiplicity:space_list', type=type.slug, city=info.slug)
+        return redirect("multiplicity:space_list", type=type.slug, city=info.slug)
 
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
-    context = { 'section': 'cities', 'menu': 'upload', 'file': csv_file, 'info': info, 'type': type, 'topics': topics }
-    return render(request, 'multiplicity/upload/infrastructure.meta.html', context)
+    context = { "section": "cities", "menu": "upload", "file": csv_file, "info": info, "type": type, "topics": topics }
+    return render(request, "multiplicity/upload/infrastructure.meta.html", context)
 
 @login_required
 def upload_flow_meta(request, city, type, id):
@@ -1014,8 +1030,8 @@ def upload_flow_meta(request, city, type, id):
     dataset = get_object_or_404(DatasetType, pk=type)
     error = False
     update = None
-    if 'update' in request.GET:
-        update = get_object_or_404(Dataset, pk=request.GET['update'])
+    if "update" in request.GET:
+        update = get_object_or_404(Dataset, pk=request.GET["update"])
 
     if dataset.type == "stocks":
         column_count = 7
@@ -1025,11 +1041,11 @@ def upload_flow_meta(request, city, type, id):
         if dataset.name == "Population":
             column_count = 5
             column_destination = 3
-    elif dataset.flows == 'origin_and_destination':
+    elif dataset.flows == "origin_and_destination":
         column_count = 10
         column_origin = 7
         column_destination = 8
-    elif dataset.flows == 'origin_only':
+    elif dataset.flows == "origin_only":
         column_count = 9
         column_origin = 7
         column_destination = False
@@ -1039,17 +1055,17 @@ def upload_flow_meta(request, city, type, id):
         column_destination = 7
     column_comments = column_count-1
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
         if not update:
 
-            if 'reference_id' in request.POST:
-                reference = get_object_or_404(Reference, pk=request.POST['reference_id'])
+            if "reference_id" in request.POST:
+                reference = get_object_or_404(Reference, pk=request.POST["reference_id"])
             else:
                 referenceform = ReferenceForm(request.POST)
                 if referenceform.is_valid():
                     reference = referenceform.save(commit=False)
-                    reference.status = 'pending'
+                    reference.status = "pending"
                     reference.save()
                     create_record = get_object_or_404(UserAction, pk=1)
                     log = UserLog(user=request.user, action=create_record, reference=reference, points=5)
@@ -1062,38 +1078,38 @@ def upload_flow_meta(request, city, type, id):
             if not update:
 
                 try:
-                    reliability = int(request.POST['quality_1'])
+                    reliability = int(request.POST["quality_1"])
                     reliability = DQIRating.objects.get(indicator_id=1, score=reliability)
                 except ValueError:
                     reliability = None
 
                 try:
-                    completeness = int(request.POST['quality_2'])
+                    completeness = int(request.POST["quality_2"])
                     completeness = DQIRating.objects.get(indicator_id=2, score=completeness)
                 except ValueError:
                     completeness = None
 
                 try:
-                    geographical_correlation = int(request.POST['quality_4'])
+                    geographical_correlation = int(request.POST["quality_4"])
                     geographical_correlation = DQIRating.objects.get(indicator_id=3, score=geographical_correlation)
                 except ValueError:
                     geographical_correlation = None
 
                 try:
-                    access = int(request.POST['quality_3'])
+                    access = int(request.POST["quality_3"])
                     access = DQIRating.objects.get(indicator_id=4, score=access)
                 except ValueError:
                     access = None
 
                 newdataset = Dataset(
-                    name = request.POST['name'],
+                    name = request.POST["name"],
                     primary_space = info,
                     reliability = reliability,
                     completeness = completeness, 
                     geographical_correlation = geographical_correlation,
                     access = access,
-                    notes = request.POST['notes'],
-                    replication = request.POST['instructions'],
+                    notes = request.POST["notes"],
+                    replication = request.POST["instructions"],
                 )
                 newdataset.save()
                 newdataset.references.add(reference)
@@ -1110,9 +1126,9 @@ def upload_flow_meta(request, city, type, id):
             csv_file.dataset = newdataset
             csv_file.save()
             
-            messages.success(request, 'Information was saved.')
+            messages.success(request, "Information was saved.")
 
-            path = settings.MEDIA_ROOT + '/csv/' + csv_file.name
+            path = settings.MEDIA_ROOT + "/csv/" + csv_file.name
 
             materiallist = {}
             timeframelist = {}
@@ -1191,7 +1207,7 @@ def upload_flow_meta(request, city, type, id):
                                 else:
                                     timeframe_info = TimePeriod(
                                         start=parse(date, dayfirst=True),
-                                        name=parse(date, dayfirst=True).strftime('%b %d, %Y'),
+                                        name=parse(date, dayfirst=True).strftime("%b %d, %Y"),
                                     )
                                     timeframe_info.save()
                                     timeframelist[timeframe] = timeframe_info
@@ -1220,7 +1236,7 @@ def upload_flow_meta(request, city, type, id):
                             if destination:
 
                                 # We create a dictionary that holds all the query results for each of the names.
-                                # Otherwise we'll keep running the same queries if the names repeat
+                                # Otherwise we"ll keep running the same queries if the names repeat
                                 # So before we run a query, we check if the query has already been done 
 
                                 if destination in referencespacelist:
@@ -1246,7 +1262,7 @@ def upload_flow_meta(request, city, type, id):
 
                         origin_info = None
                         if column_origin:
-                            # We'll do the exact same thing with origin as we did with destination
+                            # We"ll do the exact same thing with origin as we did with destination
                             origin = row[column_origin].strip()
                             origin_info = None
                             if origin:
@@ -1272,7 +1288,7 @@ def upload_flow_meta(request, city, type, id):
                                     referencespacelist[origin] = origin_info
 
                         try:
-                            quantity = float(qty.replace(',',''))
+                            quantity = float(qty.replace(",",""))
                         except ValueError:
                             quantity = None
 
@@ -1301,31 +1317,31 @@ def upload_flow_meta(request, city, type, id):
             csv_file.save()
 
             # Temporary redirect for video
-            # return redirect('http://localhost:8000/cities/cape-town/resources/water/water-treatment-works/faure')
+            # return redirect("http://localhost:8000/cities/cape-town/resources/water/water-treatment-works/faure")
 
-            return redirect('multiplicity:dataset', id=newdataset.id, city=info.slug)
+            return redirect("multiplicity:dataset", id=newdataset.id, city=info.slug)
 
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
     datasetform = DatasetForm(request.POST or None, instance=info)
-    referenceform = ReferenceForm(initial={'type': 16, 'language': 'EN'})
+    referenceform = ReferenceForm(initial={"type": 16, "language": "EN"})
     dqi = DQI.objects.all
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     context = { 
-        'section': 'cities', 'menu': 'upload', 'file': csv_file, 'info': info, 'type': dataset.type, 
-        'dataset': dataset, 'datasetform': datasetform, 'referenceform': referenceform, 'dqi': dqi, 
-        'topics': topics, 'update': update
+        "section": "cities", "menu": "upload", "file": csv_file, "info": info, "type": dataset.type, 
+        "dataset": dataset, "datasetform": datasetform, "referenceform": referenceform, "dqi": dqi, 
+        "topics": topics, "update": update
     }
-    return render(request, 'multiplicity/upload/flow.meta.html', context)
+    return render(request, "multiplicity/upload/flow.meta.html", context)
 
 
 @login_required
 def upload_systemboundaries(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    locations = ReferenceSpaceLocation.objects.filter(space=info).order_by('name')
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'locations': locations }
-    return render(request, 'multiplicity/upload/systemboundaries.html', context)
+    locations = ReferenceSpaceLocation.objects.filter(space=info).order_by("name")
+    context = { "section": "cities", "menu": "upload", "info": info, "locations": locations }
+    return render(request, "multiplicity/upload/systemboundaries.html", context)
 
 
 @login_required
@@ -1336,10 +1352,10 @@ def upload_systemboundary(request, city, location=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
 
     Form = modelform_factory(ReferenceSpaceLocation, 
-        fields=('name', 'source', 'start', 'end', 'description', 'geojson', 'active'),
-        labels={"lat": "Latitude", "lng": "Longitude", 'start': 'In place since', 'end': 'Until'}
+        fields=("name", "source", "start", "end", "description", "geojson", "active"),
+        labels={"lat": "Latitude", "lng": "Longitude", "start": "In place since", "end": "Until"}
     )
-    if request.method == 'POST':
+    if request.method == "POST":
         if location:
             form = Form(request.POST, request.FILES, instance=location)
         else:
@@ -1348,10 +1364,10 @@ def upload_systemboundary(request, city, location=False):
             boundary = form.save(commit=False)
             boundary.space = info
             boundary.save()
-            messages.success(request, 'The boundaries have been saved.')
-            return redirect(reverse('multiplicity:map', args=[info.slug, boundary.id]))
+            messages.success(request, "The boundaries have been saved.")
+            return redirect(reverse("multiplicity:map", args=[info.slug, boundary.id]))
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
     else:
         if location:
@@ -1359,32 +1375,32 @@ def upload_systemboundary(request, city, location=False):
         else:
             form = Form()
 
-    locations = ReferenceSpaceLocation.objects.filter(space=info).order_by('name')
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info, 'locations': locations, 'form': form }
-    return render(request, 'multiplicity/upload/systemboundary.html', context)
+    locations = ReferenceSpaceLocation.objects.filter(space=info).order_by("name")
+    context = { "section": "cities", "menu": "upload", "info": info, "locations": locations, "form": form }
+    return render(request, "multiplicity/upload/systemboundary.html", context)
 
 @login_required
 def upload_mtu(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    if 'file' in request.FILES:
-        file = request.FILES['file']
+    if "file" in request.FILES:
+        file = request.FILES["file"]
         filename = str(uuid.uuid4())
-        path = settings.MEDIA_ROOT + '/json/' + filename
+        path = settings.MEDIA_ROOT + "/json/" + filename
 
-        with open(path, 'wb+') as destination:
+        with open(path, "wb+") as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
 
-        return redirect(reverse('multiplicity:upload_mtu_review', args=[info.slug, filename]))
+        return redirect(reverse("multiplicity:upload_mtu_review", args=[info.slug, filename]))
 
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info }
-    return render(request, 'multiplicity/upload/mtu.html', context)
+    context = { "section": "cities", "menu": "upload", "info": info }
+    return render(request, "multiplicity/upload/mtu.html", context)
 
 @login_required
 def upload_mtu_review(request, city, filename):
     info = get_object_or_404(ReferenceSpace, slug=city)
 
-    path = settings.MEDIA_ROOT + '/json/' + filename
+    path = settings.MEDIA_ROOT + "/json/" + filename
 
     try:
         with open(path) as json_data:
@@ -1402,88 +1418,88 @@ def upload_mtu_review(request, city, filename):
     if data:
         error = False
 
-        if request.method == 'POST':
+        if request.method == "POST":
             create_record = get_object_or_404(UserAction, pk=1)
             import_data = get_object_or_404(UserAction, pk=6)
 
             log = UserLog.objects.create(user=request.user, action=import_data, space=info, points=10, model="MTU geojson", description="File: " + filename)
 
-            type = ReferenceSpaceType.objects.filter(name__iexact=request.POST['mtu_name'])
+            type = ReferenceSpaceType.objects.filter(name__iexact=request.POST["mtu_name"])
             if type:
                 type = type[0]
             else:
-                type = ReferenceSpaceType.objects.filter(slug=slugify(request.POST['mtu_name']))
+                type = ReferenceSpaceType.objects.filter(slug=slugify(request.POST["mtu_name"]))
                 if type:
                     type = type[0]
                 else:
-                    type = ReferenceSpaceType.objects.create(name__iexact=request.POST['mtu_name'], slug=slugify(request.POST['mtu_name']), type='SOC', marker_color=None, user_accessible=False)
+                    type = ReferenceSpaceType.objects.create(name__iexact=request.POST["mtu_name"], slug=slugify(request.POST["mtu_name"]), type="SOC", marker_color=None, user_accessible=False)
 
-            mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST['start'], source=request.POST['source'], file=filename, description=request.POST['details'])
+            mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST["start"], source=request.POST["source"], file=filename, description=request.POST["details"])
 
-        for record in data['features']:
-            properties = record['properties']
-            geometry = record['geometry']
+        for record in data["features"]:
+            properties = record["properties"]
+            geometry = record["geometry"]
 
-            if request.method == 'POST':
-                name = properties[request.POST['name']]
+            if request.method == "POST":
+                name = properties[request.POST["name"]]
                 area = None
-                if 'area' in request.POST:
-                    area = float(properties[request.POST['area']])/float(request.POST['unit'])
+                if "area" in request.POST:
+                    area = float(properties[request.POST["area"]])/float(request.POST["unit"])
 
                 space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, slug=slugify(name), mtu=mtu)
-                if 'start' in request.POST and request.POST['start']:
-                    start = request.POST['start']
+                if "start" in request.POST and request.POST["start"]:
+                    start = request.POST["start"]
                 else:
                     start = None
-                if 'end' in request.POST and request.POST['end']:
-                    end = request.POST['end']
+                if "end" in request.POST and request.POST["end"]:
+                    end = request.POST["end"]
                 else:
                     end = None
-                location = ReferenceSpaceLocation.objects.create(space=space, area=area, start=start, end=end, source=request.POST['source'], geojson=geometry)
+                location = ReferenceSpaceLocation.objects.create(space=space, area=area, start=start, end=end, source=request.POST["source"], geojson=geometry)
                 space.location = location
                 space.save()
 
                 log = UserLog.objects.create(user=request.user, action=create_record, space=space, points=0)
 
-        if request.method == 'POST':
-            return redirect(reverse('multiplicity:map_mtu', args=[info.slug, type.slug]))
+        if request.method == "POST":
+            return redirect(reverse("multiplicity:map_mtu", args=[info.slug, type.slug]))
 
 
-        if 'crs' in data and 'properties' in data['crs'] and 'name' in data['crs']['properties']:
-            projection = data['crs']['properties']['name']
+        if "crs" in data and "properties" in data["crs"] and "name" in data["crs"]["properties"]:
+            projection = data["crs"]["properties"]["name"]
         else:
             # If the projection is not set we must alert the user
             projection = "unknown"
 
     context = { 
-        'section': 'cities', 'menu': 'upload', 'info': info, 'properties': properties, 'geometry': geometry,
-        'filename': filename, 'map': True, 'projection': projection, 'error': error
+        "section": "cities", "menu": "upload", "info": info, "properties": properties, "geometry": geometry,
+        "filename": filename, "map": True, "projection": projection, "error": error
     }
-    return render(request, 'multiplicity/upload/mtu.review.html', context)
+    return render(request, "multiplicity/upload/mtu.review.html", context)
 
 
 @login_required
 def reference_form(request, city, type):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    if 'file' in request.FILES:
-        file = request.FILES['file']
+    if "file" in request.FILES:
+        file = request.FILES["file"]
         filename = str(uuid.uuid4())
-        path = settings.MEDIA_ROOT + '/json/' + filename
+        path = settings.MEDIA_ROOT + "/json/" + filename
 
-        with open(path, 'wb+') as destination:
+        with open(path, "wb+") as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
 
-        return redirect(reverse('multiplicity:upload_mtu_review', args=[info.slug, filename]))
+        return redirect(reverse("multiplicity:upload_mtu_review", args=[info.slug, filename]))
 
-    context = { 'section': 'cities', 'menu': 'upload', 'info': info }
-    return render(request, 'multiplicity/upload/mtu.html', context)
+    context = { "section": "cities", "menu": "upload", "info": info }
+    return render(request, "multiplicity/upload/mtu.html", context)
 
 def infrastructure_list(request, topic, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     topic = get_object_or_404(Topic, slug=topic)
     spaces = ReferenceSpace.objects.filter(active=True, city=info, type__topic=topic)
-    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count('referencespace'))
+    types = ReferenceSpaceType.objects.filter(topic=topic).annotate(total=Count("referencespace"))
     # TODO Surely we can do better than this? A single db query should be possible.
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     count = {}
@@ -1492,37 +1508,37 @@ def infrastructure_list(request, topic, city):
             count[details.type.id] += 1
         else:
             count[details.type.id] = 1
-    context = { 'section': 'cities', 'menu': 'infrastructure', 'page': topic.slug, 'info': info, 'topic': topic, 'spaces': spaces, 'types': types, 'count': count, 'tab': 'overview', 'topics': topics}
-    return render(request, 'multiplicity/topic.html', context)
+    context = { "section": "cities", "menu": "infrastructure", "page": topic.slug, "info": info, "topic": topic, "spaces": spaces, "types": types, "count": count, "tab": "overview", "topics": topics}
+    return render(request, "multiplicity/topic.html", context)
 
 def research(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     context = {
-        'section': 'cities', 
-        'info' : info,
-        'menu' : 'research',
-        'page' : 'overview',
+        "section": "cities", 
+        "info" : info,
+        "menu" : "research",
+        "page" : "overview",
     }
-    return render(request, 'multiplicity/research.html', context)
+    return render(request, "multiplicity/research.html", context)
 
 def datasetlist(request):
     list = DatasetType.objects.all()
-    context = { 'section': 'cities', 'menu': 'dashboard', 'list': list}
-    return render(request, 'multiplicity/contribute.dataset.list.html', context)
+    context = { "section": "cities", "menu": "dashboard", "list": list}
+    return render(request, "multiplicity/contribute.dataset.list.html", context)
 
 def download(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
     context = { 
-        'section': 'cities', 'menu': 'download', 'page': 'download',
-        'info': info, 'list': list, 'datatables': True
+        "section": "cities", "menu": "download", "page": "download",
+        "info": info, "list": list, "datatables": True
     }
-    return render(request, 'multiplicity/download/index.html', context)
+    return render(request, "multiplicity/download/index.html", context)
 
 def upload(request, city):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cities', 'menu': 'upload', 'page': 'upload', 'info': info, 'list': list, 'topics': topics}
-    return render(request, 'multiplicity/upload/index.html', context)
+    context = { "section": "cities", "menu": "upload", "page": "upload", "info": info, "list": list, "topics": topics}
+    return render(request, "multiplicity/upload/index.html", context)
 
 def topic(request, city, topic, main=False, tab=False):
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
@@ -1534,31 +1550,31 @@ def topic(request, city, topic, main=False, tab=False):
         information = information[0]
     datasets = Dataset.objects.filter(topics=topic, primary_space=info)
 
-    context = { 'section': 'cities', 'menu': 'profile', 'info': info, 'page': topic.slug, 'topic': topic, 'datasets': datasets, 'information': information }
-    return render(request, 'multiplicity/topic.html', context)
+    context = { "section": "cities", "menu": "profile", "info": info, "page": topic.slug, "topic": topic, "datasets": datasets, "information": information }
+    return render(request, "multiplicity/topic.html", context)
 
 def materials(request, catalog=False):
     if catalog == "hs":
-        list = Material.objects.filter(catalog_id=1).order_by('id')
+        list = Material.objects.filter(catalog_id=1).order_by("id")
         title = "Harmonized system"
     elif catalog == "elements":
-        list = Material.objects.filter(catalog_id=3).order_by('id')
+        list = Material.objects.filter(catalog_id=3).order_by("id")
         title = "Elements"
     elif catalog == "em":
-        list = Material.objects.filter(catalog_id=2).order_by('id')
+        list = Material.objects.filter(catalog_id=2).order_by("id")
         title = "Engineering materials"
     else:
-        list = Material.objects.filter(catalog_id=4).exclude(id=970921).order_by('id')
+        list = Material.objects.filter(catalog_id=4).exclude(id=970921).order_by("id")
         title = "Eurostat catalog"
-    context = { 'section': 'cites', 'menu': 'dashboard', 'list': list, 'datatables': True, 'title': title, 'type': catalog }
-    return render(request, 'multiplicity/materials.html', context)
+    context = { "section": "cites", "menu": "dashboard", "list": list, "datatables": True, "title": title, "type": catalog }
+    return render(request, "multiplicity/materials.html", context)
 
 @login_required
 def information_form(request, city, id=False, topic=False):
 
     info = get_object_or_404(ReferenceSpace, slug=city)
-    processes = Process.objects.filter(slug__isnull=False).order_by('id')
-    references = Reference.objects.filter(status='active')
+    processes = Process.objects.filter(slug__isnull=False).order_by("id")
+    references = Reference.objects.filter(status="active")
 
     if topic:
         topic = Topic.objects.get(pk=topic)
@@ -1576,14 +1592,14 @@ def information_form(request, city, id=False, topic=False):
         form = InformationForm()
     saved = False
 
-    if request.method == 'POST':
+    if request.method == "POST":
         if not id:
             form = InformationForm(request.POST, request.FILES)
         else:
             form = InformationForm(request.POST, request.FILES, instance=information)
         if form.is_valid():
-            if not topic and request.POST['process']:
-                process = Process.objects.get(pk=request.POST['process'])
+            if not topic and request.POST["process"]:
+                process = Process.objects.get(pk=request.POST["process"])
             else:
                 process = None
             if id:
@@ -1603,25 +1619,25 @@ def information_form(request, city, id=False, topic=False):
 
             information.references.clear()
 
-            selected = request.POST.getlist('references')
+            selected = request.POST.getlist("references")
             for reference in selected:
                 information.references.add(Reference.objects.get(pk=reference))
 
             saved = True
-            messages.success(request, 'Information was saved.')
-            return redirect(reverse('multiplicity:information_form', args=[info.slug, information.id]))
+            messages.success(request, "Information was saved.")
+            return redirect(reverse("multiplicity:information_form", args=[info.slug, information.id]))
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'tinymce': True, 'processes': processes, 'information': information,
-    'references': references, 'select2': True, 'topic': topic
+    context = { "section": "cities", "info": info, "form": form, "type": type, "tinymce": True, "processes": processes, "information": information,
+    "references": references, "select2": True, "topic": topic
     }
-    return render(request, 'multiplicity/form.information.html', context)
+    return render(request, "multiplicity/form.information.html", context)
 
 @login_required
 def photo_form(request, city, id=False, map=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    processes = Process.objects.filter(slug__isnull=False).order_by("id")
     if id:
         photo = get_object_or_404(Photo, pk=id)
         form = PhotoForm(instance=photo)
@@ -1629,14 +1645,14 @@ def photo_form(request, city, id=False, map=False):
         photo = False
         form = PhotoForm()
     saved = False
-    if request.method == 'POST':
+    if request.method == "POST":
         if not id:
             form = PhotoForm(request.POST, request.FILES)
         else:
             form = PhotoForm(request.POST, request.FILES, instance=photo)
         if form.is_valid():
-            if request.POST['process']:
-                process = Process.objects.get(pk=request.POST['process'])
+            if request.POST["process"]:
+                process = Process.objects.get(pk=request.POST["process"])
             else:
                 process = None
             photo = form.save(commit=False)
@@ -1644,12 +1660,12 @@ def photo_form(request, city, id=False, map=False):
             photo.uploaded_by = request.user
             photo.process = process
             if map:
-                photo.type = 'map'
+                photo.type = "map"
             else:
-                photo.type = 'photo'
+                photo.type = "photo"
             photo.save()
             saved = True
-            messages.success(request, 'Image was saved.')
+            messages.success(request, "Image was saved.")
             if not id:
                 record_type = get_object_or_404(UserAction, pk=1)
                 points = 3
@@ -1659,26 +1675,26 @@ def photo_form(request, city, id=False, map=False):
             log = UserLog.objects.create(user=request.user, action=record_type, space=photo.primary_space, points=points, model="Photo", model_id=photo.id)
 
             if map:
-                return redirect(reverse('multiplicity:map_other', args=[info.slug]))
+                return redirect(reverse("multiplicity:map_other", args=[info.slug]))
             else:
-                return redirect(reverse('multiplicity:photos', args=[info.slug]))
+                return redirect(reverse("multiplicity:photos", args=[info.slug]))
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
     if map:
-        title = 'Map'
+        title = "Map"
     else:
-        title = 'Photo'
+        title = "Photo"
 
-    context = { 'section': 'cities', 'info': info, 'form': form, 'type': type, 'processes': processes, 'photo': photo, 'select2': True,
-    'map': map, 'menu': 'upload', 'title': title }
-    return render(request, 'multiplicity/form.photo.html', context)
+    context = { "section": "cities", "info": info, "form": form, "type": type, "processes": processes, "photo": photo, "select2": True,
+    "map": map, "menu": "upload", "title": title }
+    return render(request, "multiplicity/form.photo.html", context)
 
 
 @login_required
 def upload_video(request, city, id=False, space=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    processes = Process.objects.filter(slug__isnull=False).order_by('id')
+    processes = Process.objects.filter(slug__isnull=False).order_by("id")
     if id:
         video = get_object_or_404(Video, pk=id)
         form = VideoUploadForm(instance=video)
@@ -1686,25 +1702,25 @@ def upload_video(request, city, id=False, space=False):
         video = False
         form = VideoUploadForm()
     saved = False
-    if request.method == 'POST':
+    if request.method == "POST":
         if not id:
             form = VideoUploadForm(request.POST, request.FILES)
         else:
             form = VideoUploadForm(request.POST, request.FILES, instance=video)
         if form.is_valid():
-            if request.POST['process']:
-                process = Process.objects.get(pk=request.POST['process'])
+            if request.POST["process"]:
+                process = Process.objects.get(pk=request.POST["process"])
             else:
                 process = None
             video = form.save(commit=False)
-            if request.POST['primary_space']:
-                video.primary_space = get_object_or_404(ReferenceSpace, pk=request.POST['primary_space'])
+            if request.POST["primary_space"]:
+                video.primary_space = get_object_or_404(ReferenceSpace, pk=request.POST["primary_space"])
             video.process = process
             url = video.url
-            video.url = url.rsplit('/', 1)[-1]
+            video.url = url.rsplit("/", 1)[-1]
             video.save()
             saved = True
-            messages.success(request, 'Video was saved.')
+            messages.success(request, "Video was saved.")
             if not id:
                 record_type = get_object_or_404(UserAction, pk=1)
                 points = 3
@@ -1718,42 +1734,42 @@ def upload_video(request, city, id=False, space=False):
             else:
                 return redirect_space(request, info.id)
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
     context = { 
-        'section': 'cities', 'info': info, 'form': form, 
-        'type': type, 'processes': processes, 'video': video, 'select2': True,
-        'menu': 'upload' 
+        "section": "cities", "info": info, "form": form, 
+        "type": type, "processes": processes, "video": video, "select2": True,
+        "menu": "upload" 
     }
-    return render(request, 'multiplicity/upload/video.html', context)
+    return render(request, "multiplicity/upload/video.html", context)
 
 @login_required
 def reset_dataset(request, city, id):
     info = get_object_or_404(Dataset, pk=id)
     CSV.objects.filter(dataset=info, active=True).update(active=False)
-    messages.success(request, 'Dataset was reset')
-    return redirect('multiplicity:dataset', city=city, id=info.id)
+    messages.success(request, "Dataset was reset")
+    return redirect("multiplicity:dataset", city=city, id=info.id)
 
 # Admin
 
 def redirect_space(request, id):
     info = get_object_or_404(ReferenceSpace, pk=id)
     if info.city:
-        link = reverse('multiplicity:space', kwargs={
-            'city': info.city.slug,
-            'type': info.type.slug,
-            'space': info.slug,
+        link = reverse("multiplicity:space", kwargs={
+            "city": info.city.slug,
+            "type": info.type.slug,
+            "space": info.slug,
             })
     else:
-        link = reverse('multiplicity:city', kwargs={'slug': info.slug})
+        link = reverse("multiplicity:city", kwargs={"slug": info.slug})
     return redirect(link)
 
 @staff_member_required
 def admin_referencespaces(request, type):
     type = ReferenceSpaceType.objects.get(slug=type)
     list = ReferenceSpace.objects.filter(type=type)
-    context = { 'navbar': 'backend', 'list': list, 'datatables': True, 'type': type }
-    return render(request, 'multiplicity/admin/referencespaces.html', context)
+    context = { "navbar": "backend", "list": list, "datatables": True, "type": type }
+    return render(request, "multiplicity/admin/referencespaces.html", context)
 
 @staff_member_required
 def admin_referencespace(request, type, id=False):
@@ -1765,7 +1781,7 @@ def admin_referencespace(request, type, id=False):
         info = False
         form = ReferenceSpaceForm()
     saved = False
-    if request.method == 'POST':
+    if request.method == "POST":
         if not id:
             form = ReferenceSpaceForm(request.POST, request.FILES)
         else:
@@ -1773,19 +1789,19 @@ def admin_referencespace(request, type, id=False):
         if form.is_valid():
             info = form.save()
             saved = True
-            messages.success(request, 'Information was saved.')
-            return redirect(reverse('multiplicity:admin_referencespace', args=[info.type.slug, info.id]))
+            messages.success(request, "Information was saved.")
+            return redirect(reverse("multiplicity:admin_referencespace", args=[info.type.slug, info.id]))
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
-    context = { 'navbar': 'backend', 'info': info, 'form': form, 'type': type }
-    return render(request, 'multiplicity/admin/referencespace.html', context)
+    context = { "navbar": "backend", "info": info, "form": form, "type": type }
+    return render(request, "multiplicity/admin/referencespace.html", context)
 
 @staff_member_required
 def admin_locations(request):
     list = ReferenceSpaceLocation.objects.filter(type__id=3)
-    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
-    return render(request, 'multiplicity/admin/locations.html', context)
+    context = { "navbar": "backend", "list": list, "datatables": True }
+    return render(request, "multiplicity/admin/locations.html", context)
 
 @staff_member_required
 def admin_location(request, id=False, referencespace=False, type=False):
@@ -1802,7 +1818,7 @@ def admin_location(request, id=False, referencespace=False, type=False):
         info = False
         form = ReferenceSpaceLocationForm()
     saved = False
-    if request.method == 'POST':
+    if request.method == "POST":
         if not id:
             form = ReferenceSpaceLocationForm(request.POST)
         else:
@@ -1810,7 +1826,7 @@ def admin_location(request, id=False, referencespace=False, type=False):
         if form.is_valid():
             info = form.save(commit=False)
             saved = True
-            messages.success(request, 'Information was saved.')
+            messages.success(request, "Information was saved.")
             if referencespace:
                 info.space = referencespace
             info.save()
@@ -1818,12 +1834,12 @@ def admin_location(request, id=False, referencespace=False, type=False):
                 referencespace.location = info
                 referencespace.save()
 
-            return redirect(reverse('multiplicity:admin_location', args=[info.id]))
+            return redirect(reverse("multiplicity:admin_location", args=[info.id]))
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
-    context = { 'navbar': 'backend', 'info': info, 'form': form, 'referencespace': referencespace, 'type': type }
-    return render(request, 'multiplicity/admin/location.html', context)
+    context = { "navbar": "backend", "info": info, "form": form, "referencespace": referencespace, "type": type }
+    return render(request, "multiplicity/admin/location.html", context)
 
 
 @staff_member_required
@@ -1833,9 +1849,9 @@ def admin_data_overview(request, city):
     csv = CSV.objects.filter(space=info)
     space_csv = ReferenceSpaceCSV.objects.filter(space=info)
     spaces = ReferenceSpace.objects.filter(city=info)
-    photos = Photo.objects.filter(primary_space=info).order_by('process', 'position')
+    photos = Photo.objects.filter(primary_space=info).order_by("process", "position")
     information = Information.objects.filter(space=info)
-    sectors = ProcessGroup.objects.all().order_by('name')
+    sectors = ProcessGroup.objects.all().order_by("name")
     mtu_list = MTU.objects.filter(space=info)
 
     active_sectors = []
@@ -1843,12 +1859,12 @@ def admin_data_overview(request, city):
         active_sectors.append(sector.process_group.id)
 
     context = { 
-        'navbar': 'backend', 'info': info, 'datasets': datasets, 'csv': csv, 
-        'space_csv': space_csv, 'datatables': True, 
-        'information': information, 'spaces': spaces, 'photos': photos,
-        'sectors': sectors, 'active_sectors': active_sectors, 'mtu_list': mtu_list
+        "navbar": "backend", "info": info, "datasets": datasets, "csv": csv, 
+        "space_csv": space_csv, "datatables": True, 
+        "information": information, "spaces": spaces, "photos": photos,
+        "sectors": sectors, "active_sectors": active_sectors, "mtu_list": mtu_list
     }
-    return render(request, 'multiplicity/admin/overview.data.html', context)
+    return render(request, "multiplicity/admin/overview.data.html", context)
 
 @staff_member_required
 def admin_activate_sector(request, city, sector):
@@ -1857,8 +1873,8 @@ def admin_activate_sector(request, city, sector):
     check = ReferenceSpaceSector.objects.filter(space=info, process_group=sector)
     if not check:
         ReferenceSpaceSector.objects.create(space=info, process_group=sector)
-    messages.success(request, 'Sector activated')
-    return redirect('multiplicity:admin_data_overview', city=info.slug)
+    messages.success(request, "Sector activated")
+    return redirect("multiplicity:admin_data_overview", city=info.slug)
 
 @staff_member_required
 def admin_mtu_delete(request, city, mtu):
@@ -1867,8 +1883,8 @@ def admin_mtu_delete(request, city, mtu):
     mtu.active = False
     mtu.save()
     ReferenceSpace.objects.filter(mtu=mtu).update(active=False)
-    messages.success(request, 'MTU was deactivated')
-    return redirect('multiplicity:admin_data_overview', city=info.slug)
+    messages.success(request, "MTU was deactivated")
+    return redirect("multiplicity:admin_data_overview", city=info.slug)
 
 @staff_member_required
 def admin_deactivate_sector(request, city, sector):
@@ -1877,8 +1893,8 @@ def admin_deactivate_sector(request, city, sector):
     check = ReferenceSpaceSector.objects.filter(space=info, process_group=sector)
     if check:
         check.delete()
-    messages.success(request, 'Sector deactivated')
-    return redirect('multiplicity:admin_data_overview', city=info.slug)
+    messages.success(request, "Sector deactivated")
+    return redirect("multiplicity:admin_data_overview", city=info.slug)
 
 
 @staff_member_required
@@ -1887,14 +1903,14 @@ def delete_dataset(request, city, id):
     dataset = get_object_or_404(Dataset, pk=id)
     dataset.deleted = True
     dataset.save()
-    messages.success(request, 'Dataset was deleted')
-    return redirect('multiplicity:admin_data_overview', city=city)
+    messages.success(request, "Dataset was deleted")
+    return redirect("multiplicity:admin_data_overview", city=city)
 
 @staff_member_required
 def admin_datasettypes(request):
     list = DatasetType.objects.filter(active=True)
-    context = { 'navbar': 'backend', 'list': list, 'datatables': True }
-    return render(request, 'multiplicity/admin/datasettypes.html', context)
+    context = { "navbar": "backend", "list": list, "datatables": True }
+    return render(request, "multiplicity/admin/datasettypes.html", context)
 
 @staff_member_required
 def admin_datasettype(request, id=False):
@@ -1905,7 +1921,7 @@ def admin_datasettype(request, id=False):
         info = False
         form = DatasetTypeForm()
     saved = False
-    if request.method == 'POST':
+    if request.method == "POST":
         if not id:
             form = DatasetTypeForm(request.POST, request.FILES)
         else:
@@ -1913,13 +1929,13 @@ def admin_datasettype(request, id=False):
         if form.is_valid():
             info = form.save()
             saved = True
-            messages.success(request, 'Information was saved.')
-            return redirect(reverse('multiplicity:admin_datasettypes'))
+            messages.success(request, "Information was saved.")
+            return redirect(reverse("multiplicity:admin_datasettypes"))
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
-    context = { 'navbar': 'backend', 'info': info, 'form': form, 'type': type }
-    return render(request, 'multiplicity/admin/datasettype.html', context)
+    context = { "navbar": "backend", "info": info, "form": form, "type": type }
+    return render(request, "multiplicity/admin/datasettype.html", context)
 
 @staff_member_required
 def admin_referencephoto(request, id=False):
@@ -1930,7 +1946,7 @@ def admin_referencephoto(request, id=False):
         info = False
         form = ReferencePhotoForm()
     saved = False
-    if request.method == 'POST':
+    if request.method == "POST":
         if not id:
             form = ReferencePhotoForm(request.POST)
         else:
@@ -1938,18 +1954,18 @@ def admin_referencephoto(request, id=False):
         if form.is_valid():
             info = form.save()
             saved = True
-            messages.success(request, 'Information was saved.')
-            return redirect(reverse('multiplicity:admin_datasettypes'))
+            messages.success(request, "Information was saved.")
+            return redirect(reverse("multiplicity:admin_datasettypes"))
         else:
-            messages.warning(request, 'We could not save your form, please correct the errors')
+            messages.warning(request, "We could not save your form, please correct the errors")
 
-    context = { 'navbar': 'backend', 'info': info, 'form': form }
-    return render(request, 'multiplicity/admin/referencephoto.html', context)
+    context = { "navbar": "backend", "info": info, "form": form }
+    return render(request, "multiplicity/admin/referencephoto.html", context)
 
 def temp_slide(request, city):
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { 'section': 'cites', 'menu': 'dashboard', 'info': info }
-    return render(request, 'multiplicity/slide.html', context)
+    context = { "section": "cites", "menu": "dashboard", "info": info }
+    return render(request, "multiplicity/slide.html", context)
 
 @staff_member_required
 def import_cpa(request):
@@ -1961,8 +1977,8 @@ def import_cpa(request):
         url = "https://ec.europa.eu/eurostat/ramon/nomenclatures/index.cfm?TargetUrl=LST_CLS_DLD&StrNom=CPA_2_1&StrLanguageCode=EN&StrLayoutCode=HIERARCHIC#"
     )
     filename = "CPA_2_1_20190423_200404.csv"
-    path = settings.MEDIA_ROOT + '/csv/' + filename
-    f = codecs.open(path, encoding='utf-8', errors='strict')
+    path = settings.MEDIA_ROOT + "/csv/" + filename
+    f = codecs.open(path, encoding="utf-8", errors="strict")
     reader = csv.reader(f)
 
     name = "Classification of Products by Activity (CPA)"
@@ -2017,7 +2033,7 @@ def import_cpa(request):
                 is_separator=False
             )
 
-    messages.success(request, 'Information was saved.')
-    return redirect(reverse('multiplicity:admin_datasettypes'))
+    messages.success(request, "Information was saved.")
+    return redirect(reverse("multiplicity:admin_datasettypes"))
 
 
