@@ -1,0 +1,87 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Checklist</h3>
+        <p>Use the list below to see what we are looking for. </p>
+
+        <p>Which sector? Any | {% for sector in info.sectors.all %}{{ sector.process_group.name }} | {% endfor %}</p>
+        <p>What type of work?
+          Georeferencing | Identify and describe | Obtain photos
+        </p>
+
+        <table class="table datatable">
+          <thead>
+            <tr>
+              <th>Sector</th>
+              <th>Dataset</th>
+              <th>Work</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sector in info.sectors.all %}
+              {% for details in sector.process_group.spaces.all %}
+                <tr>
+                  <td>{{ sector.process_group.name }}</td>
+                  <td>{{ details }}</td>
+                  <td>Georeferencing</td>
+                </tr>
+                <tr>
+                  <td>{{ sector.process_group.name }}</td>
+                  <td>{{ details }}</td>
+                  <td>Identify and describe</td>
+                </tr>
+                <tr>
+                  <td>{{ sector.process_group.name }}</td>
+                  <td>{{ details }}</td>
+                  <td>Obtain photos</td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ info.name }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'multiplicity:index' %}">{{ MULTIPLICITY_NAME }}</a></li>
+        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
+        <li class="active">Checklist</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

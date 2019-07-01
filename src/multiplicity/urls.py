@@ -31,6 +31,7 @@ urlpatterns = [
 
     # General
     path('table/datasets/<int:dataset>/', views.datatable, name='datatable_dataset'),
+    path('<slug:city>/checklist/', views.checklist, name='checklist'),
 
     path('', views.index, name='index'),
     path('<slug:city>/research/', views.research, name='research'),

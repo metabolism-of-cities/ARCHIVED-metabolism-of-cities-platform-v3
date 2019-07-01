@@ -226,7 +226,7 @@ def sector(request, city, sector):
 
     last_space = ReferenceSpace.objects.filter(type=OuterRef("pk")).order_by("-id")
     space_photo = Photo.objects.filter(secondary_space__type=OuterRef("pk")).order_by("id")
-    types = ReferenceSpaceType.objects.filter(process__in=sector.processes.all()).annotate(total=Count("referencespace", filter=Q(referencespace__city=info)))
+    types = ReferenceSpaceType.objects.filter(processes__in=sector.processes.all()).annotate(total=Count("referencespace", filter=Q(referencespace__city=info)))
     types = types.annotate(image=Subquery(space_photo.values("image")[:1]))
 
     #Photo.objects.filter(primary_space=OuterRef("referencespace", secondary_space__isnull=True, process__isnull=True, deleted=False)
@@ -350,18 +350,24 @@ def resources(request, city, slug):
     return render(request, "multiplicity/resources.list.html", context)
 
 def checklist(request, city):
+
+    # Delete after running this
+    if "convert" in request.GET:
+      list = ReferenceSpaceType.objects.filter(process__isnull=False)
+      for details in list:
+        details.processes.add(details.process)
+
     info = get_object_or_404(ReferenceSpace, slug=city)
     list = Video.objects.filter(primary_space=info)
 
     context = { 
         "section": "cities", 
-        "menu":  "resources", 
-        "page": "videos", 
+        "menu":  "upload",
         "info": info, 
         "list": list,
-        "addlink": addlink, 
+        "datatables": True,
     }
-    return render(request, "multiplicity/resources.videos.html", context)
+    return render(request, "multiplicity/checklist.html", context)
 
 
 

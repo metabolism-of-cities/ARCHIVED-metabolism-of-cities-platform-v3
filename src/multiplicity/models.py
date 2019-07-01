@@ -49,7 +49,8 @@ class ReferenceSpaceType(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(db_index=True, max_length=255, unique=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, blank=True)
-    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False})
+    process = models.ForeignKey('staf.Process', on_delete=models.CASCADE, null=True, blank=True, limit_choices_to={'slug__isnull': False}, related_name="dropsoon")
+    processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False}, related_name="referencespaces")
     SPACE_TYPE = (
         ('SOC', 'Socio-economic System'),
         ('NAT', 'Natural Environment'),
@@ -261,6 +262,8 @@ class ProcessGroup(models.Model):
 
     def __str__(self):
         return self.name
+    def spaces(self):
+        return ReferenceSpaceType.objects.filter(processes__in=self.processes.all())
 
 class ReferenceSpaceSector(models.Model):
     space = models.ForeignKey(ReferenceSpace, on_delete=models.CASCADE, related_name='sectors')

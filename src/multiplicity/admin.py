@@ -11,7 +11,10 @@ class ReferenceSpaceAdmin(admin.ModelAdmin):
     list_display = ('name', 'type')
     search_fields = ['name']
 
-admin.site.register(DatasetType)
+class DatasetTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'origin_process', 'destination_process', 'category', 'active')
+
+admin.site.register(DatasetType, DatasetTypeAdmin)
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(DQIRating)
 admin.site.register(DQI)
