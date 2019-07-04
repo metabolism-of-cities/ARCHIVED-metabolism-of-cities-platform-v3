@@ -42,6 +42,7 @@
               </h4>
               <p class="text-muted">{{ details.city.name }}, {{ details.city.country.name }}</p>
 
+              {% if not request.GET.short %}
               <p>{{ details.profile }}</p>
 
               <p class="text-muted">Member since {{ details.member_since }}</p>
@@ -63,6 +64,9 @@
                   <a href="{{ details.linkedin }}" class="btn btn-icon bord-no icon-lg add-tooltip fab fa-linkedin" data-original-title="LinkedIn" data-container="body"></a>
                 {% endif %}
               </div>
+
+              {% endif %}
+
           </div>
       </div>
 
