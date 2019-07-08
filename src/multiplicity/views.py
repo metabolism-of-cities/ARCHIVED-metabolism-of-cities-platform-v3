@@ -476,23 +476,30 @@ def graph(request, city, dataset, id, space=False):
 
     datapoints = []
     spaces = []
+    spaces_objects = []
     for row in data:
         unit = False
         if row.unit:
             unit = row.unit.symbol
         this_space = False
+        this_space_object = False
         if row.origin_space and row.origin_space.city == space:
             this_space = row.origin_space.name
+            this_space_object = row.origin_space
         elif row.destination_space and row.destination_space.city == space:
             this_space = row.destination_space.name
+            this_space_object = row.destination_space
         elif row.destination_space and row.destination_space.city == space:
             this_space = row.destination_space.name
+            this_space_object = row.destination_space
         elif row.destination_space == space or row.origin_space == space:
             this_space = space.name
+            this_space_object= space
 
         if this_space:
             if this_space not in spaces:
                 spaces.append(this_space)
+                spaces_objects.append(this_space_object)
 
         datapoints.append({"material_name": row.material_name, "material_group": row.material.name, "date": row.timeframe.start.strftime("%Y-%m-%d"), "date_label": row.timeframe.name, "date_formatted":row.timeframe.start.strftime("%Y, %m, %d"), "quantity": row.quantity, "unit": unit, "type": this_space})
     datapoints = json.dumps(datapoints)
@@ -500,17 +507,21 @@ def graph(request, city, dataset, id, space=False):
     spaces = json.dumps(spaces)
 
     graph = get_object_or_404(GraphType, pk=id)
-    context = {"graph": graph, "dataset": dataset, "info": info, 
-    "t1": t1, 
-    "t2": t2,
-    "t3": t3,
-    "groups": groups,
-    "subgroups": subgroups,
-    "data": datapoints,
-    "spaces": spaces,
-    "info": info,
-    "dataset": dataset,
-    "unit": unit,
+    context = {
+        "graph": graph, 
+        "dataset": dataset, 
+        "info": info, 
+        "t1": t1, 
+        "t2": t2,
+        "t3": t3,
+        "groups": groups,
+        "subgroups": subgroups,
+        "data": datapoints,
+        "spaces": spaces,
+        "spaces_objects": spaces_objects,
+        "info": info,
+        "dataset": dataset,
+        "unit": unit,
     }
     return render(request, "multiplicity/graphs/" + graph.slug + ".html", context)
 
