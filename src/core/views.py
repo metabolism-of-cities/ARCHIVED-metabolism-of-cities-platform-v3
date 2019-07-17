@@ -522,10 +522,10 @@ def references(request, type=False, tag=False):
                     tag = tag[0]
                 else:
                     return redirect("core:references")
-            title = tag.name + " | Publications"
+            title = tag.name + " | Library"
         else:
             list = Reference.objects.filter(status="active", tags__id=main_filter).order_by("-year")
-            title = "Publications"
+            title = "Library"
     maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     addlink = reverse("core:newreference")
 
