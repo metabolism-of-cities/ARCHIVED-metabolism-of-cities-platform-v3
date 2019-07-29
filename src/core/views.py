@@ -77,6 +77,8 @@ def index(request):
         return render(request, "core/home.html", context)
     else:
         main_filter = 219
+        context = { "section": "home", "page": ""  }
+        return render(request, "core/home.moi.html", context)
     publications = False
     events = False
     projects = False
