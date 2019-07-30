@@ -41,10 +41,10 @@
 #topstrip{margin-top:59px;background:#9175a7;padding:10px;min-height:120px}
 #topstrip .leftbox{width:220px}
 #topstrip .leftbox img{max-width:120px}
-#topstrip .rightbox{position:absolute;left:220px;top:0;text-align:left}
+#topstrip .rightbox{position:absolute;left:12px;top:0;text-align:left}
 #topstrip .container{padding-left:0}
 #content-container{padding-top:0}
-#mainnav-container{padding-top:0}
+#mainnav-container{padding-top:20px}
 .panel{background-color:transparent}
 .narrow-dropdown{width:600px}
 .text-main, a.text-main:hover, a.text-main:focus{color:#000}
