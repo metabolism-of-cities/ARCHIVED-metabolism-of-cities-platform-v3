@@ -191,6 +191,7 @@
   <li class="active"><a data-toggle="tab" href="#tab-charts">Charts</a></li>
   <li><a data-toggle="tab" href="#tab-table">Table</a></li>
   <li><a data-toggle="tab" href="#tab-replication">Replication</a></li>
+  <li><a data-toggle="tab" href="#tab-download">Data download</a></li>
 </ul>
 
 <div class="tab-content">
@@ -221,6 +222,14 @@
   <section id="tab-replication" class="tab-pane">
     <h3>Replication instructions</h3>
     <p>{{ dataset.replication|linebreaksbr }}</p>
+  </section>
+
+  <section id="tab-download" class="tab-pane">
+    <h3>Data download</h3>
+    <p>Download the original data in CSV format using the link below.</p>
+    {% for csv in csv_files %}
+      <p><a class="btn btn-primary" href="{% url 'multiplicity:download_csv' info.slug csv.id %}"><i class="fa fa-download"></i> Download CSV file</a></p>
+    {% endfor %}
   </section>
 </div>
 
