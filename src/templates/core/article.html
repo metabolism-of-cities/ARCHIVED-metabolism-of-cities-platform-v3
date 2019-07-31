@@ -1,7 +1,7 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
 
-{% block title %}{{ info.title }} | {{ info.type.name }}{% endblock %}
+{% block title %}{{ info.title }} {% if info.type.name %}| {{ info.type.name }}{% endif %}{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
@@ -49,8 +49,10 @@
               {% if event.estimated_date %}
               {{ event.estimated_date }}
               {% else %}
-                {{ event.start|date:"M d, Y" }}-
-                {{ event.end|date:"M d, Y" }}
+                {{ event.start|date:"M d, Y" }}
+                {% if event.start != event.end %}-
+                  {{ event.end|date:"M d, Y" }}
+                {% endif %}
                 {% endif %}
               </p>
               {% elif info.date %}
@@ -68,7 +70,7 @@
       </div>
 
       {% if info.image %}
-        <p class="text-center"><img src="{{ info.image.url }}" alt="" /></p>
+        <p class="text-center"><img style="max-width:100%" src="{{ info.image.url }}" alt="" /></p>
       {% endif %}
 
       <div class="row">
@@ -156,6 +158,15 @@
 .panel > .list-group .list-group-item.active-sub{border-left:8px solid #fe6d33}
 .list-header{font-weight:700}
 </style>
+
+<meta property="og:title" content="{{ info.title }}"/>
+<meta property="og:description" content="{% if info.introduction %}{{ info.introduction }}{% else %}{{ info.content|striptags|truncatewords:50 }}{% endif %}"/>
+<meta name="description" content="{% if info.introduction %}{{ info.introduction }}{% else %}{{ info.content|striptags|truncatewords:30 }}{% endif %}">
+<meta property="og:type" content="article"/>
+{% if info.image %}
+  <meta property="og:image" content="{{ URL }}{{ info.image.url }}"/>
+{% endif %}
+
 {% endblock %}
 
 {% block sidebar %}

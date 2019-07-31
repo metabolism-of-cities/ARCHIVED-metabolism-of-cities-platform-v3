@@ -1282,11 +1282,11 @@ def admin_article(request, id=False, type=False, parent=False):
             eventform = EventForm()
     if request.method == "POST":
         if not id:
-            form = SimpleArticleForm(request.POST)
+            form = SimpleArticleForm(request.POST, request.FILES)
             if type == "event":
                 eventform = EventForm(request.POST)
         else:
-            form = SimpleArticleForm(request.POST, instance=info)
+            form = SimpleArticleForm(request.POST, request.FILES, instance=info)
             if type == "event":
                 eventform = EventForm(request.POST, instance=info.event)
         if (form.is_valid() and eventform and eventform.is_valid()) or (form.is_valid() and not eventform):
