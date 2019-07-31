@@ -164,7 +164,7 @@
 <meta name="description" content="{% if info.introduction %}{{ info.introduction }}{% else %}{{ info.content|striptags|truncatewords:30 }}{% endif %}">
 <meta property="og:type" content="article"/>
 {% if info.image %}
-  <meta property="og:image" content="{{ URL }}{{ info.image.url }}"/>
+  <meta property="og:image" content="{{ SITE_URL }}{{ info.image.url }}"/>
 {% endif %}
 
 {% endblock %}

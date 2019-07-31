@@ -930,8 +930,7 @@ def register(request, contributor=False, taskforce=False):
         )
 
         current_site = Site.objects.get_current()
-        scheme = request.scheme
-        url = scheme + "://" + current_site.domain
+        url = current_site.domain
 
         context = {
             "url": url + reverse("core:admin_people", args=[people.id]),
