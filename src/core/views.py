@@ -44,7 +44,7 @@ def videos(request, collection=False, all=False):
     if all:
         list = Video.on_site.all().exclude(collections__id=7).order_by('title')
     else:
-        list = Video.on_site.filter(collections=collection).order_by('title')
+        list = Video.objects.filter(collections=collection).order_by('title')
     addlink = "/admin/videos/create"
     context = { "section": "resources", "collection": collection, "addlink": addlink,
     "collections": collections, "list": list, "editlink": editlink, 'all': all }

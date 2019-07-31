@@ -66,29 +66,39 @@
           {% else %}
           <i class="psi-map-marker-2"></i>
           {% endif %}
-          Data
+          Islands
       </span>
   </a>
 
-  <div class="dropdown-menu mega-dropdown-menu narrow-dropdown" id="dropdown-community">
+  <div class="dropdown-menu mega-dropdown-menu " id="dropdown-community">
     <div class="row">
-      <div class="col-md-6">
-        <p class="pad-top text-main text-sm text-uppercase text-bold">Island nations</p>
+      <div class="col-sm-4">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="fas fa-chart-bar icon-fw"></i>MultipliCity - Data Portals</p>
         <ul class="list-unstyled">
-            <li><a href="{% url 'multiplicity:city' 'grenada' %}">Grenada</a></li>
-            <li><a href="{% url 'multiplicity:city' 'antigua-barbuda' %}">Antigua &amp; Barbuda</a></li>
-            <li><a href="{% url 'multiplicity:city' 'jamaica' %}">Jamaica</a></li>
+          <li><a href="/cities/page/contribute">How to contribute</a></li>
+          <li><a href="/resources/videos/collections/5">Instruction videos</a></li>
         </ul>
       </div>
-      <div class="col-md-6">
-        <p class="pad-top text-main text-sm text-uppercase text-bold">Subnational island jurisdiction</p>
+      <div class="col-sm-4">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="fas fa-door-open icon-fw"></i>Existing Data Portals</p>
         <ul class="list-unstyled">
+            <li><a href="{% url 'multiplicity:city' 'grenada' %}">Grenada</a></li>
+            <li><a href="{% url 'multiplicity:city' 'jamaica' %}">Jamaica</a></li>
             <li><a href="{% url 'multiplicity:city' 'trinket-island' %}">Trinket Is.</a></li>
             <li><a href="{% url 'multiplicity:city' 'samothraki-island' %}">Samothraki Is.</a></li>
         </ul>
       </div>
+
+      <div class="col-sm-4">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="fas fa-door-closed icon-fw"></i>Upcoming Data Portals</p>
+        <ul class="list-unstyled future-cities" style="opacity:0.5">
+          <li><a href="javascript:void()"><span class="faded">Antigua &amp; Barbuda</span> <span class="pull-right label label-warning">Coming soon</span></a></li>
+          <li><a href="javascript:void()"><span class="faded">Aruba</span> <span class="pull-right label label-warning">Coming soon</span></a></li>
+          <li><a href="javascript:void()"><span class="faded">Bahamas</span> <span class="pull-right label label-warning">Coming soon</span></a></li>
+          <li><a href="javascript:void()"><span class="faded">Sint Maarten</span> <span class="pull-right label label-warning">Coming soon</span></a></li>
+        </ul>
+      </div>
     </div>
-  </div>
 
 </li>
 

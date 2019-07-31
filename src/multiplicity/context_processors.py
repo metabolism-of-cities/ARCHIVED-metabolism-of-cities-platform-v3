@@ -17,7 +17,7 @@ def site(request):
         news = 142
         system = "island"
         systems = "islands"
-        multiplicity_name = "Data"
+        multiplicity_name = "Islands"
     latest_news = Article.objects.filter(parent=news, active=True).order_by('-date')[0]
     processgroups = ProcessGroup.objects.order_by('name').exclude(pk__in=[13,14,12])
 
