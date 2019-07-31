@@ -40,9 +40,13 @@ class ReferenceType(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True, blank=True)
+    twitter = models.CharField(max_length=255, null=True, blank=True)
+    linkedin = models.CharField(max_length=255, null=True, blank=True)
+    researchgate = models.CharField(max_length=255, null=True, blank=True)
+    logo = models.ImageField(null=True, blank=True, upload_to='organizations')
     processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
     reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = HTMLField(null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     ORG_TYPE = (
         ('academic', 'Academic Institution'),

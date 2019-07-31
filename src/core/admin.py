@@ -5,18 +5,21 @@ from .models import *
 
 class ArticleAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
-    list_display = ('title', 'site', 'parent')
-    search_fields = ('title',)
+    list_display = ['title', 'site', 'parent']
+    search_fields = ['title',]
 
 class PeopleAdmin(admin.ModelAdmin):
-    list_display = ('firstname', 'lastname', 'city', 'email')
+    list_display = ['firstname', 'lastname', 'city', 'email']
 
 class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
+class OrganizationAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['processes', 'reference_spaces']
+
 admin.site.register(Journal)
 admin.site.register(Publisher)
-admin.site.register(Organization)
+admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Video)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Color)
