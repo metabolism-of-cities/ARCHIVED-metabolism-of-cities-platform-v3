@@ -545,7 +545,7 @@ def topicmap(request, city, theme, topic):
 def download_location(request, city, id):
     info = get_object_or_404(ReferenceSpaceLocation, pk=id)
     response = HttpResponse(info.geojson, content_type="application/json")
-    response["Content-Disposition"] = "attachment; filename='" + info.name + ".json'"
+    response["Content-Disposition"] = "attachment; filename=\"" + info.name + ".json\""
     return response
 
 def download_mtu(request, city, type):
@@ -559,7 +559,7 @@ def download_mtu(request, city, type):
     output += "]}"
     print(output)
     response = HttpResponse(output, content_type="application/json")
-    response["Content-Disposition"] = "attachment; filename='" + type + ".json'"
+    response["Content-Disposition"] = "attachment; filename=\"" + type + ".json\""
     return response
 
 def download_csv(request, city, id):
@@ -572,7 +572,7 @@ def download_csv(request, city, id):
         name = file.dataset.name
     else:
         name = "download"
-    response["Content-Disposition"] = "attachment; filename='"+name+"-"+date+".csv'"
+    response["Content-Disposition"] = "attachment; filename=\""+name+"-"+date+".csv\""
     return response
 
 @login_required
