@@ -41,9 +41,15 @@
 
 <body>
 
-<div class="alert alert-dark" id="footerwarning" style="font-size:17px">
-  This is the new {{ SITE_NAME }} website. <a style="text-decoration:underline;color:#fff" href="{% url 'core:contact' %}"><br>Please leave your feedback here.</a>
-</div>
+{% if SITE_ID == 1 %}
+  <div class="alert alert-dark" id="footerwarning" style="font-size:17px">
+    This is the new {{ SITE_NAME }} website. <a style="text-decoration:underline;color:#fff" href="{% url 'core:contact' %}"><br>Please leave your feedback here.</a>
+  </div>
+{% else %}
+  <div class="alert alert-dark" id="footerwarning" style="font-size:18px">
+  The <em>Metabolism of Islands</em> is an open access data portal on the physical basis of island economies.
+  </div>
+{% endif %}
 
 <div id="container" class="effect boxed-layout aside-float slide mainnav-out stretch-bg-head">
 
@@ -81,6 +87,7 @@
     </div>
 
   </div>
+
 </header>
 
 {% block content %}
