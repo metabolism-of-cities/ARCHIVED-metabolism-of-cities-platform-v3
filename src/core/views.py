@@ -194,7 +194,7 @@ def article(request, id):
     section = info.section
     if info.parent:
         section = info.parent.section
-    list = Article.objects.filter(active=True, parent=info.parent).order_by("-created_at")[:8]
+    list = Article.objects.filter(active=True, parent=info.parent).order_by("-date", "-created_at")[:8]
     context = { "section": section, "page": "news", "info": info, "editlink": editlink, "list": list, "event": event}
     return render(request, "core/article.html", context)
 
@@ -227,8 +227,8 @@ def news_and_events(request):
     events = match[request.site.id]
     match = { 1: 61, 2: 142 }
     news = match[request.site.id]
-    news_list = Article.objects.filter(active=True, parent__id=news, site=request.site).order_by("-created_at")
-    events_list = Event.objects.filter(article__active=True, article__site=request.site).order_by("start")
+    news_list = Article.objects.filter(active=True, parent__id=news, site=request.site).order_by("-date")
+    events_list = Event.objects.filter(article__active=True, article__site=request.site).order_by("-start")
     page = Article.objects.get(pk=news)
     section = page.section
     add_news_link = reverse("core:admin_article_parent", args=[news])
