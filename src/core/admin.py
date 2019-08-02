@@ -18,6 +18,9 @@ class ReferenceAdmin(admin.ModelAdmin):
 class OrganizationAdmin(admin.ModelAdmin):
     autocomplete_fields = ['processes', 'reference_spaces']
 
+class DataVizAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['space', 'reference']
+
 class ProjectOrgAdmin(admin.ModelAdmin):
     autocomplete_fields = ['project']
     list_display = ['project', 'organization', 'type']
@@ -45,5 +48,6 @@ admin.site.register(Timeline)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectOrganization, ProjectOrgAdmin)
 admin.site.register(ReferenceType)
+admin.site.register(DataViz, DataVizAdmin)
 admin.site.register(ReferenceOrganization, ReferenceOrgAdmin)
 admin.site.register(Reference, ReferenceAdmin)

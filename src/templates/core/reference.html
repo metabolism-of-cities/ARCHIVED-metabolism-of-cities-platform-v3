@@ -80,6 +80,13 @@ p.abstract {
 {% include 'core/includes/ris.html' %}
 
 {% if request.user.is_staff %}
+
+    {% if info.status != "active" %}
+      <div class="alert alert-warning">
+        This record is NOT active. It is <em><strong>{{ info.get_status_display }}</strong></em>. Only admins can see this record.
+      </div>
+    {% endif %}
+
   <a title="Edit tags" href="{% url 'core:editreference_tags' info.id %}" id="editextrabutton" class="btn"><i class="psi-tag"></i></a>
 {% endif %}
 

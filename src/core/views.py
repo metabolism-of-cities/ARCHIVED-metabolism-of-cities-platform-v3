@@ -338,6 +338,12 @@ def reference(request, id):
         main_filter = 11 # This is urban systems
     else:
         main_filter = 219
+
+    if info.status != "active":
+        if not request.user.is_staff:
+            from django.http import Http404
+            raise Http404("This record does not exist.")
+
     related = Reference.objects.filter(status="active", tags__id=main_filter).order_by("-id")[:5]
     authors = info.authors.all()
     data = Data.objects.filter(dataset__references=info)
