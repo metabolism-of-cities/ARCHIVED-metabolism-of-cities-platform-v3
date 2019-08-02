@@ -10,6 +10,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 class PeopleAdmin(admin.ModelAdmin):
     list_display = ['firstname', 'lastname', 'city', 'email']
+    search_fields = ['firstname', 'lastname']
 
 class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ['title']
