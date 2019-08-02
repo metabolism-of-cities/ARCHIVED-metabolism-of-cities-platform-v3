@@ -22,6 +22,11 @@ class ProjectOrgAdmin(admin.ModelAdmin):
     list_display = ['project', 'organization', 'type']
     search_fields = ['organization__name', 'project__name', 'type']
 
+class PeopleAffAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['people']
+    list_display = ['people', 'affiliation', 'start', 'end']
+    search_fields = ['people__firstname', 'people__lastname', 'organization__name']
+
 class ReferenceOrgAdmin(admin.ModelAdmin):
     autocomplete_fields = ['reference']
     list_display = ['reference', 'organization', 'type']
@@ -40,6 +45,7 @@ admin.site.register(Tag)
 admin.site.register(UserAction)
 admin.site.register(UserLog)
 admin.site.register(People, PeopleAdmin)
+admin.site.register(PeopleAffiliation, PeopleAffAdmin)
 admin.site.register(Timeline)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectOrganization, ProjectOrgAdmin)

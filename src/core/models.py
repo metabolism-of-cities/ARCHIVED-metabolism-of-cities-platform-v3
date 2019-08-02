@@ -146,7 +146,7 @@ class PeopleNote(models.Model):
 class PeopleAffiliation(models.Model):
     people = models.ForeignKey(People, on_delete=models.CASCADE)
     affiliation = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    start = models.PositiveSmallIntegerField()
+    start = models.PositiveSmallIntegerField(null=True, blank=True)
     end = models.PositiveSmallIntegerField(null=True, blank=True)
     title = models.CharField(max_length=255, blank=True, null=True)
 
