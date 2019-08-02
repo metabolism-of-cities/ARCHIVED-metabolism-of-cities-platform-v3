@@ -154,6 +154,7 @@ def contact(request):
     email = request.POST["email"]
     message = request.POST["message"]
     organization = request.POST["organization"]
+    site = Site.objects.get_current()
     context = {
         "name": name,
         "email": email,
@@ -164,7 +165,7 @@ def contact(request):
     message = render_to_string("core/mail/contactform.txt", context)
 
     send_mail(
-        "Contact form Metabolism of Cities (" + name + ")",
+        "Contact form " + site.name + " (" + name + ")",
         message,
         settings.SITE_EMAIL,
         [settings.SITE_EMAIL],
