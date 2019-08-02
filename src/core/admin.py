@@ -17,6 +17,19 @@ class ReferenceAdmin(admin.ModelAdmin):
 class OrganizationAdmin(admin.ModelAdmin):
     autocomplete_fields = ['processes', 'reference_spaces']
 
+class ProjectOrgAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['project']
+    list_display = ['project', 'organization', 'type']
+    search_fields = ['organization__name', 'project__name', 'type']
+
+class ReferenceOrgAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['reference']
+    list_display = ['reference', 'organization', 'type']
+    search_fields = ['organization__name', 'reference__title', 'type']
+
+class ProjectAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
 admin.site.register(Journal)
 admin.site.register(Publisher)
 admin.site.register(Organization, OrganizationAdmin)
@@ -28,6 +41,8 @@ admin.site.register(UserAction)
 admin.site.register(UserLog)
 admin.site.register(People, PeopleAdmin)
 admin.site.register(Timeline)
-admin.site.register(Project)
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(ProjectOrganization, ProjectOrgAdmin)
 admin.site.register(ReferenceType)
+admin.site.register(ReferenceOrganization, ReferenceOrgAdmin)
 admin.site.register(Reference, ReferenceAdmin)

@@ -414,6 +414,8 @@ class ReferenceOrganization(models.Model):
         ('organization', 'Organization'),
     )
     type = models.CharField(max_length=20, choices=TYPES)
+    def __str__(self):
+        return self.organization.name + " - " + self.type + " - " + self.reference.title
 
 class UserAction(models.Model):
     name = models.CharField(max_length=255)
@@ -442,6 +444,7 @@ class Color(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     institution = models.CharField(max_length=255, null=True, blank=True)
+    organizations = models.ManyToManyField(Organization, through='ProjectOrganization')
     researcher = models.CharField(max_length=255, null=True, blank=True)
     supervisor = models.CharField(max_length=255, null=True, blank=True)
     email = models.CharField(max_length=255, null=True, blank=True)
@@ -499,6 +502,19 @@ class ProjectUserForm(ModelForm):
             'supervisor': 'Supervisor(s) / Project leader(s)',
             'url': 'URL',
         }
+
+class ProjectOrganization(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    TYPES = (
+        ('funder', 'Funder'),
+        ('commissioner', 'Commissioner'),
+        ('organization', 'Organization'),
+    )
+    type = models.CharField(max_length=20, choices=TYPES)
+    def __str__(self):
+        return self.organization.name + " - " + self.type + " - " + self.project.name
+
 
 class Timeline(models.Model):
     title = models.CharField(max_length=255)
