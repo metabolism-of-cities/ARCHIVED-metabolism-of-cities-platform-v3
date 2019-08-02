@@ -121,6 +121,7 @@ class People(models.Model):
     )
     status = models.CharField(max_length=8, choices=PEOPLE_STATUS, default='active')
     site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
+    organizations = models.ManyToManyField(Organization, blank=True)
     objects = models.Manager()
     on_site = CurrentSiteManager()
 
@@ -142,13 +143,6 @@ class PeopleNote(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     class Meta:
         ordering = ["date"]
-
-class PeopleAffiliation(models.Model):
-    people = models.ForeignKey(People, on_delete=models.CASCADE)
-    affiliation = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    start = models.PositiveSmallIntegerField(null=True, blank=True)
-    end = models.PositiveSmallIntegerField(null=True, blank=True)
-    title = models.CharField(max_length=255, blank=True, null=True)
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
