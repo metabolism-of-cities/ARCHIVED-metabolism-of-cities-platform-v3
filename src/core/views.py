@@ -118,8 +118,13 @@ def literature(request):
     return render(request, "core/literature.html", context)
 
 def team(request):
-    page = Article.objects.get(pk=39)
-    list = People.objects.exclude(member_since__isnull=True).order_by("member_since")
+    if request.site.id == 1:
+        page = Article.objects.get(pk=39)
+        list = People.objects.exclude(member_since__isnull=True).order_by("member_since")
+    else:
+        page = Article.objects.get(pk=192)
+        ids = [1150,282,186,934,926]
+        list = People.objects.filter(pk__in=ids).order_by("-firstname")
     context = { "section": "about", "list": list, "page": page }
     return render(request, "core/team.html", context)
 

@@ -105,6 +105,7 @@ urlpatterns = [
     path('cities', views.sectionpage, { 'id': 33}, name='citieshomepage'),
     path('cities/page/<slug:slug>', views.sectionpage, name='sectionpage'),
     path('about/team', views.team, name='team'),
+    path('about/moi-team', views.team, name='moi-team'),
     path('about/task-forces', views.taskforces, name='taskforces'),
     path('about/task-forces/<slug:slug>', views.taskforce, name='taskforce'),
     path('about/task-forces/<slug:taskforce>/join', views.register, name='jointaskforce'),

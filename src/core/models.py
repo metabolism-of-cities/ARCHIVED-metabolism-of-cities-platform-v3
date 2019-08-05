@@ -12,6 +12,10 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.conf import settings
 
+# Used for image resizing
+from stdimage.models import StdImageField
+import re
+
 class TimestampedModel(models.Model):
     # A timestamp representing when this object was created.
     created_at = models.DateTimeField(auto_now_add=True)
@@ -520,7 +524,7 @@ class Timeline(models.Model):
 
 class DataViz(models.Model):
     title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='dataviz')
+    image = StdImageField(upload_to='dataviz', variations={'thumbnail': (300, 300), 'large': (1024, 1024)})
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     space = models.ForeignKey('multiplicity.ReferenceSpace', on_delete=models.CASCADE, null=True, blank=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
