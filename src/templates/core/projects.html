@@ -58,6 +58,19 @@
   </tbody>
 </table>
 
+<div class="panel panel-colorful panel-warning" id="contribute-panel">
+  <div class="panel-body">
+    <h3>Contribute</h3>
+    <p>
+      Do you see any errors or do you know of any missing information?
+    </p>
+    <ul class="nolist">
+      <li><a href="{% url 'core:contact' %}" class="btn btn-default"><i class="fa fa-envelope"></i> Contact us</a></li>
+      <li><a href="{% url 'core:project_form' %}" class="btn btn-default"><i class="fa fa-plus"></i> Add your own project</a></li>
+    </ul>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block head %}
@@ -67,6 +80,11 @@ td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+#contribute-panel {
+  margin-top: 40px;
+  width: 300px;
+  float: right;
 }
 </style>
 {% endblock %}

@@ -16,6 +16,8 @@ from django.conf import settings
 from stdimage.models import StdImageField
 import re
 
+from django.urls import reverse
+
 class TimestampedModel(models.Model):
     # A timestamp representing when this object was created.
     created_at = models.DateTimeField(auto_now_add=True)
@@ -442,7 +444,7 @@ class Color(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     institution = models.CharField(max_length=255, null=True, blank=True)
-    organizations = models.ManyToManyField(Organization, through='ProjectOrganization')
+    organizations = models.ManyToManyField(Organization, through='ProjectOrganization', blank=True)
     researcher = models.CharField(max_length=255, null=True, blank=True)
     supervisor = models.CharField(max_length=255, null=True, blank=True)
     email = models.CharField(max_length=255, null=True, blank=True)
@@ -481,6 +483,9 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("core:project", args=[self.type, self.id])
+
     class Meta:
         ordering = ['name']
 
@@ -488,6 +493,13 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         exclude = ['id', 'site',  'references']
+        labels = {
+            'name': 'Project title',
+            'thesistype': 'Thesis type',
+            'researcher': 'Researcher(s)',
+            'supervisor': 'Supervisor(s) / Project leader(s)',
+            'url': 'URL',
+        }
 
 class ProjectUserForm(ModelForm):
     class Meta:

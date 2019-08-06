@@ -1112,7 +1112,7 @@ def admin_project(request, id=False):
                 info.references.add(Reference.objects.get(pk=reference))
 
             messages.success(request, "Information was saved.")
-            return redirect(reverse("core:project", args=[info.id]))
+            return redirect(info.get_absolute_url())
         else:
             messages.error(request, "We could not save your form, please correct the errors")
     context = { "navbar": "backend", "form": form, "info": info, "tinymce": True, "select2": True }
@@ -1233,7 +1233,7 @@ def admin_videocollection(request, id=False):
 
 @staff_member_required
 def admin_organization_list(request):
-    list = Organization.on_site.all()
+    list = Organization.objects.all()
     context = { "navbar": "backend", "list": list, "datatables": True }
     return render(request, "core/admin/organizations.list.html", context)
 

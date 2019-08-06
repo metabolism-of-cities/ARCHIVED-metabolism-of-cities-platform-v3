@@ -12,13 +12,22 @@
         <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
         <li><a href="{% url 'core:admin_organization_list' %}">Organizations</a></li>
         {% if info.id %}
-          <li class="active">{{ info.title }}</li>
+          <li class="active">{{ info.name }}</li>
         {% else %}
           <li class="active">Create new organization</li>
         {% endif %}
     </ol>
 
   <h2>{{ info|yesno:"Edit details,Add new organization" }}</h2>
+
+  <div class="alert alert-info">
+    Under 'reference spaces' please indicate the city or country that this organization should be linked with.
+    For instance, a university should be associated with the city/cities it is in. A national ministry should 
+    be associated with its respective country.
+    Only use processes if this organization should appear in a particular sector in a city/island dashboard.
+    This applies for instance to a waste management company or an electricity company.
+  </div>
+
   <form method="post" class="form form-horizontal boxit pad-all" enctype="multipart/form-data">
 
     {% bootstrap_form form layout='horizontal' %}
