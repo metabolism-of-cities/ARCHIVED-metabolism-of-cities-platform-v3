@@ -9,4 +9,4 @@ Title: {{ title }}
 Please review this application and activate it if it is appropriate. Notify the uploader after activating the publication.
 
 Review online at:
-https://{{ domain }}{{ link }}
+{{ domain }}{{ link }}
