@@ -55,7 +55,7 @@ class Organization(models.Model):
     description = HTMLField(null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     ORG_TYPE = (
-        ('academic', 'Academic Institution'),
+        ('academic', 'Research Institution'),
         ('universities', 'Universities'),
         ('city_government', 'City Government'),
         ('regional_government', 'Regional Government'),
