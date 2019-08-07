@@ -45,7 +45,9 @@
               {% if not request.GET.short %}
               <p>{{ details.profile }}</p>
 
-              <p class="text-muted">Member since {{ details.member_since }}</p>
+              {% if SITE_ID == 1 %}
+                <p class="text-muted">Member since {{ details.member_since }}</p>
+              {% endif %}
 
               <div class="btn-group btn-group-justified pad-top">
                 {% if details.website %}
