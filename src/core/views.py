@@ -516,7 +516,7 @@ def referenceform_multiplicity(request, id):
 
 
 
-def references(request, type=False, tag=False):
+def references(request, type=False, tag=False, all=False):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
     else:
@@ -527,7 +527,7 @@ def references(request, type=False, tag=False):
         title = type.name + "s"
     else:
         if tag:
-            list = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags__id=tag).order_by("-year")
+            list = Reference.objects.filter(status="active", tags__id=tag).order_by("-year")
             tag = get_object_or_404(Tag, pk=tag)
             if tag.hidden:
                 tag = Tag.objects.filter(name=tag.name, hidden=False)
@@ -536,6 +536,9 @@ def references(request, type=False, tag=False):
                 else:
                     return redirect("core:references")
             title = tag.name + " | Library"
+        elif all:
+            list = Reference.objects.filter(status="active").order_by("-year")
+            title = "Entire library"
         else:
             list = Reference.objects.filter(status="active", tags__id=main_filter).order_by("-year")
             title = "Library"
@@ -565,6 +568,7 @@ def references(request, type=False, tag=False):
         "section": "resources",
         "list": list, 
         "addlink": addlink, 
+        "main_filter": Tag.objects.get(pk=main_filter),
         "title": title, 
         "select2": True, 
         "tag": tag, 
@@ -573,6 +577,7 @@ def references(request, type=False, tag=False):
         "methodologies": Tag.objects.filter(parent_tag__id=318, hidden=False),
         "cities": cities,
         "cities_references": cities_references,
+        "all": all,
     }
     return render(request, "core/references.list.html", context)
 

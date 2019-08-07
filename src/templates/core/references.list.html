@@ -6,12 +6,12 @@
 
 {% block content %}
 
-{% if not tag %}
+{% if not tag and not all %}
 <div class="col-lg-12 text-right">
   <div class="section-menu">
     Introduction | 
     <a onclick="scrollToDiv('browse')">Browse</a> | 
-    <a onclick="scrollToDiv('collections')">Collections</a> | 
+    <a onclick="scrollToDiv('collections')">Map</a> | 
     <a onclick="scrollToDiv('taggingtree')">Tagging tree</a>
   </div>
 </div>
@@ -25,7 +25,7 @@
   <div class="section-menu">
     <a onclick="scrollToDiv('introduction')">Introduction</a> | 
     Browse | 
-    <a onclick="scrollToDiv('collections')">Collections</a> | 
+    <a onclick="scrollToDiv('collections')">Map</a> | 
     <a onclick="scrollToDiv('taggingtree')">Tagging tree</a>
   </div>
 </div>
@@ -35,17 +35,41 @@
 <div class="col-lg-12" id="browse">
   <h2>Browse</h2>
 
-  {% if tag %}
+  {% if all %}
+  <p>
+   You are currently browsing the entire publications library, which includes publications on
+   cities, islands, national and sub-national territories, and more. Click here to only
+   view our publications tagged with <strong><a href="{% url "core:references" %}">System type: {{ main_filter }}</a></strong>.
+  </p>
+  {% elif tag %}
 
   <p>
     You are viewing all publications with the tag: <strong>{{ tag }}</strong>.
+    {% if tag != main_filter %}
     <br>
-    <a href="{% url "core:references" %}">Go back to the publications overview.</a>
+    Click the button below to filter for system type: <strong>{{ main_filter }}</strong>
+    {% endif %}
   </p>
+  {% if tag != main_filter %}
+  <p>
+    <a class="btn btn-primary" href="#" id="apply_main_filter" data-word="{{ main_filter }}"><i class="pli-filter-2"></i> Apply filter: system type = {{ main_filter }}</a>
+  </p>
+
 
   {% endif %}
 
-  <input class="search form-control" placeholder="Search" />
+  {% else %}
+    <p>
+      You are currently viewing publications with system type: <strong>{{ main_filter }}</strong>.
+      View publications for <a href="{% url "core:tag_all" %}">all system types</a>
+    </p>
+  {% endif %}
+
+  <p class="alert alert-info">
+    <strong>{{ list.count }}</strong> publication(s) found.
+  </p>
+
+  <input class="search form-control" id="search_box" placeholder="Search" />
   <button class="sort btn btn-default" data-sort="title">
     Sort by title
   </button>
@@ -92,6 +116,12 @@
 
   <ul class="pagination"></ul>
 
+  {% if tag %}
+    <p>
+      <a href="{% url "core:references" %}">&laquo; Publications overview.</a>
+    </p>
+  {% endif %}
+
   <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
   <script type="text/javascript">
     var options = {
@@ -105,13 +135,13 @@
   </script>
 </div>
 
-{% if not tag %}
+{% if not tag and not all %}
 
 <div class="col-lg-12 text-right">
   <div class="section-menu">
     <a onclick="scrollToDiv('introduction')">Introduction</a> | 
     <a onclick="scrollToDiv('browse')">Browse</a> | 
-    Collections | 
+    Map | 
     <a onclick="scrollToDiv('taggingtree')">Tagging tree</a>
   </div>
 </div>
@@ -119,6 +149,7 @@
 
 <div class="col-lg-12" id="collections">
 
+  {% if False %}
   <h2>Collections</h2>
 
   <h3>Methodologies</h3>
@@ -128,6 +159,7 @@
     <li><a href="{% url "core:tag_search" details.id %}">{{ details }}</a> ({{ details.reference_set.count }})</li>
   {% endfor %}
   </ul>
+  {% endif %}
 
   <h3>View map</h3>
 
@@ -144,7 +176,7 @@
   <div class="section-menu">
     <a onclick="scrollToDiv('introduction')">Introduction</a> | 
     <a onclick="scrollToDiv('browse')">Browse</a> | 
-    <a onclick="scrollToDiv('collections')">Collections</a> | 
+    <a onclick="scrollToDiv('collections')">Map</a> | 
     Tagging tree
   </div>
 </div>
@@ -155,6 +187,11 @@
   <div class="col-lg-12" id="taggingtree">
 
   <h2>Tagging tree</h2>
+
+  <p>
+    This list shows the hierarchical tree of tags that have been applied to publications in our entire library. 
+    Click on a tag to see all the sub-categories and the list with relevant publications.
+  </p>
 
     <div class="pad-all file-manager">
       <div class="fixed-fluid">
@@ -489,5 +526,12 @@ table td .taglist {
 
 
     map.scrollWheelZoom.disable();
+    $(function(){
+      $("#apply_main_filter").click(function(e){
+        e.preventDefault();
+        var word = $(this).data("word");
+        $("#search_box").val(word);
+      });
+    });
 </script>
 {% endblock %}

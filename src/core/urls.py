@@ -166,6 +166,7 @@ urlpatterns = [
     path('resources/publications/<int:id>/edit/multiplicity', views.referenceform_multiplicity, name='editreference_multiplicity'),
     path('resources/publications/add', views.referenceform, name='newreference'),
     path('resources/publications/create/<int:dataset>', views.referenceform, name='newflowreference'),
+    path('resources/publications/tags/all', views.references, {"all": True }, name='tag_all'),
     path('resources/publications/tags/<int:tag>', views.references, name='tag_search'),
     path('resources/publications/<slug:slug>', views.page, name='publications'),
     path('resources/<slug:slug>', views.page, name='resources'),
