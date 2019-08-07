@@ -117,7 +117,7 @@ class People(models.Model):
     description = models.TextField(null=True, blank=True)
     member_since = models.DateField(null=True, blank=True, db_index=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to='people')
+    image = models.ImageField(null=True, blank=True, upload_to='people', help_text="Square photos are best - please resize to 350x350 pixels")
     PEOPLE_STATUS = (
         ('active', 'Active'),
         ('retired', 'Retired'),
