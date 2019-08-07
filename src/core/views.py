@@ -520,9 +520,11 @@ def references(request, type=False, tag=False, all=False):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
         article_id = 75
+        type_id = 3 # The ID of reference type = city
     else:
         main_filter = 219 # Island system
         article_id = 200
+        type_id = 21 # The ID of reference type = island
     if type:
         type = get_object_or_404(ReferenceType, pk=type)
         list = Reference.objects.filter(status="active", type=type, tags__id=main_filter).order_by("-year")
@@ -547,7 +549,7 @@ def references(request, type=False, tag=False, all=False):
     maintags = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     addlink = reverse("core:newreference")
 
-    cities_list = Reference.objects.filter(status="active", tags__id=main_filter, spaces__type__id=3).prefetch_related('spaces')
+    cities_list = Reference.objects.filter(status="active", tags__id=main_filter, spaces__type__id=type_id).prefetch_related('spaces')
     cities = defaultdict(dict)
     cities_references = {}
 
@@ -556,7 +558,7 @@ def references(request, type=False, tag=False, all=False):
         # We can improve this a lot
         for details in cities_list:
             for sub in details.spaces.all():
-                if sub.type.id == 3:
+                if sub.type.id == type_id:
                     cities[sub.id] = sub
                     reference = details
                     if sub.id in cities_references and details not in cities_references[sub.id]:
