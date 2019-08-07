@@ -122,17 +122,6 @@
     </p>
   {% endif %}
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-  <script type="text/javascript">
-    var options = {
-      valueNames: [ 'hidden-title', 'title', 'authors', 'type', 'year', 'tags' ],
-      page: 10,
-      pagination: true
-    };
-
-    var userList = new List('browse', options);
-    userList.update();
-  </script>
 </div>
 
 {% if not tag and not all %}
@@ -235,6 +224,7 @@
 {% endblock %}
 
 {% block head %}
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
 <style type="text/css">
 
@@ -277,10 +267,6 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
   text-align: center;
   opacity: 0.7;
 }
-
-
-
-
 
 .sort:after {
   display:inline-block;
@@ -366,6 +352,8 @@ table td .taglist {
 {% endblock %}
 
 {% block footer %}
+
+{% if not tag and not all %}
   <script type="text/javascript">
   $(function(){
     $(".filters .filter").click(function(e){
@@ -498,6 +486,7 @@ table td .taglist {
     }
 
 </script>
+
 <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
 <script type="text/javascript">
 
@@ -524,13 +513,28 @@ table td .taglist {
       {% endif %}
     {% endfor %}
 
-
     map.scrollWheelZoom.disable();
+
+</script>
+{% endif %}
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  <script type="text/javascript">
+    var options = {
+      valueNames: [ 'hidden-title', 'title', 'authors', 'type', 'year', 'tags' ],
+      page: 10,
+      pagination: true
+    };
+
+    var userList = new List('browse', options);
+    userList.update();
+
     $(function(){
       $("#apply_main_filter").click(function(e){
         e.preventDefault();
         var word = $(this).data("word");
         $("#search_box").val(word);
+        userList.search(word);
       });
     });
 </script>
