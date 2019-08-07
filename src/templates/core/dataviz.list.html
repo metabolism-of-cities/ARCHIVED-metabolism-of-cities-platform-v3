@@ -1,0 +1,67 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Urban Metabolism Data Visualisations{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+{% include 'multiplicity/includes/top.navbar.html' %}
+
+<div class="row">
+  <div class="col-lg-12">
+      <h3>{{ page.title }}</h3>
+      {{ page.content|safe }}
+  </div>
+</div>
+
+<div class="row">
+  {% for details in list %}
+    <div class="col-md-4">
+        <div class="panel">
+          <div class="panel-body text-center">
+            <a href="{% url "core:datavisualization" details.id %}">
+            <img alt="" class="img-lg mar-btm" src="{{ details.image.thumb.url }}">
+            </a>
+            <p class="text-lg text-semibold mar-no text-main">{{ details.title }}</p>
+            {% if details.space %}
+            <p class="text-muted">{{ details.space }}</p>
+            {% endif %}
+            <div class="mar-top">
+                <a href="{% url "core:datavisualization" details.id %}" class="btn btn-mint">View</a>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+  <div id="page-title">
+    <h1 class="page-header text-overflow">{{ page.title }}</h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="pli-home"></i></a></li>
+    <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+    <li class="active">{{ page.title }}</li>
+  </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

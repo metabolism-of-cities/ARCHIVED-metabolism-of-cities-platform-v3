@@ -88,6 +88,9 @@ urlpatterns = [
     path('resources/videos/<int:id>', views.video, name='video'),
     path('resources/videos/all', views.videos, { 'all': True }, name='videos_all'),
 
+    path('resources/datavisualisations/', views.datavisualizations, name='datavisualizations'),
+    path('resources/datavisualisations/<int:id>/', views.datavisualization, name='datavisualization'),
+
     path('community/news', views.articles, {'parent': 'news'}, name='news'),
     path('community/news/<int:id>', views.article, name='news'),
     path('community/blog', views.articles, {'parent': 'blog'}, name='blog'),

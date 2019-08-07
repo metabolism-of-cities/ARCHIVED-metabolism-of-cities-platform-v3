@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process, Material
@@ -912,6 +912,19 @@ def reference_list_ajax(request):
     list = list.order_by("title")
     context = { "references": list, "show_quantity": True, "reference_types": reference_types }
     return render(request, "core/includes/references.list.html", context)
+
+def datavisualizations(request):
+    context = {
+        "list": DataViz.objects.all(),
+        "page": get_object_or_404(Article, pk=201),
+    }
+    return render(request, "core/dataviz.list.html", context)
+
+def datavisualization(request, id):
+    context = {
+        "info": get_object_or_404(DataViz, pk=id),
+    }
+    return render(request, "core/dataviz.html", context)
 
 def register(request, contributor=False, taskforce=False):
 

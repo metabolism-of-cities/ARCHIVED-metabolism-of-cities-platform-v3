@@ -1,0 +1,97 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Urban Metabolism Data Visualisations{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+{% include 'multiplicity/includes/top.navbar.html' %}
+
+<div class="row">
+  <div class="col-lg-12 text-center">
+      <h3>{{ info.title }}</h3>
+      <p><img class="dataviz" alt="" src="{{ info.image.url }}"></p>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12" style="padding:20px 0">
+    {{ info.description|safe }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-body">
+
+          <dl class="dl dl-horizontal">
+
+            {% if info.source %}
+              <dt>Source</dt>
+              <dd>{{ info.source }}</dd>
+            {% endif %}
+
+            {% if info.year %}
+              <dt>Year</dt>
+              <dd>{{ info.year }}</dd>
+            {% endif %}
+
+            {% if info.uploaded_by %}
+              <dt>Uploaded by</dt>
+              <dd>{{ info.uploaded_by }}</dd>
+            {% endif %}
+
+            {% if info.url %}
+              <dt>URL</dt>
+              <dd><a href="{{ info.url }}">{{ info.url|truncatechars:40 }}</a></dd>
+            {% endif %}
+
+            {% if info.reference %}
+              <dt>Related publication</dt>
+              <dd><a href="{% url "core:reference" info.reference.id %}">{{ info.reference }}</a></dd>
+            {% endif %}
+
+          </dl>
+        </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.dataviz {
+  border: 1px solid #999;
+  padding:5px;
+}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+  <div id="page-title">
+    <h1 class="page-header text-overflow">{{ info.title }}</h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="pli-home"></i></a></li>
+    <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+    <li><a href="{% url 'core:datavisualizations' %}">Data visualisations</a></li>
+    <li class="active">{{ info.title }}</li>
+  </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

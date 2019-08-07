@@ -536,16 +536,18 @@ class Timeline(models.Model):
 
 class DataViz(models.Model):
     title = models.CharField(max_length=255)
-    image = StdImageField(upload_to='dataviz', variations={'thumbnail': (300, 300), 'large': (1024, 1024)})
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = StdImageField(upload_to='dataviz', variations={'thumb': (300, 300), 'large': (1024, 1024)})
+    uploaded_by = models.ForeignKey(People, on_delete=models.CASCADE)
     space = models.ForeignKey('multiplicity.ReferenceSpace', on_delete=models.CASCADE, null=True, blank=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
     process_group = models.ForeignKey('multiplicity.ProcessGroup', on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     description = HTMLField(null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True, help_text="URL of the source website/article -- ONLY enter if this is not linked to a publication")
-    source = models.CharField(max_length=255, null=True, blank=True, help_text="Name of the source website/article -- ONLY enter if this is not linked to a publication")
+    source = models.TextField(null=True, blank=True, help_text="Name of the source website/article -- ONLY enter if this is not linked to a publication")
     year = models.PositiveSmallIntegerField(null=True, blank=True, help_text="Year of the data being visualized -- ONLY enter if this is not linked to a publication")
     class Meta:
         ordering = ["-date"]
+    def __str__(self):
+        return self.title
 
