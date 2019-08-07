@@ -69,7 +69,7 @@
     <strong>{{ list.count }}</strong> publication(s) found.
   </p>
 
-  <input class="search form-control" id="search_box" placeholder="Search" />
+  <input class="search form-control fuzzy-search" id="search_box" placeholder="Search" />
   <button class="sort btn btn-default" data-sort="title">
     Sort by title
   </button>
@@ -523,7 +523,14 @@ table td .taglist {
     var options = {
       valueNames: [ 'hidden-title', 'title', 'authors', 'type', 'year', 'tags' ],
       page: 10,
-      pagination: true
+      pagination: true,
+      fuzzySearch: {
+        searchClass: "fuzzy-search",
+        location: 0,
+        distance: 1000,
+        threshold: 0.4,
+        multiSearch: true
+      }
     };
 
     var userList = new List('browse', options);
