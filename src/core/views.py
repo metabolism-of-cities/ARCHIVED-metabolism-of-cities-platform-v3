@@ -519,8 +519,10 @@ def referenceform_multiplicity(request, id):
 def references(request, type=False, tag=False, all=False):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
+        article_id = 75
     else:
         main_filter = 219 # Island system
+        article_id = 200
     if type:
         type = get_object_or_404(ReferenceType, pk=type)
         list = Reference.objects.filter(status="active", type=type, tags__id=main_filter).order_by("-year")
@@ -573,7 +575,7 @@ def references(request, type=False, tag=False, all=False):
         "select2": True, 
         "tag": tag, 
         "maintags": maintags, 
-        "page": get_object_or_404(Article, pk=75),
+        "page": get_object_or_404(Article, pk=article_id),
         "methodologies": Tag.objects.filter(parent_tag__id=318, hidden=False),
         "cities": cities,
         "cities_references": cities_references,
