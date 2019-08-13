@@ -339,9 +339,9 @@ def resources(request, city, slug):
     elif slug == "podcasts":
         type = 24
     type = get_object_or_404(ReferenceType, pk=type)
-    references = Reference.objects.filter(status="active", tags=info.tag, type=type).order_by("-year")
+    references = Reference.objects.filter(status="active", spaces=info, type=type).order_by("-year")
 
-    addlink = reverse("multiplicity:photo_form", args=[info.slug])
+    addlink = reverse("core:newreference")
 
     context = { 
         "section": "cities", "menu":  "resources", "page": type.name, "info": info, 
