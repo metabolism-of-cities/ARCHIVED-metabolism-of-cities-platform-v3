@@ -107,7 +107,122 @@
 {% include 'multiplicity/includes/footer.html' %}
 
 <script src="{% static 'ie/js/onepage-scroll.min.js' %}"></script>
-<script src="{% static 'ie/js/cycleText.js' %}"></script>
+
+<script type="text/javascript">
+/**
+ * Created by Sky on 2015/12/23.
+ */
+;
++function ($, window, document) {
+
+    var PLUGIN_NAME = 'cycleText',
+        VERSION = '1.0.0',
+        DEFAULTS = {
+            separator: '|',
+            animation: 'flipInX',
+            interval: 2000
+        };
+
+    function Plugin(element, options) {
+        this.$element = $(element);
+        this.options = options;
+        this._init();
+    }
+
+    Plugin.prototype = {
+        _init: function () {
+            var that = this;
+            this.originalText = this.$element.text();
+            this.textArray = this.originalText.split(this.options.separator);
+            this.$element.empty();
+            $.each(this.textArray, function () {
+                that.$element.append('<span class="cycleText animated ' + that.options.animation + '" style="display: none;">' + this + '</span>');
+            });
+            this.resume();
+        },
+
+        resume: function () {
+            if(!this._interval){
+                var that = this;
+                var index = 0;
+                this.$element.find('span.cycleText').hide();
+                this.$element.find('span.cycleText:eq(0)').css('display', 'inline-block');
+                this._interval = setInterval(function () {
+                    index++;
+                    index = index % that.textArray.length;
+                    that.$element.find('span.cycleText').hide();
+                    that.$element.find('span.cycleText:eq(' + index + ')').css('display', 'inline-block');
+                }, this.options.interval);
+            }
+        },
+
+        pause: function () {
+            if(this._interval){
+                this._interval = clearInterval(this._interval);
+            }
+        }
+    }
+
+    function fn(option) {
+        return this.each(function () {
+            var $this = $(this);
+            var data = $this.data('plugin_' + PLUGIN_NAME);
+            var options = $.extend({}, DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+            if (!data) $this.data('plugin_' + PLUGIN_NAME, (data = new Plugin(this, options)))
+            if (typeof option == 'string') data[option]();
+        });
+    }
+
+    $.fn[PLUGIN_NAME] = fn;
+    $.fn[PLUGIN_NAME].Constructor = Plugin;
+
+}(jQuery, window, document);
+
+  $(".main").onepage_scroll({
+     sectionContainer: "section",     // sectionContainer accepts any kind of selector in case you don't want to use section
+     easing: "ease",                  // Easing options accepts the CSS3 easing animation such "ease", "linear", "ease-in",
+     animationTime: 800,              // AnimationTime let you define how long each section takes to animate
+     loop: false,                     // You can have the page loop back to the top/bottom when the user navigates at up/down on the first/last page.
+     keyboard: true,                  // You can activate the keyboard controls
+     responsiveFallback: 992,
+  });
+
+  $(".changing.cities, .changing.success").cycleText({
+    "interval": {% if SITE_ID == 1 %}2500{% else %}5000{% endif %},
+    "animation": "fadeInUp"
+  });
+
+  $(".section.do-what .panel").mouseover(function() {
+    var panelClass = $(this).attr("panelClass");
+    $(".section.do-what .split-text").hide()
+    $(".section.do-what .split-text." + panelClass).show();
+    $(".section.do-what .split").addClass("darker");
+    var backgroundColor = $(this).css("background-color")
+    $(".section.do-what .split").css("background-color", backgroundColor);
+  });
+
+  $(".section.for-whom .panel").mouseover(function() {
+    var panelClass = $(this).attr("panelClass");
+    $(".section.for-whom .split-text").hide()
+    $(".section.for-whom .split-text." + panelClass).show();
+    $(".section.for-whom .split").addClass("darker");
+    var backgroundColor = $(this).css("background-color")
+    $(".section.for-whom .split").css("background-color", backgroundColor);
+  });
+
+  $(".section.do-what .row.panel-collection").mouseleave(function() {
+    $(".section.do-what .split-text:visible").fadeOut(200, function(){
+      $(".section.do-what .split-text.standard").fadeIn(200);
+    })
+  });
+
+  $(".downArrow").click(function() {
+    $(".main").moveDown();
+  })
+
+</script>
+
 <script src="{% static 'ie/js/homepage.js' %}"></script>
 
 </body>
