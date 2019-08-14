@@ -1,0 +1,7 @@
+There is a new subscriber to the newsletter!
+
+Details:
+
+Name: {{ name }}
+E-mail: {{ email }}
+Organisation: {{ organization }}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz, NewsletterSubscriber
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process, Material
@@ -154,7 +154,6 @@ def page(request, slug):
 
 @csrf_exempt
 def contact(request):
-
     name = request.POST["name"]
     email = request.POST["email"]
     message = request.POST["message"]
@@ -178,6 +177,69 @@ def contact(request):
     messages.success(request, "Thanks, we have received your message!")
     return redirect("core:contact")
 
+
+@csrf_exempt
+def subscribe(request):
+    check = People.objects.filter(email=request.POST["email"])
+    if check:
+        person = check[0]
+    else:
+        person = People.objects.create(
+            firstname = request.POST["firstname"],
+            lastname = request.POST["lastname"],
+            affiliation = request.POST["organization"],
+            email = request.POST["email"],
+            email_public = False,
+        )
+
+    d = n = e = p = m = pr = t = False
+    if "datasets" in request.POST and request.POST["datasets"]:
+        d = True
+    if "news" in request.POST and request.POST["news"]:
+        n = True
+    if "events" in request.POST and request.POST["events"]:
+        e = True
+    if "publications" in request.POST and request.POST["publications"]:
+        p = True
+    if "multimedia" in request.POST and request.POST["multimedia"]:
+        m = True
+    if "projects" in request.POST and request.POST["projects"]:
+        pr = True
+    if "theses" in request.POST and request.POST["theses"]:
+        t = True
+
+    NewsletterSubscriber.objects.create(
+        people = person,
+        datasets = d,
+        news = n,
+        events = e,
+        publications = p,
+        multimedia = m,
+        projects = pr,
+        theses = t,
+        dataviz = False,
+    )
+
+    name = request.POST["firstname"] + " " + request.POST["lastname"]
+    email = request.POST["email"]
+    organization = request.POST["organization"]
+    site = Site.objects.get_current()
+    context = {
+        "name": name,
+        "email": email,
+        "organization": organization,
+    }
+
+    message = render_to_string("core/mail/subscriber.txt", context)
+
+    send_mail(
+        "New subscriber " + site.name + " (" + name + ")",
+        message,
+        settings.SITE_EMAIL,
+        [settings.SITE_EMAIL],
+    )
+    messages.success(request, "Thanks, you have signed up to our newsletter.")
+    return redirect("core:subscribe")
 
 def sectionpage(request, id=None, slug=None):
     if id:

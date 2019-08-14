@@ -71,13 +71,10 @@
 
   <input class="search form-control fuzzy-search" id="search_box" placeholder="Search" />
   <button class="sort btn btn-default" data-sort="title">
-    Sort by title
+    Sort A...Z
   </button>
   <button class="sort btn btn-default" data-sort="year">
     Sort by year
-  </button>
-  <button class="sort btn btn-default" data-sort="type">
-    Sort by type
   </button>
 
   <table class="table table-striped datatable">
@@ -178,8 +175,17 @@
   <h2>Tagging tree</h2>
 
   <p>
-    This list shows the hierarchical tree of tags that have been applied to publications in our entire library. 
-    Click on a tag to see all the sub-categories and the list with relevant publications.
+    {{ SITE_NAME }} shares a library with its twin website, {% if SITE_ID == 1 %}<a href="https://metabolismofislands.org">Metabolism of Islands</a>{% else %}
+    <a href="https://metabolismofcities.org">Metabolism of Cities</a>{% endif %}. This joint library contains references on a variety of industrial ecology
+    topics, including studies on cities and islands, but also publications on methodologies and indicators. All of these references have been tagged
+    using the tagging structure that you can see below. 
+    The library on this website (which you can browse above) contains the references that have been tagged with <strong>System type = {% if SITE_ID == 1 %}Urban{% else %}Island{% endif %}</strong>.
+    However, you can use the tagging tree to see <em>all</em> the publications in our library, including the ones that do not relate specifically to this
+    system type. 
+    <br><br>
+    If development of a specific collection within industrial ecology literature is something of your interest, please be sure to <a href="{% url "core:contact" %}">get in touch</a>.
+    <br><br> Click on a tag to see all the sub-categories and the list with relevant publications.
+    <br>
   </p>
 
     <div class="pad-all file-manager">

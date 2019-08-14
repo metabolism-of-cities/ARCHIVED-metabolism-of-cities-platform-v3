@@ -551,3 +551,16 @@ class DataViz(models.Model):
     def __str__(self):
         return self.title
 
+
+class NewsletterSubscriber(models.Model):
+    people = models.ForeignKey(People, on_delete=models.CASCADE)
+    datasets = models.BooleanField()
+    news = models.BooleanField()
+    events = models.BooleanField()
+    publications = models.BooleanField()
+    dataviz = models.BooleanField()
+    multimedia = models.BooleanField()
+    projects = models.BooleanField()
+    theses = models.BooleanField()
+    reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
