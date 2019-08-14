@@ -186,6 +186,10 @@
   </div>
 </div>
 
+{% if request.user.is_superuser %}
+  <a title="Edit features" href="/admin/multiplicity/referencespacefeature/?q={{ space.name|urlencode }}" id="videouploadlink" class="btn" style="top:553px"><i class="psi-bulleted-list"></i></a>
+{% endif %}
+
 {% endblock %}
 
 {% block head %}

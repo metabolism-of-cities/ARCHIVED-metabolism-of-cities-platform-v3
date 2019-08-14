@@ -11,6 +11,10 @@ class ReferenceSpaceAdmin(admin.ModelAdmin):
     list_display = ('name', 'type')
     search_fields = ['name']
 
+class ReferenceSpaceFeatureAdmin(admin.ModelAdmin):
+    list_display = ('space', 'feature', 'value')
+    search_fields = ['space__name', 'feature__name']
+
 class DatasetTypeAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'origin_process', 'destination_process', 'type', 'active']
     list_filter = ['active', 'category', 'type']
@@ -25,7 +29,7 @@ admin.site.register(ReferenceSpaceLocation)
 admin.site.register(ReferenceSpaceType, ReferenceSpaceTypeAdmin)
 admin.site.register(Feature)
 admin.site.register(Information)
-admin.site.register(ReferenceSpaceFeature)
+admin.site.register(ReferenceSpaceFeature, ReferenceSpaceFeatureAdmin)
 admin.site.register(ReferenceSpaceTypeDescription)
 admin.site.register(ReferenceSpaceCSV)
 admin.site.register(GraphType)
