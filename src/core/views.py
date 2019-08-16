@@ -286,7 +286,7 @@ def articles(request, parent):
     list = Article.objects.filter(active=True, parent__id=parent, site=request.site).order_by(order)
     page = Article.objects.get(pk=parent)
     section = page.section
-    addlink = reverse("core:admin_article_parent", args=[parent])
+    addlink = reverse("core:admin_article_parent", args=[parent]) + "?ref=" + request.path
     context = { "section": section, "page": page, "list": list, "addlink": addlink, "years": years }
     return render(request, "core/news.html", context)
 
