@@ -120,5 +120,16 @@ footer#actions .btn-danger, footer#actions .btn-danger:hover {
   background-color: #285775;
 }
 .main-content-block a:not(.btn) {
-  color: #1F7A8C;
+  color:#cf4803;
+  text-decoration:underline;
+}
+#page-content a:not(.btn):not(.list-group-item):hover {
+  text-decoration: none;
+}
+
+.main-content-block a:not(.btn).single-resource {
+  text-decoration: none;
+}
+a.list-group-item {
+  text-decoration: none !important;
 }
