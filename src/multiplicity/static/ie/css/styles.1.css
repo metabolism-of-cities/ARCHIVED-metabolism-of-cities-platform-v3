@@ -130,6 +130,13 @@ footer#actions .btn-danger, footer#actions .btn-danger:hover {
 .main-content-block a:not(.btn).single-resource {
   text-decoration: none;
 }
-a.list-group-item {
+a.list-group-item, .leaflet-control-zoom a {
   text-decoration: none !important;
+}
+.leaflet-control-zoom a {
+  color: #333 !important;
+}
+
+span.icon-circle.bg-success {
+  background-color:#1F7A8C
 }
