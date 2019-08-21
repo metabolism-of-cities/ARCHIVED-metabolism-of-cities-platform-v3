@@ -37,6 +37,13 @@ class TimestampedModel(models.Model):
 class ReferenceType(models.Model):
     name = models.CharField(max_length=255)
     icon = models.CharField(max_length=255, null=True, blank=True)
+    GROUP = (
+        ('academic', 'Academic'),
+        ('theses', 'Theses'),
+        ('reports', 'Reports'),
+        ('multimedia', 'Multimedia'),
+    )
+    group = models.CharField(max_length=20, choices=GROUP, null=True, blank=True)
 
     def __str__(self):
         return self.name

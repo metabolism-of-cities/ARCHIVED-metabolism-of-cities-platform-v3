@@ -579,6 +579,24 @@ def referenceform_multiplicity(request, id):
 
 
 def references(request, type=False, tag=False, all=False):
+
+    if "reshuffle" in request.GET:
+        ids = [16, 5, 6, 19]
+        list = ReferenceType.objects.filter(id__in=ids)
+        list.update(group="academic")
+
+        ids = [29]
+        list = ReferenceType.objects.filter(id__in=ids)
+        list.update(group="theses")
+
+        ids = [27,11]
+        list = ReferenceType.objects.filter(id__in=ids)
+        list.update(group="reports")
+
+        ids = [25,12,31,33,30, 24, 26, 2, 15]
+        list = ReferenceType.objects.filter(id__in=ids)
+        list.update(group="multimedia")
+
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
         article_id = 75

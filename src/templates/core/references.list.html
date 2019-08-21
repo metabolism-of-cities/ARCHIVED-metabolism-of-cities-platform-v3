@@ -69,13 +69,36 @@
     <strong>{{ list.count }}</strong> publication(s) found.
   </p>
 
-  <input class="search form-control fuzzy-search" id="search_box" placeholder="Search" />
-  <button class="sort btn btn-default" data-sort="title">
-    Sort A...Z
-  </button>
-  <button class="sort btn btn-default" data-sort="year">
-    Sort by year
-  </button>
+  <p>
+    <input class="search form-control fuzzy-search" id="search_box" placeholder="Search" />
+  </p>
+
+  <p>
+    Filter by type: 
+    <button class="type_filter btn btn-default" data-filter="academic">
+      Academic publications
+    </button>
+    <button class="type_filter btn btn-default" data-filter="theses">
+      Theses
+    </button>
+    <button class="type_filter btn btn-default" data-filter="reports">
+      Reports
+    </button>
+    <button class="type_filter btn btn-default" data-filter="multimedia">
+      Multimedia
+    </button>
+
+  </p>
+
+
+  <p>
+    <button class="sort btn btn-default" data-sort="title">
+      Sort A...Z
+    </button>
+    <button class="sort btn btn-default" data-sort="year">
+      Sort by year
+    </button>
+  </p>
 
   <table class="table table-striped datatable">
     <thead>
@@ -84,6 +107,7 @@
         <th>Title</th>
         <th>Author(s)</th>
         <th>Type</th>
+        <th class="hidden-type"></th>
         <th>Year</th>
         <th>Tags</th>
       </tr>
@@ -99,6 +123,7 @@
         <td><a href="{% url 'core:reference' details.id %}"><span class="title">{{ details.title|truncatewords:10 }}</span></a></td>
         <td class="authors">{{ details.authorlist }}</td>
         <td class="type">{{ details.type }}</td>
+        <td class="hidden-type">{{ details.type.group }}</td>
         <td class="year">{{ details.year }}</td>
         <td class="tags">
           <div class="taglist">
@@ -309,7 +334,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
   right:-5px;
 }
 
-.hidden-title {
+.hidden-type, .hidden-title {
   display:none;
 }
 
@@ -524,10 +549,14 @@ table td .taglist {
 </script>
 {% endif %}
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  {% if DEBUG %}
+    <script src="{% static 'ie/js/list.min.js' %}"></script>
+  {% else %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  {% endif %}
   <script type="text/javascript">
     var options = {
-      valueNames: [ 'hidden-title', 'title', 'authors', 'type', 'year', 'tags' ],
+      valueNames: [ 'hidden-title', 'title', 'authors', 'type', 'hidden-type', 'year', 'tags' ],
       page: 10,
       pagination: true,
       fuzzySearch: {
@@ -539,15 +568,23 @@ table td .taglist {
       }
     };
 
-    var userList = new List('browse', options);
-    userList.update();
+    var publicationList = new List('browse', options);
+    publicationList.update();
+
+    $(".type_filter").click(function() {
+      $(".type_filter").removeClass("btn-primary");
+      $(this).addClass("btn-primary");
+      var filter = $(this).data("filter");
+      console.log("Searching type = " + filter);
+      publicationList.search(filter, ['hidden-type']);
+    });
 
     $(function(){
       $("#apply_main_filter").click(function(e){
         e.preventDefault();
         var word = $(this).data("word");
         $("#search_box").val(word);
-        userList.search(word);
+        publicationList.search(word);
       });
     });
 </script>
