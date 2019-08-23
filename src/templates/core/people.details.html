@@ -117,18 +117,20 @@
 
         {% if info.member_since %}
           <div class="panel">
-            <div class="panel-body text-center bg-success infobox">
+            <div class="panel-body text-center bg-warning infobox">
               <img src="{% static 'ie/img/logo.new.png' %}" alt="" />
               <p class="pad-top"><strong>{{ info.firstname }} is a <a href="{% url 'core:team' %}">member of {{ SITE_NAME }}</a></strong></p>
-              <p>Member since {{ info.member_since }}</p>
+              {% if SITE_ID == 1 %}
+                <p>Member since {{ info.member_since }}</p>
+              {% endif %}
             </div>
           </div>
         {% endif %}
 
         {% if info.user.log.all %}
           <div class="panel points">
-            <div class="panel-body text-center bg-info infobox">
-              <h4 class="pad-top">MultipliCity Contributions</h4>
+            <div class="panel-body text-center bg-success infobox">
+              <h4 class="pad-top">{% if SITE_ID == 1 %}MultipliCity{% else %}Data{% endif %} Contributions</h4>
               <p>
                 Score: 
                 <strong>{{ points.total }} points</strong>

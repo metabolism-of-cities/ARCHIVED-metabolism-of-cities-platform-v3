@@ -139,8 +139,9 @@ a.list-group-item, .leaflet-control-zoom a,
 {
   text-decoration: underline !important;
 }
-
-
+.main-content-block .bg-warning a:not(.btn) {
+  color:#fff;
+}
 
 .leaflet-control-zoom a {
   color: #333 !important;
