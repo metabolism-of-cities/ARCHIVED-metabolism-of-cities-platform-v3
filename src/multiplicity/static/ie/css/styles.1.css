@@ -130,9 +130,18 @@ footer#actions .btn-danger, footer#actions .btn-danger:hover {
 .main-content-block a:not(.btn).single-resource {
   text-decoration: none;
 }
-a.list-group-item, .leaflet-control-zoom a {
+a.list-group-item, .leaflet-control-zoom a,
+.main-content-block .list-group-item a:not(.btn)
+{
   text-decoration: none !important;
 }
+.main-content-block .list-group-item a:not(.btn):hover
+{
+  text-decoration: underline !important;
+}
+
+
+
 .leaflet-control-zoom a {
   color: #333 !important;
 }
