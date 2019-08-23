@@ -245,7 +245,14 @@ def sectionpage(request, id=None, slug=None):
     if id:
         info = get_object_or_404(Article, pk=id)
     elif slug:
-        info = get_object_or_404(Article, slug=slug)
+        info = Article.objects.filter(slug=slug)
+        if info.count() > 1:
+            info = info.filter(site=Site.objects.get_current())
+            info = info[0]
+        elif info.count() == 1:
+            info = info[0]
+        else:
+            raise Http404("We could not find this page.")
     editlink = "/admin/core/article/"+str(info.id) + "/change/"
     list = Article.objects.filter(active=True, parent=info.parent).order_by("created_at")
     context = { "section": "markcities", "page": info.slug, "info": info, "editlink": editlink, "list": list, "datatables": True}
