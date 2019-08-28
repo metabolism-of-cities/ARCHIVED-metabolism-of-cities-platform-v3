@@ -554,7 +554,7 @@ class DataViz(models.Model):
     source = models.TextField(null=True, blank=True, help_text="Name of the source website/article -- ONLY enter if this is not linked to a publication")
     year = models.PositiveSmallIntegerField(null=True, blank=True, help_text="Year of the data being visualized -- ONLY enter if this is not linked to a publication")
     class Meta:
-        ordering = ["-date"]
+        ordering = ["date"]
     def __str__(self):
         return self.title
 
