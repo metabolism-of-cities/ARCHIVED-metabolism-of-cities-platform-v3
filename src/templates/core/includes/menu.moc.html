@@ -77,7 +77,6 @@
         </ul>
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg pli-photo icon-fw"></i>Multimedia</p>
         <ul class="list-unstyled">
-          <li><a href="{% url 'core:datavisualizations' %}">Data visualisations</a></li>
           <li><a href="{% url 'core:resources' 'photos' %}">Photos</a></li>
           <li><a href="{% url 'core:resources' 'videos' %}">Videos</a></li>
         </ul>
@@ -91,11 +90,15 @@
         </ul>
       </div>
       <div class="col-sm-4 col-md-4">
+        <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="fas fa-chart-pie icon-fw"></i>Data</p>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'core:data' 'datasets' %}">Datasets</a></li>
+          <li><a href="{% url 'core:datavisualizations' %}">Data Visualisations</a></li>
+        </ul>
         <p class="pad-top text-main text-sm text-uppercase text-bold"><i class="icon-lg fa fa-wrench icon-fw"></i>Tools</p>
         <ul class="list-unstyled">
           <li><a href="{% url 'core:tools' 'omat' %}">Online Material Flow Analysis Tool (OMAT)</a></li>
           <li><a href="{% url 'core:resources' 'mooc' %}">MOOC</a></li>
-          <li><a href="{% url 'core:data' 'datasets' %}">Datasets</a></li>
         </ul>
       </div>
     </div>
