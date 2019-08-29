@@ -75,6 +75,9 @@
 
   <p>
     Filter by type: 
+    <button class="type_filter btn btn-primary" data-filter="all">
+      All
+    </button>
     <button class="type_filter btn btn-default" data-filter="academic">
       Academic publications
     </button>
@@ -575,8 +578,11 @@ table td .taglist {
       $(".type_filter").removeClass("btn-primary");
       $(this).addClass("btn-primary");
       var filter = $(this).data("filter");
-      console.log("Searching type = " + filter);
-      publicationList.search(filter, ['hidden-type']);
+      if (filter == "all") {
+        publicationList.search();
+      } else {
+        publicationList.search(filter, ['hidden-type']);
+      }
     });
 
     $(function(){
