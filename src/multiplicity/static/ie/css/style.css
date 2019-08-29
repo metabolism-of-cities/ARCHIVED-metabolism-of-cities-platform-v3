@@ -308,9 +308,14 @@ footer#latest_news a {
   #topstrip .leftbox{width:120px}
 }
 
-@media (max-width:520px){
-  .navbar-top-links i{display:none}
+@media (max-width:600px){
+  .icon-links{display:none}
   #topstrip .leftbox{width:1px;overflow:hidden}
+}
+@media (max-width:550px){
+  .navbar-top-links > li > a > span > i {
+    display: none;
+  }
 }
 @media (max-width:420px){
   li[data-id="services"]{display:none}
@@ -894,4 +899,7 @@ article.sector section .section-menu a:hover {
   justify-content: center;
   align-items: center;
   text-align:center;
+}
+a.underline {
+  text-decoration: underline !important;
 }

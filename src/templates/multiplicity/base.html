@@ -245,25 +245,25 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
 
                         {% endif %}
                     </ul>
-                    <ul class="nav navbar-top-links">
+                    <ul class="nav navbar-top-links icon-links">
 
                         {% if navbar == "team" or navbar == "backend" %}
 
-                        <li id="dropdown-profile" class="dropdown">
+                        <li class="dropdown">
                             <a href="{% url 'team:memberprofile' %}" class="text-right" title="User profile">
                                 <span class="ic-user pull-right">
                                     <i class="fa fa-user"></i>
                                 </span>
                             </a>
                         </li>
-                        <li id="dropdown-profile" class="dropdown">
+                        <li class="dropdown">
                             <a href="{% url 'team:search' %}" class="text-right" title="Search discussion board">
                                 <span class="ic-user pull-right">
                                     <i class="fa fa-search"></i>
                                 </span>
                             </a>
                         </li>
-                        <li id="dropdown-profile" class="dropdown">
+                        <li class="dropdown">
                             <a href="/accounts/logout" class="text-right" title="Log out">
                                 <span class="ic-user pull-right">
                                     <i class="fas fa-sign-out-alt"></i>
@@ -271,143 +271,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                             </a>
                         </li>{% else %}
 
-                        <li class="dropdown hide">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                                <i class="pli-bell icon-lg"></i>
-                                <span class="badge badge-header badge-danger"></span>
-                            </a>
-
-                            <!--Notification dropdown menu-->
-                            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                                <div class="nano scrollable">
-                                    <div class="nano-content">
-                                        <ul class="head-list">
-
-                                            <!-- Dropdown list-->
-                                            <li>
-                                                <a href="#">
-                                                    <div class="clearfix">
-                                                        <p class="pull-left">Progressbar</p>
-                                                        <p class="pull-right">70%</p>
-                                                    </div>
-                                                    <div class="progress progress-sm">
-                                                        <div style="width: 70%;" class="progress-bar">
-                                                            <span class="sr-only">70% Complete</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-
-                          <!-- Dropdown list-->
-                          <li>
-                              <a href="#" class="media">
-                                  <div class="media-left">
-                                      <i class="pli-hd icon-2x icon-lg"></i>
-                                  </div>
-                                  <div class="media-body">
-                                      <div class="text-nowrap">With Icon</div>
-                                      <small class="text-muted">15 minutes ago</small>
-                                  </div>
-                              </a>
-                          </li>
-
-                          <!-- Dropdown list-->
-                          <li>
-                              <a href="#" class="media">
-                                  <div class="media-left">
-                                      <i class="pli-power-cable icon-2x icon-lg"></i>
-                                  </div>
-                                  <div class="media-body">
-                                      <div class="text-nowrap">With Icon</div>
-                                      <small class="text-muted">15 minutes ago</small>
-                                  </div>
-                              </a>
-                          </li>
-
-                          <!-- Dropdown list-->
-                          <li>
-                              <a href="#" class="media">
-                                  <div class="media-left">
-
-                  <span class="icon-wrap icon-circle bg-primary">
-                      <i class="pli-disk icon-lg icon-lg"></i>
-                  </span>
-                                  </div>
-                                  <div class="media-body">
-                                      <div class="text-nowrap">Circle Icon</div>
-                                      <small class="text-muted">15 minutes ago</small>
-                                  </div>
-                              </a>
-                          </li>
-
-                          <!-- Dropdown list-->
-                          <li>
-                              <a href="#" class="media">
-                          <span class="badge badge-success pull-right">90%</span>
-                                  <div class="media-left">
-
-                  <span class="icon-wrap icon-circle bg-danger">
-                      <i class="pli-mail-open icon-lg icon-lg"></i>
-                  </span>
-                                  </div>
-                                  <div class="media-body">
-                                      <div class="text-nowrap">Circle icon with badge</div>
-                                      <small class="text-muted">50 minutes ago</small>
-                                  </div>
-                              </a>
-                          </li>
-
-                          <!-- Dropdown list-->
-                          <li>
-                              <a href="#" class="media">
-                                  <div class="media-left">
-
-                  <span class="icon-wrap bg-info">
-                      <i class="pli-monitor-3 icon-lg icon-lg"></i>
-                  </span>
-                                  </div>
-                                  <div class="media-body">
-                                      <div class="text-nowrap">Square icon</div>
-                                      <small class="text-muted">Last Update 8 hours ago</small>
-                                  </div>
-                              </a>
-                          </li>
-
-                          <!-- Dropdown list-->
-                          <li>
-                              <a href="#" class="media">
-                          <span class="label label-danger pull-right">New</span>
-                                  <div class="media-left">
-
-                  <span class="icon-wrap bg-purple">
-                      <i class="pli-paintbrush icon-lg icon-lg"></i>
-                  </span>
-                                  </div>
-                                  <div class="media-body">
-                                      <div class="text-nowrap">Square icon with label</div>
-                                      <small class="text-muted">Last Update 8 hours ago</small>
-                                  </div>
-                              </a>
-                          </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <!--Dropdown footer-->
-                                <div class="pad-all bord-top">
-                                    <a href="#" class="btn-link text-main box-block">
-                                        <i class="pci-chevron chevron-right pull-right"></i>Show All Notifications
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <!--End notifications dropdown-->
-
-
-
                         {% if request.user.is_authenticated %}
-                          <li id="dropdown-profile" class="dropdown">
+                          <li class="dropdown">
                               <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                                   <span class="ic-user pull-right">
                                       <i class="fal fa-user"></i>
@@ -426,7 +291,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                               </div>
                           </li>
                           {% else %}
-                              <li id="dropdown-profile">
+                              <li>
                                 <a href="/accounts/login?next={{ CURRENT_PAGE }}">
                                   <span class="ic-user pull-right">
                                     <i class="fal fa-user fa-fw"></i>
@@ -435,7 +300,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                             </li>
                           {% endif %}
 
-                            <li id="dropdown-profile" class="dropdown">
+                            <li class="dropdown">
                                 <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                                   <span class="ic-user pull-right">
                                     <i class="fa fa-palette"></i>
@@ -445,10 +310,40 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                                   <ul class="head-list">
                                     <li>
-                                        <a href="{% url 'core:set_theme' 'orange' %}?next={{ CURRENT_PAGE }}">{% if SITE_ID == 1 %}Orange Theme{% else %}Purple Theme{% endif %}</a>
+                                        <a href="{% url 'core:set_theme' 'orange' %}?next={{ CURRENT_PAGE }}">
+                                          {% if request.COOKIES.theme == "orange" %}<i class="fa fa-check"></i>{% endif %}
+                                          {% if SITE_ID == 1 %}Orange Theme{% else %}Purple Theme{% endif %}
+                                        </a>
                                     </li>
                                     <li>
-                                      <a href="{% url 'core:set_theme' 'blue' %}?next={{ CURRENT_PAGE }}">Blue Theme</a>
+                                      
+                                      <a href="{% url 'core:set_theme' 'blue' %}?next={{ CURRENT_PAGE }}">
+                                        {% if request.COOKIES.theme != "orange" %}<i class="fa fa-check"></i>{% endif %}
+                                        Blue Theme
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                                  <span class="pull-right">
+                                    {% if SITE_ID == 1 %}
+                                      <img src="{% static "ie/img/logo.moc/icon.svg" %}" alt="" style="max-height:30px" />
+                                    {% else %}
+                                      <img src="{% static "ie/img/logo.moi/icon.svg" %}" alt="" style="max-height:30px" />
+                                    {% endif %}
+                                  </span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+                                  <ul class="head-list">
+                                    <li>
+                                      <a href="https://metabolismofcities.org">{% if SITE_ID == 1 %}<i class="fa fa-check"></i>{% endif %} Metabolism of Cities</a>
+                                    </li>
+                                    <li>
+                                      <a href="https://metabolismofislands.org">{% if SITE_ID == 2 %}<i class="fa fa-check"></i>{% endif %} Metabolism of Islands</a>
                                     </li>
                                   </ul>
                                 </div>
@@ -765,7 +660,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
           <br>
           Our source code is available on
           <br>
-          <a href="https://gitlab.com/metabolism-of-cities/metabolism-of-cities-platform">
+          <a href="https://gitlab.com/metabolism-of-cities/metabolism-of-cities-platform" class="underline">
           <i class="fab fa-gitlab"></i> Gitlab
           </a>
         </p>
@@ -775,23 +670,35 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
         {% if SITE_ID == 1 %}
           <img src="{% static 'ie/img/logo.new.png' %}" alt="" />
         {% else %}
-          <img src="{% static 'ie/img/logo.moi/icon.svg' %}" alt="" />
+          <img src="{% static 'ie/img/logo.moi/icon.white.svg' %}" alt="" />
         {% endif %}
         </a>
         {% if SITE_ID == 1 %}
-          <p style="margin-top:20px"><a href="{% url 'core:contact' %}"><i class="fa fa-pencil-alt"></i> Contact us</a></p>
+          <p style="margin-top:20px"><a href="{% url 'core:contact' %}" class="underline"><i class="fa fa-pencil-alt"></i> Contact us</a></p>
         {% endif %}
 
       </div>
       <div class="col-lg-3">
         {% if SITE_ID == 1 %}
-        <h4>Follow Us</h4>
-        <ul class="nav nav-list">
-          <li><a href="https://twitter.com/CityMetabolism"><i class="psi-twitter"></i> Twitter</a></li>
-          <li><a href="https://www.youtube.com/metabolismofcities"><i class="psi-youtube"></i> YouTube</a></li>
-          <li><a href="https://www.instagram.com/metabolism_of_cities/"><i class="psi-instagram"></i> Instagram</a></li>
-          <li><a href="https://linkedin.com/company/metabolism-of-cities"><i class="psi-linkedin"></i> LinkedIn</a></li>
-        </ul>
+          <h4>Follow Us</h4>
+          <ul class="list-unstyled list-inline">
+            <li><a href="https://twitter.com/CityMetabolism"><i class="psi-twitter"></i></a></li>
+            <li><a href="https://www.youtube.com/metabolismofcities"><i class="psi-youtube"></i></a></li>
+            <li><a href="https://www.instagram.com/metabolism_of_cities/"><i class="psi-instagram"></i></a></li>
+            <li><a href="https://linkedin.com/company/metabolism-of-cities"><i class="psi-linkedin"></i></a></li>
+          </ul>
+
+          <h4 style="margin-top:40px">Metabolism of Islands</h4>
+          <p>Visit our twin site:<br>
+            <a class="underline" href="https://metabolismofislands.org">Metabolism of Islands</a>
+            <a href="https://metabolismofcities.org/community/news/203" title="Learn more"><i class="fas fa-info-circle"></i></a>
+          </p>
+        {% else %}
+          <h4>Metabolism of Cities</h4>
+          <p>Visit our twin site:<br>
+            <a class="underline" href="https://metabolismofcities.org">Metabolism of Cities</a>
+            <a href="https://metabolismofcities.org/community/news/203" title="Learn more"><i class="fas fa-info-circle"></i></a>
+          </p>
         {% endif %}
       </div>
     </div>
