@@ -123,7 +123,7 @@ def team(request):
         list = People.objects.exclude(member_since__isnull=True).order_by("member_since")
     else:
         page = Article.objects.get(pk=192)
-        ids = [1150,282,186,934,926,95,1165]
+        ids = [1150,282,186,934,926,95,1165,927,1209]
         list = People.objects.filter(pk__in=ids).order_by("-firstname")
     context = { "section": "about", "list": list, "page": page }
     return render(request, "core/team.html", context)
