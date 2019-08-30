@@ -68,7 +68,7 @@ urlpatterns = [
     path('data/subareas/<slug:slug>', RedirectView.as_view(url=archive_url+'/data/subareas/%(slug)s', permanent=False)),
     path('stakeholders', RedirectView.as_view(url=archive_url+'/stakeholders', permanent=False)),
     path('stakeholders/<slug:slug>', RedirectView.as_view(url=archive_url+'/stakeholders/%(slug)s', permanent=False)),
-    path('datavisualization', RedirectView.as_view(url=archive_url+'/datavisualization', permanent=False)),
+    path('datavisualization', RedirectView.as_view(url=site_url+'/resources/datavisualisations/', permanent=True)),
     path('datavisualization/examples', RedirectView.as_view(url=site_url+'/resources/datavisualisations/', permanent=True)),
     path('datavisualizations/<int:id>-<slug:slug>', RedirectView.as_view(url=site_url+'/resources/datavisualisations/%(id)s', permanent=True)),
 
