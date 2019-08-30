@@ -1127,6 +1127,7 @@ def upload_flow_meta(request, city, type, id):
                     access = access,
                     notes = request.POST["notes"],
                     replication = request.POST["instructions"],
+                    type = dataset,
                 )
                 newdataset.save()
                 newdataset.references.add(reference)
