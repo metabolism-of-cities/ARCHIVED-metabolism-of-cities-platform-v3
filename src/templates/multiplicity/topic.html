@@ -15,6 +15,11 @@
     </div>
   </div>
 
+  {% if references %}
+    <h2>References</h2>
+    {% include 'core/includes/references.list.html' %}
+  {% endif %}
+
   {% if datasets %}
     {% include 'multiplicity/includes/datasetlist.html' %}
   {% endif %}

@@ -1559,6 +1559,7 @@ def upload(request, city):
     return render(request, "multiplicity/upload/index.html", context)
 
 def topic(request, city, topic, main=False, tab=False):
+    references = None
     topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     topic = get_object_or_404(Topic, slug=topic)
     #datasets = Dataset.objects.filter(data__material__in=topic.materials.all())
@@ -1566,9 +1567,19 @@ def topic(request, city, topic, main=False, tab=False):
     information = Information.objects.filter(topic=topic, space=info)
     if information:
         information = information[0]
+        references = information.references.all()
     datasets = Dataset.objects.filter(topics=topic, primary_space=info)
 
-    context = { "section": "cities", "menu": "profile", "info": info, "page": topic.slug, "topic": topic, "datasets": datasets, "information": information }
+    context = { 
+        "section": "cities", 
+        "menu": "profile", 
+        "info": info, 
+        "page": topic.slug, 
+        "topic": topic, 
+        "datasets": datasets, 
+        "information": information,
+        "references": references,
+    }
     return render(request, "multiplicity/topic.html", context)
 
 def materials(request, catalog=False):
@@ -1643,12 +1654,24 @@ def information_form(request, city, id=False, topic=False):
 
             saved = True
             messages.success(request, "Information was saved.")
-            return redirect(reverse("multiplicity:information_form", args=[info.slug, information.id]))
+            if topic:
+                return redirect(reverse("multiplicity:topic", args=[info.slug, topic.slug]))
+            else:
+                return redirect(reverse("multiplicity:information_form", args=[info.slug, information.id]))
         else:
             messages.warning(request, "We could not save your form, please correct the errors")
 
-    context = { "section": "cities", "info": info, "form": form, "type": type, "tinymce": True, "processes": processes, "information": information,
-    "references": references, "select2": True, "topic": topic
+    context = { 
+        "section": "cities", 
+        "info": info, 
+        "form": form, 
+        "type": type, 
+        "tinymce": True, 
+        "processes": processes, 
+        "information": information,
+        "references": references, 
+        "select2": True, 
+        "topic": topic,
     }
     return render(request, "multiplicity/form.information.html", context)
 

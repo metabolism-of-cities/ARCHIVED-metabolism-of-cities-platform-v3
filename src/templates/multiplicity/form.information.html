@@ -18,7 +18,7 @@
         </div>
           <div class="panel-body" style="margin-top:30px">
             <form method="post" class="form form-horizontal" enctype="multipart/form-data">
-              {% bootstrap_form form layout='horizontal' %}
+              {% bootstrap_form form %}
               {% buttons %}
 
               {% if not topic %}
@@ -62,18 +62,9 @@
 
 {% endblock %}
 
-{% block head %}
-<style type="text/css">
-.form-horizontal .col-md-3[for='id_content']{width:70%;text-align:left}
-</style>
-{% endblock %}
-
 {% block sidebar %}
 {% include 'multiplicity/sidebar.default.html' %}
 
-{% endblock %}
-
-{% block pagehead %}
 {% endblock %}
 
 {% block footer %}
