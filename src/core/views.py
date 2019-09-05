@@ -637,6 +637,8 @@ def references(request, type=False, tag=False, all=False):
     addlink = reverse("core:newreference")
 
     cities_list = Reference.objects.filter(status="active", tags__id=main_filter, spaces__type__id=type_id).prefetch_related('spaces')
+    show = cities_list.all().query
+    print(show)
     cities = defaultdict(dict)
     cities_references = {}
 

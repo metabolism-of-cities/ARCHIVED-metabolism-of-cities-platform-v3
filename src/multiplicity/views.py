@@ -1450,7 +1450,7 @@ def upload_mtu_review(request, city, filename):
                 if type:
                     type = type[0]
                 else:
-                    type = ReferenceSpaceType.objects.create(name__iexact=request.POST["mtu_name"], slug=slugify(request.POST["mtu_name"]), type="SOC", marker_color=None, user_accessible=False)
+                    type = ReferenceSpaceType.objects.create(name=request.POST["mtu_name"], slug=slugify(request.POST["mtu_name"]), type="SOC", marker_color=None, user_accessible=False)
 
             mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST["start"], source=request.POST["source"], file=filename, description=request.POST["details"])
 
@@ -1464,7 +1464,7 @@ def upload_mtu_review(request, city, filename):
                 if "area" in request.POST:
                     area = float(properties[request.POST["area"]])/float(request.POST["unit"])
 
-                space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, slug=slugify(name), mtu=mtu)
+                space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, mtu=mtu)
                 if "start" in request.POST and request.POST["start"]:
                     start = request.POST["start"]
                 else:

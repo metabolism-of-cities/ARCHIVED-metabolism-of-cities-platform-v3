@@ -15,6 +15,7 @@ from django.urls import reverse
 User = get_user_model()
 
 from django.db.models import Q
+from django.utils.crypto import get_random_string
 
 class TimestampedModel(models.Model):
     # A timestamp representing when this object was created.
@@ -148,8 +149,21 @@ class ReferenceSpace(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            # Newly created object, so set slug
-            self.slug = slugify(self.name)
+            slug = slugify(self.name)
+            check = ReferenceSpace.objects.filter(slug=slug)
+            if check:
+                # We must try another slug, this one already exists
+                if self.city:
+                    slug = slugify(self.name) + "-" + self.city.slug
+                elif self.country:
+                    slug = slugify(self.name) + "-" + self.country.slug
+                else:
+                    slug = slugify(self.name) + "-" + self.type.slug
+                check = ReferenceSpace.objects.filter(slug=slug)
+                if check:
+                    # If even that one already exists, we simply add the ID onto the slug
+                    slug = slugify(self.name + "-" + get_random_string(5))
+            self.slug = slug
         super(ReferenceSpace, self).save(*args, **kwargs)
 
     def system_photo(self):
