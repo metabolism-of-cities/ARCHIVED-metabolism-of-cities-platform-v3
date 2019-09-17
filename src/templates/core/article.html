@@ -31,7 +31,13 @@
           </li>
           {% endfor %}
           <li class="list-group-item">
-            <a href="{% url 'core:news' %}">View {{ info.parent.title }} archive</a>
+            {% if info.parent.title == "News" %}
+              <a href="{% url 'core:news' %}">View news archive</a>
+            {% elif info.parent.title == "Events" %}
+              <a href="{% url 'core:events' %}">View events archive</a>
+            {% else %}
+              <a href="{% url 'core:news' %}">View {{ info.parent.title }} archive</a>
+            {% endif %}
           </li>
       </ul>
     </div>
