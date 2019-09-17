@@ -10,3 +10,7 @@ Please review this application and activate it if it is appropriate. Notify the 
 
 Review online at:
 {{ domain }}{{ link }}
+
+Classification: 
+TBO-prj-341-id
+TBO-assign-50-id
