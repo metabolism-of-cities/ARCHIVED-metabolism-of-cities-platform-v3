@@ -446,10 +446,13 @@ def referenceform(request, id=False, dataset=False):
         else:
             form = ReferenceForm()
     if request.method == "POST":
+        title = request.POST["title"]
+        title = title.strip()
         if not id:
             new_record = True
             if request.user.is_staff:
                 form = ReferenceFormAdmin(request.POST, request.FILES)
+                check = Reference.objects.filter(title=title)
             else:
                 form = ReferenceForm(request.POST)
         else:
@@ -457,7 +460,10 @@ def referenceform(request, id=False, dataset=False):
                 form = ReferenceFormAdmin(request.POST, request.FILES, instance=info)
             else:
                 form = ReferenceForm(request.POST, instance=info)
-        if form.is_valid():
+        
+        if check:
+            messages.error(request, "This publication already exists in our library. If you can not yet locate it, it may still be under review. We can not add a duplicate publication. Please contact us if you have any questions")
+        elif form.is_valid():
             info = form.save()
             if new_record:
                 create_record = get_object_or_404(UserAction, pk=1)
@@ -468,7 +474,6 @@ def referenceform(request, id=False, dataset=False):
                     info.save()
 
                 # Send mail to notify team that a new record was added.
-                title = request.POST["title"]
                 if request.user.is_authenticated:
                     name = request.user.username
                     email = request.user.email
