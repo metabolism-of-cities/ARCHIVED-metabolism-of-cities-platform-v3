@@ -139,7 +139,14 @@ def taskforce(request, slug):
     tickets = TaskForceTicket.objects.filter(taskforce=info).exclude(status="removed").order_by("title")
     units = TaskForceUnit.objects.filter(taskforce=info).order_by("name")
     taskforces = Category.objects.filter(group="community", position__isnull=False).order_by("position")
-    context = { "section": "about", "page": "taskforces", "info": info, "tickets": tickets, "units": units, "sidenav": True, "taskforces": taskforces }
+    context = { 
+        "section": "about", 
+        "page": "taskforces", 
+        "info": info, 
+        "tickets": tickets, 
+        "units": units, 
+        "taskforces": taskforces,
+    }
     return render(request, "core/taskforce.html", context)
 
 def notfound(request):

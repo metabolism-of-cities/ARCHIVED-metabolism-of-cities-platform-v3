@@ -7,35 +7,36 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-body">
-        <div class="panel-heading">
-            <h3>Journals</h3>
-        </div>
-        <div class="panel-body">
-            {{ page.content|safe }}
-            <table class="table table-striped datatable">
-              <thead>
-                <tr>
-                    <th>Journal</th>
-                    <th>Number of articles</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for info in list %}
-                  {% if info.num_references > 0 %}
-                    <tr>
-                      <td><a href="{% url 'core:journal' info.id %}">{{ info.name }}</a></td>
-                      <td>{{ info.num_references }}</td>
-                    </tr>
-                  {% endif %}
-                {% endfor %}
-              </tbody>
-            </table>
-        </div>
-        </div>
+  <div class="col-lg-12">
+    <div class="panel panel-body">
+      <div class="panel-heading">
+        <h3>Journals</h3>
+      </div>
+      <div class="panel-body">
+        {{ page.content|safe }}
+      </div>
     </div>
+  </div>
 </div>
+
+<table class="table table-striped datatable">
+  <thead>
+    <tr>
+        <th>Journal</th>
+        <th>Number of articles</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for info in list %}
+      {% if info.num_references > 0 %}
+        <tr>
+          <td><a href="{% url 'core:journal' info.id %}">{{ info.name }}</a></td>
+          <td>{{ info.num_references }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}
 
