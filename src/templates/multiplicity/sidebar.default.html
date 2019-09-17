@@ -145,6 +145,7 @@
           <li {% if menu == "resources" and type.id == 27 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'reports' %}">Reports</a></li>
           <li {% if menu == "resources" and type.id == 29 %} class="active" {% endif %}><a href="{% url 'multiplicity:resources' info.slug 'theses' %}">Theses</a></li>
           <li {% if page == "photos" %} class="active" {% endif %}><a href="{% url 'multiplicity:photos' info.slug %}">Photos</a></li>
+          <li {% if menu == "resources" and page == "links" %} class="active" {% endif %}><a href="{% url 'multiplicity:links' info.slug %}">Links</a></li>
       </ul>
   </li>
 

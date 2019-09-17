@@ -1580,9 +1580,13 @@ def topic(request, city, topic, main=False, tab=False):
         references = information.references.all()
     datasets = Dataset.objects.filter(topics=topic, primary_space=info)
 
+    menu = "profile"
+    if topic.slug == "links":
+        menu = "resources"
+
     context = { 
         "section": "cities", 
-        "menu": "profile", 
+        "menu": menu, 
         "info": info, 
         "page": topic.slug, 
         "topic": topic, 
