@@ -350,7 +350,7 @@ class Reference(models.Model):
     abstract = models.TextField(null=True, blank=True)
     abstract_original_language = models.TextField(null=True, blank=True)
     date_added = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    file = models.FileField(null=True, blank=True, upload_to='references')
+    file = models.FileField(null=True, blank=True, upload_to='references', help_text='Only upload the file if you are the creator or you have permission to do so')
     open_access = models.NullBooleanField(null=True, blank=True)
     url = models.CharField(max_length=255, null=True, blank=True)
     doi = models.CharField(max_length=255, null=True, blank=True)
@@ -393,7 +393,7 @@ class ReferenceAuthors(models.Model):
 class ReferenceForm(ModelForm):
     class Meta:
         model = Reference
-        fields = ['language', 'title', 'title_original_language', 'authorlist', 'type', 'journal', 'year', 'abstract', 'abstract_original_language', 'open_access', 'doi', 'isbn', 'url', 'comments']
+        fields = ['language', 'title', 'title_original_language', 'authorlist', 'type', 'journal', 'year', 'abstract', 'abstract_original_language', 'open_access', 'doi', 'isbn', 'url', 'comments', 'file']
         labels = {
             'authorlist': 'Author(s)',
             'doi': 'DOI',
