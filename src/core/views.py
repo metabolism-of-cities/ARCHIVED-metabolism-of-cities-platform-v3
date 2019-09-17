@@ -426,6 +426,7 @@ def reference(request, id):
     return render(request, "core/reference.html", context)
 
 def referenceform(request, id=False, dataset=False):
+    
     new_record = False
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
@@ -501,7 +502,13 @@ def referenceform(request, id=False, dataset=False):
         else:
             messages.error(request, "We could not save your form, please correct the errors")
 
-    context = { "section": "resources", "page": "publications", "info": info, "form": form, "dataset": dataset }
+    context = { 
+        "section": "resources", 
+        "page": Article.objects.get(pk=213),
+        "info": info, 
+        "form": form, 
+        "dataset": dataset,
+    }
     return render(request, "core/reference.form.html", context)
 
 @staff_member_required

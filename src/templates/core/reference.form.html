@@ -16,6 +16,8 @@
   </ul>
 {% endif %}
 
+
+
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-body">
@@ -23,6 +25,11 @@
             <h3>{% if info %}Edit{% else %}Add{% endif %} publication</h3>
         </div>
         <div class="panel-body">
+
+          <div>
+            {{ page.content|safe }}
+          </div>
+
           <form method="post" class="form form-horizontal" enctype="multipart/form-data">
             {% csrf_token %}
             {% bootstrap_form form layout='horizontal' %}
@@ -63,6 +70,7 @@
 <link rel="stylesheet" href="{% static 'ie/css/select2.min.css' %}" />
 <style type="text/css">
 textarea[name='authorlist']{height:100px}
+.panel-body form{margin-top:20px}
 </style>
 {% endblock %}
 
