@@ -6,6 +6,14 @@
 
 {% block content %}
 
+{% if tips %}
+
+  <h2>Tips &amp; tricks</h2>
+
+  {{ tips.content|safe }}
+
+{% endif %}
+
 <h2>Data</h2>
 
 <div class="row">
@@ -47,8 +55,6 @@
     </div>
   </div>
 </div>
-
-{% if request.user.is_authenticated %}
 
   <section class="resources jslinks">
 
@@ -285,8 +291,6 @@
     </div>
 
   </section>
-
-{% endif %}
 
 {% endblock %}
 

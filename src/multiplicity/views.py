@@ -1553,9 +1553,19 @@ def download(request, city):
     return render(request, "multiplicity/download/index.html", context)
 
 def upload(request, city):
-    topics = Topic.objects.exclude(position=0).filter(parent__isnull=True)
     info = get_object_or_404(ReferenceSpace, slug=city)
-    context = { "section": "cities", "menu": "upload", "page": "upload", "info": info, "list": list, "topics": topics}
+    tips = Information.objects.filter(topic__id=59, space=info)
+    if tips:
+        tips = tips[0]
+    context = { 
+        "section": "cities", 
+        "menu": "upload", 
+        "page": "upload", 
+        "info": info, 
+        "list": list,
+        "tips": tips,
+        "editlink": reverse("multiplicity:information_form_topic", args=[info.slug, "59"]),
+    }
     return render(request, "multiplicity/upload/index.html", context)
 
 def topic(request, city, topic, main=False, tab=False):
