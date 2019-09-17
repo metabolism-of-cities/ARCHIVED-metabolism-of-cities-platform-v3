@@ -262,7 +262,14 @@ def sectionpage(request, id=None, slug=None):
             raise Http404("We could not find this page.")
     editlink = "/admin/core/article/"+str(info.id) + "/change/"
     list = Article.objects.filter(active=True, parent=info.parent).order_by("created_at")
-    context = { "section": "markcities", "page": info.slug, "info": info, "editlink": editlink, "list": list, "datatables": True}
+    context = { 
+        "section": "markcities", 
+        "page": info.slug, 
+        "info": info, 
+        "editlink": editlink, 
+        "list": list, 
+        "datatables": True,
+    }
     return render(request, "core/article.section.html", context)
 
 def article(request, id):

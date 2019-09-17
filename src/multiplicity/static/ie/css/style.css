@@ -903,3 +903,6 @@ article.sector section .section-menu a:hover {
 a.underline {
   text-decoration: underline !important;
 }
+.blue_sidebar .list-group-item{border-color:rgba(255, 255, 255, 0.2);border-style:dotted}
+.blue_sidebar .panel > .list-group .list-group-item.active-sub{border-left:8px solid #1f7a8c}
+.blue_sidebar .list-header{font-weight:700}

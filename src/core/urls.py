@@ -38,6 +38,7 @@ urlpatterns = [
     path('news/<int:year>/<int:month>', RedirectView.as_view(url=site_url+'/community/news', permanent=True)),
     path('vancouver/', RedirectView.as_view(url=site_url+'/community/news/214', permanent=False)),
     path('vancouver', RedirectView.as_view(url=site_url+'/community/news/214', permanent=False)),
+    path('cities/page/datasets', RedirectView.as_view(url=site_url+'/cities/datasets/', permanent=True)),
 
     path('videos', RedirectView.as_view(url=site_url+'/resources/videos', permanent=True)),
     path('mooc', RedirectView.as_view(url=site_url+'/resources/mooc', permanent=True)),

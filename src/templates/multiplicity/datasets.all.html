@@ -1,0 +1,85 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Datasets{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+  {% block menu_content %}
+    <li class="list-header">{{ page.parent.title }}</li>
+    {% for details in list %}
+      <li class="list-group-item {% if page.id == details.id %} active-sub{% endif %}"><a href="{% url 'core:sectionpage' details.slug %}">{{ details.title }}</a>
+    </li>
+    {% endfor %}
+  {% endblock %}
+
+  {% block inner_content %}
+
+  {% if datasets %}
+    <section id="datasets">
+      <div class="row">
+        <h3>Datasets</h3>
+        {{ page.content|safe }}
+      </div>
+
+      <div id="graph">
+        <div class="loading text-center text-2x pad-all mar-top">
+          <span class="mar-top pad-all">Loading graph</span>
+          <i class="fas fa-cog fa-spin mar-top"></i>
+        </div>
+      </div>
+
+      <div class="alert alert-info">
+        We currently have <strong>{{ datasets.count }}</strong> datasets in our database.
+      </div>
+
+      <table class="table datatable">
+        <thead>
+          <tr>
+            <th width="300">Dataset</th>
+            <th>{{ SYSTEM|title }}</th>
+            <th>Preview</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for details in datasets %}
+            <tr>
+              <td><a href="{% url 'multiplicity:dataset' details.primary_space.slug details.id %}">{{ details.name }}</a></td>
+              <td><a href="{{ details.primary_space.get_absolute_url }}">{{ details.primary_space.name }}</a></td>
+              <td><a class="btn btn-sm btn-mint" data-space="{{ details.primary_space.slug }}" data-id="{{ details.id }}" data-graph="{{ details.graph.id|default:4 }}" onclick="previewChart({{ details.id }}, {{ details.graph.id|default:4 }}, '{{ details.primary_space.slug }}')"><i class="far fa-fw fa-chart-bar"></i> Preview chart</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+  {% endif %}
+
+  {% endblock %}
+
+{% block head %}
+  {% include 'multiplicity/includes/charts.head.html' %}
+{% endblock %}
+
+{% block pagehead %}
+  <div id="page-head">
+      
+    <div id="page-title">
+        <h1 class="page-header text-overflow">Datasetes</h1>
+    </div>
+
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="pli-home"></i></a></li>
+      <li><a href="{% url 'multiplicity:index' %}">{{ MULTIPLICITY_NAME }}</a></li>
+      <li class="active">Datasets</li>
+    </ol>
+
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {% if datasets %}
+    {% include 'multiplicity/includes/charts.footer.html' %}
+  {% endif %}
+{% endblock %}
+
+

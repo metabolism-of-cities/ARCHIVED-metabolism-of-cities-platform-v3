@@ -30,6 +30,7 @@ urlpatterns = [
     path('admin/<slug:city>/mtu/<int:mtu>/delete/', views.admin_mtu_delete, name='admin_mtu_delete'),
 
     # General
+    path('datasets/', views.datasets_all, name='datasets_all'),
     path('table/datasets/<int:dataset>/', views.datatable, name='datatable_dataset'),
     path('<slug:city>/checklist/', views.checklist, name='checklist'),
 

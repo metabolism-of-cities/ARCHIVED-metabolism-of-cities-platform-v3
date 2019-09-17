@@ -7,7 +7,7 @@ from .models import Topic, DatasetType, ReferenceSpace, ReferenceSpaceType, Feat
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.defaultfilters import slugify
-from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization, Video, VideoUploadForm
+from core.models import UserAction, UserLog, ReferenceForm, Reference, ReferenceType, Organization, Video, VideoUploadForm, Article
 from staf.models import CSV, Material, Data, Unit, TimePeriod, DatasetForm, Material, Dataset, Process
 from django.db.models import Count
 from django.contrib import messages
@@ -398,6 +398,26 @@ def datasets_overview(request, city, topic, type="flows"):
     datasets = Dataset.objects.filter(primary_space=info, deleted=False, topics=topic, type__type=type)
     context = { "section": "cities", "menu":  type, "page": topic.slug, "info": info, "datasets": datasets, "topic": topic}
     return render(request, "multiplicity/datasets.html", context)
+
+def datasets_all(request):
+    if request.site.id == 1:
+        type_id = 3 # The ID of reference type = city
+    else:
+        type_id = 21 # The ID of reference type = island
+
+    datasets = Dataset.objects.filter(deleted=False, primary_space__type__id=type_id)
+    page = get_object_or_404(Article, pk=215)
+    list = Article.objects.filter(active=True, parent=page.parent).order_by("created_at")
+    context = { 
+        "section": "cities", 
+        "menu":  "datasets",
+        "datasets": datasets,
+        "datatables": True,
+        "blue_sidebar": True,
+        "page": page,
+        "list": list,
+    }
+    return render(request, "multiplicity/datasets.all.html", context)
 
 def dataset(request, city, id, slug=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
