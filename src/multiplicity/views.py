@@ -1942,6 +1942,27 @@ def admin_data_overview(request, city):
     return render(request, "multiplicity/admin/overview.data.html", context)
 
 @staff_member_required
+def admin_data_overview_all(request):
+    if request.site.id == 1:
+        type_id = 3 # The ID of reference type = city
+    else:
+        type_id = 21 # The ID of reference type = island
+    datasets = Dataset.objects.filter(primary_space__type__id=type_id, deleted=False)
+    csv = CSV.objects.filter(space__type__id=type_id)
+    space_csv = ReferenceSpaceCSV.objects.filter(space__type__id=type_id)
+    information = Information.objects.filter(space__type__id=type_id)
+
+    context = { 
+        "navbar": "backend", 
+        "datasets": datasets, 
+        "csv": csv, 
+        "space_csv": space_csv, 
+        "datatables": True, 
+        "information": information,
+    }
+    return render(request, "multiplicity/admin/overview.data.all.html", context)
+
+@staff_member_required
 def admin_activate_sector(request, city, sector):
     info = get_object_or_404(ReferenceSpace, slug=city)
     sector = get_object_or_404(ProcessGroup, slug=sector)

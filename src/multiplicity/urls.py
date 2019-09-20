@@ -17,6 +17,7 @@ urlpatterns = [
     path('admin/referencespaces/<slug:type>/create/', views.admin_referencespace, name='admin_referencespace_create'),
 
     path('admin/<slug:city>/overview/', views.admin_data_overview, name='admin_data_overview'),
+    path('admin/overview/', views.admin_data_overview_all, name='admin_data_overview_all'),
     path('admin/<slug:city>/sector/<slug:sector>/activate/', views.admin_activate_sector, name='admin_activate_sector'),
     path('admin/<slug:city>/sector/<slug:sector>/deactivate/', views.admin_deactivate_sector, name='admin_deactivate_sector'),
 

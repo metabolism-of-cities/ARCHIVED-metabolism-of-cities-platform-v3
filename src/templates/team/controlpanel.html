@@ -14,33 +14,14 @@
 
             <h4 class="text-light">Volunteer Activities</h4>
             <p class="text-sm">Metabolism of Cities is first and foremost a community of people working voluntarily to advance the field of urban metabolism.</p>
-            <ul class="list-unstyled text-center pad-top mar-no row">
-                <li class="col-xs-4">
-                    <span class="text-lg text-semibold">12</span>
-                    <p class="text-sm mar-no">Members</p>
-                </li>
-                <li class="col-xs-4">
-                    <span class="text-lg text-semibold">9</span>
-                    <p class="text-sm mar-no">Task forces</p>
-                </li>
-                <li class="col-xs-4">
-                    <span class="text-lg text-semibold">89</span>
-                    <p class="text-sm mar-no">Discussion threads</p>
-                </li>
-            </ul>
         </div>
         <div class="list-group ">
-            <a class="list-group-item show" data-show="communityboard" href="{% url 'team:homepage' %}"><i class="far fa-comments icon-lg icon-fw"></i> <strong>Discussion board</strong></a>
               <div id="communityboard">
             {% for info in community %}
                 <a class="list-group-item" href="{% url 'team:viewcategory' info.id %}"><i class="far icon-lg icon-fw"></i> {{ info.name }}</a>
             {% endfor %}
               </div>
-              <a class="list-group-item show" data-show="communitydrive" href="#"><i class="fab fa-google-drive icon-lg icon-fw"></i> <strong>Google Drive</strong></a>
               <div id="communitydrive">
-            {% for info in community %}
-                <a class="list-group-item" href="{{ info.google_drive }}"><i class="far icon-lg icon-fw"></i> {{ info.name }}</a>
-            {% endfor %}
               </div>
               <a class="list-group-item show" data-show="taskforces" href="#"><i class="fas fa-users icon-lg icon-fw"></i> <strong>Task forces</strong></a>
               <div id="taskforces">
@@ -59,28 +40,8 @@
 
             <h4 class="text-light">Administrative board</h4>
             <p class="text-sm">The administrative board governs Metabolism of Cities and is in charge of ensuring that we achieve our goals.</p>
-            <ul class="list-unstyled text-center pad-top mar-no row">
-                <li class="col-xs-4">
-                    <span class="text-lg text-semibold">5</span>
-                    <p class="text-sm mar-no">Board members</p>
-                </li>
-                <li class="col-xs-4">
-                    <span class="text-lg text-semibold">3</span>
-                    <p class="text-sm mar-no">Unread threads</p>
-                </li>
-                <li class="col-xs-4">
-                    <span class="text-lg text-semibold">39</span>
-                    <p class="text-sm mar-no">Total threads</p>
-                </li>
-            </ul>
         </div>
         <div class="list-group ">
-          {% for boardinfo in board %}
-            <a class="list-group-item" href="{% url 'team:viewcategory' boardinfo.id %}"><i class="far fa-comments icon-lg icon-fw"></i> {{ boardinfo.name }}</a>
-          {% endfor %}
-          {% for boardinfo in board %}
-            <a class="list-group-item" href="{{ boardinfo.google_drive }}"><i class="fab fa-google-drive icon-lg icon-fw"></i> {{ boardinfo.name }}</a>
-          {% endfor %}
           {% for boardinfo in board %}
             <a class="list-group-item" href="{% url 'team:taskforce' boardinfo.id %}"><i class="fas fa-users icon-lg icon-fw"></i> {{ boardinfo.name }}</a>
           {% endfor %}
@@ -110,8 +71,6 @@
             </ul>
         </div>
         <div class="list-group ">
-            <a class="list-group-item" href="{% url 'team:viewcategory' services.id %}"><i class="far fa-comments icon-lg icon-fw"></i> Discussion board</a>
-            <a class="list-group-item" href="{{ services.google_drive }}"><i class="fab fa-google-drive icon-lg icon-fw"></i> View Drive</a>
             <a class="list-group-item" href="{% url 'team:taskforce' services.id %}"><i class="fas fa-users icon-lg icon-fw"></i> Task force</a>
             <a class="list-group-item" href="/admin/team/service/"><i class="fas fa-edit icon-lg icon-fw"></i> Services</a>
             <a class="list-group-item show" data-show="projects" href="#"><i class="fas fa-users icon-lg icon-fw"></i> <strong>Project list</strong></a>
@@ -177,8 +136,6 @@
         </div>
         <div class="list-group ">
             <a class="list-group-item" href="/admin/"> <i class="fas fa-edit icon-lg icon-fw"></i>Content Management System</a>
-            <a class="list-group-item" href="https://drive.google.com/open?id=1wLlthj85Xu83F332Kg4TK7vkCStlheLjlWFKuAY-7rw"> 
-           <i class="fab fa-google-drive icon-lg icon-fw"></i> Reimbursement form</a>
            <a class="list-group-item" href="https://pixabay.com/"><i class="fa fa-image icon-fw"></i> Pixabay: open source photo bank</a>
            <a class="list-group-item" href="https://fontawesome.com/icons?d=gallery&m=free"><i class="fab fa-font-awesome  icon-fw"></i> Font-awesome: icons</a>
            <a class="list-group-item" href="http://www.themeon.net/nifty/v2.9.1/index.html"><i class="fa fa-crop icon-fw"></i> Nifty Template</a>
@@ -194,9 +151,7 @@
         </div>
         <div class="list-group ">
             <a class="list-group-item" href="{% static 'team/videos/introduction-internal-comms.mp4' %}"> Introduction back-end</a>
-            <a class="list-group-item" href="{% static 'team/videos/discussion-board.mp4' %}"> Discussion board</a>
             <a class="list-group-item" href="{% static 'team/videos/taskforces.mp4' %}"> Task forces</a>
-            <a class="list-group-item" href="{% static 'team/videos/discussion-board-notifications.mp4' %}">  Discussion board notifications</a>
             <a class="list-group-item" href="{% static 'team/videos/services.mp4' %}"> <span class="badge badge-success pull-right">New</span> Services</a>
             <a class="list-group-item" href="{% static 'multiplicity/videos/introduction.mp4' %}"> <span class="badge badge-success pull-right">New</span> MultipliCity introduction</a>
             <a class="list-group-item" href="{% static 'multiplicity/videos/adding-a-city.mp4' %}"> <span class="badge badge-success pull-right">New</span> Adding a city to MultipliCity</a>
@@ -222,6 +177,7 @@
             <a class="list-group-item" href="{% url 'multiplicity:admin_referencespaces' 'cities' %}">Cities</a>
             <a class="list-group-item" href="{% url 'multiplicity:admin_referencespaces' 'islands' %}">Islands</a>
             <a class="list-group-item" href="{% url 'multiplicity:admin_datasettypes' %}">Dataset types</a>
+            <a class="list-group-item" href="{% url 'multiplicity:admin_data_overview_all' %}">Data overview</a>
         </div>
     </div>
   </div><div class="col-sm-4">

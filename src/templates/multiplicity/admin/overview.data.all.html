@@ -1,0 +1,189 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Data overview{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<ol class="breadcrumb">
+  <li><a href="./"><i class="pli-home"></i></a></li>
+  <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
+  <li class="active">Data overview</li>
+</ol>
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Datasets</h3>
+        <table class="table table-striped datatable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>User</th>
+                    <th>Creation date</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for details in datasets %}
+                <tr>
+                    <td>{{ details.id }}. <a href="{% url 'multiplicity:dataset' details.primary_space.slug details.id %}">{{ details.name }}</a></td>
+                    <td>{{ details.primary_space.name }}</td>
+                    <td>
+                      {% for csv in details.csv_set.all %}
+                        {{ csv.user }}<br>
+                      {% endfor %}
+                    </td>
+                    <td>
+                      {% for csv in details.csv_set.all %}
+                        {{ csv.created_at|date:"M d, Y H:i" }}<br>
+                      {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>CSV Files - datasets</h3>
+        <table class="table table-striped datatable">
+            <thead>
+                <tr>
+                    <th>Creation date</th>
+                    <th>Name</th>
+                    <th>User</th>
+                    <th>Dataset</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for details in csv %}
+                <tr>
+                    <td data-sort="{{ details.created_at|date:"Y-m-d H:i" }}">{{ details.created_at }}</td>
+                    <td>
+                      <a href="{% url 'multiplicity:download_csv' details.space.slug details.id %}"><i class="fa fa-download"></i></a>
+                      <a href="{% url 'multiplicity:upload_flow_review' details.space.slug details.datasettype.id details.id %}">{{ details.original_name }}</a>
+                    </td>
+                    <td><a href="{% url 'core:userdetails' details.user.id %}">{{ details.user.first_name }} {{ details.user.last_name }}</a></td>
+                    <td>
+                    {% if details.dataset %}
+                      <a href="{% url 'multiplicity:dataset' details.space.slug details.dataset.id %}">#{{ details.dataset.id }}</a>
+                    {% endif %}
+                    </td>
+                    <td>{{ details.datasettype.name }}<br>
+                    {{ details.space.name }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>CSV Files - reference spaces</h3>
+        <table class="table table-striped datatable">
+            <thead>
+                <tr>
+                    <th>Creation date</th>
+                    <th>Name</th>
+                    <th>User</th>
+                    <th>Import?</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for details in space_csv %}
+                <tr>
+                    <td data-sort="{{ details.created_at|date:"Y-m-d H:i" }}">{{ details.created_at }}</td>
+                    <td><a href="{% url 'multiplicity:upload_infrastructure_review' details.space.slug details.type.slug details.id %}">{{ details.original_name }}</a></td>
+                    <td><a href="{% url 'core:userdetails' details.user.id %}">{{ details.user.first_name }} {{ details.user.last_name }}</a></td>
+                    <td>
+                    {% if details.imported %}
+                      Yes
+                    {% endif %}
+                    </td>
+                    <td>{{ details.type.name }}<br>{{ details.space.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="panel">
+      <div class="panel-body">
+        <h3>Information</h3>
+
+        <table class="table table-striped datatable">
+          <thead>
+            <tr>
+              <th>Information</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for details in information %}
+              <tr>
+                <td><a href="{% url 'multiplicity:information_form' details.space.slug details.id %}">{{ details.title }}</a></td>
+                <td>{{ details.space.name }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<style type="text/css">
+textarea.form-control{height:200px}
+
+#gallery figure {
+  position:relative;
+}
+#gallery figure span {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  opacity:0.7;
+}
+
+#gallery figure.fade {
+  opacity: 0.6;
+}
+#gallery .fade img {
+  border: 2px solid #f00;
+}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
