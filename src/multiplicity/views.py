@@ -1474,33 +1474,37 @@ def upload_mtu_review(request, city, filename):
 
             mtu = MTU.objects.create(type=type, space=info, timeframe=request.POST["start"], source=request.POST["source"], file=filename, description=request.POST["details"])
 
-        for record in data["features"]:
-            properties = record["properties"]
-            geometry = record["geometry"]
+        if "features" not in data:
+            messages.error(request, "We could not find any features in this geojson file. It should contain at a minimum the names of each MTU")
+            return redirect(reverse("multiplicity:upload_mtu", args=[info.slug]))
+        else:
+            for record in data["features"]:
+                properties = record["properties"]
+                geometry = record["geometry"]
+
+                if request.method == "POST":
+                    name = properties[request.POST["name"]]
+                    area = None
+                    if "area" in request.POST:
+                        area = float(properties[request.POST["area"]])/float(request.POST["unit"])
+
+                    space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, mtu=mtu)
+                    if "start" in request.POST and request.POST["start"]:
+                        start = request.POST["start"]
+                    else:
+                        start = None
+                    if "end" in request.POST and request.POST["end"]:
+                        end = request.POST["end"]
+                    else:
+                        end = None
+                    location = ReferenceSpaceLocation.objects.create(space=space, area=area, start=start, end=end, source=request.POST["source"], geojson=geometry)
+                    space.location = location
+                    space.save()
+
+                    log = UserLog.objects.create(user=request.user, action=create_record, space=space, points=0)
 
             if request.method == "POST":
-                name = properties[request.POST["name"]]
-                area = None
-                if "area" in request.POST:
-                    area = float(properties[request.POST["area"]])/float(request.POST["unit"])
-
-                space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, mtu=mtu)
-                if "start" in request.POST and request.POST["start"]:
-                    start = request.POST["start"]
-                else:
-                    start = None
-                if "end" in request.POST and request.POST["end"]:
-                    end = request.POST["end"]
-                else:
-                    end = None
-                location = ReferenceSpaceLocation.objects.create(space=space, area=area, start=start, end=end, source=request.POST["source"], geojson=geometry)
-                space.location = location
-                space.save()
-
-                log = UserLog.objects.create(user=request.user, action=create_record, space=space, points=0)
-
-        if request.method == "POST":
-            return redirect(reverse("multiplicity:map_mtu", args=[info.slug, type.slug]))
+                return redirect(reverse("multiplicity:map_mtu", args=[info.slug, type.slug]))
 
 
         if "crs" in data and "properties" in data["crs"] and "name" in data["crs"]["properties"]:
