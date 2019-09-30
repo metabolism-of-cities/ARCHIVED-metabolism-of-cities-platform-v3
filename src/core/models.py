@@ -163,7 +163,7 @@ class Article(models.Model):
     introduction = models.TextField(null=True, blank=True)
     head = models.TextField(null=True, blank=True)
     includes_form = models.BooleanField(default=False)
-    content = HTMLField('Content')
+    content = HTMLField('Content', help_text="The content field is a required field - be sure to fill this out")
     image = models.ImageField(null=True, blank=True, upload_to='articles')
 
     parent = models.ForeignKey(
