@@ -17,7 +17,7 @@
   <div class="col-lg-8">
       <div class="text-justify">
         <h4>Summary</h4>
-        {% if info.active %}
+        {% if info.active or info.id == 107 %}
           <div>{{ info.description|safe }}</div>
         {% else %}
           <p>{{ info.description|striptags|linebreaksbr }}</p>
