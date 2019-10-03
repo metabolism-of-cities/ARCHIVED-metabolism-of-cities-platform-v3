@@ -11,7 +11,8 @@
   author = "{{info.authorlist}}",
   title = "{{info.title}}",{% if info.journal %}
   journal = "{{info.journal}}",{% endif %}
-  year = {{info.year}},{% if info.url %}url = "{{info.url}}",{% endif %}{% if info.doi %}
+  year = {{info.year}},{% if info.url %}url = "{{info.url}}",{% endif %}{% if info.abstract %}
+  abstract = "{{ info.abstract }}",{% endif %}{% if info.doi %}
   doi = "{{info.doi}}",{% endif %}
 }</pre>
 
