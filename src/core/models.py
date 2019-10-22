@@ -324,6 +324,43 @@ class Tag(models.Model):
     class Meta:
         ordering = ["name"]
 
+class MethodClassification(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    def __str__(self):
+        return self.name
+
+class MethodScale(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+
+
+class Method(models.Model):
+    tag = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318})
+    material_scope = models.CharField(max_length=255, null=True, blank=True)
+    METHOD_SCORING = (
+ 	(3,	'3 - The item is a defining feature of the approach'),
+ 	(2,	'2 - The feature is typically included in the techique'),
+ 	(1,	'1 - The item is included only occasionally in the mode of analysis, and in a partial or conditional way'),
+    )
+    substances = models.CharField("selected specific substances", max_length=1, choices=METHOD_SCORING, null=True, blank=True, help_text="Elements and basic compounds only")
+    materials = models.CharField("materials / bulk materials", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    energy = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    outputs = models.CharField("outputs to environment", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    recycling = models.CharField("recyling of material and energy", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    stock_changes = models.CharField("stock changes", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    specific = models.CharField("specific goods and services", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    production = models.CharField("production processes", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    between_flows = models.CharField("between-flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True, help_text="Specification of flows between sectors, industries or acticity fields, or other system components")
+    classification = models.ManyToManyField(MethodClassification, blank=True)
+    scale = models.ManyToManyField(MethodScale, blank=True)
+    entity = models.CharField(max_length=255, null=True, blank=True, help_text="Key socio-institutional entity (driving force boundary for induced flows)")
+
+
+    def __str__(self):
+        return self.name
+
 class TagForm(ModelForm):
     class Meta:
         model = Tag

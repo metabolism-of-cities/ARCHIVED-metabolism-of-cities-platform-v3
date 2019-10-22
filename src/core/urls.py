@@ -205,9 +205,13 @@ urlpatterns = [
     path('admin/projects', views.admin_project_list, name='admin_project_list'),
     path('admin/projects/<slug:status>', views.admin_project_list, name='admin_project_list'),
     path('admin/tags', views.admin_tag_list, name='admin_tag_list'),
+    path('admin/tags', views.admin_tag_list, name='admin_tag_list'),
     path('admin/tags/create', views.admin_tag, name='admin_tag'),
     path('admin/tags/<int:id>', views.admin_tag, name='admin_tag'),
     path('admin/tags/<int:parent>/child', views.admin_tag, name='admin_tag'),
+    path('admin/methods', views.admin_method_list, name='admin_method_list'),
+    path('admin/methods/create', views.admin_method, name='admin_method'),
+    path('admin/methods/<int:id>', views.admin_method, name='admin_method'),
     path('admin/publications/<int:id>', views.referenceform, name='admin_reference'),
     path('admin/publications', views.admin_references, name='admin_references'),
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz, NewsletterSubscriber
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz, NewsletterSubscriber, Method
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace
 from staf.models import Data, Process, Material
@@ -1268,7 +1268,7 @@ def admin_project_list(request, status="published"):
     return render(request, "core/admin/project.list.html", context)
 
 @staff_member_required
-def admin_tag_list(request):
+def admin_tag_list(request, method=False):
     list = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     context = { "navbar": "backend", "list": list, "datatables": True }
     return render(request, "core/admin/tag.list.html", context)
@@ -1302,6 +1302,32 @@ def admin_tag(request, id=False, parent=False):
     context = { "navbar": "backend", "form": form, "info": info, "select2": True }
     return render(request, "core/admin/tag.html", context)
 
+@staff_member_required
+def admin_method_list(request):
+    list = Tag.objects.filter(parent_tag__id=318)
+    context = { "navbar": "backend", "list": list, "datatables": True }
+    return render(request, "core/admin/method.list.html", context)
+
+@staff_member_required
+def admin_method(request, id=False):
+
+    from django.forms import modelform_factory
+    ModelForm = modelform_factory(Method, exclude={})
+    if id:
+        info = get_object_or_404(Method, pk=id)
+        form = ModelForm(request.POST or None, instance=info)
+    else:
+        form = ModelForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Information was saved.")
+            return redirect(reverse("core:admin_method_list"))
+        else:
+            messages.error(request, "We could not save your form, please fill out all fields")
+
+    context = { "navbar": "backend", "form": form, "form": form, "select2": True }
+    return render(request, "core/admin/method.html", context)
 
 @staff_member_required
 def admin_video_list(request):
