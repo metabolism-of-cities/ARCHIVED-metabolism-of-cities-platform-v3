@@ -357,7 +357,6 @@ class Method(models.Model):
     scale = models.ManyToManyField(MethodScale, blank=True)
     entity = models.CharField(max_length=255, null=True, blank=True, help_text="Key socio-institutional entity (driving force boundary for induced flows)")
 
-
     def __str__(self):
         return self.name
 
@@ -460,6 +459,21 @@ class ReferenceOrganization(models.Model):
     type = models.CharField(max_length=20, choices=TYPES)
     def __str__(self):
         return self.organization.name + " - " + self.type + " - " + self.reference.title
+
+class CaseStudy(models.Model):
+    title = models.CharField(max_length=255)
+    method = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318})
+    reference = models.ForeignKey(Reference, on_delete=models.CASCADE)
+    spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type__id': 3})
+    ongoing = models.CharField(max_length=255, null=True, blank=True, help_text="Do they continue to implement it?")
+    consideration = models.TextField(null=True, blank=True, help_text="Circular economy / closing loop consideration")
+    target_audience = models.TextField(null=True, blank=True, help_text="Target audience of results")
+    indicators = models.TextField(null=True, blank=True, help_text="Indicators")
+    pros = models.TextField(null=True, blank=True, help_text="Indicators")
+    cons = models.TextField(null=True, blank=True, help_text="Indicators")
+    purpose = models.TextField(null=True, blank=True, help_text="Purpose of the study")
+    def __str__(self):
+        return self.title
 
 class UserAction(models.Model):
     name = models.CharField(max_length=255)
