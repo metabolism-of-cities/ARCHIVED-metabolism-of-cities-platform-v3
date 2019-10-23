@@ -299,12 +299,11 @@ class VideoUploadForm(ModelForm):
         
 class Tag(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(null=True, blank=True)
+    description = HTMLField('description', null=True, blank=True)
     parent_tag = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
         limit_choices_to={'hidden': False}, related_name='children'
     )
-    hidden = models.BooleanField(db_index=True, default=False)
-    gps = models.CharField(max_length=255, null=True, blank=True)
+    hidden = models.BooleanField(db_index=True, default=False, help_text="Mark if tag is superseded/not yet approved/deactivated")
     PARENTS = (
  	(1,	'Publication Types'),
  	(2,	'Metabolism Studies'),
@@ -316,7 +315,7 @@ class Tag(models.Model):
  	(9,	'Methodologies'),
  	(10,	'Other'),
     )
-    parent = models.CharField(max_length=2, choices=PARENTS, null=True, blank=True)
+    parent = models.CharField(max_length=2, choices=PARENTS, null=True, blank=True, help_text="This was a previous classification - can be left empty")
 
     def __str__(self):
         return self.name
@@ -335,14 +334,19 @@ class MethodScale(models.Model):
     def __str__(self):
         return self.name
 
+class MethodTemporalBoundary(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
 
 class Method(models.Model):
     tag = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318})
     material_scope = models.CharField(max_length=255, null=True, blank=True)
     METHOD_SCORING = (
- 	(3,	'3 - The item is a defining feature of the approach'),
- 	(2,	'2 - The feature is typically included in the techique'),
- 	(1,	'1 - The item is included only occasionally in the mode of analysis, and in a partial or conditional way'),
+ 	('3',	'3 - The item is a defining feature of the approach'),
+ 	('2',	'2 - The feature is typically included in the techique'),
+ 	('1',	'1 - The item is included only occasionally in the mode of analysis, and in a partial or conditional way'),
+        ('0',   '0 - Not included at all'),
     )
     substances = models.CharField("selected specific substances", max_length=1, choices=METHOD_SCORING, null=True, blank=True, help_text="Elements and basic compounds only")
     materials = models.CharField("materials / bulk materials", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
@@ -356,9 +360,17 @@ class Method(models.Model):
     classification = models.ManyToManyField(MethodClassification, blank=True)
     scale = models.ManyToManyField(MethodScale, blank=True)
     entity = models.CharField(max_length=255, null=True, blank=True, help_text="Key socio-institutional entity (driving force boundary for induced flows)")
+    temporal_study_boundary = models.ForeignKey(MethodTemporalBoundary, on_delete=models.CASCADE, null=True, blank=True)
+    cradle_to_grave = models.CharField("cradle-to-grave sources of flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True, help_text="Note: could also be considered as consumption-based accounting?)")
+    hidden_flows = models.CharField("accounts for hidden flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    impacts = models.CharField("quantitative weighting of impacts of material flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    main_measurement_unit = models.CharField(max_length=255, null=True, blank=True)
+    mass_balancing = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    avoidance_double_counting = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    sustainability_criteria_reference = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.tag.name
 
 class TagForm(ModelForm):
     class Meta:
@@ -474,6 +486,8 @@ class CaseStudy(models.Model):
     purpose = models.TextField(null=True, blank=True, help_text="Purpose of the study")
     def __str__(self):
         return self.title
+    class Meta:
+        verbose_name_plural = "case studies"
 
 class UserAction(models.Model):
     name = models.CharField(max_length=255)
