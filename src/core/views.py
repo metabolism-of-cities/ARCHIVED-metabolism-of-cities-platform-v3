@@ -71,7 +71,7 @@ def home(request):
     return render(request, "core/home.html", context)
 
 def glossary(request):
-    list = Tag.objects.filter(hidden=False, description__isnull=False).order_by("name")
+    list = Tag.objects.filter(include_in_glossary=True, description__isnull=False).order_by("name")
     context = { "section": "resources", "page": "glossary", "list": list  }
     return render(request, "core/glossary.html", context)
 
