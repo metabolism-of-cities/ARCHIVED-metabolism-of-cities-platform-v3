@@ -371,9 +371,10 @@ class Method(models.Model):
     avoidance_double_counting = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
     sustainability_criteria_reference = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
-
     def __str__(self):
         return self.tag.name
+    class Meta:
+        ordering = ["tag__name"]
 
 class TagForm(ModelForm):
     class Meta:
