@@ -335,6 +335,11 @@ class MethodTemporalBoundary(models.Model):
     def __str__(self):
         return self.name
 
+class MethodData(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+
 class Method(models.Model):
     tag = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318}, related_name="methods")
     material_scope = models.CharField(max_length=255, null=True, blank=True)
@@ -357,6 +362,7 @@ class Method(models.Model):
     scale = models.ManyToManyField(Tag, limit_choices_to={'parent_tag__id': 320}, related_name="method_scales", blank=True)
     entity = models.CharField(max_length=255, null=True, blank=True, help_text="Key socio-institutional entity (driving force boundary for induced flows)")
     temporal_study_boundary = models.ForeignKey(MethodTemporalBoundary, on_delete=models.CASCADE, null=True, blank=True)
+    data_sources = models.ForeignKey(MethodData, on_delete=models.CASCADE, null=True, blank=True)
     cradle_to_grave = models.CharField("cradle-to-grave sources of flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True, help_text="Note: could also be considered as consumption-based accounting?)")
     hidden_flows = models.CharField("accounts for hidden flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
     impacts = models.CharField("quantitative weighting of impacts of material flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
