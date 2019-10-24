@@ -368,8 +368,9 @@ class Method(models.Model):
     impacts = models.CharField("quantitative weighting of impacts of material flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
     main_measurement_unit = models.CharField(max_length=255, null=True, blank=True)
     mass_balancing = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
-    avoidance_double_counting = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    avoidance_double_counting = models.NullBooleanField(null=True, blank=True)
     sustainability_criteria_reference = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    also_known_as = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.tag.name
