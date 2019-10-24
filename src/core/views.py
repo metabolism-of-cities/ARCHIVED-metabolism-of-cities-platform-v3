@@ -70,6 +70,11 @@ def home(request):
     context = { "section": "home", "page": ""  }
     return render(request, "core/home.html", context)
 
+def glossary(request):
+    list = Tag.objects.filter(hidden=False, description__isnull=False).order_by("name")
+    context = { "section": "resources", "page": "glossary", "list": list  }
+    return render(request, "core/glossary.html", context)
+
 def index(request):
     if request.site.id == 1:
         main_filter = 11 # This is urban systems

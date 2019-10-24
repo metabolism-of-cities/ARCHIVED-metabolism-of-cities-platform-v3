@@ -304,6 +304,7 @@ class Tag(models.Model):
         limit_choices_to={'hidden': False}, related_name='children'
     )
     hidden = models.BooleanField(db_index=True, default=False, help_text="Mark if tag is superseded/not yet approved/deactivated")
+    include_in_glossary = models.BooleanField(db_index=True, default=False)
     PARENTS = (
  	(1,	'Publication Types'),
  	(2,	'Metabolism Studies'),
@@ -329,18 +330,13 @@ class MethodClassification(models.Model):
     def __str__(self):
         return self.name
 
-class MethodScale(models.Model):
-    name = models.CharField(max_length=255)
-    def __str__(self):
-        return self.name
-
 class MethodTemporalBoundary(models.Model):
     name = models.CharField(max_length=255)
     def __str__(self):
         return self.name
 
 class Method(models.Model):
-    tag = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318})
+    tag = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318}, related_name="methods")
     material_scope = models.CharField(max_length=255, null=True, blank=True)
     METHOD_SCORING = (
  	('3',	'3 - The item is a defining feature of the approach'),
@@ -358,7 +354,7 @@ class Method(models.Model):
     production = models.CharField("production processes", max_length=1, choices=METHOD_SCORING, null=True, blank=True)
     between_flows = models.CharField("between-flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True, help_text="Specification of flows between sectors, industries or acticity fields, or other system components")
     classification = models.ManyToManyField(MethodClassification, blank=True)
-    scale = models.ManyToManyField(MethodScale, blank=True)
+    scale = models.ManyToManyField(Tag, limit_choices_to={'parent_tag__id': 320}, related_name="method_scales", blank=True)
     entity = models.CharField(max_length=255, null=True, blank=True, help_text="Key socio-institutional entity (driving force boundary for induced flows)")
     temporal_study_boundary = models.ForeignKey(MethodTemporalBoundary, on_delete=models.CASCADE, null=True, blank=True)
     cradle_to_grave = models.CharField("cradle-to-grave sources of flows", max_length=1, choices=METHOD_SCORING, null=True, blank=True, help_text="Note: could also be considered as consumption-based accounting?)")

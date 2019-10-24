@@ -87,6 +87,8 @@ urlpatterns = [
     path('search', views.search, name='search'),
     path('more', views.empty, name='more'),
 
+    path('glossary/', views.glossary, name='glossary'),
+
     path('resources/videos', views.videos, name='videos'),
     path('resources/videos/collections/<int:collection>', views.videos, name='videocollection'),
     path('resources/videos/<int:id>', views.video, name='video'),
