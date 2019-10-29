@@ -370,6 +370,7 @@ class Method(models.Model):
     mass_balancing = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
     avoidance_double_counting = models.NullBooleanField(null=True, blank=True)
     sustainability_criteria_reference = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
+    developed_by = models.CharField(max_length=255, null=True, blank=True)
     also_known_as = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
     def __str__(self):
@@ -477,11 +478,18 @@ class ReferenceOrganization(models.Model):
     def __str__(self):
         return self.organization.name + " - " + self.type + " - " + self.reference.title
 
+class MaterialGroup(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    def __str__(self):
+        return self.name
+
 class CaseStudy(models.Model):
     title = models.CharField(max_length=255)
     method = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318})
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE)
     spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type__id': 3})
+    material_groups = models.ManyToManyField(MaterialGroup, blank=True)
     ongoing = models.CharField(max_length=255, null=True, blank=True, help_text="Do they continue to implement it?")
     consideration = models.TextField(null=True, blank=True, help_text="Circular economy / closing loop consideration")
     target_audience = models.TextField(null=True, blank=True, help_text="Target audience of results")
@@ -556,6 +564,7 @@ class Project(models.Model):
     on_site = CurrentSiteManager()
     url = models.CharField(max_length=255, null=True, blank=True)
     references = models.ManyToManyField(Reference, blank=True, limit_choices_to={'status': 'active'})
+    material_groups = models.ManyToManyField(MaterialGroup, blank=True)
 
     def __str__(self):
         return self.name
