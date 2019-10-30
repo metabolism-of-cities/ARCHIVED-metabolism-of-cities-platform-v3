@@ -125,10 +125,10 @@ def literature(request):
 def team(request):
     if request.site.id == 1:
         page = Article.objects.get(pk=39)
-        list = People.objects.exclude(member_since__isnull=True).order_by("member_since")
+        list = People.objects.exclude(member_since__isnull=True).exclude(site__id=2).order_by("member_since")
     else:
         page = Article.objects.get(pk=192)
-        ids = [1150,282,186,934,926,95,1165,927,1209]
+        ids = [1150,282,186,934,926,95,1165,927,1209,1169,1228]
         list = People.objects.filter(pk__in=ids).order_by("-firstname")
     context = { "section": "about", "list": list, "page": page }
     return render(request, "core/team.html", context)
