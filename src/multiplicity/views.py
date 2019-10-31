@@ -254,31 +254,6 @@ def sector(request, city, sector):
     }
     return render(request, "multiplicity/sector.html", context)
 
-def overview(request, city, slug):
-    groups = ProcessGroup.objects.order_by("name")
-    flow = get_object_or_404(DatasetTypeStructure, slug=slug)
-    list = DatasetType.objects.filter(category__parent=flow)
-    types = DatasetTypeStructure.objects.filter(parent=flow)
-    if not types:
-        types = DatasetTypeStructure.objects.filter(pk=flow.id)
-    info = get_object_or_404(ReferenceSpace, slug=city)
-
-    if flow.parent and flow.parent.name == "Material Flows":
-      menu = "material-flows"
-    elif flow.parent and flow.parent.parent and flow.parent.parent.name == "Material Flows":
-      menu = "material-flows"
-      slug = flow.parent.slug
-    else:
-      menu = "material-stocks"
-
-    page = slug
-    context = { "section": "cities", "menu":  menu, "page": slug, "info": info,
-    "list": list, "types": types, "flow": flow, "slug": slug,
-    "editlink": reverse("multiplicity:admin_datasettypes"),
-    "groups": groups
-    }
-    return render(request, "multiplicity/overview.html", context)
-
 def flow(request, city, type, slug=False):
     info = get_object_or_404(ReferenceSpace, slug=city)
     type = get_object_or_404(DatasetType, slug=type)
@@ -391,6 +366,46 @@ def datasets(request, city):
     datasets = Dataset.objects.filter(primary_space=info, deleted=False)
     context = { "section": "cities", "menu":  "resources", "page": "datasets", "info": info, "datasets": datasets }
     return render(request, "multiplicity/datasets.html", context)
+
+def overview(request):
+    if request.site.id == 1:
+        type_id = 3 # The ID of reference type = city
+    else:
+        type_id = 21 # The ID of reference type = island
+    # Let's get the total number of datasets per city
+    list = Dataset.objects.filter(deleted=False, primary_space__type=type_id).values("primary_space__name", "primary_space", "primary_space__slug").annotate(total=Count("primary_space__name")).order_by("-total")
+
+    # And this is the total number of spaces inside each city. These could be farms, suburbs, factories, etc.
+    spaces_list = ReferenceSpace.objects.filter(active=True, parent__type=type_id, mtu__isnull=True).order_by("parent__name", "type__name").values("parent__name", "type__name").annotate(Count("pk"))
+    spaces = {}
+    for details in spaces_list:
+        parent = details["parent__name"]
+        type = details["type__name"]
+        count = details["pk__count"]
+        if not parent in spaces:
+            spaces[parent] = ""
+        spaces[parent] = spaces[parent] + type + ": " + str(count) + "<br>"
+
+    # And this is the total number of spaces inside each city. These could be farms, suburbs, factories, etc.
+    mtu_list = ReferenceSpace.objects.filter(active=True, parent__type=type_id, mtu__isnull=False).order_by("parent__name", "type__name").values("parent__name", "type__name").annotate(Count("pk"))
+    mtu = {}
+    for details in mtu_list:
+        parent = details["parent__name"]
+        type = details["type__name"]
+        count = details["pk__count"]
+        if not parent in mtu:
+            mtu[parent] = ""
+        mtu[parent] = mtu[parent] + type + ": " + str(count) + "<br>"
+
+    context = { 
+        "section": "cities", 
+        "menu":  "resources", 
+        "page": "datasets", 
+        "list": list,
+        "spaces": spaces,
+        "mtu": mtu,
+    }
+    return render(request, "multiplicity/overview.html", context)
 
 def datasets_overview(request, city, topic, type="flows"):
     info = get_object_or_404(ReferenceSpace, slug=city)
@@ -577,7 +592,6 @@ def download_mtu(request, city, type):
         output += "},"
         output += "\n"
     output += "]}"
-    print(output)
     response = HttpResponse(output, content_type="application/json")
     response["Content-Disposition"] = "attachment; filename=\"" + type + ".json\""
     return response
@@ -767,7 +781,7 @@ def upload_infrastructure_review(request, city, type, id):
 
                     existing = False
                     if row[0].strip() != "Name" and row[0]:
-                        check = ReferenceSpace.objects.filter(active=True, city=info, type=type, name=row[0].strip())
+                        check = ReferenceSpace.objects.filter(active=True, city=info, parent=info, type=type, name=row[0].strip())
                         if check:
                             existing = True
 
@@ -1488,7 +1502,7 @@ def upload_mtu_review(request, city, filename):
                     if "area" in request.POST:
                         area = float(properties[request.POST["area"]])/float(request.POST["unit"])
 
-                    space = ReferenceSpace.objects.create(name=name, type=type, city=info, country=info.country, mtu=mtu)
+                    space = ReferenceSpace.objects.create(name=name, type=type, city=info, parent=info, country=info.country, mtu=mtu)
                     if "start" in request.POST and request.POST["start"]:
                         start = request.POST["start"]
                     else:

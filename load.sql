@@ -22,3 +22,4 @@ INSERT INTO "core_useraction" ("id", "name") VALUES ('5', 'Data imported');
 
 UPDATE staf_material SET code = CONCAT('HS',code) WHERE catalog_id = 1 AND parent_id != 970753;
 
+UPDATE multiplicity_referencespace set parent_id = city_id WHERE mtu_id > 0 AND parent_id IS NULL;

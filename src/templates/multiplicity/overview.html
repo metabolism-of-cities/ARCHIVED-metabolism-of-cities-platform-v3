@@ -1,100 +1,40 @@
 {% extends 'multiplicity/base.html' %}
 {% load static %}
 
-{% block title %}{{ info.name }} | {{ info.country }}{% endblock %}
+{% block title %}Overview{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
 {% block content %}
 
 <section class="city-overview">
 
-<h2><i class="far fa-fw fa-exchange"></i> {{ flow.name }}</h2>
-
-{% for details in types %}
   <div class="panel panel-dark">
     <div class="panel-heading">
       <h3 class="panel-title">{{ details.name }}</h3>
     </div>
     <div class="panel-body">
-
       <table class="table">
         <thead>
           <tr>
-            <th width="300">Source</th>
-            <th>Data available</th>
-            {% if False %}
-            <th></th>
-            <th>Coverage</th>
-            <th>Smallest scale</th>
-            {% endif %}
-            <th>Upload</th>
+            <th>City</th>
+            <th>Datasets</th>
+            <th>Infrastructure</th>
+            <th>MTUs</th>
           </tr>
         </thead>
-      {% for item in details.datasettype_set.all %}
-        <tr>
-
-          {% if slug == "material-stocks" %}
-            <td><a href="{% url 'multiplicity:stock' info.slug item.slug %}">{{ item.name }}</a></td>
-          {% else %}
-            <td><a href="{% url 'multiplicity:flow' info.slug flow.slug item.slug %}">{{ item.name }}</a></td>
-          {% endif %}
-
-          <td><div class="data-available" available="{{ item.dataset_set.all.count }}" total="{% if item.dataset_set.all.count > 0 %}{{ item.dataset_set.all.count }}{% else %}1{% endif %}"></div></td>
-
-          {% if False %}
-          <td class="expand"><i class="fas fa-caret-down"></i></td>
-          <td>1 year</td>
-          <td>City-wide</td>
-          <td>
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                60%
-              </div>
-            </div>
-          </td>
-          {% else %}
-            <td>
-              <a href="{% url 'multiplicity:upload_flow_file' info.slug item.id %}"><i class="fa fa-upload"></i> Data</a>
-              <a href="{% url 'multiplicity:information_form' info.slug %}"><i class="fa fa-upload"></i> Information</a>
-            </td>
-          {% endif %}
-        </tr>
-        <tr class="extra-info">
-          <td></td>
-          <td>
-            <span class="label label-success">Grains</span>
-            <span class="label label-success">Fruits</span>
-            <span class="label label-success">Vegetables</span>
-            <span class="label label-success">Something</span>
-            <span class="label label-success">Something else</span>
-            <span class="label label-success">This</span>
-            <span class="label label-success">Other stuff</span>
-            <br>
-            <span class="label label-unavailable">Gone</span>
-            <span class="label label-unavailable">Not here</span>
-            <span class="label label-unavailable">Unavailable</span>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      {% endfor %}
+        {% for details in list %}
+          <tr>
+            <td><a href="{% url "multiplicity:city" details.primary_space__slug %}">{{ details.primary_space__name }}</a></td>
+            <td>{{ details.total }}</td>
+            <td>{{ spaces|get_item:details.primary_space__name|default_if_none:""|safe }}</td>
+            <td>{{ mtu|get_item:details.primary_space__name|default_if_none:""|safe }}</td>
+          </tr>
+        {% endfor %}
       </table>
     </div>
   </div>
 
-{% endfor %}
-
 </section>
-
-{% endblock %}
-
-{% block head %}
-{% endblock %}
-
-{% block sidebar %}
-{% include 'multiplicity/sidebar.default.html' %}
 
 {% endblock %}
 
@@ -108,37 +48,8 @@
     <ol class="breadcrumb">
         <li><a href="/"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'multiplicity:index' %}">{{ MULTIPLICITY_NAME }}</a></li>
-        <li><a href="{% url 'multiplicity:city' info.slug %}">{{ info.name }}</a></li>
-        <li class="active">Data overview</li>
+        <li class="active">Overview</li>
     </ol>
 
 </div>
-{% endblock %}
-
-{% block footer %}
-  <script>
-    $(".data-available").each(function() {
-      var available = $(this).attr("available");
-      var total = $(this).attr("total");
-      var unavailable = total - available;
-      var width = 100 / total;
-
-      for (var i = 1; i <= available; i++) {
-        $(document.createElement('div')).addClass("data-box available").css("width", "calc(" + width + "% - 1px)").appendTo(this);
-      };
-
-      for (var i = 1; i <= unavailable; i++) {
-        $(document.createElement('div')).addClass("data-box").css("width", "calc(" + width + "% - 1px)").appendTo(this);
-      };
-    });
-
-    $(".city-overview .table .expand").click(function() {
-      var parentRow = $(this).parent("tr");
-      $(parentRow).children("td").each(function() {
-        $(this).width( $(this).width() );
-      });
-      $("i", this).toggleClass("fa-caret-up");
-      $(this).parent().next("tr.extra-info").toggle();
-    });
-  </script>
 {% endblock %}
