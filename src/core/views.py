@@ -981,6 +981,7 @@ def project_form(request, id=False):
             info = form.save(commit=False)
             info.site = request.site
             info.save()
+            form.save_m2m()
 
             if new_record:
                 create_record = get_object_or_404(UserAction, pk=1)
@@ -1159,6 +1160,12 @@ def set_theme(request, theme):
     response.set_cookie("theme", theme, 60*60*25*365)
     return response
 
+def methodologies(request):
+    list = Method.objects.all()
+    context = {
+        "list": list,
+    }
+    return render(request, "core/methodologies.html", context)
 # Admin section
 
 @staff_member_required
@@ -1270,6 +1277,7 @@ def admin_project(request, id=False):
             info = form.save(commit=False)
             info.site = request.site
             info.save()
+            form.save_m2m()
 
             info.references.clear()
             selected = request.POST.getlist("references")

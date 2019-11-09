@@ -104,6 +104,8 @@ urlpatterns = [
     path('community/events', views.articles, {'parent': 'events'}, name='events'),
     path('community/events/<int:id>', views.article, name='event'),
 
+    path('methodologies', views.methodologies, name='methodologies'),
+
     path('about', views.section_home, {'slug': 'about'}, name='about'),
     path('community', views.section_home, {'slug': 'community'}, name='community_home'),
     path('resources', views.section_home, {'slug': 'resources'}, name='resources_home'),
@@ -222,6 +224,7 @@ urlpatterns = [
     path('admin/organizations/<int:id>', views.admin_organization, name='admin_organization'),
     path('admin/organizations/create', views.admin_organization, name='admin_organization'),
     path('admin/organizations/create/<slug:slug>', views.admin_organization, name='admin_organization_referencespace'),
+
 
 #temp
     path('updateorgs', views.updateorgs),

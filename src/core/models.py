@@ -371,12 +371,18 @@ class Method(models.Model):
     avoidance_double_counting = models.NullBooleanField(null=True, blank=True)
     sustainability_criteria_reference = models.CharField(max_length=1, choices=METHOD_SCORING, null=True, blank=True)
     developed_by = models.CharField(max_length=255, null=True, blank=True)
+    based_on = models.TextField(null=True, blank=True)
+    gaps_addressed = models.TextField(null=True, blank=True, help_text="What gaps does in other methodologies does this particular methodology address?")
+    next_steps = models.TextField(null=True, blank=True,help_text="The proposed next steps to further develop/improve this methodology")
+    materials_catalog_used = models.TextField(null=True, blank=True)
     also_known_as = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.tag.name
     class Meta:
         ordering = ["tag__name"]
+        verbose_name_plural = "methodologies"
+        verbose_name = "methodology"
 
 class TagForm(ModelForm):
     class Meta:

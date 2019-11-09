@@ -1,0 +1,125 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}Methodologies{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block head %}
+<style type="text/css">
+#container.boxed-layout.reveal #content-container, #container.boxed-layout #content-container{min-height:0}
+table{margin:10px}
+th.width200{width:200px}
+.table td{white-space: nowrap}
+#container{overflow:auto}
+a{color:#1F7A8C;font-weight:bold}
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'multiplicity/includes/top.navbar.html' %}
+
+</div>
+</div>
+</div>
+
+        <h3>Methodologies</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Material scope</th>
+              <th>Substances</th>
+              <th>Materials</th>
+              <th>Energy</th>
+              <th>Outputs</th>
+              <th>Recycling</th>
+              <th>Stock changes</th>
+              <th>Specific goods and services</th>
+              <th>Production processes</th>
+              <th>Between-flows</th>
+              <th>Classifications</th>
+              <th>Scale</th>
+              <th>Entity</th>
+              <th>Temporal study boundary</th>
+              <th>Data sources</th>
+              <th>Cradle to grave</th>
+              <th>Hidden flows</th>
+              <th>Impacts</th>
+              <th>Main unit</th>
+              <th>Mass balancing</th>
+              <th>Avoidance double counting</th>
+              <th>Sustainability criteria</th>
+              <th>Developed by</th>
+              <th>Based on</th>
+              <th>Gaps addressed</th>
+              <th>Next steps</th>
+              <th>Materials catalog</th>
+              <th>Also known as</th>
+              <th>Internal notes</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for details in list %}
+            <tr>
+              <td><a href="admin/core/method/{{ details.id }}/change/">{{ details.tag|default_if_none:"" }}</a></td>
+              <td>{{ details.material_scope|default_if_none:"" }}</td>
+              <td>{{ details.substances|default_if_none:"" }}</td>
+              <td>{{ details.materials|default_if_none:"" }}</td>
+              <td>{{ details.energy|default_if_none:"" }}</td>
+              <td>{{ details.outputs|default_if_none:"" }}</td>
+              <td>{{ details.recycling|default_if_none:"" }}</td>
+              <td>{{ details.stock_changes|default_if_none:"" }}</td>
+              <td>{{ details.specific|default_if_none:"" }}</td>
+              <td>{{ details.production|default_if_none:"" }}</td>
+              <td>{{ details.between_flows|default_if_none:"" }}</td>
+              <td>{% for classification in details.classification.all %}{{ classification }}<br>{% endfor %}</td>
+              <td>{% for scale in details.scale.all %}{{ scale }}<br>{% endfor %}</td>
+              <td>{{ details.entity|default_if_none:"" }}</td>
+              <td>{{ details.temporal_study|default_if_none:"" }}</td>
+              <td>{{ details.data_sources|default_if_none:"" }}</td>
+              <td>{{ details.cradle_to_grave|default_if_none:"" }}</td>
+              <td>{{ details.hidden_flows|default_if_none:"" }}</td>
+              <td>{{ details.impacts|default_if_none:"" }}</td>
+              <td>{{ details.main_measurement_unit|default_if_none:"" }}</td>
+              <td>{{ details.mass_balancing|default_if_none:"" }}</td>
+              <td>{{ details.avoidance_double_counting|default_if_none:"" }}</td>
+              <td>{{ details.sustainability_reference_criteria|default_if_none:"" }}</td>
+              <td>{{ details.developed_by|default_if_none:"" }}</td>
+              <td>{{ details.based_on|default_if_none:"" }}</td>
+              <td>{{ details.gaps_addressed|default_if_none:"" }}</td>
+              <td>{{ details.next_steps|default_if_none:"" }}</td>
+              <td>{{ details.materials_catalog|default_if_none:"" }}</td>
+              <td>{{ details.also_known_as|default_if_none:"" }}</td>
+              <td>{{ details.internal_notes|default_if_none:"" }}</td>
+
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+    
+  <div id="page-title">
+    <h1 class="page-header text-overflow">About Us</h1>
+  </div>
+
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="pli-home"></i></a></li>
+    <li><a href="{% url 'core:about' %}">About</a></li>
+    <li class="active">About Us</li>
+  </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
