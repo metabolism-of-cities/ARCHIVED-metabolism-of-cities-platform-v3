@@ -34,7 +34,7 @@
             <tbody>
             {% for details in list %}
               <tr>
-                <td>{{ details.firstname }} {{ details.lastname }}</td>
+                <td><a href="{% url "core:admin_member_profile" details.id %}">{{ details.firstname }} {{ details.lastname }}</a></td>
                 <td>{{ details.city.name }}</td>
                 {% if volunteers %}
                   <td>

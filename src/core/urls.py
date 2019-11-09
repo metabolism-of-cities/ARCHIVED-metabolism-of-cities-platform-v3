@@ -191,6 +191,7 @@ urlpatterns = [
 
     path('admin/people', views.admin_people_list, name='admin_people_list'),
     path('admin/members', views.admin_member_list, name='admin_member_list'),
+    path('admin/members/<int:id>', views.admin_member_profile, name='admin_member_profile'),
     path('admin/people/create', views.admin_people, name='admin_people_create'),
     path('admin/people/<int:id>', views.admin_people, name='admin_people'),
     path('admin/videos', views.admin_video_list, name='admin_video_list'),

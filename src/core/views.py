@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz, NewsletterSubscriber, Method
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
-from multiplicity.models import ReferenceSpace
-from staf.models import Data, Process, Material
+from multiplicity.models import ReferenceSpace, ReferenceSpaceCSV
+from staf.models import Data, Process, Material, CSV
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -1168,8 +1168,29 @@ def admin_people_list(request):
 @staff_member_required
 def admin_member_list(request):
     list = People.on_site.filter(user__isnull=False)
-    context = { "navbar": "backend", "list": list, "datatables": True, "volunteers": True }
+    context = { 
+        "navbar": "backend", 
+        "list": list, 
+        "datatables": True, 
+        "volunteers": True,
+    }
     return render(request, "core/admin/people.list.html", context)
+
+@staff_member_required
+def admin_member_profile(request, id):
+    info = People.on_site.get(pk=id)
+    csv = CSV.objects.filter(user=info.user)
+    space_csv = ReferenceSpaceCSV.objects.filter(user=info.user)
+    context = { 
+        "navbar": "backend", 
+        "info": info, 
+        "datatables": True, 
+        "volunteers": True,
+        "log": UserLog.objects.filter(user=info.user),
+        "csv": csv, 
+        "space_csv": space_csv, 
+    }
+    return render(request, "core/admin/people.profile.html", context)
 
 @staff_member_required
 def admin_people(request, id=False):
