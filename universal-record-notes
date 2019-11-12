@@ -1,0 +1,33 @@
+
+class UniversalRecord(models.Model):
+    name = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, null=True, blank=True)
+    description = HTMLField(null=True, blank=True)
+    processes = models.ManyToManyField('staf.Process', blank=True, limit_choices_to={'slug__isnull': False})
+    reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True)
+    material_groups = models.ManyToManyField(MaterialGroup, blank=True)
+    references = models.ManyToManyField(Reference, blank=True, limit_choices_to={'status': 'active'})
+    type = models.CharField(max_length=7, choices=RECORD_TYPES, db_index=True)
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        ordering = ["name"]
+
+    twitter = models.CharField(max_length=255, null=True, blank=True)
+    linkedin = models.CharField(max_length=255, null=True, blank=True)
+    researchgate = models.CharField(max_length=255, null=True, blank=True)
+    logo = models.ImageField(null=True, blank=True, upload_to='organizations')
+    ORG_TYPE = (
+        ('academic', 'Research Institution'),
+        ('universities', 'Universities'),
+        ('city_government', 'City Government'),
+        ('regional_government', 'Regional Government'),
+        ('national_government', 'National Government'),
+        ('statistical_agency', 'Statistical Agency'),
+        ('private_sector', 'Private Sector'),
+        ('publisher', 'Publishers'),
+        ('ngo', 'NGO'),
+        ('other', 'Other'),
+    )
+    type = models.CharField(max_length=20, choices=ORG_TYPE)

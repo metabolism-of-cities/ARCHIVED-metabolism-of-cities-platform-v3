@@ -33,6 +33,8 @@ class ReferenceOrgAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    autocomplete_fields = ['reference_spaces', 'references']
+    list_display = ['name', 'start_date', 'end_date', 'type', 'methodologies', 'cityloops']
 
 admin.site.register(Journal)
 admin.site.register(Publisher)

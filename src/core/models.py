@@ -572,6 +572,18 @@ class Project(models.Model):
     references = models.ManyToManyField(Reference, blank=True, limit_choices_to={'status': 'active'})
     material_groups = models.ManyToManyField(MaterialGroup, blank=True)
 
+    funding_program = models.CharField(max_length=255, null=True, blank=True)
+    methodologies = models.TextField(null=True, blank=True)
+    reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type': 3})
+    budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    eu_contribution = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    CITYLOOPS = (
+        ('no', 'No'),
+        ('pending', 'Yes - pending'),
+        ('yes', 'Yes - completed'),
+    )
+    cityloops = models.CharField(max_length=20, choices=CITYLOOPS, null=True, blank=True)
+
     def __str__(self):
         return self.name
 
@@ -642,7 +654,6 @@ class DataViz(models.Model):
         ordering = ["date"]
     def __str__(self):
         return self.title
-
 
 class NewsletterSubscriber(models.Model):
     people = models.ForeignKey(People, on_delete=models.CASCADE)
