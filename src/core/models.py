@@ -572,6 +572,10 @@ class Project(models.Model):
     references = models.ManyToManyField(Reference, blank=True, limit_choices_to={'status': 'active'})
     material_groups = models.ManyToManyField(MaterialGroup, blank=True)
 
+    output_tools = models.TextField(null=True, blank=True)
+    output_reports = models.TextField(null=True, blank=True)
+    output_articles = models.TextField(null=True, blank=True)
+
     funding_program = models.CharField(max_length=255, null=True, blank=True)
     methodologies = models.TextField(null=True, blank=True)
     reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type': 3})
