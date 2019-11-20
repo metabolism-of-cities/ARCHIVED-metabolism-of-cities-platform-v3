@@ -374,9 +374,11 @@ class Method(models.Model):
     based_on = models.TextField(null=True, blank=True)
     gaps_addressed = models.TextField(null=True, blank=True, help_text="What gaps does in other methodologies does this particular methodology address?")
     next_steps = models.TextField(null=True, blank=True,help_text="The proposed next steps to further develop/improve this methodology")
+    representative_paper = models.TextField(null=True, blank=True, help_text="Which paper is a representative case study using this methodology?")
     materials_catalog_used = models.TextField(null=True, blank=True)
     also_known_as = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
+    complete = models.NullBooleanField(null=True, blank=True)
     def __str__(self):
         return self.tag.name
     class Meta:

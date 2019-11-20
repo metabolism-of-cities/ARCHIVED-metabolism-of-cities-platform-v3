@@ -55,13 +55,14 @@ a{color:#1F7A8C;font-weight:bold}
               <th>Next steps</th>
               <th>Materials catalog</th>
               <th>Also known as</th>
+              <th>Representative paper</th>
               <th>Internal notes</th>
             </tr>
           </thead>
           <tbody>
           {% for details in list %}
             <tr>
-              <td><a href="admin/core/method/{{ details.id }}/change/">{{ details.tag|default_if_none:"" }}</a></td>
+              <td {% if details.complete %}style='background:#c4dac4'{% endif %}><a href="admin/core/method/{{ details.id }}/change/">{{ details.tag|default_if_none:"" }}</a></td>
               <td>{{ details.material_scope|default_if_none:"" }}</td>
               <td>{{ details.substances|default_if_none:"" }}</td>
               <td>{{ details.materials|default_if_none:"" }}</td>
@@ -90,6 +91,7 @@ a{color:#1F7A8C;font-weight:bold}
               <td>{{ details.next_steps|default_if_none:"" }}</td>
               <td>{{ details.materials_catalog|default_if_none:"" }}</td>
               <td>{{ details.also_known_as|default_if_none:"" }}</td>
+              <td>{{ details.representative_paper|default_if_none:"" }}</td>
               <td>{{ details.internal_notes|default_if_none:"" }}</td>
 
             </tr>
