@@ -252,7 +252,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                         <li class="dropdown">
                             <a href="{% url 'team:memberprofile' %}" class="text-right" title="User profile">
                                 <span class="ic-user pull-right">
-                                    <i class="fa fa-user"></i>
+                                    <i class="pli-lock-user"></i>
                                 </span>
                             </a>
                         </li>
@@ -266,7 +266,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                         <li class="dropdown">
                             <a href="/accounts/logout" class="text-right" title="Log out">
                                 <span class="ic-user pull-right">
-                                    <i class="fas fa-sign-out-alt"></i>
+                                    <i class="pli-unlock"></i>
                                 </span>
                             </a>
                         </li>{% else %}
@@ -275,14 +275,14 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                           <li class="dropdown">
                               <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                                   <span class="ic-user pull-right">
-                                      <i class="fal fa-user"></i>
+                                      <i class="pli-lock-user"></i>
                                   </span>
                               </a>
 
                               <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                                 <ul class="head-list">
                                   <li>
-                                    <a href="{% url 'core:userdetails' request.user.id %}"><i class="fal fa-user fa-fw"></i> Profile</a>
+                                    <a href="{% url 'core:userdetails' request.user.id %}"><i class="pli-lock-user"></i> Profile</a>
                                   </li>
                                   <li>
                                     <a href="/accounts/logout"><i class="pli-unlock icon-lg icon-fw"></i> Logout</a>
@@ -294,7 +294,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                               <li>
                                 <a href="/accounts/login?next={{ CURRENT_PAGE }}">
                                   <span class="ic-user pull-right">
-                                    <i class="fal fa-user fa-fw"></i>
+                                    <i class="pli-lock-user"></i>
                                   </span>
                                 </a>
                             </li>
@@ -303,7 +303,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, #page-title {
                             <li class="dropdown">
                                 <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                                   <span class="ic-user pull-right">
-                                    <i class="fa fa-palette"></i>
+                                    <i class="pli-palette"></i>
                                   </span>
                                 </a>
 
