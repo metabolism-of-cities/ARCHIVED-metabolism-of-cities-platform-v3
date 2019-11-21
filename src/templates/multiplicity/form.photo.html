@@ -17,7 +17,12 @@
             <div class="alert alert-info">
               Only use {{ title|slugify }}s that have a permissive license (creative commons, public domain, etc.). 
               Do not use {{ title|slugify }}s without a clearly defined permissive license unless you have
-              permission from the creator or if it can be classified as fair use.
+              permission from the creator or if it can be classified as fair use. Recommended sites include:
+              <ul>
+                <li>Wikipedia (check especially <a href="https://commons.wikimedia.org/">Wikimedia Commons</a>)
+                <li><a href="https://www.pexels.com">Pexels</a></li>
+                <li><a href="https://pixabay.com">Pixabay</a></li>
+            </ul>
             </div>
             <form method="post" class="form form-horizontal" enctype="multipart/form-data">
               {% bootstrap_form form layout='horizontal' %}
