@@ -610,7 +610,7 @@ class Project(models.Model):
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        exclude = ['id', 'site',  'references']
+        exclude = ['id', 'site',  'references', 'organizations']
         labels = {
             'name': 'Project title',
             'thesistype': 'Thesis type',

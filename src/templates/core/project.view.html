@@ -16,6 +16,9 @@
 
   <div class="col-lg-8">
       <div class="text-justify">
+        {% if info.logo %}
+          <img src="{{ info.logo.url }}" alt="" />
+        {% endif %}
         <h4>Summary</h4>
         {% if info.active or info.id == 107 %}
           <div>{{ info.description|safe }}</div>
@@ -138,6 +141,9 @@
 .dl dt{margin-top:30px}
 .statusdetails .col-md-4 p:first-child {
   font-weight:bold;
+}
+.text-justify img {
+  max-width:100%;
 }
 
 </style>
