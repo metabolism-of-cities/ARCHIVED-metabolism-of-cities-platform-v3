@@ -4,6 +4,12 @@
 {% block title %}Projects{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
+{% block head %}
+<style type="text/css">
+.table td{white-space: break-spaces}
+</style>
+{% endblock %}
+
 {% block content %}
 
     <ol class="breadcrumb">
@@ -28,16 +34,30 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Type</th>
-                <th>Status</th>
+                {% if tab == 'cityloops' %}
+                  <th>Methodologies</th>
+                  <th>Notes</th>
+                {% else %}
+                  <th>Type</th>
+                  <th>Status</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
             {% for details in list %}
               <tr>
                 <td><a href="{% url 'core:admin_project' details.id %}">{{ details.name|truncatewords:10 }}</a></td>
-                <td>{{ details.get_type_display }}</td>
-                <td>{{ details.get_status_display }}</td>
+                {% if tab == 'cityloops' %}
+                  <td>
+                    {% for method in details.methodologies_tags.all %}
+                      {{ method }}<br>
+                    {% endfor %}
+                  </td>
+                  <td>{{ details.methodologies }}</td>
+                {% else %}
+                  <td>{{ details.get_type_display }}</td>
+                  <td>{{ details.get_status_display }}</td>
+                {% endif %}
               </tr>
             {% endfor %}
             </tbody>
@@ -49,9 +69,6 @@
 </div>
 
 
-{% endblock %}
-
-{% block head %}
 {% endblock %}
 
 {% block sidebar %}

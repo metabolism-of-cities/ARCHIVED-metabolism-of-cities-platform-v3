@@ -1085,9 +1085,9 @@ def admin_project(request, id=False):
         form = ProjectForm()
     if request.method == "POST":
         if not id:
-            form = ProjectForm(request.POST)
+            form = ProjectForm(request.POST, request.FILES)
         else:
-            form = ProjectForm(request.POST, instance=info)
+            form = ProjectForm(request.POST, request.FILES, instance=info)
         if form.is_valid():
             info = form.save(commit=False)
             info.site = request.site
@@ -1344,10 +1344,19 @@ def admin_references(request):
 
 
 def temp_import_projects(request):
+    import datetime
+    list = Project.objects.filter(cityloops="pending", status='ongoing', end_date__lte=datetime.date.today())
+    for details in list:
+        print(details)
+        details.status = 'finished'
+        details.save()
+    return HttpResponse("All good")
+
+    # Delete after Jan 1, 2020
     import codecs
     import csv
     from multiplicity.models import ReferenceSpaceType
-    path = settings.MEDIA_ROOT + "/projects.csv"
+    #path = settings.MEDIA_ROOT + "/projects.csv"
     f = codecs.open(path, encoding="utf-8", errors="strict")
     reader = csv.reader(f)
     count = 0

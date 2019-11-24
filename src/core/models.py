@@ -580,7 +580,7 @@ class Project(models.Model):
 
     funding_program = models.CharField(max_length=255, null=True, blank=True)
     methodologies = models.TextField(null=True, blank=True)
-    methodologies_tags = models.ManyToManyField(Tag, limit_choices_to={'parent_tag__id': 318})
+    methodologies_tags = models.ManyToManyField(Tag, limit_choices_to={'parent_tag__id': 318}, blank=True)
     reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type': 3})
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     CITYLOOPS = (
@@ -589,6 +589,10 @@ class Project(models.Model):
         ('yes', 'Yes - completed'),
     )
     cityloops = models.CharField(max_length=20, choices=CITYLOOPS, null=True, blank=True)
+    logo = StdImageField(upload_to='projects', variations={'thumb': (300, 300), 'large': (800, 800)}, null=True, blank=True)
+    image1 = StdImageField(upload_to='projects', variations={'thumb': (300, 300), 'large': (1600,1600)}, null=True, blank=True)
+    image2 = StdImageField(upload_to='projects', variations={'thumb': (300, 300), 'large': (1600,1600)}, null=True, blank=True)
+    image3 = StdImageField(upload_to='projects', variations={'thumb': (300, 300), 'large': (1600,1600)}, null=True, blank=True)
 
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     objects = models.Manager()
