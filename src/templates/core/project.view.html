@@ -69,6 +69,11 @@
       <a href="{% url 'core:projects' info.type %}" class="btn btn-info">
         Back to list
       </a>
+      {% if request.user.is_staff %}
+        <a href="{% url 'core:admin_project_list' %}" class="btn btn-warning"><i class="psi-lock"></i> Project list</a>
+        <a href="{% url 'core:admin_project_list' 'cityloops' %}" class="btn btn-warning"><i class="psi-lock"></i> Cityloop list</a>
+        <a href="{% url 'core:admin_project' info.id %}" class="btn btn-warning"><i class="psi-pencil"></i> Edit</a>
+      {% endif %}
     </p>
 
 

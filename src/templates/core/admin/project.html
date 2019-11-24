@@ -10,7 +10,8 @@
     <ol class="breadcrumb">
         <li><a href="./"><i class="pli-home"></i></a></li>
         <li><a href="{% url 'team:controlpanel' %}">Back-end</a></li>
-        <li class="active">Project</li>
+        <li><a href="{% url 'core:admin_project_list' %}">Projects</a></li>
+        <li class="active">{{ info|yesno:"Edit details,add new project" }}</li>
     </ol>
 
   <h2>{{ info|yesno:"Edit details,Add new project" }}</h2>
@@ -54,6 +55,8 @@
 $(function(){
   $("#id_start_date").attr("type", "date");
   $("#id_end_date").attr("type", "date");
+  $('#id_methodologies_tags').select2();
+  $('#id_reference_spaces').select2();
   $('#references').select2({
     width: '100%',
     ajax: {

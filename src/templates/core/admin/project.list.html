@@ -6,7 +6,7 @@
 
 {% block head %}
 <style type="text/css">
-.table td{white-space: break-spaces}
+.table td{white-space: normal}
 </style>
 {% endblock %}
 
@@ -46,11 +46,10 @@
             <tbody>
             {% for details in list %}
               <tr>
-                <td><a href="{% url 'core:admin_project' details.id %}">{{ details.name|truncatewords:10 }}</a></td>
+                <td {% if details.cityloops == 'yes' %}style='background:#c4dac4'{% endif %}><a href="{% url 'core:admin_project' details.id %}">{{ details.name|truncatewords:10 }}</a></td>
                 {% if tab == 'cityloops' %}
-                  <td>
-                    {% for method in details.methodologies_tags.all %}
-                      {{ method }}<br>
+                  <td>{% for method in details.methodologies_tags.all %}
+                      - {{ method }}<br>
                     {% endfor %}
                   </td>
                   <td>{{ details.methodologies }}</td>
