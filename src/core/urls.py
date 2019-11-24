@@ -225,4 +225,6 @@ urlpatterns = [
     path('admin/organizations/create', views.admin_organization, name='admin_organization'),
     path('admin/organizations/create/<slug:slug>', views.admin_organization, name='admin_organization_referencespace'),
 
+    path('temp/import/', views.temp_import_projects),
+
 ]

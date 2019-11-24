@@ -1114,7 +1114,8 @@ def admin_project_list(request, status="published"):
         list = Project.on_site.filter(active=False, pending_review=False)
     elif status == "pending":
         list = Project.on_site.filter(pending_review=True)
-
+    elif status == "cityloops":
+        list = Project.on_site.filter(Q(cityloops="pending")|Q(cityloops="yes"))
     context = { "navbar": "backend", "list": list, "datatables": True, "tab": status }
     return render(request, "core/admin/project.list.html", context)
 
@@ -1341,3 +1342,88 @@ def admin_references(request):
     context = { "navbar": "backend", "list": list, "datatables": True }
     return render(request, "core/admin/references.list.html", context)
 
+
+def temp_import_projects(request):
+    import codecs
+    import csv
+    from multiplicity.models import ReferenceSpaceType
+    path = settings.MEDIA_ROOT + "/projects.csv"
+    f = codecs.open(path, encoding="utf-8", errors="strict")
+    reader = csv.reader(f)
+    count = 0
+    for row in reader:
+        count += 1
+        if count > 3:
+            funder = row[0]
+            shortname = row[1]
+            check = Project.objects.filter(Q(name=row[1])|Q(name=row[5]))
+            try:
+                budget = Decimal(row[23] * 1)
+            except:
+                budget = None
+            site = Site.objects.get_current()
+            if check:
+                info = check[0]
+            else:
+                info = Project.objects.create(
+                    name = row[1],
+                    full_name = row[5],
+                    email = row[9],
+                    start_date = row[3],
+                    end_date = row[4],
+                    type = 'projects',
+                    url = row[2],
+                    site = site,
+                )
+            info.budget = budget
+            info.cityloops = 'pending'
+            info.output_tools = row[11]
+            info.output_reports = row[12]
+            info.output_articles = row[13]
+            info.funding_program = row[0]
+            info.methodologies = row[14]
+            info.material_temp_notes = row[7]
+            info.supervisor = row[8]
+            if not info.description:
+                info.description = row[25]
+            info.internal_notes = 'Aim: \n' + row[6] + '\n\nData: \n' + row[15] + '\n\nComments:\n' + row[16] + '\n\nRelevance:\n' + row[17]
+            info.save()
+
+            city_type = ReferenceSpaceType.objects.get(pk=3)
+            if row[19]:
+                cities = row[19]
+                all = cities.split(";")
+                for details in all:
+                    details = details.strip()
+                    if details:
+                        s = details.split(",")
+                        country = s[1].strip()
+                        if country == "UK":
+                            country = "United Kingdom"
+                        if country == "USA":
+                            country = "United States of America"
+                        city = s[0].strip()
+                        search = ReferenceSpace.objects.filter(name=country)
+                        if search.count() > 1:
+                            print("More than one for " + country)
+                        elif not search:
+                            print("Did not find " + country)
+                        country = search[0]
+                        search = ReferenceSpace.objects.filter(name=city)
+                        if search.count() > 1:
+                            print("More than one for " + city)
+                        elif not search:
+                            print("Did not find " + city)
+                            city = ReferenceSpace.objects.create(
+                                name = city,
+                                country = country,
+                                type = city_type,
+                                parent = country,
+                            )
+                        else:
+                            city = search[0]
+                        info.reference_spaces.add(city)
+            info.save()
+                            
+
+    return HttpResponse("All good")

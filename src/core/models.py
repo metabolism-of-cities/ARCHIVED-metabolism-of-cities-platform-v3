@@ -536,6 +536,7 @@ class Color(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
+    full_name = models.CharField(max_length=255, null=True, blank=True)
     institution = models.CharField(max_length=255, null=True, blank=True)
     organizations = models.ManyToManyField(Organization, through='ProjectOrganization', blank=True)
     researcher = models.CharField(max_length=255, null=True, blank=True)
@@ -567,12 +568,11 @@ class Project(models.Model):
         ('other', 'Other'),
     )
     thesistype = models.CharField(max_length=20, choices=THESISTYPE, null=True, blank=True)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    objects = models.Manager()
-    on_site = CurrentSiteManager()
     url = models.CharField(max_length=255, null=True, blank=True)
     references = models.ManyToManyField(Reference, blank=True, limit_choices_to={'status': 'active'})
     material_groups = models.ManyToManyField(MaterialGroup, blank=True)
+    material_temp_notes = models.TextField(null=True, blank=True)
+    internal_notes = models.TextField(null=True, blank=True)
 
     output_tools = models.TextField(null=True, blank=True)
     output_reports = models.TextField(null=True, blank=True)
@@ -580,15 +580,19 @@ class Project(models.Model):
 
     funding_program = models.CharField(max_length=255, null=True, blank=True)
     methodologies = models.TextField(null=True, blank=True)
+    methodologies_tags = models.ManyToManyField(Tag, limit_choices_to={'parent_tag__id': 318})
     reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type': 3})
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    eu_contribution = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     CITYLOOPS = (
         ('no', 'No'),
         ('pending', 'Yes - pending'),
         ('yes', 'Yes - completed'),
     )
     cityloops = models.CharField(max_length=20, choices=CITYLOOPS, null=True, blank=True)
+
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
 
     def __str__(self):
         return self.name

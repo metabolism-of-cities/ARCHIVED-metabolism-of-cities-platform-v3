@@ -18,6 +18,7 @@
             <li {% if tab == 'published' %} class="active"{% endif %}><a href="{% url 'core:admin_project_list' 'published' %}">Published</a></li>
             <li {% if tab == 'pending' %} class="active"{% endif %}><a href="{% url 'core:admin_project_list' 'pending' %}">Pending review</a></li>
             <li {% if tab == 'deleted' %} class="active"{% endif %}><a href="{% url 'core:admin_project_list' 'deleted' %}">Deleted</a></li>
+            <li {% if tab == 'cityloops' %} class="active"{% endif %}><a href="{% url 'core:admin_project_list' 'cityloops' %}">CityLoops</a></li>
           </ul>
 
   <div class="row">
