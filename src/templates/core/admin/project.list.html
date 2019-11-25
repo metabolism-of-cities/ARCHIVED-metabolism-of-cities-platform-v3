@@ -52,7 +52,13 @@
                       - {{ method }}<br>
                     {% endfor %}
                   </td>
-                  <td>{{ details.methodologies }}</td>
+                  <td>{{ details.methodologies|linebreaksbr }}
+                  {% if details.methodologies_processing_notes %}
+                  <br>
+                  <strong>Processing notes:</strong><br>
+                  {{ details.methodologies_processing_notes|linebreaksbr }}
+                  {% endif %}
+                  </td>
                 {% else %}
                   <td>{{ details.get_type_display }}</td>
                   <td>{{ details.get_status_display }}</td>
