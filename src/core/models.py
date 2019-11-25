@@ -580,6 +580,7 @@ class Project(models.Model):
 
     funding_program = models.CharField(max_length=255, null=True, blank=True)
     methodologies = models.TextField(null=True, blank=True)
+    methodologies_processing_notes = models.TextField(null=True, blank=True)
     methodologies_tags = models.ManyToManyField(Tag, limit_choices_to={'parent_tag__id': 318}, blank=True)
     reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type': 3})
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
