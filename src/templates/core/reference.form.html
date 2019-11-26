@@ -15,9 +15,6 @@
     <li><a href="{% url "core:editreference_multiplicity" info.id %}">MultipliCity settings</a></li>
   </ul>
 {% endif %}
-
-
-
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-body">
@@ -30,7 +27,35 @@
             {{ page.content|safe }}
           </div>
 
-          <form method="post" class="form form-horizontal" enctype="multipart/form-data">
+          {% if not info %}
+          </div>
+          </div>
+            <ul class="nav nav-tabs toggleform">
+              <li class="active"><a data-id="showform" href="#">Fill out form</a></li>
+              <li><a href="#" data-id="showbibtex">Load from Bibtex</a></li>
+            </ul>
+        <div class="panel">
+        <div class="panel-body">
+
+          <form method="post" class="form togglethis showbibtex form-horizontal">
+            <p>Past your BibTeX reference here, and will will try to populate all the form fields based on this information.</p>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">BibTex</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" name="bibtex"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Load</button>
+              </div>
+            </div>
+            {% csrf_token %}
+          </form>
+
+          {% endif %}
+
+          <form method="post" class="form form-horizontal togglethis showform" enctype="multipart/form-data">
             {% csrf_token %}
             {% bootstrap_form form layout='horizontal' %}
 
@@ -71,6 +96,7 @@
 <style type="text/css">
 textarea[name='authorlist']{height:100px}
 .panel-body form{margin-top:20px}
+.showbibtex{display:none}
 </style>
 {% endblock %}
 
@@ -146,6 +172,16 @@ textarea[name='authorlist']{height:100px}
     $("select[name=type]").change();
     $("input[name=title]").attr("placeholder", "Do not write in all-caps");
     $("textarea[name=authorlist]").attr("placeholder", "Add all authors, preferably in this format: Last Name, First name; Last Name, First Name");
+
+
+    $(".toggleform a").click(function(e){
+      e.preventDefault();
+      var id = $(this).data("id");
+      $(".togglethis").hide();
+      $("."+id).show();
+      $(".toggleform li").removeClass("active");
+      $(this).closest("li").addClass('active');
+    });
   });
   </script>
 {% endblock %}

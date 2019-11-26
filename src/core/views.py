@@ -461,10 +461,51 @@ def referenceform(request, id=False, dataset=False):
     else:
         info = False
         if request.user.is_staff:
-            form = ReferenceFormAdmin(initial={"language": "EN", "status": "active", "tags": main_filter})
+            initial={"language": "EN", "status": "active", "tags": main_filter}
         else:
-            form = ReferenceForm()
-    if request.method == "POST":
+            initial = {}
+        if request.method == "POST" and "bibtex" in request.POST:
+            bibtex = request.POST["bibtex"]
+            lines = bibtex.splitlines()
+            for line in lines:
+                s = line.strip()
+                if s[0] == "@":
+                    type_id = None
+                    value = s[s.find("@")+1:s.find("{")]
+                    if value == "article":
+                        type_id = 16
+                    elif value == "report":
+                        type_id = 27
+                    elif value == "book":
+                        type_id = 5
+                    elif value == "thesis":
+                        type_id = 29
+                    if type_id:
+                        initial["type"] = ReferenceType.objects.get(pk=type_id)
+                location_equal = s.find("=")
+                if location_equal:
+                    label = s[0:location_equal]
+                    value = s[s.find("{")+1:s.find("}")]
+                    if label == "title":
+                        initial["title"] = value
+                    elif label == "author":
+                        initial["authorlist"] = value
+                    elif label == "journal":
+                        find = Journal.objects.filter(name=value)
+                        if find:
+                            initial["journal"] = find[0]
+                    elif label == "year":
+                        initial["year"] = value
+                    elif label == "abstract":
+                        initial["abstract"] = value
+                    elif label == "doi":
+                        initial["doi"] = value
+            messages.warning(request, "The form has been loaded with the BibTeX information, please review and complete the form below.")
+        if request.user.is_staff:
+            form = ReferenceFormAdmin(initial=initial)
+        else:
+            form = ReferenceForm(initial=initial)
+    if request.method == "POST" and not "bibtex" in request.POST:
         title = request.POST["title"]
         title = title.strip()
         error = False
@@ -671,7 +712,6 @@ def references(request, type=False, tag=False, all=False):
 
     cities_list = Reference.objects.filter(status="active", tags__id=main_filter, spaces__type__id=type_id).prefetch_related('spaces')
     show = cities_list.all().query
-    print(show)
     cities = defaultdict(dict)
     cities_references = {}
 
@@ -1347,7 +1387,6 @@ def temp_import_projects(request):
     import datetime
     list = Project.objects.filter(cityloops="pending", status='ongoing', end_date__lte=datetime.date.today())
     for details in list:
-        print(details)
         details.status = 'finished'
         details.save()
     return HttpResponse("All good")
