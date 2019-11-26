@@ -414,6 +414,7 @@ class Reference(models.Model):
     date_added = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     file = models.FileField(null=True, blank=True, upload_to='references', help_text='Only upload the file if you are the creator or you have permission to do so')
     open_access = models.NullBooleanField(null=True, blank=True)
+    cityloops = models.BooleanField(default=False)
     url = models.CharField(max_length=255, null=True, blank=True)
     doi = models.CharField(max_length=255, null=True, blank=True)
     isbn = models.CharField(max_length=255, null=True, blank=True)

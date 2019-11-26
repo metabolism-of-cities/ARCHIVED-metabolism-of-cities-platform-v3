@@ -32,7 +32,8 @@
             </thead>
             <tbody>
             {% for details in list %}
-              <tr>
+              {% if national not in details.tags.all %}
+              <tr {% if details.cityloops %}style='background:#c4dac4'{% endif %}>
                 <td>{{ details.id }}</td>
                 <td><a href="{% url 'core:admin_reference' details.id %}">{{ details }}</a></td>
                 <td>{{ details.year }}</td>
@@ -48,6 +49,7 @@
                 <td></td>
                 {% endif %}
               </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
           </table>

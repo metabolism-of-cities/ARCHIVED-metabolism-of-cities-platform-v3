@@ -7,3 +7,4 @@ Pillow
 django_cron
 python-dateutil
 django-stdimage
+PyPDF2

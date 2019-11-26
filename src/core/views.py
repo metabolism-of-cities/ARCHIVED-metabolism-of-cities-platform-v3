@@ -560,8 +560,13 @@ def referenceform(request, id=False, dataset=False):
                 )
 
             if request.user.is_authenticated:
-                messages.success(request, "Information was saved.")
-                return redirect("core:reference", id=info.id)
+                if "cityloops" in request.POST:
+                    info.cityloops = True
+                    info.save()
+                    return redirect(reverse("core:editreference_tags", args=[info.id]) + "?analyze=true")
+                else:
+                    messages.success(request, "Information was saved.")
+                    return redirect("core:reference", id=info.id)
             else:
                 messages.success(request, "Thanks, the record has been added! Our team will review this and notify you when it has been activated. Use the form below if you would like to add another record.")
                 return redirect("core:newreference")
@@ -612,14 +617,74 @@ def referenceform_tags(request, id):
         selected = request.POST.getlist("tags")
         for tag in selected:
             info.tags.add(Tag.objects.get(pk=tag))
+
         messages.success(request, "Information was saved.")
-        return redirect("core:editreference_multiplicity", id=info.id)
+        if "spaces" in request.POST:
+            info.spaces.clear()
+            selected = request.POST.getlist("spaces")
+            for spaces in selected:
+                info.spaces.add(ReferenceSpace.objects.get(pk=spaces))
+        else:
+            return redirect("core:editreference_multiplicity", id=info.id)
+    case_sensitive = ''
+    case_insensitive = ''
+    if "analyze" in request.GET:
+        import PyPDF2
+        tags = Tag.objects.filter(parent_tag__id=318)
+        list = ["methodology", "methodologies"]
+        for details in tags:
+            name = details.name
+            for char in "&,.!;:-/\\":
+                name = name.replace(char,'').replace(" ", "")
+            s = name
+            location = s.find("(")
+            if location > 0:
+                name = s[0:location]
+                abbreviation = s[s.find("(")+1:s.find(")")]
+                list.append(abbreviation)
+            list.append(name)
+        file = info.file
+        if file:
+
+            pdfFileObj = open(file.path,'rb')
+            pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+            num_pages = pdfReader.numPages
+            count = 0
+            text = ""#The while loop will read each page
+            while count < num_pages:
+                pageObj = pdfReader.getPage(count)
+                count +=1
+                text += pageObj.extractText()
+            for char in "&,.!;:-/\\":
+                text = text.replace(char,'')
+            text = text.replace(" ", "")
+            text = text.replace("\n", "").replace("\r", "").replace("ß", "fl")
+            case_sensitive = ''
+            case_insensitive = ''
+            for method in list:
+                location = text.find(method)
+                if location > 0:
+                    blurb = text[location-100:location+100] + "<br>"
+                    case_sensitive += "<li>" + blurb.replace(method, '<span class="highlight">' + method + '</span>') + "</li>"
+            lower = text.lower()
+            for method in list:
+                method = method.lower()
+                location = lower.find(method)
+                if location > 0:
+                    blurb = text[location-100:location+100] + "<br>"
+                    case_insensitive += "<li>" + blurb.replace(method, '<span class="highlight">' + method + '</span>') + "</li>"
+    if request.site.id == 1:
+        tags = Tag.objects.filter(parent_tag__isnull=False)
+    else:
+        tags = Tag.objects.filter(hidden=False, parent_tag__isnull=False)
     context = { 
         "navbar": "backend", 
-        "tags": Tag.objects.filter(hidden=False, parent_tag__isnull=False), 
+        "tags": tags,
         "info": info, 
         "parent_tags": Tag.objects.filter(parent_tag__isnull=True, hidden=False), 
         "select2": True,
+        "case_sensitive": case_sensitive,
+        "case_insensitive": case_insensitive,
     }
     return render(request, "core/admin/reference.tags.html", context)
 
@@ -1379,7 +1444,17 @@ def admin_article(request, id=False, type=False, parent=False):
 @staff_member_required
 def admin_references(request):
     list = Reference.objects.all()
-    context = { "navbar": "backend", "list": list, "datatables": True }
+    site = Site.objects.get_current()
+    # Temporary
+    # CityLoops
+    # Take out national
+    if site.id == 1:
+        list = list.exclude(tags__name="National").exclude(tags__name="Global")
+    context = { 
+        "navbar": "backend", 
+        "list": list, 
+        "datatables": True,
+    }
     return render(request, "core/admin/references.list.html", context)
 
 

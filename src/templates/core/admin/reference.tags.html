@@ -34,6 +34,21 @@
 
   <h2>Edit tags</h2>
 
+  {% if request.GET.analyze %}
+    {{ info.abstract|linebreaksbr }}<br><br>
+  {% endif %}
+
+  <h3>Automated lookup - case sensitive</h3>
+  
+  <ol>
+  {{ case_sensitive|safe }}
+  </ol>
+
+  <h3>Automated lookup - case insensitive</h3>
+  <ol>
+  {{ case_insensitive|safe }}
+  </ol>
+
   <form method="post" class="form form-horizontal">
     <div class="form-group">
       <label class="col-sm-2 control-label">Tags</label>
@@ -45,6 +60,20 @@
         </select>
       </div>
     </div>
+
+    {% if request.GET.analyze %}
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Spaces</label>
+      <div class="col-sm-10">
+        <select name="spaces" class="form-control" multiple id="spaces">
+          {% for details in info.spaces.all %}
+            <option selected value="{{ details.id }}">{{ details.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    {% endif %}
+
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         {% csrf_token %}
@@ -68,6 +97,8 @@
 <style type="text/css">
 #tree{overflow:hidden}
 #details{margin-top:20px}
+span.highlight{background:yellow;padding:0 10px}
+ol li{word-wrap: break-word;}
 </style>
 {% endblock %}
 
@@ -101,6 +132,19 @@ $(function(){
         var node = data.node;
       },
 		});
+
+  $('#spaces').select2({
+    width: '100%',
+    ajax: {
+      url: '{% url 'multiplicity:referencespace_search_ajax' %}',
+      dataType: 'json',
+      processResults: function (data) {
+        return {
+          results: data
+        };
+      },
+    }
+  });
     
 });
 
