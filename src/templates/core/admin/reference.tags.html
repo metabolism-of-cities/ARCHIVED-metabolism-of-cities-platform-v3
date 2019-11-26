@@ -5,6 +5,16 @@
 {% block title %}Tags{% endblock %}
 {% block container %}stretch-bg-head{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/skin-lion/ui.fancytree.min.css" />
+<style type="text/css">
+#tree{overflow:hidden}
+#details{margin-top:20px}
+span.highlight{background:yellow;padding:0 10px}
+ol li{word-wrap: break-word;}
+</style>
+{% endblock %}
+
 {% block pagehead %}
 <div id="page-head">
     
@@ -90,16 +100,6 @@
 
   <p><a href="{% url 'core:admin_tag_list' %}" target="_blank">Edit tag list</a></p>
 
-{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mar10/fancytree@2/dist/skin-lion/ui.fancytree.min.css" />
-<style type="text/css">
-#tree{overflow:hidden}
-#details{margin-top:20px}
-span.highlight{background:yellow;padding:0 10px}
-ol li{word-wrap: break-word;}
-</style>
 {% endblock %}
 
 {% block sidebar %}
