@@ -619,6 +619,9 @@ def referenceform_tags(request, id):
             info.tags.add(Tag.objects.get(pk=tag))
 
         messages.success(request, "Information was saved.")
+        if "cityloops_comments" in request.POST:
+            info.cityloops_comments = request.POST["cityloops_comments"]
+            info.save()
         if "spaces" in request.POST:
             info.spaces.clear()
             selected = request.POST.getlist("spaces")

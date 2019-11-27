@@ -35,7 +35,14 @@
               {% if national not in details.tags.all %}
               <tr {% if details.cityloops %}style='background:#c4dac4'{% endif %}>
                 <td>{{ details.id }}</td>
-                <td><a href="{% url 'core:admin_reference' details.id %}">{{ details }}</a></td>
+                <td>
+                  <a href="{% url 'core:admin_reference' details.id %}">{{ details }}</a>
+                  {% if details.cityloops_comments %}
+                  <br><br>
+                  <strong>Cityloops comments:</strong><br>
+                  {{ details.cityloops_comments|linebreaksbr }}
+                  {% endif %}
+                </td>
                 <td>{{ details.year }}</td>
                 <td>{{ details.type }}</td>
                 <td>{{ details.status }}</td>
