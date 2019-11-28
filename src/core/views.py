@@ -485,6 +485,7 @@ def referenceform(request, id=False, dataset=False):
                 location_equal = s.find("=")
                 if location_equal:
                     label = s[0:location_equal]
+                    label = label.strip()
                     value = s[s.find("{")+1:s.find("}")]
                     if label == "title":
                         initial["title"] = value
