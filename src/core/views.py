@@ -469,7 +469,7 @@ def referenceform(request, id=False, dataset=False):
             lines = bibtex.splitlines()
             for line in lines:
                 s = line.strip()
-                if s[0] == "@":
+                if s and s[0] == "@":
                     type_id = None
                     value = s[s.find("@")+1:s.find("{")]
                     if value == "article":
