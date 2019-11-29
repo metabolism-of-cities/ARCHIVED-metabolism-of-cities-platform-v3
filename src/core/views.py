@@ -816,6 +816,30 @@ def references(request, type=False, tag=False, all=False):
     }
     return render(request, "core/references.list.html", context)
 
+def case_studies(request):
+    list = Reference.objects.all()
+
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+        article_id = 224
+        type_id = 3 # The ID of reference type = city
+    else:
+        main_filter = 219 # Island system
+        article_id = 200
+        type_id = 21 # The ID of reference type = island
+    list = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags__id=1).order_by("-year").prefetch_related("tags").prefetch_related("spaces")
+
+    context = { 
+        "section": "resources",
+        "list": list, 
+        "title": "Case studies", 
+        "page": get_object_or_404(Article, pk=article_id),
+        "methodologies": Tag.objects.filter(parent_tag__id=318, hidden=False),
+        "type_id": type_id,
+        "datatables": True,
+    }
+    return render(request, "core/references.casestudies.html", context)
+
 def references_old(request, type=False, tag=False):
     title = "Publications"
     list = None
@@ -1567,13 +1591,36 @@ def temp_import_references(request):
     for line in lines:
         count += 1
         if line:
-            megastring += line
+            megastring += " " + line
         
     import re
 
     x = re.split("([0-9][0-9][0-9][0-9]\.)", megastring)
     for details in x:
-        print(details)
+        getlength = len(details)
+        details = details.strip()
+        if getlength > 50:
+            start = details[0:40]
+            print(start)
+            search = Reference.objects.filter(title__icontains=start)
+            if search.count() == 1:
+                s = search[0]
+                print(s)
+            elif search.count() > 1:
+                print("--------------")
+                print("More than one!")
+            else:
+                start = details[30:45]
+                search = Reference.objects.filter(title__icontains=start)
+                if search.count() == 1:
+                    s = search[0]
+                    print(s)
+                elif search.count() > 1:
+                    print("--------------")
+                    print("More than one!")
+                    print(start)
+                else:
+                    print("NOTHING!!!")
 
     #print(matches)
     context = { 

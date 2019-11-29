@@ -1,0 +1,250 @@
+{% extends 'multiplicity/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block container %}stretch-bg-head{% endblock %}
+
+{% block content %}
+
+<div class="col-lg-12" id="introduction">
+  <h2>Introduction</h2>
+  {{ page.content|safe }}
+</div>
+
+<div class="col-lg-12" id="browse">
+  <h2>Browse</h2>
+
+  <p class="alert alert-info">
+    <strong>{{ list.count }}</strong> publication(s) found.
+  </p>
+
+  <p>
+    <input class="search form-control fuzzy-search" id="search_box" placeholder="Search" />
+  </p>
+
+  <p>
+    <button class="sort btn btn-default" data-sort="title">
+      Sort A...Z
+    </button>
+    <button class="sort btn btn-default" data-sort="year">
+      Sort by year
+    </button>
+  </p>
+
+  <table class="table table-striped datatable">
+    <thead>
+      <tr>
+        <th class="hidden-title"></th>
+        <th>Title</th>
+        <th>Methodology</th>
+        <th>City</th>
+        <th>Year</th>
+      </tr>
+    </thead>
+    <tbody class="list">
+    {% for details in list %}
+      <tr>
+        <td class="hidden-title">
+        {{ details.title }}
+        {{ details.abstract }}
+        {{ details.abstract_original_language }}
+        </td>
+        <td><a href="{% url 'core:reference' details.id %}"><span class="title">{{ details.title }}</span></a></td>
+        <td class="tags">
+          <div class="taglist">
+          {% for tag in details.tags.all %}
+            {% if tag.parent_tag.id == 318 %}
+              <div><span class="label label-default">{{ tag }}</span></div>
+            {% endif %}
+          {% endfor %}
+          </div>
+        </td>
+        <td class="tags">
+          <div class="taglist">
+          {% for space in details.spaces.all %}
+            {% if space.type.id == type_id %}
+              <div><span class="label label-default">{{ space.name }}</span></div>
+              <span style="display:none">{{ space.country.name }}</span>
+            {% endif %}
+          {% endfor %}
+          </div>
+        </td>
+        <td class="year">{{ details.year }}</td>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <ul class="pagination"></ul>
+
+</div>
+
+  <h3>View map</h3>
+
+  <p>The map below indicates the cities linked to publications in our database.</p>
+
+  <div id="map"></div>
+
+
+</div>
+
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
+<style type="text/css">
+
+#map{height:600px;border:1px solid #ccc}
+
+.multicolumn {
+  -moz-column-count: 3;
+  -moz-column-gap: 10px;
+  -webkit-column-count: 3;
+  -webkit-column-gap: 10px;
+  column-count: 3;
+  column-gap: 10px;
+}
+.section-menu {
+  margin-top: 30px;
+}
+.section-menu a:hover {
+  cursor: pointer;
+}
+section.cities, section.search {
+  margin-top: 50px;
+}
+.file-list-loading {
+  display: none;
+}
+.filter { 
+  margin-bottom: 15px;
+}
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+  border: none;
+}
+a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+  color: #fff !important;
+}
+#placeholder {
+  height: 430px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.sort:after {
+  display:inline-block;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  content:"";
+  position: relative;
+  top:-10px;
+  right:-5px;
+}
+.sort.asc:after {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #333;
+  content:"";
+  position: relative;
+  top:4px;
+  right:-5px;
+}
+.sort.desc:after {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #333;
+  content:"";
+  position: relative;
+  top:-4px;
+  right:-5px;
+}
+
+.hidden-type, .hidden-title {
+  display:none;
+}
+
+.main-content-block #browse .pagination .active a{
+  color:#fff;
+}
+#browse input.form-control {
+  border-color: #333;
+  margin-bottom: 10px;
+}
+.leaflet-popup-content ul {
+  padding-left:0;
+}
+.leaflet-popup-content li {
+  list-style: none;
+  text-align: left;
+}
+table.dataTable {
+  white-space: normal;
+}
+
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'multiplicity/sidebar.default.html' %}
+
+{% endblock %}
+
+{% block pagehead %}
+<div id="page-head">
+
+    <div id="page-title">
+        <h1 class="page-header text-overflow">{{ title }}</h1>
+    </div>
+
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="pli-home"></i></a></li>
+        <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+        <li class="active">{{ title }}</li>
+    </ol>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+
+<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+<script type="text/javascript">
+
+  var map = L.map('map').setView([20, 0], 2);
+  {% include 'multiplicity/includes/markers.html' %}
+
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ MAPBOX_API_KEY }}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+      '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    {% if page == "satellite" %}
+      id: 'mapbox.satellite'
+    {% else %}
+      id: 'mapbox.streets'
+    {% endif %}
+  }).addTo(map);
+
+    {% for key,space in cities.items %}
+      {% if space.location.lat %}
+        L.marker([{{ space.location.lat }}, {{ space.location.lng }}], {icon:orangemarker})
+        .bindPopup("<b>{{ space.name }}</b><ul>{% for reference in cities_references|get_item:key %}<li><a href='{% url 'core:reference' reference.id %}'>{{ reference }}</a> ({{ reference.year }})</li>{%endfor %}</ul>", {minWidth:200})
+        .addTo(map);
+
+      {% endif %}
+    {% endfor %}
+
+    map.scrollWheelZoom.disable();
+
+</script>
+
+{% endblock %}

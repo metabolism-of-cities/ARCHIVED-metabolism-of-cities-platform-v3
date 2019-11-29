@@ -170,6 +170,7 @@ urlpatterns = [
     path('resources/reports', views.references, {'type': 27}),
     path('resources/presentations', views.references, {'type': 25}),
     path('resources/publications', views.references, name='references'),
+    path('resources/publications/casestudies', views.case_studies, name='case_studies'),
     path('resources/publication/<int:id>', views.reference),
     path('resources/publications/<int:id>', views.reference, name='reference'),
     path('resources/publications/<int:id>/edit', views.referenceform, name='editreference'),
