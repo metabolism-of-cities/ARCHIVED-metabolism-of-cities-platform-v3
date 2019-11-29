@@ -1596,6 +1596,7 @@ def temp_import_references(request):
     import re
 
     x = re.split("([0-9][0-9][0-9][0-9]\.)", megastring)
+    total = 0
     for details in x:
         getlength = len(details)
         details = details.strip()
@@ -1604,6 +1605,7 @@ def temp_import_references(request):
             print(start)
             search = Reference.objects.filter(title__icontains=start)
             if search.count() == 1:
+                total += 1
                 s = search[0]
                 print(s)
             elif search.count() > 1:
@@ -1613,6 +1615,7 @@ def temp_import_references(request):
                 start = details[30:45]
                 search = Reference.objects.filter(title__icontains=start)
                 if search.count() == 1:
+                    total += 1
                     s = search[0]
                     print(s)
                 elif search.count() > 1:
@@ -1622,8 +1625,47 @@ def temp_import_references(request):
                 else:
                     print("NOTHING!!!")
 
+    print("TOTAL: " + str(total))
     #print(matches)
     context = { 
         "list": x,
     }
     return render(request, "core/temp.html", context)
+
+def zotero_import(request):
+    import requests
+    from django.conf import settings
+    url = "https://api.zotero.org/groups/2381279/items?limit=100"
+    key = settings.ZOTERO_API
+    headers = {
+        "Zotero-API-Version": "3",
+        "Zotero-API-Key": key,
+    }
+    try:
+        info = requests.get(url, headers=headers)
+        if info.status_code == 200:
+            results = info.json()
+            #print(results)
+            count = 0
+            total_results = info.headers["Total-Results"]
+            link = info.headers["Link"]
+            print(link)
+            print("TOTAL: " + str(total_results))
+            print("-----------------")
+            for details in results:
+                count += 1
+                #print(details)
+                data = details["data"]
+                if "title" in data:
+                    if data["itemType"] != "attachment":
+                        print(data["title"])
+                        print(data["itemType"])
+            print("TOTAL: " + str(count))
+        else:
+            print("Status code not 200!")
+            print("Will not proceed")
+            print(info.status_code)
+    except Exception as e:
+        print("Error!")
+        print(e)
+    return HttpResponse("All good")

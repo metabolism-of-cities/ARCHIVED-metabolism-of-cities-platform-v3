@@ -16,19 +16,7 @@
 
   <p class="alert alert-info">
     <strong>{{ list.count }}</strong> publication(s) found.
-  </p>
-
-  <p>
-    <input class="search form-control fuzzy-search" id="search_box" placeholder="Search" />
-  </p>
-
-  <p>
-    <button class="sort btn btn-default" data-sort="title">
-      Sort A...Z
-    </button>
-    <button class="sort btn btn-default" data-sort="year">
-      Sort by year
-    </button>
+    <span class="pull-right">Search by {{ SYSTEM }}, methodology, country... ↷</span>
   </p>
 
   <table class="table table-striped datatable">
@@ -53,7 +41,7 @@
         <td class="tags">
           <div class="taglist">
           {% for tag in details.tags.all %}
-            {% if tag.parent_tag.id == 318 %}
+            {% if tag.parent_tag.id == 318 and tag.id != 1 %}
               <div><span class="label label-default">{{ tag }}</span></div>
             {% endif %}
           {% endfor %}
@@ -125,49 +113,6 @@ section.cities, section.search {
 a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
   color: #fff !important;
 }
-#placeholder {
-  height: 430px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  opacity: 0.7;
-}
-
-.sort:after {
-  display:inline-block;
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  content:"";
-  position: relative;
-  top:-10px;
-  right:-5px;
-}
-.sort.asc:after {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #333;
-  content:"";
-  position: relative;
-  top:4px;
-  right:-5px;
-}
-.sort.desc:after {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid #333;
-  content:"";
-  position: relative;
-  top:-4px;
-  right:-5px;
-}
 
 .hidden-type, .hidden-title {
   display:none;
@@ -189,6 +134,9 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 }
 table.dataTable {
   white-space: normal;
+}
+.dataTables_filter input {
+  border-bottom:1px solid #000;
 }
 
 </style>
