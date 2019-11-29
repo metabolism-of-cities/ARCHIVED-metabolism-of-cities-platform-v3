@@ -128,7 +128,7 @@ def team(request):
         list = People.objects.exclude(member_since__isnull=True).exclude(site__id=2).order_by("member_since")
     else:
         page = Article.objects.get(pk=192)
-        ids = [1150,282,186,934,926,95,1165,927,1209,1169,1228]
+        ids = [1150,282,186,934,926,95,1165,927,1209,1169,1228,1307]
         list = People.objects.filter(pk__in=ids).order_by("-firstname")
     context = { "section": "about", "list": list, "page": page }
     return render(request, "core/team.html", context)
@@ -1554,3 +1554,29 @@ def temp_import_projects(request):
                             
 
     return HttpResponse("All good")
+
+
+def temp_import_references(request):
+
+    # Delete after Jan 1, 2020
+    path = settings.MEDIA_ROOT + "/references.txt"
+    contents =  open(path, "r").read()
+    lines = contents.splitlines()
+    megastring = ""
+    count = 0
+    for line in lines:
+        count += 1
+        if line:
+            megastring += line
+        
+    import re
+
+    x = re.split("([0-9][0-9][0-9][0-9]\.)", megastring)
+    for details in x:
+        print(details)
+
+    #print(matches)
+    context = { 
+        "list": x,
+    }
+    return render(request, "core/temp.html", context)
