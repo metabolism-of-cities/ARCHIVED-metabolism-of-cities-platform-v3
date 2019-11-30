@@ -1497,6 +1497,80 @@ def admin_references(request):
     }
     return render(request, "core/admin/references.list.html", context)
 
+def findReference(title, doi=None):
+    title = title.strip()
+    # DOI is the most unique, so if present, use that
+    if doi:
+        list = Reference.objects.filter(doi=doi)
+        if list.count() == 1:
+            return list[0]
+        elif list.count() > 1:
+            list = list.filter(status="active")
+            if list.count() == 1:
+                return list[0]
+    # Let's try the title instead
+    list = Reference.objects.filter(title=title)
+    if list.count() == 1:
+        return list[0]
+    elif list.count() > 1:
+        list = list.filter(status="active")
+        if list.count() == 1:
+            return list[0]
+    # Let's try the first 20 chars of the title (still unique enough but less chances of misspelling etc)
+    list = Reference.objects.filter(title__icontains=title[0:20])
+    if list.count() == 1:
+        return list[0]
+    elif list.count() > 1:
+        list = list.filter(status="active")
+        if list.count() == 1:
+            return list[0]
+    return False
+
+def zotero_import(request):
+    import requests
+    from django.conf import settings
+    url = "https://api.zotero.org/groups/2381279/items?limit=5"
+    headers = {
+        "Zotero-API-Version": "3",
+        "Zotero-API-Key": settings.ZOTERO_API,
+    }
+    try:
+        info = requests.get(url, headers=headers)
+        if info.status_code == 200:
+            results = info.json()
+            print(results)
+            count = 0
+            total_results = info.headers["Total-Results"]
+            link = info.headers["Link"]
+            print(link)
+            print("TOTAL: " + str(total_results))
+            print("-----------------")
+            for details in results:
+                count += 1
+                #print(details)
+                data = details["data"]
+                if "title" in data:
+                    if data["itemType"] != "attachment":
+                        print(data.get("title"))
+                        print(data.get("itemType"))
+                        print(data.get("abstractNote"))
+                        print(data.get("publicationTitle"))
+                        print(data.get("DOI"))
+                        print(data.get("url"))
+                        print(data.get("creators"))
+                        print(data.get("tags"))
+            print("TOTAL: " + str(count))
+        else:
+            print("Status code not 200!")
+            print("Will not proceed")
+            print(info.status_code)
+    except Exception as e:
+        print("Error!")
+        print(e)
+    return HttpResponse("All good")
+
+# TEMPORARY IMPORT SCRIPTS FOR CITYLOOPS
+
 def temp_import_projects(request):
     import datetime
     list = Project.objects.filter(cityloops="pending", status='ongoing', end_date__lte=datetime.date.today())
@@ -1594,7 +1668,7 @@ def temp_import_references(request):
 
     # Delete after Jan 1, 2020
     path = settings.MEDIA_ROOT + "/references.txt"
-    contents =  open(path, "r").read()
+    contents = open(path, "r").read()
     lines = contents.splitlines()
     megastring = ""
     count = 0
@@ -1603,6 +1677,12 @@ def temp_import_references(request):
         if line:
             megastring += " " + line
         
+    list = megastring.split("$")
+    context = { 
+        "list": list,
+    }
+    return render(request, "core/temp.html", context)
+
     import re
 
     tag = Tag.objects.filter(name="UM review paper import")
@@ -1618,113 +1698,34 @@ def temp_import_references(request):
     casestudytag = Tag.objects.get(pk=1)
     x = re.split("([0-9][0-9][0-9][0-9]\.)", megastring)
     total = 0
+    list = []
     for details in x:
         getlength = len(details)
         details = details.strip()
         s = None
         if getlength > 50:
             start = details[0:40]
-            print(start)
             search = Reference.objects.filter(title__icontains=start)
             if search.count() == 1:
                 total += 1
                 s = search[0]
-                print(s)
             elif search.count() > 1:
-                print("--------------")
-                print("More than one!")
+                pass
             else:
                 start = details[30:45]
                 search = Reference.objects.filter(title__icontains=start)
                 if search.count() == 1:
                     total += 1
                     s = search[0]
-                    print(s)
-                elif search.count() > 1:
-                    print("--------------")
-                    print("More than one!")
-                    print(start)
-                else:
-                    print("NOTHING!!!")
         if s:
             s.tags.add(tag)
             s.tags.add(casestudytag)
+            print(s)
+            list.append(s)
 
     print("TOTAL: " + str(total))
     #print(matches)
     context = { 
-        "list": x,
+        "list": list,
     }
     return render(request, "core/temp.html", context)
-
-def findReference(title, doi=None):
-    title = title.strip()
-    # DOI is the most unique, so if present, use that
-    if doi:
-        list = Reference.objects.filter(doi=doi)
-        if list.count() == 1:
-            return list[0]
-        elif list.count() > 1:
-            list = list.filter(status="active")
-            if list.count() == 1:
-                return list[0]
-    # Let's try the title instead
-    list = Reference.objects.filter(title=title)
-    if list.count() == 1:
-        return list[0]
-    elif list.count() > 1:
-        list = list.filter(status="active")
-        if list.count() == 1:
-            return list[0]
-    # Let's try the first 20 chars of the title (still unique enough but less chances of misspelling etc)
-    list = Reference.objects.filter(title__icontains=title[0:20])
-    if list.count() == 1:
-        return list[0]
-    elif list.count() > 1:
-        list = list.filter(status="active")
-        if list.count() == 1:
-            return list[0]
-    return False
-
-def zotero_import(request):
-    import requests
-    from django.conf import settings
-    url = "https://api.zotero.org/groups/2381279/items?limit=5"
-    headers = {
-        "Zotero-API-Version": "3",
-        "Zotero-API-Key": settings.ZOTERO_API,
-    }
-    try:
-        info = requests.get(url, headers=headers)
-        if info.status_code == 200:
-            results = info.json()
-            print(results)
-            count = 0
-            total_results = info.headers["Total-Results"]
-            link = info.headers["Link"]
-            print(link)
-            print("TOTAL: " + str(total_results))
-            print("-----------------")
-            for details in results:
-                count += 1
-                #print(details)
-                data = details["data"]
-                if "title" in data:
-                    if data["itemType"] != "attachment":
-                        print(data.get("title"))
-                        print(data.get("itemType"))
-                        print(data.get("abstractNote"))
-                        print(data.get("publicationTitle"))
-                        print(data.get("DOI"))
-                        print(data.get("url"))
-                        print(data.get("creators"))
-                        print(data.get("tags"))
-            print("TOTAL: " + str(count))
-        else:
-            print("Status code not 200!")
-            print("Will not proceed")
-            print(info.status_code)
-    except Exception as e:
-        print("Error!")
-        print(e)
-    return HttpResponse("All good")
