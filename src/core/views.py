@@ -1672,7 +1672,11 @@ def temp_import_references(request):
     lines = contents.splitlines()
     megastring = ""
     count = 0
-
+    for line in lines:
+        count += 1
+        if line:
+            megastring += " " + line
+        
     import re
 
     tag = Tag.objects.filter(name="UM review paper import")
