@@ -31,6 +31,10 @@ class ReferenceOrgAdmin(admin.ModelAdmin):
     list_display = ['reference', 'organization', 'type']
     search_fields = ['organization__name', 'reference__title', 'type']
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['name', 'parent_tag', 'hidden']
+    search_fields = ['name']
+
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
     autocomplete_fields = ['reference_spaces', 'references']
@@ -42,7 +46,7 @@ admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Video)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Color)
-admin.site.register(Tag)
+admin.site.register(Tag, TagAdmin)
 admin.site.register(MethodClassification)
 admin.site.register(MaterialGroup)
 admin.site.register(Method)

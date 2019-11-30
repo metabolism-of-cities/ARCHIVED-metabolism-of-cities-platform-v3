@@ -1254,7 +1254,10 @@ def admin_project_list(request, status="published"):
 
 @staff_member_required
 def admin_tag_list(request, method=False):
-    list = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
+    if "hidden" in request.GET:
+        list = Tag.objects.filter(parent_tag__isnull=True)
+    else:
+        list = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
     context = { "navbar": "backend", "list": list, "datatables": True }
     return render(request, "core/admin/tag.list.html", context)
 
@@ -1476,8 +1479,17 @@ def admin_references(request):
     # Temporary
     # CityLoops
     # Take out national
-    if site.id == 1:
+    if "cityloops" in request.GET:
+        list = list.filter(cityloops=True)
+    elif "casestudies" in request.GET:
+        list = list.exclude(tags__name="National").exclude(tags__name="Global").filter(tags__id=1)
+    elif "zotero" in request.GET:
+        list = list.filter(tags__id=705)
+    elif "review" in request.GET:
+        list = list.filter(tags__id=706)
+    elif site.id == 1:
         list = list.exclude(tags__name="National").exclude(tags__name="Global")
+    
     context = { 
         "navbar": "backend", 
         "list": list, 
@@ -1595,11 +1607,23 @@ def temp_import_references(request):
         
     import re
 
+    tag = Tag.objects.filter(name="UM review paper import")
+    if tag:
+        tag = tag[0]
+    else:
+        tag = Tag.objects.create(
+            name = "UM review paper import",
+            parent_tag = Tag.objects.get(name="Temporary tags"),
+            hidden = True,
+        )
+
+    casestudytag = Tag.objects.get(pk=1)
     x = re.split("([0-9][0-9][0-9][0-9]\.)", megastring)
     total = 0
     for details in x:
         getlength = len(details)
         details = details.strip()
+        s = None
         if getlength > 50:
             start = details[0:40]
             print(start)
@@ -1624,6 +1648,9 @@ def temp_import_references(request):
                     print(start)
                 else:
                     print("NOTHING!!!")
+        if s:
+            s.tags.add(tag)
+            s.tags.add(casestudytag)
 
     print("TOTAL: " + str(total))
     #print(matches)
@@ -1632,20 +1659,126 @@ def temp_import_references(request):
     }
     return render(request, "core/temp.html", context)
 
+def findReference(title, doi=None):
+    title = title.strip()
+    # DOI is the most unique, so if present, use that
+    if doi:
+        list = Reference.objects.filter(doi=doi)
+        if list.count() == 1:
+            return list[0]
+        elif list.count() > 1:
+            list = list.filter(status="active")
+            if list.count() == 1:
+                return list[0]
+    # Let's try the title instead
+    list = Reference.objects.filter(title=title)
+    if list.count() == 1:
+        return list[0]
+    elif list.count() > 1:
+        list = list.filter(status="active")
+        if list.count() == 1:
+            return list[0]
+    # Let's try the first 20 chars of the title (still unique enough but less chances of misspelling etc)
+    list = Reference.objects.filter(title__icontains=title[0:20])
+    if list.count() == 1:
+        return list[0]
+    elif list.count() > 1:
+        list = list.filter(status="active")
+        if list.count() == 1:
+            return list[0]
+    return False
+
+def temp_import_cityloops(request):
+    # Delete after Jan 1, 2020
+    import codecs
+    import csv
+    from multiplicity.models import ReferenceSpaceType
+    path = settings.MEDIA_ROOT + "/CityLoops.csv"
+    f = codecs.open(path, encoding="utf-8", errors="strict")
+    reader = csv.reader(f)
+    count = 0
+    hits = 0
+    tag = Tag.objects.filter(name="Zotero import")
+    if tag:
+        zotero = tag[0]
+    else:
+        temporary = Tag.objects.create(
+            name = "Temporary tags",
+            hidden = True,
+        )
+        zotero = Tag.objects.create(
+            name = "Zotero import",
+            parent_tag = temporary,
+            hidden = True,
+        )
+    for row in reader:
+        count += 1
+        if count > 1 and row[1] != "webpage":
+            type = row[1]
+            try:
+                year = int(row[2])
+            except:
+                year = 2022
+            authors = row[3]
+            title = row[4]
+            journal = row[5]
+            isbn = row[6]
+            doi = row[8]
+            url = row[9]
+            abstract = row[10]
+            tags = row[39]
+            info = findReference(title, doi)
+            if info:
+                hits += 1
+            else:
+                get_journal = None
+                if journal:
+                    get_journal = Journal.objects.filter(name=journal)
+                    if get_journal:
+                        get_journal = get_journal[0]
+                    else:
+                        get_journal = Journal.objects.create(name=journal)
+                convert = {
+                    "book": 5,
+                    "bookSection": 6,
+                    "conferencePaper": 9,
+                    "thesis": 29,
+                    "journalArticle": 16,
+                    "report": 27,
+                }
+                info =  Reference.objects.create(
+                    title = title,
+                    authorlist = authors,
+                    type = ReferenceType.objects.get(pk=convert[type]),
+                    journal = get_journal,
+                    year = year,
+                    url = url,
+                    doi = doi,
+                    isbn = isbn,
+                    status = "active",
+                    abstract = abstract,
+                )
+            info.tags.add(zotero)
+            if tags:
+                info.cityloops_comments_import = "Zotero tags: " + tags
+            info.save()
+    print("TOTAL HITS: " + str(hits))
+    return HttpResponse("All good")
+
+
 def zotero_import(request):
     import requests
     from django.conf import settings
-    url = "https://api.zotero.org/groups/2381279/items?limit=100"
-    key = settings.ZOTERO_API
+    url = "https://api.zotero.org/groups/2381279/items?limit=5"
     headers = {
         "Zotero-API-Version": "3",
-        "Zotero-API-Key": key,
+        "Zotero-API-Key": settings.ZOTERO_API,
     }
     try:
         info = requests.get(url, headers=headers)
         if info.status_code == 200:
             results = info.json()
-            #print(results)
+            print(results)
             count = 0
             total_results = info.headers["Total-Results"]
             link = info.headers["Link"]
@@ -1658,8 +1791,14 @@ def zotero_import(request):
                 data = details["data"]
                 if "title" in data:
                     if data["itemType"] != "attachment":
-                        print(data["title"])
-                        print(data["itemType"])
+                        print(data.get("title"))
+                        print(data.get("itemType"))
+                        print(data.get("abstractNote"))
+                        print(data.get("publicationTitle"))
+                        print(data.get("DOI"))
+                        print(data.get("url"))
+                        print(data.get("creators"))
+                        print(data.get("tags"))
             print("TOTAL: " + str(count))
         else:
             print("Status code not 200!")
