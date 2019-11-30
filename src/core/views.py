@@ -1497,7 +1497,6 @@ def admin_references(request):
     }
     return render(request, "core/admin/references.list.html", context)
 
-
 def temp_import_projects(request):
     import datetime
     list = Project.objects.filter(cityloops="pending", status='ongoing', end_date__lte=datetime.date.today())
@@ -1590,7 +1589,6 @@ def temp_import_projects(request):
                             
 
     return HttpResponse("All good")
-
 
 def temp_import_references(request):
 
@@ -1687,84 +1685,6 @@ def findReference(title, doi=None):
         if list.count() == 1:
             return list[0]
     return False
-
-def temp_import_cityloops(request):
-    # Delete after Jan 1, 2020
-    import codecs
-    import csv
-    from multiplicity.models import ReferenceSpaceType
-    path = settings.MEDIA_ROOT + "/CityLoops.csv"
-    f = codecs.open(path, encoding="utf-8", errors="strict")
-    reader = csv.reader(f)
-    count = 0
-    hits = 0
-    tag = Tag.objects.filter(name="Zotero import")
-    if tag:
-        zotero = tag[0]
-    else:
-        temporary = Tag.objects.create(
-            name = "Temporary tags",
-            hidden = True,
-        )
-        zotero = Tag.objects.create(
-            name = "Zotero import",
-            parent_tag = temporary,
-            hidden = True,
-        )
-    for row in reader:
-        count += 1
-        if count > 1 and row[1] != "webpage":
-            type = row[1]
-            try:
-                year = int(row[2])
-            except:
-                year = 2022
-            authors = row[3]
-            title = row[4]
-            journal = row[5]
-            isbn = row[6]
-            doi = row[8]
-            url = row[9]
-            abstract = row[10]
-            tags = row[39]
-            info = findReference(title, doi)
-            if info:
-                hits += 1
-            else:
-                get_journal = None
-                if journal:
-                    get_journal = Journal.objects.filter(name=journal)
-                    if get_journal:
-                        get_journal = get_journal[0]
-                    else:
-                        get_journal = Journal.objects.create(name=journal)
-                convert = {
-                    "book": 5,
-                    "bookSection": 6,
-                    "conferencePaper": 9,
-                    "thesis": 29,
-                    "journalArticle": 16,
-                    "report": 27,
-                }
-                info =  Reference.objects.create(
-                    title = title,
-                    authorlist = authors,
-                    type = ReferenceType.objects.get(pk=convert[type]),
-                    journal = get_journal,
-                    year = year,
-                    url = url,
-                    doi = doi,
-                    isbn = isbn,
-                    status = "active",
-                    abstract = abstract,
-                )
-            info.tags.add(zotero)
-            if tags:
-                info.cityloops_comments_import = "Zotero tags: " + tags
-            info.save()
-    print("TOTAL HITS: " + str(hits))
-    return HttpResponse("All good")
-
 
 def zotero_import(request):
     import requests
