@@ -340,8 +340,23 @@ class MethodData(models.Model):
     def __str__(self):
         return self.name
 
+class MethodCategory(models.Model):
+    name = models.CharField(max_length=255)
+    description = HTMLField('description', null=True, blank=True)
+    def __str__(self):
+        return self.name
+
 class Method(models.Model):
     tag = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318}, related_name="methods")
+    METHOD_CLASS = (
+ 	('3',	'Relation in UM systems'),
+ 	('2',	'Flows of substances'),
+ 	('1',	'Environmental impacts'),
+    )
+    method_class = models.CharField(max_length=1, choices=METHOD_CLASS, null=True, blank=True)
+    category = models.ForeignKey(MethodCategory, on_delete=models.CASCADE, null=True, blank=True)
+
+
     material_scope = models.CharField(max_length=255, null=True, blank=True)
     METHOD_SCORING = (
  	('3',	'3 - The item is a defining feature of the approach'),
@@ -379,6 +394,7 @@ class Method(models.Model):
     also_known_as = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
     complete = models.NullBooleanField(null=True, blank=True)
+
     def __str__(self):
         return self.tag.name
     class Meta:
