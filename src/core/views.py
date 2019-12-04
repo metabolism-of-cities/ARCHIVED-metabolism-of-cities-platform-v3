@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz, NewsletterSubscriber, Method
+from .models import Journal, Organization, Publisher, Reference, ReferenceForm, ReferenceFormAdmin, People, Article, PeopleForm, Video, VideoForm, ReferenceOrganization, Project, UserAction, UserLog, SimpleArticleForm, ProjectForm, ProjectUserForm, EventForm, ReferenceType, Tag, Event, TagForm, OrganizationForm, VideoCollection, VideoCollectionForm, PeopleNote, ReferenceAuthors, DataViz, NewsletterSubscriber, Method, MethodCategory
 from team.models import Category, TaskForceMember, TaskForceTicket, TaskForceUnit
 from multiplicity.models import ReferenceSpace, ReferenceSpaceCSV
 from staf.models import Data, Process, Material, CSV
@@ -1118,6 +1118,7 @@ def methodologies(request):
     context = {
         "list": list,
         "filter": filter,
+        "categories": MethodCategory.objects.all().order_by("id"),
     }
     return render(request, "core/methodologies.html", context)
 # Admin section

@@ -116,8 +116,15 @@ a{color:#1F7A8C;font-weight:bold}
     </ul>
 
   {% endfor %}
-  </div>
 
+
+  <h1>Methodology categories</h1>
+  {% for details in categories %}
+    <h2>{{ details }}</h2>
+    {{ details.description|safe }}
+  {% endfor %}
+
+  </div>
 
 {% endblock %}
 
