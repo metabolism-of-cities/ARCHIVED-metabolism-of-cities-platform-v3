@@ -37,7 +37,7 @@ class TagAdmin(admin.ModelAdmin):
 
 class MethodAdmin(admin.ModelAdmin):
     list_display = ['tag', 'category', 'method_class']
-    search_fields = ['name']
+    search_fields = ['tag__name']
 
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
