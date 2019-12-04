@@ -1110,8 +1110,14 @@ def set_theme(request, theme):
 
 def methodologies(request):
     list = Method.objects.all()
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219 # Island system
+    filter = Tag.objects.get(pk=main_filter)
     context = {
         "list": list,
+        "filter": filter,
     }
     return render(request, "core/methodologies.html", context)
 # Admin section

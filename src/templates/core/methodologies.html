@@ -99,6 +99,26 @@ a{color:#1F7A8C;font-weight:bold}
           </tbody>
         </table>
 
+
+  <div style="padding:30px">
+  {% for details in list %}
+
+    <h2>{{ details }}</h2>
+
+    {{ details.tag.description|safe }}
+
+    <ul>
+      {% for publication in details.tag.reference_set.all %}
+        {% if filter in publication.tags.all %}
+          <li>{{ publication }} ({{ publication.year }})</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+  {% endfor %}
+  </div>
+
+
 {% endblock %}
 
 {% block sidebar %}
