@@ -35,6 +35,10 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent_tag', 'hidden']
     search_fields = ['name']
 
+class MethodAdmin(admin.ModelAdmin):
+    list_display = ['tag', 'category', 'method_class']
+    search_fields = ['name']
+
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
     autocomplete_fields = ['reference_spaces', 'references']
@@ -49,7 +53,7 @@ admin.site.register(Color)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(MethodClassification)
 admin.site.register(MaterialGroup)
-admin.site.register(Method)
+admin.site.register(Method, MethodAdmin)
 admin.site.register(MethodTemporalBoundary)
 admin.site.register(MethodData)
 admin.site.register(MethodCategory)
