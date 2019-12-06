@@ -13,6 +13,10 @@ th.width200{width:200px}
 #container{overflow:auto}
 a{color:#1F7A8C;font-weight:bold}
 .hide{display:none}
+td.bg-3 {background-color:#2ebf6d;color:#2ebf6d}
+td.bg-2 {background-color:#cea75c;color:#cea75c}
+td.bg-1 {background-color:#cea75c;color:#cea75c}
+td.bg-None {background-color:#ccc;color:#ccc}
 </style>
 {% endblock %}
 
@@ -63,17 +67,17 @@ a{color:#1F7A8C;font-weight:bold}
           <tbody>
           {% for details in list %}
             <tr>
-              <td {% if details.complete %}style='background:#c4dac4'{% endif %}><a href="admin/core/method/{{ details.id }}/change/">{{ details.tag|default_if_none:"" }}</a></td>
+              <td><a href="admin/core/method/{{ details.id }}/change/">{{ details.tag|default_if_none:"" }}</a></td>
               <td class="hide">{{ details.material_scope|default_if_none:"" }}</td>
-              <td>{{ details.substances|default_if_none:"" }}</td>
-              <td>{{ details.materials|default_if_none:"" }}</td>
-              <td>{{ details.energy|default_if_none:"" }}</td>
-              <td>{{ details.outputs|default_if_none:"" }}</td>
-              <td>{{ details.recycling|default_if_none:"" }}</td>
-              <td>{{ details.stock_changes|default_if_none:"" }}</td>
-              <td>{{ details.specific|default_if_none:"" }}</td>
-              <td>{{ details.production|default_if_none:"" }}</td>
-              <td>{{ details.between_flows|default_if_none:"" }}</td>
+              <td class="bg-{{ details.substances }}">{{ details.substances|default_if_none:"" }}</td>
+              <td class="bg-{{ details.materials }}">{{ details.materials|default_if_none:"" }}</td>
+              <td class="bg-{{ details.energy }}">{{ details.energy|default_if_none:"" }}</td>
+              <td class="bg-{{ details.outputs }}">{{ details.outputs|default_if_none:"" }}</td>
+              <td class="bg-{{ details.recycling }}">{{ details.recycling|default_if_none:"" }}</td>
+              <td class="bg-{{ details.stock_changes }}">{{ details.stock_changes|default_if_none:"" }}</td>
+              <td class="bg-{{ details.specific }}">{{ details.specific|default_if_none:"" }}</td>
+              <td class="bg-{{ details.production }}">{{ details.production|default_if_none:"" }}</td>
+              <td class="bg-{{ details.between_flows }}">{{ details.between_flows|default_if_none:"" }}</td>
               <td class="hide">{% for classification in details.classification.all %}{{ classification }}<br>{% endfor %}</td>
               <td class="hide">{% for scale in details.scale.all %}{{ scale }}<br>{% endfor %}</td>
               <td class="hide">{{ details.entity|default_if_none:"" }}</td>
