@@ -1494,6 +1494,8 @@ def admin_references(request):
         list = list.filter(tags__id=705)
     elif "review" in request.GET:
         list = list.filter(tags__id=706)
+    elif "all" in request.GET:
+        list = list
     elif site.id == 1:
         list = list.exclude(tags__name="National").exclude(tags__name="Global")
     
