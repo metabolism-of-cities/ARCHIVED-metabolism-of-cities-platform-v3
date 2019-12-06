@@ -1109,7 +1109,7 @@ def set_theme(request, theme):
     return response
 
 def methodologies(request):
-    list = Method.objects.all()
+    list = Method.objects.filter(include_in_list=True)
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
     else:

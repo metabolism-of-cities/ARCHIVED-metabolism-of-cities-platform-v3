@@ -394,6 +394,7 @@ class Method(models.Model):
     also_known_as = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
     complete = models.NullBooleanField(null=True, blank=True)
+    include_in_list = models.NullBooleanField(default=False)
 
     def __str__(self):
         return self.tag.name
