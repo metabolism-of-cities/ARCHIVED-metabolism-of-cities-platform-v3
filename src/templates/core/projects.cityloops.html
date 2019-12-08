@@ -56,9 +56,11 @@
           {% for details in list %}
             {% if details.methodologies_tags.all %}
               <tr>
-                <td>{{ details.name }}<span class="hide">{{ details.full_name }}</span><br>
+                <td>
+                <strong>{{ details.name }}</strong><br>
                   {{ details.start_date|date:"Y" }} -
                   {{ details.end_date|date:"Y" }} 
+                  <p><em>{% for city in details.reference_spaces.all %}{{ city.name }}<br>{% endfor %}</em></p>
                 </td>
                 <td>{{ details.print_aim|default_if_none:"" }}</td>
                 <td>{% for methodology in details.methodologies_tags.all %}{{ methodology.name }}<br>{% endfor %}</td>
