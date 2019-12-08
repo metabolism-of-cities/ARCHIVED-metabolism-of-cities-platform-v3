@@ -226,6 +226,7 @@ urlpatterns = [
     path('admin/organizations/create', views.admin_organization, name='admin_organization'),
     path('admin/organizations/create/<slug:slug>', views.admin_organization, name='admin_organization_referencespace'),
 
+    path('cityloops/projects/', views.cityloops_projects),
     path('temp/import/', views.temp_import_projects),
     path('temp/ref/', views.temp_import_references),
     path('zotero/import/', views.zotero_import),

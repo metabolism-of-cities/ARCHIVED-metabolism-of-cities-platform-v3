@@ -604,6 +604,15 @@ class Project(models.Model):
     methodologies_tags = models.ManyToManyField(Tag, limit_choices_to={'parent_tag__id': 318}, blank=True)
     reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True, limit_choices_to={'type': 3})
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    print_aim = models.TextField(null=True, blank=True)
+    print_relevance = models.TextField(null=True, blank=True)
+    RELEVANCE = (
+        ('l', 'Low'),
+        ('m', 'Medium'),
+        ('h', 'High'),
+    )
+    relevance = models.CharField(max_length=1, choices=RELEVANCE, null=True, blank=True)
     CITYLOOPS = (
         ('no', 'No'),
         ('pending', 'Yes - pending'),
