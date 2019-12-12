@@ -41,7 +41,7 @@
           </tbody>
         </table>
 
-        <h3>Projects using accounting methodologies</h3>
+        <h3>Detailed overview</h3>
 
         <table class="table table-striped">
           <thead>
@@ -54,13 +54,13 @@
           </thead>
           <tbody>
           {% for details in list %}
-            {% if details.methodologies_tags.all %}
+            {% if details %}
               <tr>
                 <td>
                 <strong>{{ details.name }}</strong><br>
                   {{ details.start_date|date:"Y" }} -
                   {{ details.end_date|date:"Y" }} 
-                  <p><em>{% for city in details.reference_spaces.all %}{{ city.name }}<br>{% endfor %}</em></p>
+                  <br><br><em>{% for city in details.reference_spaces.all %}{{ city.name }}<br>{% endfor %}</em>
                 </td>
                 <td>{{ details.print_aim|default_if_none:"" }}</td>
                 <td>{% for methodology in details.methodologies_tags.all %}{{ methodology.name }}<br>{% endfor %}</td>
