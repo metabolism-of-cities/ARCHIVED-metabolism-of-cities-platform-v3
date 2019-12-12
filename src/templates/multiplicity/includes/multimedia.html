@@ -41,7 +41,7 @@
             License: {{ photo.license }}
           {% endif %}
         </p>
-        {% if photo.secondary_space %}
+        {% if photo.secondary_space and photo.secondary_space.city %}
           Related: <a href="{% url 'multiplicity:space' photo.secondary_space.city.slug photo.secondary_space.type.slug photo.secondary_space.slug %}">{{ photo.secondary_space.name }}</a>
         </p>
         {% endif %}
