@@ -763,7 +763,7 @@ def references(request, type=False, tag=False, all=False):
         if tag:
             list = Reference.objects.filter(status="active", tags__id=tag).order_by("-year")
             tag = get_object_or_404(Tag, pk=tag)
-            if tag.hidden:
+            if tag.hidden and not request.user.is_authenticated:
                 tag = Tag.objects.filter(name=tag.name, hidden=False)
                 if tag:
                     tag = tag[0]
@@ -1265,7 +1265,7 @@ def admin_tag_list(request, method=False):
         list = Tag.objects.filter(parent_tag__isnull=True)
     else:
         list = Tag.objects.filter(parent_tag__isnull=True, hidden=False)
-    context = { "navbar": "backend", "list": list, "datatables": True }
+    context = { "navbar": "backend", "list": list, "datatables": True, "tags": Tag.objects.all(), "datatables": True }
     return render(request, "core/admin/tag.list.html", context)
 
 @staff_member_required
@@ -1486,7 +1486,9 @@ def admin_references(request):
     # Temporary
     # CityLoops
     # Take out national
-    if "cityloops" in request.GET:
+    if "tag" in request.GET:
+        list = list.filter(tags__id=request.GET["tag"])
+    elif "cityloops" in request.GET:
         list = list.filter(cityloops=True)
     elif "casestudies" in request.GET:
         list = list.exclude(tags__name="National").exclude(tags__name="Global").filter(tags__id=1)

@@ -23,6 +23,27 @@
           <div id="tree"></div>
           <div id="details"></div>
 
+        <table class="table table-striped datatable">
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Parent</th>
+              <th>Status</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for details in tags %}
+            <tr>
+              <td>{{ details.name }}</td>
+              <td>{{ details.parent_tag }}</td>
+              <td>{{ details.hidden|yesno:"Inactive,Active" }}</td>
+              <td><a href="{% url "core:tag_search" details.id %}">View publications</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
       </div>
     </div>
   </div>
