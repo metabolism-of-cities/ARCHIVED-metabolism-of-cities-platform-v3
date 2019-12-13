@@ -230,5 +230,6 @@ urlpatterns = [
     path('temp/import/', views.temp_import_projects),
     path('temp/ref/', views.temp_import_references),
     path('zotero/import/', views.zotero_import),
+    path('zotero/csv/', views.zotero_csv),
 
 ]

@@ -623,6 +623,9 @@ def referenceform_tags(request, id):
         if "cityloops_comments" in request.POST:
             info.cityloops_comments = request.POST["cityloops_comments"]
             info.save()
+        if "cityloops" in request.POST:
+            info.cityloops = True if request.POST["cityloops"] else False
+            info.save()
         if "spaces" in request.POST:
             info.spaces.clear()
             selected = request.POST.getlist("spaces")
@@ -1742,3 +1745,56 @@ def temp_import_references(request):
         "list": list,
     }
     return render(request, "core/temp.html", context)
+
+def zotero_csv(request):
+
+    import codecs
+    import csv
+    path = settings.MEDIA_ROOT + "/review.csv"
+    f = codecs.open(path, encoding="utf-8", errors="strict")
+    reader = csv.reader(f)
+    count = 0
+    tag = Tag.objects.get(name="UM review paper import")
+    casestudytag = Tag.objects.get(pk=1)
+    types = {
+        "book": 5,
+        "journalArticle": 16,
+        "conferencePaper": 9,
+        "document": 11,
+    }
+    for row in reader:
+        count += 1
+        if count > 1:
+            funder = row[0]
+            title = row[4]
+            search = Reference.objects.filter(title__icontains=title)
+            print("Trying.,..")
+            print(title)
+            if search:
+                info = search[0]
+                print("FOUND IT!!!")
+                print(search)
+            else:
+                journal = Journal.objects.filter(name=row[20])
+                if journal:
+                    journal = journal[0]
+                else:
+                    journal = Journal.objects.create(name=row[20])
+                info = Reference.objects.create(
+                    title = title,
+                    language = "EN",
+                    authorlist = row[3],
+                    type_id = types[row[1]],
+                    journal = journal,
+                    year = row[2],
+                    abstract = row[10],
+                    url = row[9],
+                    doi = row[8],
+                    status = 'active',
+                    cityloops_comments_import = row[40],
+                )
+            info.tags.add(tag)
+            info.tags.add(casestudytag)
+
+    return HttpResponse("Records were imported good")
+

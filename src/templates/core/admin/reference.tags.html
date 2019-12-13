@@ -71,7 +71,7 @@ ol li{word-wrap: break-word;}
       </div>
     </div>
 
-    {% if request.GET.analyze or info.cityloops %}
+    {% if request.GET.analyze or info.cityloops or info.GET.spaces %}
     <div class="form-group">
       <label class="col-sm-2 control-label">Spaces</label>
       <div class="col-sm-10">
@@ -88,6 +88,17 @@ ol li{word-wrap: break-word;}
         <textarea class="form-control" name="cityloops_comments">{{ info.cityloops_comments|default_if_none:"" }}</textarea>
       </div>
     </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label>
+        <input type="checkbox" value="1" {% if info.cityloops %}checked{% endif %} name="cityloops"> Cityloops done?
+          </label>
+        </div>
+      </div>
+    </div>
+
     {% endif %}
 
     <div class="form-group">

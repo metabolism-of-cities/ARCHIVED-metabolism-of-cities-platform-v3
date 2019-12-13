@@ -43,7 +43,7 @@
             {% for details in list %}
               {% if national not in details.tags.all %}
               <tr {% if details.cityloops %}style='background:#c4dac4'{% endif %}>
-                <td>{{ details.id }}</td>
+                <td><a href="{% url "core:editreference_tags" details.id %}?spaces=true">{{ details.id }}</a></td>
                 <td>
                   <a href="{% url 'core:admin_reference' details.id %}">{{ details }}</a>
                   {% if details.cityloops_comments %}
