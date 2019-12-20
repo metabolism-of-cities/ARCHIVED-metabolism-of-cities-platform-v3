@@ -1495,8 +1495,12 @@ def admin_references(request):
         list = list.filter(cityloops=True)
     elif "casestudies" in request.GET:
         list = list.exclude(tags__name="National").exclude(tags__name="Global").filter(tags__id=1)
+    elif "casestudies_exclude" in request.GET:
+        list = list.exclude(tags__name="National").exclude(tags__name="Global").filter(tags__id=1).exclude(tags__name="Zotero2")
     elif "zotero" in request.GET:
         list = list.filter(tags__id=705)
+    elif "zotero2" in request.GET:
+        list = list.filter(tags__name="Zotero2")
     elif "review" in request.GET:
         list = list.filter(tags__id=706)
     elif "all" in request.GET:
@@ -1750,21 +1754,29 @@ def zotero_csv(request):
 
     import codecs
     import csv
-    path = settings.MEDIA_ROOT + "/review.csv"
+    path = settings.MEDIA_ROOT + "/casestudies.csv"
     f = codecs.open(path, encoding="utf-8", errors="strict")
     reader = csv.reader(f)
     count = 0
-    tag = Tag.objects.get(name="UM review paper import")
+    check = Tag.objects.filter(name="Zotero2")
+    if check:
+        tag = check[0]
+    else:
+        tag = Tag.objects.create(name="Zotero2")
     casestudytag = Tag.objects.get(pk=1)
     types = {
         "book": 5,
+        "bookSection": 6,
         "journalArticle": 16,
         "conferencePaper": 9,
         "document": 11,
+        "report": 27,
+        "webpage": 27,
+        "thesis": 27,
     }
     for row in reader:
         count += 1
-        if count > 1:
+        if count > 1 and row[2]:
             funder = row[0]
             title = row[4]
             search = Reference.objects.filter(title__icontains=title)

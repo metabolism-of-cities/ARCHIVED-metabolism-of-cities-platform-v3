@@ -434,7 +434,7 @@ class Reference(models.Model):
     cityloops = models.BooleanField(default=False)
     cityloops_comments = models.TextField(null=True, blank=True)
     cityloops_comments_import = models.TextField(null=True, blank=True, help_text='Additional comments about the importing process')
-    url = models.CharField(max_length=255, null=True, blank=True)
+    url = models.CharField(max_length=500, null=True, blank=True)
     doi = models.CharField(max_length=255, null=True, blank=True)
     isbn = models.CharField(max_length=255, null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
