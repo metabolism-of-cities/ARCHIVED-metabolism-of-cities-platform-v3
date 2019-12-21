@@ -43,11 +43,15 @@ ol li{word-wrap: break-word;}
   </ul>
 
   <h2>Edit tags</h2>
+  <p>
+    DOI: <a href="https://sci-hub.tw/{{ info.doi }}">{{ info.doi }}</a><br>
+    {% if info.file %}
+    <a href="{{ info.file.url }}">{{ info.file }}</a>
+    {% endif %}
+  </p>
+  {{ info.abstract|linebreaksbr }}<br><br>
 
-  {% if request.GET.analyze or info.cityloops %}
-    {{ info.abstract|linebreaksbr }}<br><br>
-  {% endif %}
-
+  {% if False %}
   <h3>Automated lookup - case sensitive</h3>
   
   <ol>
@@ -58,6 +62,7 @@ ol li{word-wrap: break-word;}
   <ol>
   {{ case_insensitive|safe }}
   </ol>
+  {% endif %}
 
   <form method="post" class="form form-horizontal">
     <div class="form-group">
