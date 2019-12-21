@@ -1491,6 +1491,12 @@ def admin_references(request):
     # Take out national
     if "tag" in request.GET:
         list = list.filter(tags__id=request.GET["tag"])
+    elif "reviewnew" in request.GET:
+        list = list.filter(tags__id=706).filter(type__id=16)
+        if "cityloops" in request.GET:
+            list = list.filter(cityloops=True)
+        elif "pending" in request.GET:
+            list = list.filter(cityloops=False)
     elif "cityloops" in request.GET:
         list = list.filter(cityloops=True)
     elif "casestudies" in request.GET:
