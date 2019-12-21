@@ -305,6 +305,7 @@ class Tag(models.Model):
     )
     hidden = models.BooleanField(db_index=True, default=False, help_text="Mark if tag is superseded/not yet approved/deactivated")
     include_in_glossary = models.BooleanField(db_index=True, default=False)
+    is_accounting_method = models.BooleanField(db_index=True, default=False)
     PARENTS = (
  	(1,	'Publication Types'),
  	(2,	'Metabolism Studies'),
@@ -608,6 +609,7 @@ class Project(models.Model):
     print_aim = models.TextField(null=True, blank=True)
     print_relevance = models.TextField(null=True, blank=True)
     RELEVANCE = (
+        ('u', 'Unknown'),
         ('l', 'Low'),
         ('m', 'Medium'),
         ('h', 'High'),
