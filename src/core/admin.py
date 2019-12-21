@@ -32,8 +32,8 @@ class ReferenceOrgAdmin(admin.ModelAdmin):
     search_fields = ['organization__name', 'reference__title', 'type']
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ['name', 'parent_tag', 'hidden']
-    search_fields = ['name']
+    list_display = ['name', 'parent_tag', 'hidden', 'is_accounting_method']
+    search_fields = ['name', 'parent_tag__name']
 
 class MethodAdmin(admin.ModelAdmin):
     list_display = ['tag', 'category', 'method_class']

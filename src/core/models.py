@@ -322,6 +322,15 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def shortcode(self):
+        "Returns abbreviation -- text between parenthesis -- if there is any"
+        if "(" in self.name:
+            s = self.name
+            return s[s.find("(")+1:s.find(")")]
+        else:
+            return self.name
+
     class Meta:
         ordering = ["name"]
 

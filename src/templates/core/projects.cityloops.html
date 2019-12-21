@@ -17,7 +17,7 @@
           <thead>
             <tr>
               <th>Project</th>
-              <th>Cities</th>
+              <th>Aim</th>
               <th>Materials</th>
               <th>Methodologies</th>
               <th>Budget</th>
@@ -27,11 +27,13 @@
           <tbody>
           {% for details in list %}
             <tr>
-              <td>{{ details.name }}<span class="hide">{{ details.full_name }}</span><br>
+              <td>
+              <strong>{{ details.name }}</strong><br>
                 {{ details.start_date|date:"Y" }} -
                 {{ details.end_date|date:"Y" }} 
+                <br><br><em>{% for city in details.reference_spaces.all %}{{ city.name }}<br>{% endfor %}</em>
               </td>
-              <td>{% for city in details.reference_spaces.all %}{{ city.name }}<br>{% endfor %}</td>
+              <td>{{ details.print_aim|default_if_none:"" }}</td>
               <td>{% for material in details.material_groups.all %}{{ material.name }}<br>{% endfor %}</td>
               <td>{% for methodology in details.methodologies_tags.all %}{{ methodology.name }}<br>{% endfor %}</td>
               <td>{% if details.budget %}&euro; {{ details.budget|floatformat:0|intcomma }}{% endif %}</td>
@@ -47,8 +49,7 @@
           <thead>
             <tr>
               <th>Project</th>
-              <th>Aim</th>
-              <th>Methodologies</th>
+              <th>Methods &amp; materials</th>
               <th>Relevance</th>
             </tr>
           </thead>
@@ -57,19 +58,40 @@
             {% if details %}
               <tr>
                 <td>
-                <strong>{{ details.name }}</strong><br>
+                <strong>{{ details.name }}</strong> - 
+                {{ details.full_name }}
+                <br><br>
                   {{ details.start_date|date:"Y" }} -
                   {{ details.end_date|date:"Y" }} 
-                  <br><br><em>{% for city in details.reference_spaces.all %}{{ city.name }}<br>{% endfor %}</em>
+                  <br><em>{% for city in details.reference_spaces.all %}
+                  {{ city.name }}{% if not forloop.last %},{% endif %} {% endfor %}</em>
                 </td>
-                <td>{{ details.print_aim|default_if_none:"" }}</td>
-                <td>{% for methodology in details.methodologies_tags.all %}{{ methodology.name }}<br>{% endfor %}</td>
-                <td>{{ details.print_relevance|default_if_none:"" }}</td>
+                <td>
+                {% if not details.methodologies_tags.all %}
+                  <em>No accounting methodologies used</em><br>
+                {% else %}
+                  {% for methodology in details.methodologies_tags.all %}
+                  {% if methodology.is_accounting_method  %}
+                    {{ methodology.shortcode }}
+                  {% elif methodology.name == "Unknown" %}
+                    <em>Unknown</em>
+                  {% else %}
+                    <span style="color:#b4a4a4">{{ methodology.shortcode }}</span>
+                  {% endif %}
+                  <br>
+                  {% endfor %}
+                {% endif %}
+                ----------------<br>
+                {% for material in details.material_groups.all %}{{ material.name }}<br>{% endfor %}
+                <td>
+                <em>{{ details.get_relevance_display }}</em><br>
+                {{ details.print_relevance|default_if_none:"" }}</td>
               </tr>
             {% endif %}
           {% endfor %}
           </tbody>
         </table>
+        <p>a</p>
 
       </div>
     </div>

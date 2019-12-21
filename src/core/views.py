@@ -1596,7 +1596,12 @@ def zotero_import(request):
 # TEMPORARY IMPORT SCRIPTS FOR CITYLOOPS
 
 def cityloops_projects(request):
-    list = Project.objects.filter(Q(cityloops="pending")|Q(cityloops="yes")).order_by("-funding_program", "start_date")
+    methods = Method.objects.all()
+    for details in methods:
+        tag = details.tag
+        tag.is_accounting_method = True
+        tag.save()
+    list = Project.objects.filter(Q(cityloops="pending")|Q(cityloops="yes")).order_by("-funding_program", "start_date").order_by("relevance", "name")
     context = {
         "list": list,
     }
