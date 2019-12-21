@@ -42,7 +42,7 @@ ol li{word-wrap: break-word;}
     <li><a href="{% url "core:editreference_multiplicity" info.id %}">MultipliCity settings</a></li>
   </ul>
 
-  <h2>Edit tags</h2>
+  <h2>{{ info.title }}</h2>
   <p>
     DOI: <a href="https://sci-hub.tw/{{ info.doi }}">{{ info.doi }}</a><br>
     {% if info.file %}
