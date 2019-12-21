@@ -22,6 +22,7 @@
     <a href="/admin/publications?review=true">Review imports</a> | 
     <a href="/admin/publications?all=true">All publications</a>
   </p>
+  <p>Add "&amp;format=2" to the URL for different columns</p>
 
   <div class="row">
     <div class="col-lg-12">
@@ -31,10 +32,16 @@
               <tr>
                 <th>ID</th>
                 <th>Title</th>
-                <th>Year</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Tags</th>
+                {% if request.GET.format %}
+                  <th>Method(s)</th>
+                  <th>Cities</th>
+                  <th>Materials</th>
+                {% else %}
+                  <th>Year</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Tags</th>
+                {% endif %}
                 {% if testing %}
                 <th>Added</th>
                 <th>Added by</th>
@@ -48,21 +55,57 @@
                 <td><a href="{% url "core:editreference_tags" details.id %}?spaces=true">{{ details.id }}</a></td>
                 <td>
                   <a href="{% url 'core:admin_reference' details.id %}">{{ details }}</a>
-                  {% if details.cityloops_comments %}
+                  {% if details.cityloops_comments and not request.GET.format %}
                   <br><br>
                   <strong>Cityloops comments:</strong><br>
                   {{ details.cityloops_comments|linebreaksbr }}
                   {% endif %}
                   <div class="hide">{{ details.authorlist }}</div>
                 </td>
-                <td>{{ details.year }}</td>
-                <td>{{ details.type }}</td>
-                <td>{{ details.status }}</td>
-                <td>
-                  {% for tag in details.tags.all %}
-                    <div><span class="label label-default">{{ tag }}</span></div>
-                  {% endfor %}
-                </td>
+                {% if request.GET.format %}
+
+                  <td class="tags spaces">
+                    <div class="taglist">
+                    {% for tag in details.tags.all %}
+                      {% if tag.parent_tag.id == 318 and tag.id != 1 and not tag.hidden %}
+                        <div><span class="label label-default">{{ tag }}</span></div>
+                      {% endif %}
+                    {% endfor %}
+                    </div>
+                  </td>
+
+                  <td class="tags methods">
+                    <div class="taglist">
+                    {% for space in details.spaces.all %}
+                      {% if space.type.id == 3 %}
+                        <div><span class="label label-default">{{ space.name }}</span></div>
+                        <span style="display:none">{{ space.country.name }}</span>
+                      {% endif %}
+                    {% endfor %}
+                    </div>
+                  </td>
+
+                  <td class="tags">
+                    <div class="taglist">
+                    {% for tag in details.tags.all %}
+                      {% if tag.parent_tag.id == 664 %}
+                        <div><span class="label label-default">{{ tag }}</span></div>
+                      {% endif %}
+                    {% endfor %}
+                    </div>
+                  </td>
+
+                {% else %}
+
+                  <td>{{ details.year }}</td>
+                  <td>{{ details.type }}</td>
+                  <td>{{ details.status }}</td>
+                  <td>
+                    {% for tag in details.tags.all %}
+                      <div><span class="label label-default">{{ tag }}</span></div>
+                    {% endfor %}
+                  </td>
+                {% endif %}
                 {% if testing %}
                 <td data-sort="{{ details.date_added|date:"Ymd" }}">{{ details.date_added|date:"M d, Y" }}</td>
                 <td></td>
@@ -87,14 +130,11 @@
 .breadcrumb{display:none}
 table.datatable{white-space:normal}
 a{color:#337ab7}
+red{background:red !important}
 </style>
 {% endblock %}
 
 {% block sidebar %}
 {% include 'multiplicity/sidebar.default.html' %}
-
-{% endblock %}
-
-{% block footer %}
 
 {% endblock %}
