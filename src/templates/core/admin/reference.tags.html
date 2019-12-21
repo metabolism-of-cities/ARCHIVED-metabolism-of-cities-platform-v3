@@ -46,6 +46,7 @@ ol li{word-wrap: break-word;}
   <p>
     DOI: <a href="https://sci-hub.tw/{{ info.doi }}">{{ info.doi }}</a><br>
     {% if info.file %}
+    File: 
     <a href="{{ info.file.url }}">{{ info.file }}</a>
     {% endif %}
   </p>
