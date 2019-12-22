@@ -374,6 +374,7 @@ class Method(models.Model):
  	('dr',	'Draft ready for review'),
  	('rv',	'Reviewed - DONE'),
  	('ec',	'External copy'),
+ 	('sk',	'Skip - will not be published'),
     )
     status = models.CharField(max_length=2, choices=STATUS, null=True, blank=True)
 
