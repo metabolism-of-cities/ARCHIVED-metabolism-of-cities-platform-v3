@@ -369,11 +369,11 @@ class Method(models.Model):
     strengths = HTMLField('strengths', null=True, blank=True)
     weaknesses = HTMLField('weaknesses', null=True, blank=True)
     STATUS = (
- 	(1,	'Not worked on'),
- 	(2,	'In progress'),
- 	(3,	'Draft ready for review'),
- 	(4,	'Reviewed - DONE'),
- 	(5,	'External copy'),
+ 	('nw',	'Not worked on'),
+ 	('ip',	'In progress'),
+ 	('dr',	'Draft ready for review'),
+ 	('rv',	'Reviewed - DONE'),
+ 	('ec',	'External copy'),
     )
     status = models.CharField(max_length=2, choices=STATUS, null=True, blank=True)
 
