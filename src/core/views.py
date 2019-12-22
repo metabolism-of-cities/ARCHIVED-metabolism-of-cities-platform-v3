@@ -1126,16 +1126,25 @@ def methodologies(request):
     return render(request, "core/methodologies.html", context)
 
 def methods(request):
-    list = Tag.objects.filter(is_accounting_method=True, hidden=False)
-    list = Method.objects.filter(include_in_list=True)
+    list = Method.objects.filter(category__isnull=False).order_by("category")
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
+        article_id = 224
+        type_id = 3 # The ID of reference type = city
     else:
         main_filter = 219 # Island system
+        article_id = 200
+        type_id = 21 # The ID of reference type = island
+    paper_count = {}
+    for details in list:
+        papers = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags=details.tag).filter(tags__id=1).count()
+        paper_count[details.id] = papers
+
     filter = Tag.objects.get(pk=main_filter)
     context = {
         "list": list,
         "filter": filter,
+        "count": paper_count,
     }
     return render(request, "core/methods.html", context)
 # Admin section
