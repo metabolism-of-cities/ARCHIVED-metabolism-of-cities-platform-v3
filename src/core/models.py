@@ -365,6 +365,17 @@ class Method(models.Model):
     )
     method_class = models.CharField(max_length=1, choices=METHOD_CLASS, null=True, blank=True)
     category = models.ForeignKey(MethodCategory, on_delete=models.CASCADE, null=True, blank=True)
+    description = HTMLField('description', null=True, blank=True)
+    strengths = HTMLField('strengths', null=True, blank=True)
+    weaknesses = HTMLField('weaknesses', null=True, blank=True)
+    STATUS = (
+ 	(1,	'Not worked on'),
+ 	(2,	'In progress'),
+ 	(3,	'Draft ready for review'),
+ 	(4,	'Reviewed - DONE'),
+ 	(5,	'External copy'),
+    )
+    status = models.CharField(max_length=2, choices=STATUS, null=True, blank=True)
 
 
     material_scope = models.CharField(max_length=255, null=True, blank=True)
@@ -410,8 +421,6 @@ class Method(models.Model):
         return self.tag.name
     class Meta:
         ordering = ["tag__name"]
-        verbose_name_plural = "methodologies"
-        verbose_name = "methodology"
 
 class TagForm(ModelForm):
     class Meta:

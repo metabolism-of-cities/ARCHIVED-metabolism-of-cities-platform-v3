@@ -1124,6 +1124,20 @@ def methodologies(request):
         "categories": MethodCategory.objects.all().order_by("id"),
     }
     return render(request, "core/methodologies.html", context)
+
+def methods(request):
+    list = Tag.objects.filter(is_accounting_method=True, hidden=False)
+    list = Method.objects.filter(include_in_list=True)
+    if request.site.id == 1:
+        main_filter = 11 # This is urban systems
+    else:
+        main_filter = 219 # Island system
+    filter = Tag.objects.get(pk=main_filter)
+    context = {
+        "list": list,
+        "filter": filter,
+    }
+    return render(request, "core/methods.html", context)
 # Admin section
 
 @staff_member_required
