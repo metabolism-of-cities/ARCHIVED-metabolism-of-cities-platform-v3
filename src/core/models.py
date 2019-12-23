@@ -486,6 +486,9 @@ class Reference(models.Model):
         else:
             return self.type.name
 
+    def accountingMethods(self):
+        return self.tags.filter(is_accounting_method=True, hidden=False)
+
 class ReferenceAuthors(models.Model):
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE)
     people = models.ForeignKey(People, on_delete=models.CASCADE)

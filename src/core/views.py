@@ -1148,6 +1148,7 @@ def methods(request):
         "filter": filter,
         "count": paper_count,
         "paper_list": paper_list,
+        "all": Reference.objects.filter(status="active", tags__id=main_filter).filter(tags__id=1).order_by("-year", "title")
     }
     test = Reference.objects.filter(cityloops=True)
     urban = Tag.objects.get(name="Urban")
