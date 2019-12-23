@@ -1152,10 +1152,11 @@ def methods(request):
     test = Reference.objects.filter(cityloops=True)
     urban = Tag.objects.get(name="Urban")
     for details in test:
-        check = details.spaces.filter(type=3)
-        if check:
-            details.tags.add(urban)
-            print("Urban added")
+        pass
+        #check = details.spaces.filter(type=3)
+        #if check:
+        #    details.tags.add(urban)
+        #    print("Urban added")
     return render(request, "core/methods.html", context)
 # Admin section
 
