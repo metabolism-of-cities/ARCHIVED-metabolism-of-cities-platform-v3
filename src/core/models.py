@@ -353,8 +353,13 @@ class MethodData(models.Model):
 class MethodCategory(models.Model):
     name = models.CharField(max_length=255)
     description = HTMLField('description', null=True, blank=True)
+    strengths = HTMLField('strengths', null=True, blank=True)
+    weaknesses = HTMLField('weaknesses', null=True, blank=True)
     def __str__(self):
         return self.name
+    class Meta:
+        verbose_name_plural = "Method families"
+        verbose_name = "method family"
 
 class Method(models.Model):
     tag = models.OneToOneField(Tag, on_delete=models.CASCADE, limit_choices_to={'parent_tag__id': 318}, related_name="methods")
@@ -377,7 +382,7 @@ class Method(models.Model):
  	('sk',	'Skip - will not be published'),
     )
     status = models.CharField(max_length=2, choices=STATUS, null=True, blank=True)
-
+    position = models.PositiveSmallIntegerField(null=True, blank=True)
 
     material_scope = models.CharField(max_length=255, null=True, blank=True)
     METHOD_SCORING = (
@@ -421,7 +426,7 @@ class Method(models.Model):
     def __str__(self):
         return self.tag.name
     class Meta:
-        ordering = ["tag__name"]
+        ordering = ["position", "tag__name"]
 
 class TagForm(ModelForm):
     class Meta:

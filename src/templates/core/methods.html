@@ -12,88 +12,77 @@
     <div class="panel">
       <div class="panel-body">
 
+      {% for details in families %}
+        <h4>{{ details }}</h4>
+        {{ details.description|safe }}
+
         <table class="table table-striped">
           <tr>
             <th>Method</th>
+            <th>Case studies</th>
             <th>Strengths</th>
             <th>Weaknesses</th>
           </tr>
-          {% for details in list %}
-          {% ifchanged details.category %}
-          <tr>
-            <th colspan="3" class="tt">{{ details.category }}</th>
-          </tr>
-          {% endifchanged %}
-            <tr>
-              <td><a href="/admin/core/method/{{ details.id }}/change/">{{ details }}</a></td>
-              <td>{{ details.strengths|safe }}</td>
-              <td>{{ details.weaknesses|safe }}</td>
-            </tr>
+          {% for method in list %}
+            {% if method.category == details %}
+              <tr>
+                <td>{{ method }}</td>
+                <td style="width:150px">{{ count|get_item:method.id }}</td>
+                <td>{{ method.strengths|safe }}</td>
+                <td>{{ method.weaknesses|safe }}</td>
+              </tr>
+            {% endif %}
           {% endfor %}
         </table>
 
-        {% for details in list %}
-          {% ifchanged details.category %}
-            <h4 style="margin-top:50px">{{ details.category }}</h4>
-            <table class="table table-striped">
-              <tr>
-                <th>Method</th>
-                <th>Case studies</th>
-              </tr>
-              {% for sub in list %}
-                {% if details.category == sub.category %}
-                  <tr>
-                    <td>{{ sub }}</td>
-                    <td style="width:150px">{{ count|get_item:sub.id }}</td>
-                  </tr>
-                {% endif %}
+
+        {% for method in list %}
+
+          {% if method.category == details %}
+            <h4>{{ method }}</h4>
+
+            {{ method.description|safe }}
+
+            <table class="table table-striped datatable">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Methodology</th>
+                  <th>City</th>
+                  <th>Year</th>
+                </tr>
+              </thead>
+              <tbody class="list">
+              {% for paper in paper_list|get_item:method.id %}
+                <tr>
+                  <td><a href="{% url 'core:reference' paper.id %}"><span class="title">{{ paper.title }}</span></a></td>
+                  <td class="tags">
+                    <div class="taglist">
+                    {% for tag in paper.tags.all %}
+                      {% if tag.parent_tag.id == 318 and tag.id != 1 %}
+                        <div><span class="label label-default">{{ tag.shortcode }}</span></div>
+                      {% endif %}
+                    {% endfor %}
+                    </div>
+                  </td>
+                  <td class="tags">
+                    <div class="taglist">
+                    {% for space in paper.spaces.all %}
+                        <div><span class="label label-default">{{ space.name }}</span></div>
+                        <span style="display:none">{{ space.country.name }}</span>
+                    {% endfor %}
+                    </div>
+                  </td>
+                  <td class="year">{{ paper.year }}</td>
               {% endfor %}
+              </tbody>
             </table>
-          {% endifchanged %}
 
-          <h4 style="font-size:100%;margin-top:30px">{{ details }}</h4>
-          {{ details.description|safe }}
-        {% endfor %}
-
-        {% for details in list %}
-          <h4>{{ details }}</h4>
-
-          <table class="table table-striped datatable">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Methodology</th>
-                <th>City</th>
-                <th>Year</th>
-              </tr>
-            </thead>
-            <tbody class="list">
-            {% for details in paper_list|get_item:details.id %}
-              <tr>
-                <td><a href="{% url 'core:reference' details.id %}"><span class="title">{{ details.title }}</span></a></td>
-                <td class="tags">
-                  <div class="taglist">
-                  {% for tag in details.tags.all %}
-                    {% if tag.parent_tag.id == 318 and tag.id != 1 %}
-                      <div><span class="label label-default">{{ tag.shortcode }}</span></div>
-                    {% endif %}
-                  {% endfor %}
-                  </div>
-                </td>
-                <td class="tags">
-                  <div class="taglist">
-                  {% for space in details.spaces.all %}
-                      <div><span class="label label-default">{{ space.name }}</span></div>
-                      <span style="display:none">{{ space.country.name }}</span>
-                  {% endfor %}
-                  </div>
-                </td>
-                <td class="year">{{ details.year }}</td>
-            {% endfor %}
-            </tbody>
-          </table>
+          {% endif %}
 
         {% endfor %}
+
+      {% endfor %}
 
         <h4>Multi-methods</h4>
 
@@ -134,6 +123,25 @@
             </tbody>
           </table>
 
+
+        <h4>Brief summary of method categories</h4>
+
+        <table class="table table-striped">
+          <tr>
+            <th>Method category</th>
+            <th>Case studies</th>
+            <th>Strengths</th>
+            <th>Weaknesses</th>
+          </tr>
+          {% for details in families %}
+            <tr>
+              <td>{{ details }}</td>
+              <td style="width:150px">{{ family_count|get_item:details.id }}</td>
+              <td>{{ details.strengths|safe }}</td>
+              <td>{{ details.weaknesses|safe }}</td>
+            </tr>
+          {% endfor %}
+        </table>
 
       </div>
     </div>

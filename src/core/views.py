@@ -1126,7 +1126,7 @@ def methodologies(request):
     return render(request, "core/methodologies.html", context)
 
 def methods(request):
-    list = Method.objects.filter(category__isnull=False).order_by("category")
+    list = Method.objects.filter(category__isnull=False).order_by("category", "position", "tag__name")
     if request.site.id == 1:
         main_filter = 11 # This is urban systems
         article_id = 224
@@ -1136,10 +1136,15 @@ def methods(request):
         article_id = 200
         type_id = 21 # The ID of reference type = island
     paper_count = {}
+    family_count = {}
     paper_list = {}
     for details in list:
         papers = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags=details.tag).filter(tags__id=1)
         paper_count[details.id] = papers.count()
+        if details.category.id in family_count:
+            family_count[details.category.id] += papers.count()
+        else:
+            family_count[details.category.id] = papers.count()
         paper_list[details.id] = papers
 
     filter = Tag.objects.get(pk=main_filter)
@@ -1147,8 +1152,10 @@ def methods(request):
         "list": list,
         "filter": filter,
         "count": paper_count,
+        "family_count": family_count,
         "paper_list": paper_list,
-        "all": Reference.objects.filter(status="active", tags__id=main_filter).filter(tags__id=1).order_by("-year", "title")
+        "all": Reference.objects.filter(status="active", tags__id=main_filter).filter(tags__id=1).order_by("-year", "title"),
+        "families": MethodCategory.objects.order_by("id"),
     }
     test = Reference.objects.filter(cityloops=True)
     urban = Tag.objects.get(name="Urban")
