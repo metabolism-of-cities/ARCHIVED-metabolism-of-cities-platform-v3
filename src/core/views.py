@@ -1136,16 +1136,26 @@ def methods(request):
         article_id = 200
         type_id = 21 # The ID of reference type = island
     paper_count = {}
+    paper_list = {}
     for details in list:
-        papers = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags=details.tag).filter(tags__id=1).count()
-        paper_count[details.id] = papers
+        papers = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags=details.tag).filter(tags__id=1)
+        paper_count[details.id] = papers.count()
+        paper_list[details.id] = papers
 
     filter = Tag.objects.get(pk=main_filter)
     context = {
         "list": list,
         "filter": filter,
         "count": paper_count,
+        "paper_list": paper_list,
     }
+    test = Reference.objects.filter(cityloops=True)
+    urban = Tag.objects.get(name="Urban")
+    for details in test:
+        check = details.spaces.filter(type=3)
+        if check:
+            details.tags.add(urban)
+            print("Urban added")
     return render(request, "core/methods.html", context)
 # Admin section
 
