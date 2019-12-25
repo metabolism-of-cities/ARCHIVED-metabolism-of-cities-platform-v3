@@ -1139,7 +1139,7 @@ def methods(request):
     family_count = {}
     paper_list = {}
     for details in list:
-        papers = Reference.objects.filter(status="active", tags__id=main_filter).filter(tags=details.tag).filter(tags__id=1)
+        papers = Reference.objects.filter(status="active").filter(tags=details.tag).filter(tags__id=1).filter(Q(tags__name="Urban")|Q(tags__name="Sub-national"))
         paper_count[details.id] = papers.count()
         if details.category.id in family_count:
             family_count[details.category.id] += papers.count()
@@ -1148,14 +1148,56 @@ def methods(request):
         paper_list[details.id] = papers
 
     filter = Tag.objects.get(pk=main_filter)
+    all = Reference.objects.filter(status="active").filter(tags__id=1).order_by("-year", "title").filter(Q(tags__name="Urban")|Q(tags__name="Sub-national"))
+    
+    all_family = {}
+    years = []
+    all_multi = 0
+    grand_total = 0
+    all_by_year = defaultdict(dict)
+    for details in all:
+        methods = details.accountingMethods()
+        if methods.count() > 1:
+            all_multi += 1
+        elif methods.count() == 1:
+            method = methods[0]
+            category = Method.objects.filter(tag=method)
+            if not category:
+                print("PROBLEM! NO CATEGORY FOUND!!")
+                print(method)
+            else:
+                category = category[0]
+                if not category.category:
+                    print("CATEGORY NOT SET!!")
+                    print(method)
+                else:
+                    category = category.category.name
+                    if details.year not in years:
+                        years.append(details.year)
+                    try:
+                        all_by_year[category][details.year] += 1
+                    except:
+                        all_by_year[category][details.year] = 1
+                    if category in all_family:
+                        all_family[category] += 1
+                        grand_total += 1
+                    else:
+                        all_family[category] = 1
+                        grand_total += 1
+    print(all_by_year)
     context = {
         "list": list,
         "filter": filter,
         "count": paper_count,
         "family_count": family_count,
         "paper_list": paper_list,
-        "all": Reference.objects.filter(status="active", tags__id=main_filter).filter(tags__id=1).order_by("-year", "title"),
+        "all": all,
+        "all_family": all_family,
         "families": MethodCategory.objects.order_by("id"),
+        "all_multi": all_multi,
+        "grand_total": grand_total+all_multi,
+        "years": years,
+        "all_by_year": dict(all_by_year),
     }
     test = Reference.objects.filter(cityloops=True)
     urban = Tag.objects.get(name="Urban")

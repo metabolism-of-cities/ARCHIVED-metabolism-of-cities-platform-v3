@@ -126,6 +126,8 @@
 
         <h4>Brief summary of method categories</h4>
 
+        <p>Note: each time a method is used, we add another point.</p>
+
         <table class="table table-striped">
           <tr>
             <th>Method category</th>
@@ -141,6 +143,62 @@
               <td>{{ details.weaknesses|safe }}</td>
             </tr>
           {% endfor %}
+        </table>
+
+        <h4>Brief summary of method categories</h4>
+
+        <p>Note: each paper is classified only ONCE</p>
+
+        <table class="table table-striped">
+          <tr>
+            <th>Method category</th>
+            <th>Case studies</th>
+          </tr>
+          {% for key,value in all_family.items %}
+            <tr>
+              <td>{{ key }}</td>
+              <td style="width:150px">{{ value }}</td>
+            </tr>
+          {% endfor %}
+            <tr>
+              <td>Multi-method</td>
+              <td>{{ all_multi }}</td>
+            </tr>
+            <tr>
+              <th>Total</th>
+              <th>{{ grand_total }}</th>
+            </tr>
+        </table>
+
+        <h4>Year-by-year overview</h4>
+
+        <p>Note: each paper is classified only ONCE</p>
+
+        <table class="table table-striped">
+          <tr>
+            <th>Method category</th>
+            <th>Case studies</th>
+            {% for year in years %}
+              <th>{{ year }}</th>
+            {% endfor %}
+          </tr>
+          {% for key,value in all_family.items %}
+            <tr>
+              <td>{{ key }}</td>
+              <td style="width:150px">{{ value }}</td>
+              {% for year in years %}
+                <td>{{ all_by_year.year.key }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+            <tr>
+              <td>Multi-method</td>
+              <td>{{ all_multi }}</td>
+            </tr>
+            <tr>
+              <th>Total</th>
+              <th>{{ grand_total }}</th>
+            </tr>
         </table>
 
       </div>
