@@ -41,7 +41,7 @@
               {% if not details.methodologies_tags.all %}
                 <em>No accounting methods used</em><br>
               {% else %}
-                {% for methodology in details.methodologies_tags.all %}{{ methodology.name }}<br>{% endfor %}
+                {% for methodology in details.methodologies_tags.all %}{{ methodology.shortcode }}<br>{% endfor %}
               {% endif %}
               </td>
               <td>{% if details.budget %}&euro; {{ details.budget|floatformat:0|intcomma }}{% endif %}</td>
