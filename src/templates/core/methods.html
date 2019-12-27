@@ -35,7 +35,6 @@
           {% endfor %}
         </table>
 
-
         {% for method in list %}
 
           {% if method.category == details %}
@@ -68,8 +67,10 @@
                   <td class="tags">
                     <div class="taglist">
                     {% for space in paper.spaces.all %}
+                      {% if space.name not in remove_from_list %}
                         <div><span class="label label-default">{{ space.name }}</span></div>
                         <span style="display:none">{{ space.country.name }}</span>
+                      {% endif %}
                     {% endfor %}
                     </div>
                   </td>
@@ -112,8 +113,10 @@
                   <td class="tags">
                     <div class="taglist">
                     {% for space in details.spaces.all %}
+                      {% if space.name not in remove_from_list %}
                         <div><span class="label label-default">{{ space.name }}</span></div>
                         <span style="display:none">{{ space.country.name }}</span>
+                      {% endif %}
                     {% endfor %}
                     </div>
                   </td>
@@ -161,56 +164,148 @@
             </tr>
           {% endfor %}
             <tr>
-              <td>Multi-method</td>
-              <td>{{ all_multi }}</td>
-            </tr>
-            <tr>
               <th>Total</th>
               <th>{{ grand_total }}</th>
             </tr>
         </table>
+
+        <div id="piechart" style="height:500px;width:700px"></div>
 
         <h4>Year-by-year overview</h4>
 
+        <script src="{% static 'ie/js/highcharts.js' %}"></script>
+        <script src="https://code.highcharts.com/modules/series-label.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/export-data.js"></script>
+        <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+        <script src="https://code.highcharts.com/modules/streamgraph.js"></script>
+        <script src="https://code.highcharts.com/highcharts-more.js"></script>
+        <script src="https://code.highcharts.com/modules/treemap.js"></script>
+        <script src="https://code.highcharts.com/modules/sankey.js"></script>
+
+        {% include 'multiplicity/graphs/options.html' %}
+        {% include 'multiplicity/graphs/series.time.html' %}
+        {% include 'multiplicity/graphs/series.column.html' %}
+        {% include 'multiplicity/graphs/series.drill.html' %}
+
+        <script type="text/javascript">
+          // Build the chart
+          Highcharts.chart('piechart', {
+              chart: {
+                  type: 'pie'
+              },
+              title: {
+                  text: 'Breakdown by method group'
+              },
+              tooltip: {
+                  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+              },
+              colors: colorScheme,
+              plotOptions: {
+                  pie: {
+                      allowPointSelect: true,
+                      cursor: 'pointer',
+                      dataLabels: {
+                          enabled: false
+                      },
+                      showInLegend: true
+                  }
+              },
+              series: [{
+                  name: 'Case studies',
+                  colorByPoint: true,
+                  data: [
+                  {% for key,value in all_family.items %}
+                    {
+                        name: '{{ key }}',
+                        y: {{ value }}
+                    },
+                  {% endfor %}
+                  ]
+              }]
+          });
+        </script>
+
         <p>Note: each paper is classified only ONCE</p>
 
-        <table class="table table-striped">
-          <tr>
-            <th>Method category</th>
-            <th>Case studies</th>
-            {% for year in years %}
-              <th>{{ year }}</th>
-            {% endfor %}
-          </tr>
-          {% for key,value in all_family.items %}
+        <div class="tablecontainer">
+          <table class="table table-striped">
             <tr>
-              <td>{{ key }}</td>
-              <td style="width:150px">{{ value }}</td>
+              <th>Method category</th>
               {% for year in years %}
-                <td>{{ all_by_year.year.key }}</td>
+                <th>{{ year }}</th>
               {% endfor %}
             </tr>
-          {% endfor %}
-            <tr>
-              <td>Multi-method</td>
-              <td>{{ all_multi }}</td>
-            </tr>
-            <tr>
-              <th>Total</th>
-              <th>{{ grand_total }}</th>
-            </tr>
-        </table>
+            {% for key,value in all_family.items %}
+              <tr>
+                <td>{{ key }}</td>
+                {% for year in years %}
+                  <td>{{ all_by_year|get_item:key|get_item:year }} </td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+
+        <div id="years" style="height:700px"></div>
+
+<script type="text/javascript">
+Highcharts.chart('years', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Method use over time'
+    },
+    xAxis: {
+        categories: [{% for year in years %}'{{ year }}',{% endfor %}]
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Number of case studies'
+        },
+    },
+    legend: {
+      reversed: true
+    },
+    colors: colorScheme,
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    series: [
+      {% for key,value in all_family.items %}
+        {
+          name: '{{ key }}',
+          data: [{% for year in years %}{{ all_by_year|get_item:key|get_item:year }},{% endfor %}]
+        },
+      {% endfor %}
+    ]
+});
+</script>
 
       </div>
     </div>
   </div>
 </div>
 
+
+
 {% endblock %}
 
 {% block head %}
 <style type="text/css">
 .tt{text-align:center}
+.tablecontainer{width:100%;overflow-x:scroll}
 </style>
 {% endblock %}
 

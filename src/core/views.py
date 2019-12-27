@@ -1154,11 +1154,16 @@ def methods(request):
     years = []
     all_multi = 0
     grand_total = 0
-    all_by_year = defaultdict(dict)
+    all_by_year = {}
+    all_by_year['Multi-method'] = {}
     for details in all:
         methods = details.accountingMethods()
         if methods.count() > 1:
             all_multi += 1
+            if details.year in all_by_year['Multi-method']:
+                all_by_year['Multi-method'][details.year] += 1
+            else:
+                all_by_year['Multi-method'][details.year] = 0
         elif methods.count() == 1:
             method = methods[0]
             category = Method.objects.filter(tag=method)
@@ -1174,6 +1179,8 @@ def methods(request):
                     category = category.category.name
                     if details.year not in years:
                         years.append(details.year)
+                    if not category in all_by_year:
+                        all_by_year[category] = {}
                     try:
                         all_by_year[category][details.year] += 1
                     except:
@@ -1184,7 +1191,15 @@ def methods(request):
                     else:
                         all_family[category] = 1
                         grand_total += 1
-    print(all_by_year)
+    for key,value in all_family.items():
+        for year in years:
+            if not year in all_by_year[key]:
+                all_by_year[key][year] = 0
+    for year in years:
+        if not year in all_by_year['Multi-method']:
+            all_by_year['Multi-method'][year] = 0
+    years.reverse()
+    all_family['Multi-method'] = all_multi
     context = {
         "list": list,
         "filter": filter,
@@ -1197,7 +1212,8 @@ def methods(request):
         "all_multi": all_multi,
         "grand_total": grand_total+all_multi,
         "years": years,
-        "all_by_year": dict(all_by_year),
+        "all_by_year": all_by_year,
+        "remove_from_list": ["Hong Kong (Island)", "Macao - city"],
     }
     test = Reference.objects.filter(cityloops=True)
     urban = Tag.objects.get(name="Urban")
