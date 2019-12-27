@@ -1139,7 +1139,7 @@ def methods(request):
     family_count = {}
     paper_list = {}
     for details in list:
-        papers = Reference.objects.filter(status="active").filter(tags=details.tag).filter(tags__id=1).filter(Q(tags__name="Urban")|Q(tags__name="Sub-national"))
+        papers = Reference.objects.filter(status="active").filter(tags=details.tag).filter(tags__id=1).filter(Q(tags__name="Urban")|Q(tags__name="Sub-national")).distinct()
         paper_count[details.id] = papers.count()
         if details.category.id in family_count:
             family_count[details.category.id] += papers.count()
@@ -1148,7 +1148,7 @@ def methods(request):
         paper_list[details.id] = papers
 
     filter = Tag.objects.get(pk=main_filter)
-    all = Reference.objects.filter(status="active").filter(tags__id=1).order_by("-year", "title").filter(Q(tags__name="Urban")|Q(tags__name="Sub-national"))
+    all = Reference.objects.filter(status="active").filter(tags__id=1).order_by("-year", "title").filter(Q(tags__name="Urban")|Q(tags__name="Sub-national")).distinct()
     
     all_family = {}
     years = []
