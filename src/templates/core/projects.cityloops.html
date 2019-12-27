@@ -19,7 +19,7 @@
               <th>Project</th>
               <th>Aim</th>
               <th>Materials</th>
-              <th>Methodologies</th>
+              <th>Methods</th>
               <th>Budget</th>
               <th>Funding programme</th>
             </tr>
@@ -33,7 +33,9 @@
                 {{ details.end_date|date:"Y" }} 
                 <br><br><em>{% for city in details.reference_spaces.all %}{{ city.name }}<br>{% endfor %}</em>
               </td>
-              <td>{{ details.print_aim|default_if_none:"" }}</td>
+              <td>
+              <strong>{{ details.full_name }}</strong><br>
+              {{ details.print_aim|default_if_none:"" }}</td>
               <td>{% for material in details.material_groups.all %}{{ material.name }}<br>{% endfor %}</td>
               <td>{% for methodology in details.methodologies_tags.all %}{{ methodology.name }}<br>{% endfor %}</td>
               <td>{% if details.budget %}&euro; {{ details.budget|floatformat:0|intcomma }}{% endif %}</td>
