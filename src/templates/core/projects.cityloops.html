@@ -70,7 +70,7 @@
                 </td>
                 <td>
                 {% if not details.methodologies_tags.all %}
-                  <em>No accounting methodologies used</em><br>
+                  <em>No accounting methods used</em><br>
                 {% else %}
                   {% for methodology in details.methodologies_tags.all %}
                   {% if methodology.is_accounting_method  %}

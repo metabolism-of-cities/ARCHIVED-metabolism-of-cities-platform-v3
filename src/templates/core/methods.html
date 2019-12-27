@@ -24,7 +24,7 @@
             <th>Weaknesses</th>
           </tr>
           {% for method in list %}
-            {% if method.category == details %}
+            {% if method.category == details and method.id != 21 %}
               <tr>
                 <td>{{ method }}</td>
                 <td style="width:150px">{{ count|get_item:method.id }}</td>
