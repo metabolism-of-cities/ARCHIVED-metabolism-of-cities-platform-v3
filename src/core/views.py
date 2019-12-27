@@ -1697,9 +1697,10 @@ def zotero_import(request):
 
 def cityloops_projects(request):
     methods = Method.objects.all()
-    list = Project.objects.filter(Q(cityloops="pending")|Q(cityloops="yes")).order_by("-funding_program", "start_date").order_by("relevance", "name")
+    list = Project.objects.filter(Q(cityloops="pending")|Q(cityloops="yes")).order_by("-funding_program", "start_date")
     context = {
-        "list": list,
+        "list": list.order_by("relevance", "name"),
+        "list_all": list.order_by("name"),
     }
     return render(request, "core/projects.cityloops.html", context)
 
