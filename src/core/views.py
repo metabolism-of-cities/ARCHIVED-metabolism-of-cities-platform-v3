@@ -1250,7 +1250,10 @@ def methods(request):
         #if check:
         #    details.tags.add(urban)
         #    print("Urban added")
-    return render(request, "core/methods.html", context)
+    if "short" in request.GET:
+        return render(request, "core/methods.short.html", context)
+    else:
+        return render(request, "core/methods.html", context)
 # Admin section
 
 @staff_member_required
