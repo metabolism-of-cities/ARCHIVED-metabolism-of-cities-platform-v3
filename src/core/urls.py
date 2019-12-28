@@ -106,6 +106,7 @@ urlpatterns = [
 
     path('methodologies', views.methodologies, name='methodologies'),
     path('methods', views.methods, name='methods'),
+    path('resources/material-accounting-methods', views.methods, name='methods'),
 
     path('about', views.section_home, {'slug': 'about'}, name='about'),
     path('community', views.section_home, {'slug': 'community'}, name='community_home'),
