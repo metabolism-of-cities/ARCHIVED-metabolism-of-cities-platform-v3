@@ -188,6 +188,7 @@
         {% include 'multiplicity/graphs/series.column.html' %}
         {% include 'multiplicity/graphs/series.drill.html' %}
 
+
         <script type="text/javascript">
           // Build the chart
           Highcharts.chart('piechart', {
@@ -206,9 +207,10 @@
                       allowPointSelect: true,
                       cursor: 'pointer',
                       dataLabels: {
-                          enabled: false
+                          enabled: true,
+                          format: '<b>{point.name}</b> ({point.percentage:.0f} %)'
                       },
-                      showInLegend: true
+                      showInLegend: false
                   }
               },
               series: [{
