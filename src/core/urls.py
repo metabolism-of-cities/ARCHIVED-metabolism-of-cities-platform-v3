@@ -222,6 +222,7 @@ urlpatterns = [
     path('admin/methods/<int:id>', views.admin_method, name='admin_method'),
     path('admin/publications/<int:id>', views.referenceform, name='admin_reference'),
     path('admin/publications', views.admin_references, name='admin_references'),
+    path('admin/publications/time-period-review/', views.pending_time_period, name='pending_time_period'),
 
     path('admin/organizations', views.admin_organization_list, name='admin_organization_list'),
     path('admin/organizations/<int:id>', views.admin_organization, name='admin_organization'),

@@ -1149,7 +1149,9 @@ def methods(request):
 
     filter = Tag.objects.get(pk=main_filter)
     all = Reference.objects.filter(status="active").filter(tags__id=1).order_by("-year", "title").filter(Q(tags__name="Urban")|Q(tags__name="Sub-national")).distinct()
-    
+    all_timeseries = {}
+    all_notime = {}
+    all_single_timeframe = {}
     all_family = {}
     years = []
     all_multi = 0
@@ -1157,6 +1159,7 @@ def methods(request):
     all_by_year = {}
     all_by_year['Multi-method'] = {}
     for details in all:
+        method_name = None
         methods = details.accountingMethods()
         if methods.count() > 1:
             all_multi += 1
@@ -1164,6 +1167,7 @@ def methods(request):
                 all_by_year['Multi-method'][details.year] += 1
             else:
                 all_by_year['Multi-method'][details.year] = 0
+            method_name = "Multi-method"
         elif methods.count() == 1:
             method = methods[0]
             category = Method.objects.filter(tag=method)
@@ -1177,6 +1181,7 @@ def methods(request):
                     print(method)
                 else:
                     category = category.category.name
+                    method_name = category
                     if details.year not in years:
                         years.append(details.year)
                     if not category in all_by_year:
@@ -1191,6 +1196,25 @@ def methods(request):
                     else:
                         all_family[category] = 1
                         grand_total += 1
+        if method_name:
+            check = details.tags.filter(name="Single point in time")
+            check_series = details.tags.filter(name="Time series")
+            if check:
+                if method_name in all_single_timeframe:
+                    all_single_timeframe[method_name] += 1
+                else:
+                    all_single_timeframe[method_name] = 1
+            elif check_series:
+                if method_name in all_timeseries:
+                    all_timeseries[method_name] += 1
+                else:
+                    all_timeseries[method_name] = 1
+            else:
+                if method_name in all_notime:
+                    all_notime[method_name] += 1
+                else:
+                    all_notime[method_name] = 1
+
     for key,value in all_family.items():
         for year in years:
             if not year in all_by_year[key]:
@@ -1214,6 +1238,9 @@ def methods(request):
         "years": years,
         "all_by_year": all_by_year,
         "remove_from_list": ["Hong Kong (Island)", "Macao - city"],
+        "all_timeseries": all_timeseries,
+        "all_notime": all_notime,
+        "all_single_timeframe": all_single_timeframe,
     }
     test = Reference.objects.filter(cityloops=True)
     urban = Tag.objects.get(name="Urban")
@@ -1225,6 +1252,12 @@ def methods(request):
         #    print("Urban added")
     return render(request, "core/methods.html", context)
 # Admin section
+
+@staff_member_required
+def pending_time_period(request):
+    list = Reference.objects.filter(status="active").filter(tags__id=1).order_by("-year", "title").filter(Q(tags__name="Urban")|Q(tags__name="Sub-national")).distinct().exclude(Q(tags__name="Time series")|Q(tags__name="Single point in time")).filter(tags__methods__category__name=request.GET["method"])
+    context = { "navbar": "backend", "list": list, "datatables": True }
+    return render(request, "core/admin/references.list.html", context)
 
 @staff_member_required
 def admin_people_list(request):

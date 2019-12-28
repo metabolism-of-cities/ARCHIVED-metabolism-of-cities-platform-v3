@@ -12,6 +12,25 @@
     <div class="panel">
       <div class="panel-body">
 
+      <table class="table table-striped">
+        <tr>
+          <th>Category</th>
+          <th>Single point in time</th>
+          <th>Time series</th>
+          <th>Unknown</th>
+          <th>Total</th>
+        </tr>
+        {% for key,value in all_family.items %}
+          <tr>
+            <td>{{ key }}</td>
+            <td>{{ all_single_timeframe|get_item:key }}</td>
+            <td>{{ all_timeseries|get_item:key }}</td>
+            <td><a href="{% url "core:pending_time_period" %}?method={{ key }}">{{ all_notime|get_item:key }}</a></td>
+            <td>{{ value }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+        
       {% for details in families %}
         <h4>{{ details }}</h4>
         {{ details.description|safe }}
@@ -323,13 +342,13 @@ Highcharts.chart('years', {
 <div id="page-head">
     
   <div id="page-title">
-    <h1 class="page-header text-overflow">About Us</h1>
+    <h1 class="page-header text-overflow">Material accounting methods</h1>
   </div>
 
   <ol class="breadcrumb">
     <li><a href="/"><i class="pli-home"></i></a></li>
-    <li><a href="{% url 'core:about' %}">About</a></li>
-    <li class="active">About Us</li>
+    <li><a href="{% url 'core:resources_home' %}">Resources</a></li>
+    <li class="active">Material accounting methods</li>
   </ol>
 
 </div>
