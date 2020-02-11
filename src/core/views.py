@@ -164,31 +164,36 @@ def page(request, slug):
     context = { "section": page.section, "page": "news", "page": page, "content": content }
     return render(request, "core/page.html", context)
 
-@csrf_exempt
 def contact(request):
-    name = request.POST["name"]
-    email = request.POST["email"]
-    message = request.POST["message"]
-    organization = request.POST["organization"]
-    site = Site.objects.get_current()
-    context = {
-        "name": name,
-        "email": email,
-        "organization": organization,
-        "message": message
-    }
+    context = {}
+    if request.method == "POST":
+        norobot = request.POST["norobot"].lower()
+        if norobot != "no robot" and norobot != '"no robot"':
+            messages.error(request, "Submission not accepted. Please enter \"no robot\" in the form.")
+        else:
+            name = request.POST["name"]
+            email = request.POST["email"]
+            message = request.POST["message"]
+            organization = request.POST["affiliation"]
+            site = Site.objects.get_current()
+            context = {
+                "name": name,
+                "email": email,
+                "organization": organization,
+                "message": message
+            }
 
-    message = render_to_string("core/mail/contactform.txt", context)
+            message = render_to_string("core/mail/contactform.txt", context)
 
-    send_mail(
-        "Contact form " + site.name + " (" + name + ")",
-        message,
-        settings.SITE_EMAIL,
-        [settings.SITE_EMAIL],
-    )
-    messages.success(request, "Thanks, we have received your message!")
-    return redirect("core:contact")
-
+            send_mail(
+                "Contact form " + site.name + " (" + name + ")",
+                message,
+                settings.SITE_EMAIL,
+                [settings.SITE_EMAIL],
+            )
+            messages.success(request, "Thanks, we have received your message!")
+            context = {"hide_form": True }
+    return render(request, "core/contact.html", context)
 
 @csrf_exempt
 def subscribe(request):

@@ -161,7 +161,7 @@ urlpatterns = [
     path('services/research/<slug:slug>', views.page, name='research'),
     path('services/stakeholders-engagement/<slug:slug>', views.page, name='engagement'),
     path('services/support/<slug:slug>', views.page, name='support'),
-    path('contact', views.page, { 'slug': 'contact'}, name='contact'),
+    path('contact', views.contact, name='contact'),
     path('subscribe', views.page, { 'slug': 'subscribe'}, name='subscribe'),
     path('contact/form', views.contact),
     path('about/subscribe/form/', views.subscribe),
