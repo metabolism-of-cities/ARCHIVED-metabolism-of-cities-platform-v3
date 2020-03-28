@@ -928,44 +928,47 @@ def project_form(request, id=False):
         info = False
         form = ProjectUserForm()
     if request.method == "POST":
-        if not id:
-            new_record = True
-            form = ProjectUserForm(request.POST)
+        if not "fax" in request.POST or request.POST["fax"] != "8":
+            messages.error(request, "We could not save your form, please make sure you fill out all relevant fields")
         else:
-            form = ProjectUserForm(request.POST, instance=info)
-        if form.is_valid():
-            info = form.save(commit=False)
-            info.site = request.site
-            info.save()
-            form.save_m2m()
-
-            if new_record:
-                create_record = get_object_or_404(UserAction, pk=1)
-                if request.user.is_authenticated:
-                    log = UserLog(user=request.user, action=create_record, model="Research", points=5, description=info.name)
-                info.pending_review = True
-                info.save()
-
-                # Must send mail to admins!
-                context = {
-                    "info": info,
-                }
-                msg_plain = render_to_string("core/mail/newproject.txt", context)
-                send_mail(
-                    "New project added: " + info.name,
-                    msg_plain,
-                    settings.SITE_EMAIL,
-                    [settings.SITE_EMAIL],
-                )
-
+            if not id:
+                new_record = True
+                form = ProjectUserForm(request.POST)
             else:
-                edit_record = get_object_or_404(UserAction, pk=2)
-                log = UserLog(user=request.user, action=edit_record, model="Research", points=1, description=info.name)
+                form = ProjectUserForm(request.POST, instance=info)
+            if form.is_valid():
+                info = form.save(commit=False)
+                info.site = request.site
+                info.save()
+                form.save_m2m()
 
-            messages.success(request, "We have received your submitted. We will review your project and activate it shortly if it is relevant to the website. Thanks!")
-            return redirect("core:project", id=info.id, type=info.type)
-        else:
-            messages.error(request, "We could not save your form, please correct the errors")
+                if new_record:
+                    create_record = get_object_or_404(UserAction, pk=1)
+                    if request.user.is_authenticated:
+                        log = UserLog(user=request.user, action=create_record, model="Research", points=5, description=info.name)
+                    info.pending_review = True
+                    info.save()
+
+                    # Must send mail to admins!
+                    context = {
+                        "info": info,
+                    }
+                    msg_plain = render_to_string("core/mail/newproject.txt", context)
+                    send_mail(
+                        "New project added: " + info.name,
+                        msg_plain,
+                        settings.SITE_EMAIL,
+                        [settings.SITE_EMAIL],
+                    )
+
+                else:
+                    edit_record = get_object_or_404(UserAction, pk=2)
+                    log = UserLog(user=request.user, action=edit_record, model="Research", points=1, description=info.name)
+
+                messages.success(request, "We have received your submitted. We will review your project and activate it shortly if it is relevant to the website. Thanks!")
+                return redirect("core:project", id=info.id, type=info.type)
+            else:
+                messages.error(request, "We could not save your form, please correct the errors")
 
     context = { "section": "community", "page": "research", "info": info, "form": form }
     return render(request, "core/project.form.html", context)

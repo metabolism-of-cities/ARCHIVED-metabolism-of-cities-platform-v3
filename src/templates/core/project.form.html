@@ -18,6 +18,12 @@
             {% csrf_token %}
             {% bootstrap_form form layout='horizontal' %}
               {% buttons %}
+              <div class="form-group">
+                  <label class="col-sm-3 control-label">What is 2 x 4?</label>
+                  <div class="col-sm-9">
+                    <input class="form-control" type="text" name="fax" value="" required />
+                  </div>
+              </div>
               <div class="col-sm-offset-3 col-sm-9">
                 <button type="submit" class="btn btn-success">Save</button>
               </div>
