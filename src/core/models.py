@@ -740,3 +740,5 @@ class NewsletterSubscriber(models.Model):
     theses = models.BooleanField()
     reference_spaces = models.ManyToManyField(ReferenceSpace, blank=True)
     site = models.ForeignKey(Site, on_delete=models.CASCADE, default=settings.SITE_ID)
+    def __str__(self):
+        return self.people.firstname + " " + self.people.lastname

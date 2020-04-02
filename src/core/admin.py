@@ -8,6 +8,9 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display = ['title', 'site', 'parent']
     search_fields = ['title',]
 
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ['people', 'site']
+
 class PeopleAdmin(admin.ModelAdmin):
     list_display = ['firstname', 'lastname', 'city', 'email']
     search_fields = ['firstname', 'lastname']
@@ -65,6 +68,7 @@ admin.site.register(Timeline)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectOrganization, ProjectOrgAdmin)
 admin.site.register(ReferenceType)
+admin.site.register(NewsletterSubscriber, NewsletterSubscriberAdmin)
 admin.site.register(DataViz, DataVizAdmin)
 admin.site.register(ReferenceOrganization, ReferenceOrgAdmin)
 admin.site.register(Reference, ReferenceAdmin)
