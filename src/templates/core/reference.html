@@ -169,6 +169,10 @@ p.abstract {
           {% endfor %}
         </ul>
 
+        {% if info.file %}
+        <h4 style="margin-top:40px">Download</h4>
+        <a href="{{ info.file.url }}">Download (PDF)</a>
+        {% endif %}
       
       </div>
 
