@@ -8,12 +8,14 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display = ['title', 'site', 'parent']
     search_fields = ['title',]
 
-class NewsletterSubscriberAdmin(admin.ModelAdmin):
-    list_display = ['people', 'site']
-
 class PeopleAdmin(admin.ModelAdmin):
     list_display = ['firstname', 'lastname', 'city', 'email']
     search_fields = ['firstname', 'lastname']
+
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ['people', 'site', 'get_email']
+    def get_email(self, obj):
+        return obj.people.email
 
 class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ['title']
