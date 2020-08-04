@@ -23,6 +23,8 @@ archive_url = 'https://archive.metabolismofcities.org'
 urlpatterns = [
 
     # Redirecting old URLs
+    path('curso', RedirectView.as_view(url='https://forms.gle/GZRHD7tY53EjcFY28', permanent=True)),
+    path('curso/', RedirectView.as_view(url='https://forms.gle/GZRHD7tY53EjcFY28', permanent=True)),
     path('page/about', RedirectView.as_view(url=site_url+'/about/our-story', permanent=True)),
     path('page/team', RedirectView.as_view(url=site_url+'/about/team', permanent=True)),
     path('page/wishlist', RedirectView.as_view(url=site_url+'/about/mission', permanent=True)),
