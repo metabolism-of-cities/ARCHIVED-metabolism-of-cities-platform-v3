@@ -1,3 +1,9 @@
+# Repository: archived
+
+This repository is archived as per August 25, 2020. A [new repository](https://github.com/metabolism-of-cities/metabolism-of-cities-platform) with the latest version of our platform supersedes this repository.
+
+The website within this repository was active from 2018-2020.
+
 # Overview
 
 This repository contains the source code of [Metabolism of Cities](https://metabolismofcities.org/). This repository supersedes the previous Github-hosted repository of our old website. This new website is written in Python using Django. The following technologies are used:
